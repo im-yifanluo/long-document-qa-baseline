@@ -110,27 +110,6 @@ python run_benchmark.py \
 
 ---
 
-## Using a vLLM API server (alternative backend)
-
-If you prefer to run the model as a long-lived server (useful when sharing GPUs or running multiple experiments):
-
-```bash
-# Terminal 1 — start vLLM server
-python -m vllm.entrypoints.openai.api_server \
-    --model Qwen/Qwen2.5-32B-Instruct \
-    --tensor-parallel-size 2 \
-    --gpu-memory-utilization 0.90 \
-    --port 8000
-
-# Terminal 2 — run benchmark against the server
-python run_benchmark.py \
-    --llm-backend openai_api \
-    --api-base-url http://localhost:8000/v1 \
-    --llm-model Qwen/Qwen2.5-32B-Instruct
-```
-
----
-
 ## CLI reference
 
 ### `run_benchmark.py`
@@ -142,8 +121,6 @@ python run_benchmark.py \
 | `--max-samples` | `-1` (all) | Cap examples per task |
 | `--llm-model` | `Qwen/Qwen2.5-32B-Instruct` | LLM model ID or path |
 | `--embedding-model` | `BAAI/bge-large-en-v1.5` | Embedding model |
-| `--llm-backend` | `vllm_offline` | `vllm_offline` or `openai_api` |
-| `--api-base-url` | `http://localhost:8000/v1` | API URL (openai_api only) |
 | `--chunk-size` | `512` | Tokens per chunk |
 | `--chunk-overlap` | `64` | Token overlap between chunks |
 | `--top-k` | `40` | Chunks to retrieve |
@@ -233,7 +210,7 @@ baseline_benchmark/
 ├── chunker.py           # Token-level document chunking
 ├── embedder.py          # BGE-large-en-v1.5 sentence-transformers wrapper
 ├── retriever.py         # FAISS flat-IP index per document
-├── generator.py         # vLLM offline / OpenAI-API generation
+├── generator.py         # vLLM local offline generation
 ├── rag_pipeline.py      # Full RAG orchestration + evaluation
 ├── metrics.py           # ROUGE, F1, exact-match scorers
 ├── run_benchmark.py     # Main CLI
