@@ -94,7 +94,20 @@ def parse_args():
 
 def main():
     args = parse_args()
-    from rag_pipeline import BenchmarkPipeline
+    try:
+        from rag_pipeline import BenchmarkPipeline
+    except ModuleNotFoundError as exc:
+        missing = exc.name or "a required package"
+        raise SystemExit(
+            "\n".join(
+                [
+                    f"Missing dependency: {missing}",
+                    "This repo installs Python packages into the local venv, not your base environment.",
+                    "Activate it first with: source venv/bin/activate",
+                    "If the venv does not exist yet, run: bash setup.sh",
+                ]
+            )
+        ) from exc
 
     tasks, max_samples = resolve_run_settings(args.run_tier, args.tasks, args.max_samples)
 

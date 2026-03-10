@@ -13,7 +13,19 @@ from config import BenchmarkConfig, DEFAULT_FALLBACK_LLM_MODEL, DEFAULT_LLM_MODE
 
 
 def main():
-    from generator import Generator
+    try:
+        from generator import Generator
+    except ModuleNotFoundError as exc:
+        missing = exc.name or "a required package"
+        raise SystemExit(
+            "\n".join(
+                [
+                    f"Missing dependency: {missing}",
+                    "Activate the local venv first with: source venv/bin/activate",
+                    "If needed, create/install it with: bash setup.sh",
+                ]
+            )
+        ) from exc
 
     parser = argparse.ArgumentParser(
         description="Test the generator with a custom prompt",

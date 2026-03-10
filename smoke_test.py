@@ -48,7 +48,19 @@ def main():
     parser.add_argument("--enable-thinking", action="store_true")
     args = parser.parse_args()
 
-    from rag_pipeline import BenchmarkPipeline
+    try:
+        from rag_pipeline import BenchmarkPipeline
+    except ModuleNotFoundError as exc:
+        missing = exc.name or "a required package"
+        raise SystemExit(
+            "\n".join(
+                [
+                    f"Missing dependency: {missing}",
+                    "Activate the local venv first with: source venv/bin/activate",
+                    "If needed, create/install it with: bash setup.sh",
+                ]
+            )
+        ) from exc
 
     config = BenchmarkConfig(
         methods=args.methods,

@@ -55,7 +55,16 @@ and truncate only if the document exceeds the configured LC budget.
 
 ## Environment Setup On A Server
 
-This repo uses a local virtual environment in `venv/`.
+This repo uses Python's built-in virtual environment mechanism, `venv/`.
+
+That means there are two separate concerns:
+
+- Python version management: provided by the machine, `conda`, `micromamba`, `pyenv`, or an HPC module system
+- Package isolation: provided by this repo's local `venv/`
+
+`venv` is not a Python version manager. It does not download or install Python
+3.11 for you. It simply creates an isolated package environment on top of an
+interpreter that already exists on the machine.
 
 The setup script:
 
@@ -74,12 +83,29 @@ source venv/bin/activate
 python --version
 ```
 
+`bash setup.sh` runs in a child shell, so it cannot leave your current shell
+activated after it exits. You always need to run `source venv/bin/activate` in
+your current shell before launching the benchmark.
+
+If you see `(base)` in your prompt and then run `python run_benchmark.py ...`,
+you are still using your conda base environment, not this repo's `venv/`.
+
 If the server does not already have a good system Python for vLLM, use conda:
 
 ```bash
 conda create -n scrolls-lc python=3.11 -y
 conda activate scrolls-lc
 pip install -r requirements.txt
+```
+
+If your cluster uses environment modules instead of conda, the equivalent flow
+is:
+
+```bash
+module avail python
+module load python/3.11
+bash setup.sh
+source venv/bin/activate
 ```
 
 ## Quick Start
