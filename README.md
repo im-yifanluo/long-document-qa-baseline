@@ -210,6 +210,8 @@ python run_lost_in_middle.py --run-tier subset
   - this is usually the Qwen-1M attention backend mismatch; the repo now sets the required vLLM env vars automatically before importing vLLM
 - `User-specified max_model_len ... is greater than the derived max_model_len`
   - this happens when the fallback model is standard Qwen2.5 rather than the 1M checkpoint; the repo now clamps fallback max length to the actual model config
+- `Dataset scripts are no longer supported, but found scrolls.py`
+  - your `datasets` package is too new for `tau/scrolls`; use `datasets<4.0.0`
 
 ## Official References
 

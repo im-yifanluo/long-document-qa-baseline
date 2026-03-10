@@ -16,6 +16,7 @@ import logging
 import re
 from typing import Dict, List
 
+import datasets as hf_datasets
 from datasets import load_dataset
 
 from config import SCROLLS_TASKS
@@ -124,6 +125,16 @@ def load_scrolls_task(
             "tau/scrolls", task, split=split, trust_remote_code=True
         )
     except Exception as exc:
+        version = getattr(hf_datasets, "__version__", "unknown")
+        if "Dataset scripts are no longer supported" in str(exc):
+            logger.warning(
+                "Could not load task %s with datasets %s: %s. "
+                "SCROLLS still uses a loading script, so install `datasets<4.0.0`.",
+                task,
+                version,
+                exc,
+            )
+            return []
         logger.warning("Could not load task %s: %s", task, exc)
         return []
 
