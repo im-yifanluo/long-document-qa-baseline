@@ -48,7 +48,19 @@ class Generator:
 
     def _load_model(self, model_name: str) -> None:
         """Instantiate the vLLM engine for one model name."""
-        from vllm import LLM
+        try:
+            from vllm import LLM
+        except (ImportError, OSError) as exc:
+            message = str(exc)
+            if "CXXABI_" in message or "libstdc++.so.6" in message:
+                raise RuntimeError(
+                    "vLLM import failed because the active environment is picking up an "
+                    "old system libstdc++. On shared servers this is usually fixed by "
+                    "running `conda install -y -c conda-forge libstdcxx-ng libgcc-ng` "
+                    "and then `export LD_LIBRARY_PATH=\"$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}\"` "
+                    "before launching Python."
+                ) from exc
+            raise
 
         logger.info(
             "Loading vLLM model %s  (tp=%d, gpu_mem=%.2f, max_model_len=%d) ...",
