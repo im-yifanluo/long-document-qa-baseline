@@ -147,8 +147,10 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
 # comparison isolates retrieval strategy rather than model-family differences.
 DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct-1M"
 
-# Fallback keeps the same parameter scale but drops back to the 128K variant if
-# the 1M model cannot be loaded in the local runtime setup.
+# Fallback keeps the same parameter scale but drops back to the standard
+# Qwen2.5 7B instruct checkpoint if the 1M model cannot be loaded in the local
+# runtime setup. This is mainly a sanity-check fallback, not an equivalent
+# long-context replacement.
 DEFAULT_FALLBACK_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct"
 
 DEFAULT_EMBEDDING_MODEL = "BAAI/bge-large-en-v1.5"

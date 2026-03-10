@@ -57,6 +57,12 @@ def main():
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument(
+        "--max-model-len",
+        type=int,
+        default=None,
+        help="Override the model context window used by vLLM",
+    )
+    parser.add_argument(
         "--enable-thinking",
         action="store_true",
         help="Enable model thinking mode when supported.",
@@ -70,6 +76,7 @@ def main():
         temperature=args.temperature,
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
+        max_model_len=args.max_model_len,
         enable_thinking=args.enable_thinking,
     )
 

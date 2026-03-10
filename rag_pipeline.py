@@ -227,12 +227,31 @@ class BenchmarkPipeline:
         Long-context deliberately bypasses chunking, embedding, and retrieval.
         The method tries to pass the original document as-is and only truncates
         when the document exceeds the configured LC budget.
+
+        The configured LC budget is the experiment target, not an unconditional
+        guarantee. If the active generator model has a smaller maximum context
+        window, we cap the document budget so prompt construction remains valid.
         """
         task_type = TASK_TYPE[example["task"]]
         system_prompt = SYSTEM_PROMPTS[task_type]
         document_tokens = self.generator.count_tokens(example["document"])
+        empty_user_prompt = self._build_user_prompt(task_type, "", example["query"])
+        reserved_prompt_tokens = self.generator.count_prompt_tokens(
+            system_prompt, empty_user_prompt
+        )
+        available_document_tokens = max(
+            1,
+            self.generator.active_max_model_len
+            - self.config.max_new_tokens
+            - reserved_prompt_tokens,
+        )
+        effective_lc_budget = min(
+            self.config.lc_context_budget,
+            available_document_tokens,
+        )
+
         context, context_tokens, truncated = self.generator.truncate_text(
-            example["document"], self.config.lc_context_budget
+            example["document"], effective_lc_budget
         )
         user_prompt = self._build_user_prompt(task_type, context, example["query"])
         input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
@@ -248,6 +267,7 @@ class BenchmarkPipeline:
             "references": example["references"],
             "document_tokens": document_tokens,
             "context_tokens": context_tokens,
+            "effective_context_budget": effective_lc_budget,
             "input_tokens": input_tokens,
             "num_chunks": 0,
             "num_retrieved": 0,

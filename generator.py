@@ -20,6 +20,7 @@ The benchmark uses the same ``Generator`` object for both methods:
 """
 
 import logging
+import os
 import re
 from typing import List, Optional, Tuple
 
@@ -35,6 +36,7 @@ class Generator:
         self.tokenizer = None
         self.sampling_params = None
         self.active_model = config.llm_model
+        self.active_max_model_len = config.effective_max_model_len
         self._init_vllm()
 
     def _build_sampling_params(self):
@@ -48,6 +50,9 @@ class Generator:
 
     def _load_model(self, model_name: str) -> None:
         """Instantiate the vLLM engine for one model name."""
+        model_max_len = self._resolve_model_max_len(model_name)
+        self._prepare_runtime_env(model_name)
+
         try:
             from vllm import LLM
         except (ImportError, OSError) as exc:
@@ -67,18 +72,19 @@ class Generator:
             model_name,
             self.config.tensor_parallel_size,
             self.config.gpu_memory_utilization,
-            self.config.effective_max_model_len,
+            model_max_len,
         )
         self.llm = LLM(
             model=model_name,
             gpu_memory_utilization=self.config.gpu_memory_utilization,
             tensor_parallel_size=self.config.tensor_parallel_size,
             trust_remote_code=True,
-            max_model_len=self.config.effective_max_model_len,
-            enforce_eager=False,
+            max_model_len=model_max_len,
+            enforce_eager=self._is_qwen_1m_model(model_name),
         )
         self.tokenizer = self.llm.get_tokenizer()
         self.active_model = model_name
+        self.active_max_model_len = model_max_len
         self._build_sampling_params()
         logger.info("vLLM model loaded: %s", self.active_model)
 
@@ -98,6 +104,93 @@ class Generator:
                 fallback,
             )
             self._load_model(fallback)
+
+    @staticmethod
+    def _is_qwen_1m_model(model_name: str) -> bool:
+        """Detect Qwen 1M models that require special vLLM runtime settings."""
+        normalized = model_name.lower()
+        return "qwen" in normalized and "1m" in normalized
+
+    def _prepare_runtime_env(self, model_name: str) -> None:
+        """Set runtime flags required by Qwen 1M models before importing vLLM.
+
+        Official Qwen long-context instructions use Dual Chunk Flash Attention
+        and eager execution for 1M-context deployments. Recent Qwen/vLLM docs
+        also use the legacy vLLM engine path for this setup.
+        """
+        if not self._is_qwen_1m_model(model_name):
+            return
+
+        if "VLLM_ATTENTION_BACKEND" not in os.environ:
+            os.environ["VLLM_ATTENTION_BACKEND"] = "DUAL_CHUNK_FLASH_ATTN"
+            logger.info(
+                "Set VLLM_ATTENTION_BACKEND=DUAL_CHUNK_FLASH_ATTN for %s",
+                model_name,
+            )
+
+        if "VLLM_USE_V1" not in os.environ:
+            os.environ["VLLM_USE_V1"] = "0"
+            logger.info("Set VLLM_USE_V1=0 for %s", model_name)
+
+    def _resolve_model_max_len(self, model_name: str) -> int:
+        """Choose a safe ``max_model_len`` for the specific model being loaded.
+
+        The repo-level config defines the target benchmark budget, but fallback
+        models may support a smaller context window than the primary model.
+        This resolver prevents the fallback path from inheriting an impossible
+        max length such as 300k tokens for a standard 32k-context checkpoint.
+        """
+        desired = self.config.effective_max_model_len
+        if self.config.max_model_len is not None:
+            return self.config.max_model_len
+        if self._is_qwen_1m_model(model_name):
+            return desired
+
+        derived = self._get_model_config_max_len(model_name)
+        if derived is None:
+            return desired
+        if desired > derived:
+            logger.warning(
+                "Clamping max_model_len for %s from %d to %d based on the model config.",
+                model_name,
+                desired,
+                derived,
+            )
+        return min(desired, derived)
+
+    @staticmethod
+    def _get_model_config_max_len(model_name: str) -> Optional[int]:
+        """Read a model's declared context length from its Hugging Face config."""
+        try:
+            from transformers import AutoConfig
+
+            model_config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+        except Exception as exc:
+            logger.warning("Could not read config for %s: %s", model_name, exc)
+            return None
+
+        candidates: List[int] = []
+        for attr_name in (
+            "max_position_embeddings",
+            "n_positions",
+            "max_seq_len",
+            "seq_length",
+            "model_max_length",
+        ):
+            value = getattr(model_config, attr_name, None)
+            if isinstance(value, int) and 0 < value < 10_000_000:
+                candidates.append(value)
+
+        rope_scaling = getattr(model_config, "rope_scaling", None)
+        if isinstance(rope_scaling, dict):
+            original = rope_scaling.get("original_max_position_embeddings")
+            factor = rope_scaling.get("factor")
+            if isinstance(original, (int, float)) and isinstance(factor, (int, float)):
+                candidates.append(int(original * factor))
+
+        if not candidates:
+            return None
+        return max(candidates)
 
     def _format_chat_prompt(self, system_prompt: str, user_prompt: str) -> str:
         """Apply the model's chat template.

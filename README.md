@@ -192,10 +192,24 @@ python run_lost_in_middle.py --run-tier subset
 
 - `top_k=10` is intentional. The repo is using flat retrieval without reranking, so deeper retrieval tends to add noise.
 - Long-context is configured to pass the document directly and only truncates when the source document is larger than the allowed LC budget.
+- When the repo loads `Qwen/Qwen2.5-7B-Instruct-1M`, it automatically switches vLLM to the Qwen long-context runtime path by setting `VLLM_ATTENTION_BACKEND=DUAL_CHUNK_FLASH_ATTN`, `VLLM_USE_V1=0`, and eager execution.
 - The subset tier excludes `gov_report` and `summ_screen_fd` because the first PI-facing slice is meant to be more evidence-focused.
 - Official Qwen guidance for the 1M model recommends their custom vLLM branch for best long-context behavior and warns that older/standard inference paths may degrade beyond `262144` tokens.
 - The repo now defaults to `300000` LC tokens because full 1M inference is treated as a larger-hardware setting, roughly in the `128GB` VRAM class rather than a single-A40 default.
 - If your server has the memory for it, you can still raise `--lc-context-budget` manually.
+
+## Common Server Failures
+
+- `CXXABI_1.3.15 not found`
+  - fix inside the conda env:
+  ```bash
+  conda install -y -c conda-forge libstdcxx-ng libgcc-ng
+  export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
+  ```
+- `FlashAttentionImpl.__init__() got an unexpected keyword argument 'layer_idx'`
+  - this is usually the Qwen-1M attention backend mismatch; the repo now sets the required vLLM env vars automatically before importing vLLM
+- `User-specified max_model_len ... is greater than the derived max_model_len`
+  - this happens when the fallback model is standard Qwen2.5 rather than the 1M checkpoint; the repo now clamps fallback max length to the actual model config
 
 ## Official References
 
