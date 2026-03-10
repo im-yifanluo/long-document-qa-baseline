@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# SCROLLS RAG Baseline — Environment Setup
-# ============================================================
-# Run once after cloning / first SSH into the server.
-#
-#   bash setup.sh
-#
-# Then activate the env before any run:
-#
-#   source venv/bin/activate
+# SCROLLS RAG vs Long-Context Benchmark - Environment Setup
 # ============================================================
 set -euo pipefail
 
@@ -16,44 +8,67 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "========================================"
-echo "  SCROLLS RAG Baseline — Setup"
+echo "  SCROLLS RAG vs Long-Context - Setup"
 echo "========================================"
 
-# 1. Create virtual environment (if not present)
+PYTHON_BIN=""
+for candidate in python3.12 python3.11 python3.10 python3; do
+    if command -v "$candidate" >/dev/null 2>&1; then
+        PYTHON_BIN="$candidate"
+        break
+    fi
+done
+
+if [ -z "$PYTHON_BIN" ]; then
+    echo "No suitable Python interpreter found."
+    exit 1
+fi
+
+PYTHON_VERSION="$("$PYTHON_BIN" -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")')"
+case "$PYTHON_VERSION" in
+    3.10|3.11|3.12)
+        ;;
+    *)
+        echo "Selected interpreter: $PYTHON_BIN ($PYTHON_VERSION)"
+        echo "vLLM setup is expected to work on Python 3.10-3.12."
+        echo "Install python3.12 or python3.11 on the server and rerun setup.sh."
+        exit 1
+        ;;
+esac
+
+echo "Using Python interpreter: $PYTHON_BIN ($PYTHON_VERSION)"
+
 if [ ! -d "venv" ]; then
-    echo "[1/4] Creating virtual environment …"
-    python3 -m venv venv
+    echo "[1/4] Creating virtual environment ..."
+    "$PYTHON_BIN" -m venv venv
 else
     echo "[1/4] Virtual environment already exists."
 fi
 
-# 2. Activate
 source venv/bin/activate
 
-# 3. Install dependencies
-echo "[2/4] Upgrading pip …"
+echo "[2/4] Upgrading pip ..."
 pip install --upgrade pip --quiet
 
-echo "[3/4] Installing Python dependencies …"
+echo "[3/4] Installing Python dependencies ..."
 pip install -r requirements.txt --quiet
 
-# 4. NLTK data (needed by rouge-score)
-echo "[4/4] Downloading NLTK tokeniser data …"
-python3 -c "
+echo "[4/4] Downloading NLTK tokenizer data ..."
+python -c "
 import nltk, os
-nltk.download('punkt',     quiet=True, download_dir=os.path.join(os.getcwd(), 'nltk_data'))
+nltk.download('punkt', quiet=True, download_dir=os.path.join(os.getcwd(), 'nltk_data'))
 nltk.download('punkt_tab', quiet=True, download_dir=os.path.join(os.getcwd(), 'nltk_data'))
 os.environ['NLTK_DATA'] = os.path.join(os.getcwd(), 'nltk_data')
 "
 
-# 5. Output dirs
 mkdir -p outputs
 
 echo ""
 echo "========================================"
 echo "  Setup complete!"
 echo ""
-echo "  Activate:   source venv/bin/activate"
-echo "  Smoke test: python smoke_test.py --llm-model <model>"
-echo "  Full run:   python run_benchmark.py --llm-model <model>"
+echo "  Activate:     source venv/bin/activate"
+echo "  Smoke tier:   python run_benchmark.py --run-tier smoke"
+echo "  Subset tier:  python run_benchmark.py --run-tier subset"
+echo "  Analysis:     python analyze_outputs.py --run-tier subset"
 echo "========================================"

@@ -1,9 +1,15 @@
 """
 Load and parse SCROLLS benchmark data.
 
-Each SCROLLS task packs the document and query/question into a single
-``input`` string.  This module splits them apart so the RAG pipeline can
-chunk the *document* and use the *query* for retrieval.
+SCROLLS stores each example as one packed ``input`` string. For this repo we
+need that string split into:
+
+- ``document``: the long source text
+- ``query``: the task-specific question / prompt / hypothesis
+
+That separation is essential for RAG, because retrieval should use the query
+against document chunks. The long-context path also benefits because it can
+build cleaner prompts once the raw document and the user query are separated.
 """
 
 import logging
@@ -27,7 +33,12 @@ def _parse_summarization(input_text: str, default_query: str) -> Dict[str, str]:
 
 
 def _parse_question_at_end(input_text: str) -> Dict[str, str]:
-    """Generic: question/query/hypothesis sits after the last known marker."""
+    """Generic parser for tasks where the query appears at the end.
+
+    This is intentionally heuristic because SCROLLS task formats are not fully
+    uniform. We first look for explicit markers, then fall back to a
+    last-paragraph heuristic if needed.
+    """
     markers = [
         ("\nQuestion: ", "question"),
         ("\nQuery: ", "query"),
@@ -93,10 +104,16 @@ def load_scrolls_task(
     split: str = "validation",
     max_samples: int = -1,
 ) -> List[Dict]:
-    """Load examples for one SCROLLS task.
+    """Load one SCROLLS task and return normalized example dicts.
 
-    Returns a list of dicts with keys:
-        id, task, document, query, references, raw_input_preview
+    Returned fields:
+
+    - ``id``: dataset example identifier
+    - ``task``: SCROLLS task name
+    - ``document``: parsed source document
+    - ``query``: parsed question / summary instruction / hypothesis
+    - ``references``: list of accepted answers / references
+    - ``raw_input_preview``: short debug preview of the original packed input
     """
     if task not in SCROLLS_TASKS:
         raise ValueError(f"Unknown SCROLLS task: {task!r}")

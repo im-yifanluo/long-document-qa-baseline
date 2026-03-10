@@ -1,11 +1,18 @@
 """
-FAISS-based dense retrieval.
+FAISS-based dense retrieval for the RAG method.
 
-Builds an in-memory flat inner-product index per document and retrieves
-the top-k most similar chunks for a given query embedding.
+The benchmark intentionally uses a simple retriever:
+
+- one temporary in-memory index per document
+- cosine-style similarity via normalized embeddings + inner product
+- no reranking
+- no compression
+
+That keeps the baseline easy to understand and makes retrieval traces easier to
+inspect during analysis.
 """
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Sequence
 
 import faiss
 import numpy as np
@@ -16,22 +23,32 @@ class Retriever:
 
     def __init__(self):
         self.index: Optional[faiss.IndexFlatIP] = None
-        self.chunks: List[str] = []
+        self.chunk_records: List[Dict] = []
 
-    # ------------------------------------------------------------------
-    def build_index(self, embeddings: np.ndarray, chunks: List[str]) -> None:
-        """Build (or replace) the FAISS index from *embeddings* and their
-        corresponding *chunks* texts."""
-        self.chunks = chunks
+    def build_index(self, embeddings: np.ndarray, chunks: Sequence[Dict]) -> None:
+        """Build (or replace) the FAISS index from chunk records."""
+        self.chunk_records = []
+        for idx, chunk in enumerate(chunks):
+            if isinstance(chunk, dict):
+                record = dict(chunk)
+            else:
+                record = {"index": idx, "chunk": str(chunk)}
+            record.setdefault("index", idx)
+            record.setdefault("start_token", None)
+            record.setdefault("end_token", None)
+            record.setdefault("token_count", None)
+            self.chunk_records.append(record)
+
         dim = embeddings.shape[1]
-        self.index = faiss.IndexFlatIP(dim)  # cosine with normalised vecs
+        self.index = faiss.IndexFlatIP(dim)
         self.index.add(embeddings.astype(np.float32))
 
-    # ------------------------------------------------------------------
-    def retrieve(self, query_embedding: np.ndarray, top_k: int = 40) -> List[Dict]:
+    def retrieve(self, query_embedding: np.ndarray, top_k: int = 10) -> List[Dict]:
         """Return up to *top_k* chunks ranked by similarity.
 
-        Each element is ``{"chunk": str, "score": float, "index": int}``.
+        Each returned chunk record includes its retrieval score and 1-based rank
+        so downstream analysis can inspect not just what was retrieved, but how
+        early a useful chunk appeared.
         """
         if self.index is None or self.index.ntotal == 0:
             return []
@@ -41,9 +58,11 @@ class Retriever:
         scores, indices = self.index.search(q, k)
 
         results: List[Dict] = []
-        for score, idx in zip(scores[0], indices[0]):
-            if idx >= 0:
-                results.append(
-                    {"chunk": self.chunks[idx], "score": float(score), "index": int(idx)}
-                )
+        for rank, (score, idx) in enumerate(zip(scores[0], indices[0]), start=1):
+            if idx < 0:
+                continue
+            chunk = dict(self.chunk_records[idx])
+            chunk["score"] = float(score)
+            chunk["rank"] = rank
+            results.append(chunk)
         return results

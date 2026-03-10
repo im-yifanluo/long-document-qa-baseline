@@ -1,49 +1,57 @@
 """
-Full RAG pipeline for the SCROLLS benchmark.
+Core benchmark pipeline for the SCROLLS RAG vs long-context comparison.
 
-Flow per example
-────────────────
-1. Chunk the document (TokenChunker)
-2. Embed chunks       (Embedder)
-3. Build FAISS index   (Retriever)
-4. Retrieve top-k      (Retriever)
-5. Assemble context within token budget
-6. Generate answer     (Generator)  ← batched per task
+Conceptually, the pipeline has three layers:
 
-All per-example results are streamed to ``outputs/<task>/results.jsonl``
-so that runs can be resumed after interruption.
+1. data normalization
+   SCROLLS examples are loaded as ``document`` + ``query`` + ``references``.
+
+2. method-specific prompt construction
+   - RAG: chunk -> embed -> retrieve -> assemble retrieved context
+   - long_context: pass the raw document directly, truncated only if it exceeds
+     the configured LC budget
+
+3. shared generation / evaluation / reporting
+   Both methods are generated with the same ``Generator`` wrapper and scored
+   with the same SCROLLS metrics.
+
+The file is intentionally written as a shared execution surface so that future
+methods such as TreeRAG or GraphRAG can plug into ``_prepare_example`` without
+rewriting the rest of the runner.
 """
 
 import json
 import logging
 import os
 import time
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+from chunker import TokenChunker
 from config import (
-    RAGConfig,
+    BenchmarkConfig,
+    DEFAULT_METHODS,
+    DEFAULT_TOP_K,
     SYSTEM_PROMPTS,
     TASK_METRIC_TYPE,
     TASK_TYPE,
     USER_PROMPT_TEMPLATES,
 )
-from chunker import TokenChunker
 from data_loader import load_scrolls_task
 from embedder import Embedder
 from generator import Generator
-from metrics import compute_metrics
+from metrics import compute_metrics, normalize_answer
 from retriever import Retriever
 
 logger = logging.getLogger(__name__)
 
 
-class RAGPipeline:
-    """Orchestrates chunking → embedding → retrieval → generation → eval."""
+class BenchmarkPipeline:
+    """Orchestrates prompt construction, generation, evaluation, and reporting."""
 
-    def __init__(self, config: RAGConfig):
+    def __init__(self, config: BenchmarkConfig):
         self.config = config
 
-        logger.info("Initialising RAG pipeline …")
+        logger.info("Initialising benchmark pipeline ...")
         self.chunker = TokenChunker(
             tokenizer_name=config.embedding_model,
             chunk_size=config.chunk_size,
@@ -55,233 +63,544 @@ class RAGPipeline:
             batch_size=config.embedding_batch_size,
             query_instruction=config.query_instruction,
         )
-        self.retriever = Retriever()
         self.generator = Generator(config)
 
-        os.makedirs(config.output_dir, exist_ok=True)
-        logger.info("RAG pipeline ready.")
+        os.makedirs(config.run_output_dir, exist_ok=True)
+        logger.info("Benchmark pipeline ready.")
 
-    # ------------------------------------------------------------------
-    # Per-example retrieval (returns prompt + metadata, no generation)
-    # ------------------------------------------------------------------
+    def _method_root(self, method: str) -> str:
+        return os.path.join(self.config.run_output_dir, method)
 
-    def _retrieve_for_example(
-        self, example: Dict
-    ) -> Dict[str, Any]:
-        """Chunk → embed → retrieve → build prompt.  Returns metadata
-        dict including the ``(system_prompt, user_prompt)`` pair."""
+    def _task_dir(self, method: str, task: str) -> str:
+        return os.path.join(self._method_root(method), task)
 
+    def _task_results_file(self, method: str, task: str) -> str:
+        return os.path.join(self._task_dir(method, task), "results.jsonl")
+
+    def _task_summary_file(self, method: str, task: str) -> str:
+        return os.path.join(self._task_dir(method, task), "summary.json")
+
+    def _build_user_prompt(
+        self,
+        task_type: str,
+        context: str,
+        query: str,
+        context_label: str = "Context",
+    ) -> str:
+        """Render the task-specific user prompt from a context/query pair."""
+        return USER_PROMPT_TEMPLATES[task_type].format(
+            context=context,
+            query=query,
+            context_label=context_label,
+        )
+
+    def _reference_position(self, document: str, references: List[str]) -> Tuple[Optional[float], str]:
+        """Estimate where the answer appears inside the document.
+
+        This is a heuristic used for later analysis:
+        - long-context lost-in-the-middle studies
+        - qualitative case studies
+        - rough position bucketing (beginning / middle / end)
+
+        The code first tries raw substring matching, then falls back to
+        normalized matching when the reference text is slightly reformatted.
+        """
+        doc_raw = document.lower()
+        doc_norm = normalize_answer(document)
+
+        candidates = sorted(
+            [r.strip() for r in references if isinstance(r, str) and r.strip()],
+            key=len,
+            reverse=True,
+        )
+        for ref in candidates:
+            if len(ref) >= 12:
+                idx = doc_raw.find(ref.lower())
+                if idx != -1:
+                    ratio = idx / max(len(document), 1)
+                    return ratio, self._position_bucket(ratio)
+            ref_norm = normalize_answer(ref)
+            if len(ref_norm) < 12:
+                continue
+            idx = doc_norm.find(ref_norm)
+            if idx != -1:
+                ratio = idx / max(len(doc_norm), 1)
+                return ratio, self._position_bucket(ratio)
+        return None, "unknown"
+
+    @staticmethod
+    def _position_bucket(position_ratio: float) -> str:
+        if position_ratio < (1.0 / 3.0):
+            return "beginning"
+        if position_ratio < (2.0 / 3.0):
+            return "middle"
+        return "end"
+
+    def _prepare_rag_example(self, example: Dict) -> Dict[str, Any]:
+        """Build one RAG prompt and its trace metadata.
+
+        Flow:
+        1. chunk the document
+        2. embed each chunk
+        3. retrieve top-k chunks against the query
+        4. keep adding retrieved chunks until the RAG context budget is full
+        5. sort selected chunks back into document order before prompting
+
+        The returned dict is not just a prompt container. It also stores the
+        retrieval trace needed for error analysis and qualitative inspection.
+        """
         task_type = TASK_TYPE[example["task"]]
+        chunk_records = self.chunker.chunk_with_metadata(example["document"])
+        if not chunk_records:
+            fallback = example["document"][:4000]
+            chunk_records = [
+                {
+                    "index": 0,
+                    "chunk": fallback,
+                    "start_token": 0,
+                    "end_token": self.chunker.count_tokens(fallback),
+                    "token_count": self.chunker.count_tokens(fallback),
+                }
+            ]
 
-        # 1. Chunk
-        chunks = self.chunker.chunk(example["document"])
-        if not chunks:
-            chunks = [example["document"][:4000]]  # fallback
-
-        # 2. Embed
-        chunk_embs = self.embedder.embed_passages(chunks)
-
-        # 3. Build index + retrieve
-        self.retriever.build_index(chunk_embs, chunks)
+        chunk_embs = self.embedder.embed_passages([c["chunk"] for c in chunk_records])
+        retriever = Retriever()
+        retriever.build_index(chunk_embs, chunk_records)
         q_emb = self.embedder.embed_query(example["query"])
-        retrieved = self.retriever.retrieve(q_emb, top_k=self.config.top_k)
+        retrieved = retriever.retrieve(q_emb, top_k=self.config.top_k)
 
-        # 4. Assemble context (respect token budget, keep document order)
-        selected: List[Dict] = []
+        selected: List[Dict[str, Any]] = []
         budget_used = 0
-        for r in retrieved:
-            tok_len = self.chunker.count_tokens(r["chunk"])
+        for record in retrieved:
+            tok_len = record.get("token_count") or self.chunker.count_tokens(record["chunk"])
             if budget_used + tok_len > self.config.context_budget:
                 break
-            selected.append(r)
+            selected.append(record)
             budget_used += tok_len
 
-        # Re-sort selected chunks by their original position
-        selected.sort(key=lambda x: x["index"])
-        context = "\n\n".join(r["chunk"] for r in selected)
+        selected_for_prompt = sorted(selected, key=lambda x: x["index"])
+        context = "\n\n".join(r["chunk"] for r in selected_for_prompt)
 
-        # 5. Build prompt
-        sys_p = SYSTEM_PROMPTS[task_type]
-        usr_p = USER_PROMPT_TEMPLATES[task_type].format(
-            context=context, query=example["query"]
+        system_prompt = SYSTEM_PROMPTS[task_type]
+        user_prompt = self._build_user_prompt(task_type, context, example["query"])
+        input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
+        document_tokens = self.generator.count_tokens(example["document"])
+        ref_ratio, ref_bucket = self._reference_position(
+            example["document"], example["references"]
         )
 
         return {
             "id": example["id"],
             "task": example["task"],
+            "method": "rag",
             "query": example["query"],
             "references": example["references"],
-            "num_chunks": len(chunks),
+            "document_tokens": document_tokens,
+            "context_tokens": budget_used,
+            "input_tokens": input_tokens,
+            "num_chunks": len(chunk_records),
             "num_retrieved": len(retrieved),
             "num_context_chunks": len(selected),
-            "context_tokens": budget_used,
-            "system_prompt": sys_p,
-            "user_prompt": usr_p,
+            "document_truncated": False,
+            "answer_position_ratio": ref_ratio,
+            "answer_position_bucket": ref_bucket,
+            "retrieved_chunks": retrieved,
+            "retrieval_scores": [r["score"] for r in retrieved],
+            "chunk_offsets": [
+                {
+                    "rank": r.get("rank"),
+                    "index": r.get("index"),
+                    "start_token": r.get("start_token"),
+                    "end_token": r.get("end_token"),
+                }
+                for r in retrieved
+            ],
+            "selected_chunk_indices": [r["index"] for r in selected_for_prompt],
+            "model_name": self.generator.active_model,
+            "system_prompt": system_prompt,
+            "user_prompt": user_prompt,
         }
 
-    # ------------------------------------------------------------------
-    # Run a single task
-    # ------------------------------------------------------------------
+    def _prepare_long_context_example(self, example: Dict) -> Dict[str, Any]:
+        """Build one long-context prompt and its trace metadata.
 
-    def run_task(self, task: str) -> Dict:
-        """Evaluate one SCROLLS task end-to-end."""
-
-        examples = load_scrolls_task(
-            task, self.config.split, self.config.max_samples
+        Long-context deliberately bypasses chunking, embedding, and retrieval.
+        The method tries to pass the original document as-is and only truncates
+        when the document exceeds the configured LC budget.
+        """
+        task_type = TASK_TYPE[example["task"]]
+        system_prompt = SYSTEM_PROMPTS[task_type]
+        document_tokens = self.generator.count_tokens(example["document"])
+        context, context_tokens, truncated = self.generator.truncate_text(
+            example["document"], self.config.lc_context_budget
         )
+        user_prompt = self._build_user_prompt(task_type, context, example["query"])
+        input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
+        ref_ratio, ref_bucket = self._reference_position(
+            example["document"], example["references"]
+        )
+
+        return {
+            "id": example["id"],
+            "task": example["task"],
+            "method": "long_context",
+            "query": example["query"],
+            "references": example["references"],
+            "document_tokens": document_tokens,
+            "context_tokens": context_tokens,
+            "input_tokens": input_tokens,
+            "num_chunks": 0,
+            "num_retrieved": 0,
+            "num_context_chunks": 1,
+            "document_truncated": truncated,
+            "answer_position_ratio": ref_ratio,
+            "answer_position_bucket": ref_bucket,
+            "retrieved_chunks": [],
+            "retrieval_scores": [],
+            "chunk_offsets": [],
+            "selected_chunk_indices": [],
+            "model_name": self.generator.active_model,
+            "system_prompt": system_prompt,
+            "user_prompt": user_prompt,
+        }
+
+    def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
+        """Dispatch one example to its method-specific prompt builder."""
+        if method == "rag":
+            return self._prepare_rag_example(example)
+        if method == "long_context":
+            return self._prepare_long_context_example(example)
+        raise ValueError(f"Unsupported method: {method!r}")
+
+    def run_task(self, task: str, method: str) -> Dict[str, Any]:
+        """Run one task for one method end-to-end.
+
+        Resume behavior is handled at the method/task level:
+        ``outputs/<tier>/<method>/<task>/results.jsonl`` is treated as the
+        durable source of per-example outputs. If an example id already exists
+        there, the pipeline reuses it instead of regenerating.
+        """
+        examples = load_scrolls_task(task, self.config.split, self.config.max_samples)
         if not examples:
-            logger.warning("No examples for task %s – skipping.", task)
-            return {"task": task, "error": "no examples loaded"}
+            logger.warning("No examples for task %s - skipping.", task)
+            return {"task": task, "method": method, "error": "no examples loaded"}
 
-        task_dir = os.path.join(self.config.output_dir, task)
+        task_dir = self._task_dir(method, task)
         os.makedirs(task_dir, exist_ok=True)
-        results_file = os.path.join(task_dir, "results.jsonl")
+        results_file = self._task_results_file(method, task)
 
-        # ---- Resume support: load already-processed IDs ----------------
         done: Dict[str, Dict] = {}
         if os.path.exists(results_file):
             with open(results_file) as fh:
                 for line in fh:
-                    r = json.loads(line)
-                    done[r["id"]] = r
+                    if not line.strip():
+                        continue
+                    record = json.loads(line)
+                    done[record["id"]] = record
             logger.info(
-                "Resuming %s: %d / %d already done.",
-                task, len(done), len(examples),
+                "Resuming %s/%s: %d / %d already done.",
+                method,
+                task,
+                len(done),
+                len(examples),
             )
 
-        # ---- Phase 1: retrieval (per-example) --------------------------
-        to_generate: List[Tuple[int, Dict]] = []  # (index, meta)
-        all_meta: List[Dict] = [{}] * len(examples)  # placeholder
+        to_generate: List[Tuple[int, Dict[str, Any]]] = []
+        all_meta: List[Optional[Dict[str, Any]]] = [None] * len(examples)
 
         t0 = time.time()
-        for i, ex in enumerate(examples):
+        for idx, ex in enumerate(examples):
             if ex["id"] in done:
-                all_meta[i] = done[ex["id"]]
+                all_meta[idx] = done[ex["id"]]
                 continue
             logger.info(
-                "[%s] Retrieving %d / %d  (id=%s)",
-                task, i + 1, len(examples), ex["id"],
+                "[%s/%s] Preparing %d / %d  (id=%s)",
+                method,
+                task,
+                idx + 1,
+                len(examples),
+                ex["id"],
             )
-            meta = self._retrieve_for_example(ex)
-            all_meta[i] = meta
-            to_generate.append((i, meta))
+            meta = self._prepare_example(ex, method)
+            all_meta[idx] = meta
+            to_generate.append((idx, meta))
 
-        retrieval_time = time.time() - t0
+        prep_time = time.time() - t0
         logger.info(
-            "[%s] Retrieval done for %d new examples in %.1fs",
-            task, len(to_generate), retrieval_time,
+            "[%s/%s] Prompt preparation done for %d new examples in %.1fs",
+            method,
+            task,
+            len(to_generate),
+            prep_time,
         )
 
-        # ---- Phase 2: batched generation --------------------------------
         if to_generate:
-            logger.info("[%s] Generating %d answers …", task, len(to_generate))
-            prompt_pairs = [
-                (m["system_prompt"], m["user_prompt"]) for _, m in to_generate
-            ]
+            logger.info("[%s/%s] Generating %d answers ...", method, task, len(to_generate))
+            prompt_pairs = [(m["system_prompt"], m["user_prompt"]) for _, m in to_generate]
             t1 = time.time()
             predictions = self.generator.generate_batch(prompt_pairs)
             gen_time = time.time() - t1
-            logger.info(
-                "[%s] Generation done in %.1fs", task, gen_time
-            )
+            logger.info("[%s/%s] Generation done in %.1fs", method, task, gen_time)
 
-            # Merge predictions into metadata and persist
-            with open(results_file, "a") as fh:
+            write_mode = "a" if self.config.save_raw else None
+            fh = open(results_file, write_mode) if write_mode else None
+            try:
                 for (idx, meta), pred in zip(to_generate, predictions):
                     meta["prediction"] = pred
+                    meta["normalized_prediction"] = normalize_answer(pred)
+                    meta["generation_tokens"] = self.generator.count_tokens(pred)
+                    meta["model_name"] = self.generator.active_model
                     all_meta[idx] = meta
-                    if self.config.save_raw:
+                    if fh is not None:
                         fh.write(json.dumps(meta) + "\n")
+            finally:
+                if fh is not None:
+                    fh.close()
 
-        # ---- Collect predictions & references ---------------------------
         predictions_list: List[str] = []
         references_list: List[List[str]] = []
-        for m in all_meta:
-            predictions_list.append(m.get("prediction", ""))
-            references_list.append(m.get("references", [""]))
+        completed_meta: List[Dict[str, Any]] = []
+        for meta in all_meta:
+            if meta is None:
+                continue
+            completed_meta.append(meta)
+            predictions_list.append(meta.get("prediction", ""))
+            references_list.append(meta.get("references", [""]))
 
-        # ---- Phase 3: metrics -------------------------------------------
         metric_type = TASK_METRIC_TYPE[task]
         metrics = compute_metrics(predictions_list, references_list, metric_type)
         elapsed = time.time() - t0
 
+        input_tokens = [m.get("input_tokens", 0) for m in completed_meta]
+        context_tokens = [m.get("context_tokens", 0) for m in completed_meta]
+        generation_tokens = [m.get("generation_tokens", 0) for m in completed_meta]
+
         summary = {
             "task": task,
+            "method": method,
             "num_examples": len(examples),
             "num_generated": len(to_generate),
             "metric_type": metric_type,
             "metrics": metrics,
             "elapsed_seconds": round(elapsed, 2),
+            "token_stats": {
+                "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
+                "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
+                "avg_generation_tokens": (
+                    (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
+                ),
+                "total_input_tokens": sum(input_tokens),
+            },
+            "results_file": results_file if self.config.save_raw else None,
         }
-        with open(os.path.join(task_dir, "summary.json"), "w") as fh:
+        with open(self._task_summary_file(method, task), "w") as fh:
             json.dump(summary, fh, indent=2)
 
-        logger.info("[%s] %s  (%.1fs)", task, metrics, elapsed)
+        logger.info("[%s/%s] %s  (%.1fs)", method, task, metrics, elapsed)
         return summary
 
-    # ------------------------------------------------------------------
-    # Run all tasks
-    # ------------------------------------------------------------------
-
-    def run_all(self) -> Dict[str, Dict]:
-        all_results: Dict[str, Dict] = {}
-        for task in self.config.tasks:
-            logger.info("\n%s\n  Running task: %s\n%s", "=" * 60, task, "=" * 60)
-            all_results[task] = self.run_task(task)
+    def run_all(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
+        """Run every requested method across every requested task."""
+        all_results: Dict[str, Dict[str, Dict[str, Any]]] = {}
+        methods = self.config.methods or DEFAULT_METHODS
+        for method in methods:
+            all_results[method] = {}
+            for task in self.config.tasks:
+                logger.info(
+                    "\n%s\n  Running method=%s task=%s\n%s",
+                    "=" * 60,
+                    method,
+                    task,
+                    "=" * 60,
+                )
+                all_results[method][task] = self.run_task(task, method)
 
         self._report(all_results)
         return all_results
 
-    # ------------------------------------------------------------------
-    # Final report
-    # ------------------------------------------------------------------
+    def _primary_score(self, task: str, result: Dict[str, Any]) -> float:
+        if "error" in result:
+            return 0.0
+        metric_type = result["metric_type"]
+        metrics = result["metrics"]
+        if metric_type == "rouge":
+            return metrics.get("rouge_geo_mean", 0.0)
+        if metric_type == "f1":
+            return metrics.get("f1", 0.0)
+        if metric_type == "exact_match":
+            return metrics.get("exact_match", 0.0)
+        return 0.0
 
-    def _report(self, all_results: Dict[str, Dict]) -> None:
-        scores: Dict[str, float] = {}
-        details: Dict[str, Dict] = {}
-        for task, res in all_results.items():
-            if "error" in res:
-                continue
-            m = res["metrics"]
-            mt = res["metric_type"]
-            if mt == "rouge":
-                primary = m.get("rouge_geo_mean", 0.0)
-            elif mt == "f1":
-                primary = m.get("f1", 0.0)
-            elif mt == "exact_match":
-                primary = m.get("exact_match", 0.0)
-            else:
-                primary = 0.0
-            scores[task] = primary
-            details[task] = m
+    def _load_method_task_results(self, method: str, task: str) -> List[Dict[str, Any]]:
+        results_file = self._task_results_file(method, task)
+        if not os.path.exists(results_file):
+            return []
+        rows: List[Dict[str, Any]] = []
+        with open(results_file) as fh:
+            for line in fh:
+                if line.strip():
+                    rows.append(json.loads(line))
+        return rows
 
-        avg = (sum(scores.values()) / len(scores)) if scores else 0.0
+    def _compute_agreement(self, methods: List[str]) -> Dict[str, Any]:
+        """Measure normalized prediction agreement between the first two methods."""
+        if len(methods) < 2:
+            return {"overall_agreement_rate": None, "per_task": {}}
 
-        report = {
+        base, compare = methods[:2]
+        per_task: Dict[str, Dict[str, Any]] = {}
+        matched = 0
+        agreed = 0
+
+        for task in self.config.tasks:
+            base_rows = {r["id"]: r for r in self._load_method_task_results(base, task)}
+            compare_rows = {r["id"]: r for r in self._load_method_task_results(compare, task)}
+            shared_ids = sorted(set(base_rows) & set(compare_rows))
+            task_matched = len(shared_ids)
+            task_agreed = 0
+            disagreements: List[str] = []
+            for ex_id in shared_ids:
+                left = base_rows[ex_id].get("normalized_prediction") or normalize_answer(
+                    base_rows[ex_id].get("prediction", "")
+                )
+                right = compare_rows[ex_id].get("normalized_prediction") or normalize_answer(
+                    compare_rows[ex_id].get("prediction", "")
+                )
+                if left == right:
+                    task_agreed += 1
+                else:
+                    disagreements.append(ex_id)
+            matched += task_matched
+            agreed += task_agreed
+            per_task[task] = {
+                "matched_examples": task_matched,
+                "agreement_rate": (task_agreed / task_matched) if task_matched else None,
+                "disagreement_example_ids": disagreements[:10],
+            }
+
+        return {
+            "overall_agreement_rate": (agreed / matched) if matched else None,
+            "matched_examples": matched,
+            "per_task": per_task,
+        }
+
+    def _report(self, all_results: Dict[str, Dict[str, Dict[str, Any]]]) -> None:
+        """Write per-method reports plus one combined comparison report."""
+        methods = list(all_results.keys())
+        method_reports: Dict[str, Dict[str, Any]] = {}
+        for method, task_results in all_results.items():
+            scores: Dict[str, float] = {}
+            details: Dict[str, Dict[str, float]] = {}
+            token_costs = {
+                "avg_input_tokens": 0.0,
+                "avg_context_tokens": 0.0,
+                "avg_generation_tokens": 0.0,
+                "total_input_tokens": 0,
+            }
+            valid_count = 0
+            for task, result in task_results.items():
+                if "error" in result:
+                    continue
+                scores[task] = self._primary_score(task, result)
+                details[task] = result["metrics"]
+                stats = result.get("token_stats", {})
+                token_costs["avg_input_tokens"] += stats.get("avg_input_tokens", 0.0)
+                token_costs["avg_context_tokens"] += stats.get("avg_context_tokens", 0.0)
+                token_costs["avg_generation_tokens"] += stats.get(
+                    "avg_generation_tokens", 0.0
+                )
+                token_costs["total_input_tokens"] += stats.get("total_input_tokens", 0)
+                valid_count += 1
+
+            if valid_count:
+                token_costs["avg_input_tokens"] /= valid_count
+                token_costs["avg_context_tokens"] /= valid_count
+                token_costs["avg_generation_tokens"] /= valid_count
+
+            average = (sum(scores.values()) / len(scores)) if scores else 0.0
+            report = {
+                "method": method,
+                "config": {
+                    "embedding_model": self.config.embedding_model,
+                    "llm_model": self.config.llm_model,
+                    "active_model": self.generator.active_model,
+                    "fallback_llm_model": self.config.fallback_llm_model,
+                    "chunk_size": self.config.chunk_size,
+                    "chunk_overlap": self.config.chunk_overlap,
+                    "top_k": self.config.top_k,
+                    "context_budget": self.config.context_budget,
+                    "lc_context_budget": self.config.lc_context_budget,
+                    "split": self.config.split,
+                    "run_tier": self.config.run_tier,
+                },
+                "per_task_scores": scores,
+                "average_score": average,
+                "detailed_metrics": details,
+                "token_cost_summary": token_costs,
+            }
+            method_reports[method] = report
+
+            path = os.path.join(self._method_root(method), "benchmark_report.json")
+            os.makedirs(self._method_root(method), exist_ok=True)
+            with open(path, "w") as fh:
+                json.dump(report, fh, indent=2)
+
+        deltas: Dict[str, Optional[float]] = {}
+        if "rag" in method_reports and "long_context" in method_reports:
+            for task in self.config.tasks:
+                rag_score = method_reports["rag"]["per_task_scores"].get(task)
+                lc_score = method_reports["long_context"]["per_task_scores"].get(task)
+                if rag_score is None or lc_score is None:
+                    deltas[task] = None
+                else:
+                    deltas[task] = lc_score - rag_score
+
+        comparison = {
             "config": {
-                "embedding_model": self.config.embedding_model,
+                "methods": methods,
+                "run_tier": self.config.run_tier,
+                "tasks": self.config.tasks,
                 "llm_model": self.config.llm_model,
-                "chunk_size": self.config.chunk_size,
-                "chunk_overlap": self.config.chunk_overlap,
+                "fallback_llm_model": self.config.fallback_llm_model,
                 "top_k": self.config.top_k,
                 "context_budget": self.config.context_budget,
-                "split": self.config.split,
+                "lc_context_budget": self.config.lc_context_budget,
+                "enable_thinking": self.config.enable_thinking,
             },
-            "per_task_scores": scores,
-            "average_score": avg,
-            "detailed_metrics": details,
+            "methods": method_reports,
+            "comparison": {
+                "long_context_minus_rag": deltas,
+                "agreement": self._compute_agreement(methods),
+            },
         }
-        path = os.path.join(self.config.output_dir, "benchmark_report.json")
-        with open(path, "w") as fh:
-            json.dump(report, fh, indent=2)
 
-        print("\n" + "=" * 62)
-        print("  SCROLLS RAG Baseline — Final Report")
-        print("=" * 62)
-        for task, sc in scores.items():
-            mt = TASK_METRIC_TYPE[task]
-            print(f"  {task:20s}  {mt:14s}  {sc:.4f}")
-        print("-" * 62)
-        print(f"  {'AVERAGE':20s}  {'':14s}  {avg:.4f}")
-        print("=" * 62)
-        print(f"  Report saved to: {path}")
+        path = os.path.join(self.config.run_output_dir, "comparison_report.json")
+        with open(path, "w") as fh:
+            json.dump(comparison, fh, indent=2)
+
+        print("\n" + "=" * 74)
+        print(f"  SCROLLS Benchmark - {self.config.run_tier} tier")
+        print("=" * 74)
+        for method in methods:
+            report = method_reports.get(method, {})
+            print(f"  Method: {method}")
+            for task, score in report.get("per_task_scores", {}).items():
+                metric_type = TASK_METRIC_TYPE[task]
+                print(f"    {task:20s}  {metric_type:14s}  {score:.4f}")
+            print(f"    {'AVERAGE':20s}  {'':14s}  {report.get('average_score', 0.0):.4f}")
+            print("-" * 74)
+        if deltas:
+            print("  long_context - rag")
+            for task, delta in deltas.items():
+                if delta is None:
+                    continue
+                print(f"    {task:20s}  {delta:+.4f}")
+            agreement = comparison["comparison"]["agreement"].get("overall_agreement_rate")
+            if agreement is not None:
+                print(f"  Agreement rate: {agreement:.4f}")
+        print("=" * 74)
+        print(f"  Comparison report saved to: {path}")
+
+
+# Backwards-compatible alias.
+RAGPipeline = BenchmarkPipeline

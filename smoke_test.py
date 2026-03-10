@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
 """
-Smoke test — quick validation that every component works end-to-end.
+Small end-to-end validation entrypoint.
 
-Runs 2 examples from each of a small set of tasks (default: qasper,
-gov_report) so you can verify correctness before launching a full run.
+Use this before a subset or full benchmark run to verify that:
 
-Usage
-─────
-  python smoke_test.py --llm-model Qwen/Qwen2.5-32B-Instruct
-
-  # Override tasks & sample count
-  python smoke_test.py --tasks qasper narrative_qa quality \\
-                       --num-samples 3 \\
-                       --llm-model Qwen/Qwen2.5-32B-Instruct
+- the model loads
+- the dataset downloads
+- both methods execute
+- outputs are written in the expected structure
 """
 
 import argparse
@@ -21,35 +16,45 @@ import logging
 import os
 import sys
 
-from config import RAGConfig, SCROLLS_TASKS
-from rag_pipeline import RAGPipeline
+from config import (
+    BenchmarkConfig,
+    DEFAULT_FALLBACK_LLM_MODEL,
+    DEFAULT_LC_CONTEXT_BUDGET,
+    DEFAULT_LLM_MODEL,
+    SUPPORTED_METHODS,
+)
 
 
 def main():
-    p = argparse.ArgumentParser(
-        description="Smoke test for the SCROLLS RAG Baseline",
+    parser = argparse.ArgumentParser(
+        description="Smoke test for the SCROLLS RAG vs long-context benchmark",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    p.add_argument("--llm-model", required=True)
-    p.add_argument("--tasks", nargs="+",
-                   default=["qasper", "gov_report"],
-                   choices=SCROLLS_TASKS)
-    p.add_argument("--num-samples", type=int, default=2)
-    p.add_argument("--embedding-device", default="cuda")
-    p.add_argument("--output-dir", default="outputs/smoke_test")
-    p.add_argument("--tensor-parallel-size", type=int, default=1)
-    p.add_argument("--gpu-memory-utilization", type=float, default=0.90)
-    args = p.parse_args()
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[logging.StreamHandler(sys.stdout)],
+    parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
+    parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
+    parser.add_argument(
+        "--methods",
+        nargs="+",
+        default=SUPPORTED_METHODS,
+        choices=SUPPORTED_METHODS,
     )
-    log = logging.getLogger("smoke_test")
+    parser.add_argument("--tasks", nargs="+", default=["qasper", "qmsum"])
+    parser.add_argument("--num-samples", type=int, default=2)
+    parser.add_argument("--embedding-device", default="cuda")
+    parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument("--tensor-parallel-size", type=int, default=1)
+    parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
+    parser.add_argument("--lc-context-budget", type=int, default=DEFAULT_LC_CONTEXT_BUDGET)
+    parser.add_argument("--enable-thinking", action="store_true")
+    args = parser.parse_args()
 
-    config = RAGConfig(
+    from rag_pipeline import BenchmarkPipeline
+
+    config = BenchmarkConfig(
+        methods=args.methods,
+        run_tier="smoke",
         llm_model=args.llm_model,
+        fallback_llm_model=args.fallback_llm_model,
         max_samples=args.num_samples,
         tasks=args.tasks,
         output_dir=args.output_dir,
@@ -57,54 +62,64 @@ def main():
         embedding_device=args.embedding_device,
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
+        lc_context_budget=args.lc_context_budget,
+        enable_thinking=args.enable_thinking,
     )
 
-    os.makedirs(config.output_dir, exist_ok=True)
+    os.makedirs(config.run_output_dir, exist_ok=True)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
+    log = logging.getLogger("smoke_test")
 
-    log.info("=" * 55)
-    log.info("  SMOKE TEST — SCROLLS RAG Baseline")
+    log.info("=" * 60)
+    log.info("  SMOKE TEST - SCROLLS RAG vs long-context")
+    log.info("  Methods:    %s", args.methods)
     log.info("  Tasks:      %s", args.tasks)
     log.info("  Samples:    %d per task", args.num_samples)
-    log.info("  LLM:        %s (vLLM local)", args.llm_model)
-    log.info("=" * 55)
+    log.info("  LLM:        %s (fallback=%s)", args.llm_model, args.fallback_llm_model)
+    log.info("  Thinking:   %s", args.enable_thinking)
+    log.info("=" * 60)
 
-    pipeline = RAGPipeline(config)
+    pipeline = BenchmarkPipeline(config)
     results = pipeline.run_all()
 
-    # ----- Verdict -------------------------------------------------------
     ok = True
-    print("\n" + "-" * 55)
-    for task, res in results.items():
-        if "error" in res:
-            print(f"  FAIL  {task}: {res['error']}")
-            ok = False
-        else:
-            print(f"  PASS  {task}: {res['metrics']}")
+    print("\n" + "-" * 60)
+    for method, task_results in results.items():
+        for task, result in task_results.items():
+            if "error" in result:
+                print(f"  FAIL  {method}/{task}: {result['error']}")
+                ok = False
+            else:
+                print(f"  PASS  {method}/{task}: {result['metrics']}")
 
-    # Show a few raw outputs for inspection
     print("\n--- Sample raw outputs ---")
-    for task in args.tasks:
-        rfile = os.path.join(args.output_dir, task, "results.jsonl")
-        if not os.path.exists(rfile):
-            continue
-        with open(rfile) as fh:
-            for i, line in enumerate(fh):
-                if i >= 2:
-                    break
-                r = json.loads(line)
-                print(f"\n[{task} #{i}]")
-                print(f"  Query:      {r.get('query', '')[:120]}")
-                print(f"  Prediction: {r.get('prediction', '')[:200]}")
-                refs = r.get("references", [""])
-                print(f"  Reference:  {refs[0][:200]}")
+    for method in args.methods:
+        for task in args.tasks:
+            rfile = os.path.join(config.run_output_dir, method, task, "results.jsonl")
+            if not os.path.exists(rfile):
+                continue
+            with open(rfile) as fh:
+                for idx, line in enumerate(fh):
+                    if idx >= 1:
+                        break
+                    record = json.loads(line)
+                    print(f"\n[{method}/{task} #{idx}]")
+                    print(f"  Query:      {record.get('query', '')[:120]}")
+                    print(f"  Prediction: {record.get('prediction', '')[:200]}")
+                    refs = record.get("references", [""])
+                    print(f"  Reference:  {refs[0][:200]}")
 
     print()
     if ok:
-        print(">>> Smoke test PASSED — all tasks completed.")
+        print(">>> Smoke test PASSED - all requested method/task combinations completed.")
         sys.exit(0)
-    else:
-        print(">>> Smoke test FAILED — see errors above.")
-        sys.exit(1)
+
+    print(">>> Smoke test FAILED - see errors above.")
+    sys.exit(1)
 
 
 if __name__ == "__main__":
