@@ -24,7 +24,7 @@ if [ -z "$PYTHON_BIN" ]; then
     exit 1
 fi
 
-PYTHON_VERSION="$("$PYTHON_BIN" -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")')"
+PYTHON_VERSION="$("$PYTHON_BIN" -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
 case "$PYTHON_VERSION" in
     3.10|3.11|3.12)
         ;;
