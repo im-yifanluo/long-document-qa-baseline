@@ -1,6 +1,12 @@
-# SCROLLS Vanilla RAG and DOS RAG Benchmark
+# Long-Document Benchmark Runner
 
-This repo benchmarks two retrieval-based long-document QA baselines on SCROLLS:
+This repo is now structured as a modular benchmark runner:
+
+- benchmark plugins live under `benchmarks/`
+- method plugins live under `methods/`
+- the pipeline in `rag_pipeline.py` only orchestrates loading, generation, caching, and reporting
+
+The current benchmark plugin is SCROLLS, and the current active methods are:
 
 - `vanilla_rag`: retrieve relevant passages and prompt the reader in retrieval-rank order
 - `dos_rag`: retrieve the same passages but restore their original document order before prompting
@@ -35,6 +41,20 @@ Long-context scaffolding is still present in the codebase, but it is intentional
 - `Snowflake/snowflake-arctic-embed-m-v1.5` and `100`-token passages match the paper’s vanilla/DOS RAG setup.
 - `top_k` is derived from the context budget with the paper-style heuristic `top_k ~= budget / 50`. At the default `10000`-token budget that yields `top_k=200`.
 
+## Architecture
+
+The intended extension points are:
+
+- add a new benchmark such as LaRA by implementing a benchmark plugin
+- add a new method such as RAPTOR, ReadAgent, or a long-context reader by implementing a method plugin
+- keep benchmark-specific evaluation logic inside the benchmark plugin instead of in the generic pipeline
+
+The current concrete implementation is:
+
+- benchmark plugin: `scrolls`
+- active methods: `vanilla_rag`, `dos_rag`
+- retained experimental method scaffold: `long_context`
+
 ## Task Scope
 
 The repo has two benchmark surfaces:
@@ -63,7 +83,7 @@ source venv/bin/activate
 
 ## Official SCROLLS Evaluation
 
-This repo now uses the official SCROLLS evaluator from the local `scrolls/`
+The `scrolls` benchmark plugin now uses the official SCROLLS evaluator from the local `scrolls/`
 clone as the primary task scorer whenever it is enabled.
 
 Important constraint: the official evaluator is an older toolchain
@@ -78,7 +98,7 @@ export SCROLLS_EVAL_PYTHON=/path/to/scrolls-eval/bin/python
 or:
 
 ```bash
-python run_benchmark.py --scrolls-eval-python /path/to/scrolls-eval/bin/python ...
+python run_benchmark.py --benchmark scrolls --official-eval-python /path/to/scrolls-eval/bin/python ...
 ```
 
 For reproducibility, treat the local `scrolls/` clone as a pinned dependency:
@@ -193,13 +213,13 @@ python smoke_test.py --overwrite-existing
 Run a one-example-per-dataset preflight pass:
 
 ```bash
-python run_benchmark.py --run-tier preflight --overwrite-existing
+python run_benchmark.py --benchmark scrolls --run-tier preflight --overwrite-existing
 ```
 
 Or use the smoke entrypoint for a one-example-per-dataset sanity run:
 
 ```bash
-python smoke_test.py --all-datasets --overwrite-existing
+python smoke_test.py --benchmark scrolls --all-datasets --overwrite-existing
 ```
 
 That path writes to the `preflight` output directory so it stays aligned with
@@ -208,46 +228,47 @@ the one-example-per-dataset tier.
 Run the subset benchmark:
 
 ```bash
-python run_benchmark.py --run-tier subset --overwrite-existing
+python run_benchmark.py --benchmark scrolls --run-tier subset --overwrite-existing
 ```
 
 Run a subset over all 7 SCROLLS tasks:
 
 ```bash
-python run_benchmark.py --run-tier scrolls_subset --overwrite-existing
+python run_benchmark.py --benchmark scrolls --run-tier scrolls_subset --overwrite-existing
 ```
 
 Run the full official 7-task SCROLLS validation benchmark:
 
 ```bash
-python run_benchmark.py --run-tier scrolls_full --overwrite-existing
+python run_benchmark.py --benchmark scrolls --run-tier scrolls_full --overwrite-existing
 ```
 
 Run with an explicit SCROLLS evaluator interpreter:
 
 ```bash
 python run_benchmark.py \
+  --benchmark scrolls \
   --run-tier scrolls_full \
-  --scrolls-eval-python /path/to/scrolls-eval/bin/python \
+  --official-eval-python /path/to/scrolls-eval/bin/python \
   --overwrite-existing
 ```
 
 Run the paper-style long-QA context-budget sweep:
 
 ```bash
-python run_benchmark.py --run-tier subset --context-budget-preset paper_long_qa
+python run_benchmark.py --benchmark scrolls --run-tier subset --context-budget-preset paper_long_qa
 ```
 
 Run a custom budget sweep:
 
 ```bash
-python run_benchmark.py --run-tier subset --context-budgets 1500 5000 10000 20000
+python run_benchmark.py --benchmark scrolls --run-tier subset --context-budgets 1500 5000 10000 20000
 ```
 
 Run one method only:
 
 ```bash
-python run_benchmark.py --run-tier subset --methods dos_rag
+python run_benchmark.py --benchmark scrolls --run-tier subset --methods dos_rag
 ```
 
 ## Analysis
@@ -255,7 +276,7 @@ python run_benchmark.py --run-tier subset --methods dos_rag
 Generate post-hoc analysis artifacts from saved outputs:
 
 ```bash
-python analyze_outputs.py --run-tier subset
+python analyze_outputs.py --benchmark scrolls --run-tier subset
 ```
 
 The analysis package includes:
@@ -270,25 +291,29 @@ The analysis package includes:
 
 ## Output Layout
 
+Outputs are benchmark-scoped so different benchmarks do not overwrite each
+other.
+
 ```text
 outputs/
-  smoke|preflight|subset|full|scrolls_subset|scrolls_full/
-    comparison_report.json
-    comparison_report.md
-    comparison_examples.jsonl
-    benchmark.log
-    vanilla_rag/
-      benchmark_report.json
-      <task>/
-        results.jsonl
-        summary.json
-    dos_rag/
-      benchmark_report.json
-      <task>/
-        results.jsonl
-        summary.json
-    analysis/
-      ... generated by analyze_outputs.py ...
+  <benchmark>/
+    smoke|preflight|subset|full|scrolls_subset|scrolls_full/
+      comparison_report.json
+      comparison_report.md
+      comparison_examples.jsonl
+      benchmark.log
+      vanilla_rag/
+        benchmark_report.json
+        <task>/
+          results.jsonl
+          summary.json
+      dos_rag/
+        benchmark_report.json
+        <task>/
+          results.jsonl
+          summary.json
+      analysis/
+        ... generated by analyze_outputs.py ...
 ```
 
 `comparison_report.json` now includes per-task example previews, and
@@ -321,6 +346,10 @@ benchmark artifacts under:
 |---|---|
 | `run_benchmark.py` | main benchmark CLI |
 | `rag_pipeline.py` | method execution, generation, evaluation, reporting |
+| `registry.py` | benchmark and method plugin registry |
+| `interfaces.py` | shared benchmark/method contracts |
+| `benchmarks/` | benchmark plugins, currently `scrolls` |
+| `methods/` | method plugins, currently retrieval and long-context scaffolds |
 | `chunker.py` | sentence-aware passage chunking |
 | `embedder.py` | dense retrieval embedding wrapper |
 | `retriever.py` | FAISS retrieval |

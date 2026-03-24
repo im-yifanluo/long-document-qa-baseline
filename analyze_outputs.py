@@ -20,7 +20,8 @@ import os
 from statistics import mean
 from typing import Dict, List, Optional, Tuple
 
-from config import DEFAULT_ANALYSIS_SAMPLE_SIZE, SCROLLS_TASKS, SUPPORTED_METHODS, TASK_METRIC_TYPE
+from config import DEFAULT_ANALYSIS_SAMPLE_SIZE, DEFAULT_BENCHMARK_NAME
+from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
 
 try:
     import matplotlib.pyplot as plt
@@ -364,6 +365,7 @@ def make_qualitative_exports(
 
 
 def make_rag_rank_analysis(
+    benchmark,
     method_rows: Dict[str, Dict[str, Dict[str, Dict]]],
     methods: List[str],
     tasks: List[str],
@@ -376,7 +378,7 @@ def make_rag_rank_analysis(
         return
 
     for task in tasks:
-        metric_type = TASK_METRIC_TYPE[task]
+        metric_type = benchmark.task_metric_type(task)
         for row in method_rows.get(retrieval_method, {}).get(task, {}).values():
             rank = first_supporting_rank(row.get("retrieved_chunks", []), row.get("references", []))
             bucket = rank_bucket(rank)
@@ -441,17 +443,21 @@ def main():
     )
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument(
+        "--benchmark",
+        default=DEFAULT_BENCHMARK_NAME,
+        choices=benchmark_names(),
+    )
+    parser.add_argument(
         "--run-tier",
         default="subset",
-        choices=["smoke", "preflight", "subset", "full", "scrolls_subset", "scrolls_full"],
     )
     parser.add_argument(
         "--methods",
         nargs="+",
-        default=SUPPORTED_METHODS,
-        choices=SUPPORTED_METHODS,
+        default=ACTIVE_METHOD_NAMES,
+        choices=method_names(),
     )
-    parser.add_argument("--tasks", nargs="+", default=None, choices=SCROLLS_TASKS)
+    parser.add_argument("--tasks", nargs="+", default=None)
     parser.add_argument("--sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
     parser.add_argument("--seed", type=int, default=13)
     args = parser.parse_args()
@@ -461,7 +467,11 @@ def main():
             "Analysis dependencies are missing. Install requirements.txt first."
         )
 
-    run_root = os.path.join(args.output_dir, args.run_tier)
+    benchmark = create_benchmark(args.benchmark, None)
+    if args.tasks is not None:
+        benchmark.validate_tasks(args.tasks)
+
+    run_root = os.path.join(args.output_dir, args.benchmark, args.run_tier)
     analysis_dir = os.path.join(run_root, "analysis")
     os.makedirs(analysis_dir, exist_ok=True)
 
@@ -472,7 +482,7 @@ def main():
     make_agreement_artifacts(method_rows, args.methods, tasks, analysis_dir)
     make_qualitative_exports(method_rows, args.methods, args.sample_size, args.seed, analysis_dir)
     if any(method in args.methods for method in ("dos_rag", "vanilla_rag", "rag")):
-        make_rag_rank_analysis(method_rows, args.methods, tasks, analysis_dir)
+        make_rag_rank_analysis(benchmark, method_rows, args.methods, tasks, analysis_dir)
     maybe_copy_probe_plot(run_root, analysis_dir)
 
     manifest = {

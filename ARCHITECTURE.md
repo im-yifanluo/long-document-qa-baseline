@@ -1,26 +1,30 @@
 # Architecture And Execution Guide
 
-This repo currently benchmarks retrieval-based long-document QA on SCROLLS with two closely matched baselines:
+This repo is now organized around three separable layers:
 
-- `vanilla_rag`
-- `dos_rag`
+1. benchmark plugins in `benchmarks/`
+2. method plugins in `methods/`
+3. the generic pipeline in `rag_pipeline.py`
 
-The important design choice is that both methods share the same chunker, retriever, reader, prompts, and evaluation path. The only behavioral difference is the order in which retrieved passages are presented to the language model.
+The current concrete setup is:
+
+- benchmark plugin: `scrolls`
+- active methods: `vanilla_rag`, `dos_rag`
+- retained experimental scaffold: `long_context`
 
 ## 1. Goal
 
 The benchmark is meant to establish strong retrieval baselines before adding more complex systems such as RAPTOR-style, ReadAgent-style, or long-context methods.
 
-At the moment:
+The architectural goal is that:
 
-- active methods: `vanilla_rag`, `dos_rag`
-- inactive scaffold retained for future work: `long_context`
-- QA-focused experiment tiers: `subset`, `full`
-- full 7-task SCROLLS tiers: `scrolls_subset`, `scrolls_full`
+- a new benchmark such as LaRA should be added as a benchmark plugin
+- a new method such as RAPTOR or ReadAgent should be added as a method plugin
+- the generic pipeline should not need benchmark-specific or method-specific rewrites
 
 ## 2. Data Flow
 
-Each SCROLLS example is normalized into:
+Each benchmark plugin is responsible for normalizing its raw examples into the shared interface:
 
 - `id`
 - `task`
@@ -28,18 +32,19 @@ Each SCROLLS example is normalized into:
 - `query`
 - `references`
 
-This happens in `data_loader.py`.
+For SCROLLS this happens in `benchmarks/scrolls.py`, with `data_loader.py`
+retained as a compatibility wrapper.
 
 Important boundary:
 
-- `data_loader.py` exists for generation-time parsing and example selection
-- official scoring still comes from the cloned `scrolls/evaluator` scripts
-- the loader mirrors the evaluator's duplicate-ID handling so generation and
-  scoring operate on the same unique example IDs
+- benchmark plugins own prompts, task metadata, and scoring logic
+- method plugins own prompt construction and retrieval / LC traces
+- the pipeline only manages batching, caching, generation, and reporting
+- official scoring still comes from the cloned `scrolls/evaluator` scripts for the `scrolls` plugin
 
 ## 3. Retrieval Pipeline
 
-The active retrieval pipeline is:
+The current retrieval methods share the same retrieval stack:
 
 1. Split the document into sentence-aware passages with a target size of `100` tokens.
 2. Embed passages with `Snowflake/snowflake-arctic-embed-m-v1.5`.
@@ -93,6 +98,7 @@ Reason:
 
 Each run writes:
 
+- a benchmark-scoped root under `outputs/<benchmark>/<run-tier>/`
 - per-example `results.jsonl`
 - per-task `summary.json`
 - per-method `benchmark_report.json`
@@ -100,10 +106,9 @@ Each run writes:
 
 When official evaluation is enabled:
 
-- per-task `summary.json` uses official SCROLLS metrics as the primary score
+- per-task `summary.json` uses the benchmark plugin's official metrics as the primary score when available
 - local in-process metrics are retained only as diagnostics
-- complete `scrolls_full` validation runs also write official benchmark-level
-  artifacts via `prepare_submission.py` and `benchmark_evaluator.py`
+- the SCROLLS plugin writes official benchmark-level artifacts on complete `scrolls_full` validation runs
 
 The analysis script then derives:
 
@@ -117,7 +122,11 @@ The analysis script then derives:
 | File | Role |
 |---|---|
 | `config.py` | defaults, run tiers, supported methods |
-| `data_loader.py` | SCROLLS parsing |
+| `interfaces.py` | shared benchmark/method contracts |
+| `registry.py` | benchmark and method plugin registry |
+| `benchmarks/` | benchmark plugins |
+| `methods/` | method plugins |
+| `data_loader.py` | compatibility wrapper for SCROLLS loading |
 | `official_scrolls.py` | bridge to the official `scrolls/evaluator` scripts |
 | `chunker.py` | sentence-aware chunking |
 | `embedder.py` | retrieval embeddings |

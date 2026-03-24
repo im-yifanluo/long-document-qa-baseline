@@ -11,24 +11,11 @@ This file now follows the official SCROLLS evaluator closely:
 
 import math
 import re
-import string
 from collections import Counter
 from typing import Dict, List
 
 from rouge_score import rouge_scorer
-
-
-# ---------------------------------------------------------------------------
-# Normalisation (shared by F1 and EM)
-# ---------------------------------------------------------------------------
-
-def normalize_answer(s: str) -> str:
-    """SCROLLS F1/EM normalization copied from the official helpers."""
-    s = s.lower()
-    s = re.sub(r"\b(a|an|the)\b", " ", s)
-    s = "".join(c for c in s if c not in string.punctuation)
-    s = " ".join(s.split())
-    return s
+from text_utils import normalize_answer
 
 
 def _rouge_postprocess_text(text: str) -> str:

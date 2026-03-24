@@ -18,33 +18,38 @@ import sys
 
 from config import (
     BenchmarkConfig,
+    DEFAULT_BENCHMARK_NAME,
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
-    SCROLLS_TASKS,
-    SUPPORTED_METHODS,
 )
+from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Smoke test for the SCROLLS vanilla RAG vs DOS RAG benchmark",
+        description="Smoke test for the long-document benchmark runner",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--benchmark",
+        default=DEFAULT_BENCHMARK_NAME,
+        choices=benchmark_names(),
     )
     parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
     parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
     parser.add_argument(
         "--methods",
         nargs="+",
-        default=SUPPORTED_METHODS,
-        choices=SUPPORTED_METHODS,
+        default=ACTIVE_METHOD_NAMES,
+        choices=method_names(),
     )
-    parser.add_argument("--tasks", nargs="+", default=["qasper", "quality"])
-    parser.add_argument("--num-samples", type=int, default=2)
+    parser.add_argument("--tasks", nargs="+", default=None)
+    parser.add_argument("--num-samples", type=int, default=None)
     parser.add_argument(
         "--all-datasets",
         action="store_true",
-        help="Run exactly one example for every SCROLLS dataset as a preflight check.",
+        help="Run exactly one example for every dataset/task in the selected benchmark as a preflight check.",
     )
     parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
     parser.add_argument("--embedding-device", default="cuda")
@@ -53,24 +58,24 @@ def main():
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--enable-thinking", action="store_true")
     parser.add_argument(
-        "--scrolls-repo-dir",
+        "--benchmark-repo-dir",
         default="scrolls",
-        help="Path to the local clone of the official SCROLLS repo.",
+        help="Path to the local clone of the benchmark repo used by the official evaluator.",
     )
     parser.add_argument(
-        "--scrolls-eval-python",
+        "--official-eval-python",
         default=None,
-        help="Python executable for the official SCROLLS evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
+        help="Python executable for the official evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
     )
     parser.add_argument(
-        "--scrolls-eval-cache-dir",
+        "--official-eval-cache-dir",
         default=None,
-        help="Optional cache dir passed through to the official SCROLLS evaluator.",
+        help="Optional cache dir passed through to the official evaluator.",
     )
     parser.add_argument(
-        "--no-official-scrolls-eval",
+        "--no-official-eval",
         action="store_true",
-        help="Disable the official SCROLLS evaluator and keep only local diagnostic metrics.",
+        help="Disable the official benchmark evaluator and keep only local diagnostic metrics.",
     )
     parser.add_argument(
         "--overwrite-existing",
@@ -83,11 +88,19 @@ def main():
         help="Do not run generation. Recompute scoring and reports from existing cached smoke/preflight results.",
     )
     args = parser.parse_args()
+    benchmark = create_benchmark(args.benchmark, None)
     run_tier = "smoke"
     if args.all_datasets:
-        args.tasks = SCROLLS_TASKS.copy()
+        args.tasks = benchmark.list_tasks()
         args.num_samples = 1
         run_tier = "preflight"
+    else:
+        args.tasks, resolved_samples = benchmark.resolve_run_settings(
+            "smoke",
+            args.tasks,
+            args.num_samples,
+        )
+        args.num_samples = resolved_samples
 
     try:
         from rag_pipeline import BenchmarkPipeline
@@ -104,6 +117,7 @@ def main():
         ) from exc
 
     config = BenchmarkConfig(
+        benchmark_name=args.benchmark,
         methods=args.methods,
         run_tier=run_tier,
         llm_model=args.llm_model,
@@ -118,10 +132,10 @@ def main():
         gpu_memory_utilization=args.gpu_memory_utilization,
         enable_thinking=args.enable_thinking,
         overwrite_existing=args.overwrite_existing,
-        use_official_scrolls_eval=not args.no_official_scrolls_eval,
-        scrolls_repo_dir=args.scrolls_repo_dir,
-        scrolls_eval_python=args.scrolls_eval_python,
-        scrolls_eval_cache_dir=args.scrolls_eval_cache_dir,
+        use_official_evaluator=not args.no_official_eval,
+        benchmark_repo_dir=args.benchmark_repo_dir,
+        official_eval_python=args.official_eval_python,
+        official_eval_cache_dir=args.official_eval_cache_dir,
     )
 
     os.makedirs(config.run_output_dir, exist_ok=True)
@@ -133,7 +147,8 @@ def main():
     log = logging.getLogger("smoke_test")
 
     log.info("=" * 60)
-    log.info("  SMOKE TEST - SCROLLS vanilla RAG vs DOS RAG")
+    log.info("  SMOKE TEST - %s", args.benchmark)
+    log.info("  Benchmark:  %s", args.benchmark)
     log.info("  Methods:    %s", args.methods)
     log.info("  Tasks:      %s", args.tasks)
     log.info("  Samples:    %d per task", args.num_samples)

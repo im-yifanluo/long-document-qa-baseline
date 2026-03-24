@@ -1,164 +1,37 @@
 """
-Central configuration for the SCROLLS long-document QA benchmark.
+Central configuration for the modular long-document benchmark runner.
 
-This module is the single source of truth for:
-
-- which SCROLLS tasks exist and how they are scored
-- which benchmark methods are supported (`vanilla_rag` and `dos_rag`)
-- prompt templates shared across methods
-- default model, retrieval, and context-budget settings
-- run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`,
-  `full`, `scrolls_subset`, `scrolls_full`)
-
-The goal is that a reader can inspect this file first and immediately answer:
-
-- what gets benchmarked
-- which defaults are considered "the current experiment"
-- how large the long-context window is allowed to be
-- which settings are safe to override from the command line
+This file holds experiment-wide runtime defaults. Benchmark-specific metadata
+such as tasks, prompt templates, and official evaluation logic now live in
+their benchmark plugins under ``benchmarks/``.
 """
 
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional
 
-# ---------------------------------------------------------------------------
-# SCROLLS task definitions
-# ---------------------------------------------------------------------------
-
-SCROLLS_TASKS: List[str] = [
-    "gov_report",
-    "summ_screen_fd",
-    "qmsum",
-    "qasper",
-    "narrative_qa",
-    "quality",
-    "contract_nli",
-]
-
-SCROLLS_QA_TASKS: List[str] = [
-    "qmsum",
-    "qasper",
-    "narrative_qa",
-    "quality",
-    "contract_nli",
-]
-
-TASK_METRIC_TYPE: Dict[str, str] = {
-    "gov_report": "rouge",
-    "summ_screen_fd": "rouge",
-    "qmsum": "rouge",
-    "qasper": "f1",
-    "narrative_qa": "f1",
-    "quality": "exact_match",
-    "contract_nli": "exact_match",
-}
-
-TASK_TYPE: Dict[str, str] = {
-    "gov_report": "summarization",
-    "summ_screen_fd": "summarization",
-    "qmsum": "query_summarization",
-    "qasper": "question_answering",
-    "narrative_qa": "question_answering",
-    "quality": "multiple_choice",
-    "contract_nli": "nli",
-}
+from benchmarks.scrolls import (
+    SCROLLS_QA_TASKS,
+    SCROLLS_RUN_TIER_DEFAULTS,
+    SCROLLS_TASKS,
+    SYSTEM_PROMPTS,
+    TASK_METRIC_TYPE,
+    TASK_TYPE,
+    USER_PROMPT_TEMPLATES,
+)
 
 # ---------------------------------------------------------------------------
 # Supported methods and run tiers
 # ---------------------------------------------------------------------------
 
+DEFAULT_BENCHMARK_NAME = "scrolls"
 RESULTS_FORMAT_VERSION = 3
 
 SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()
 EXPERIMENTAL_METHODS: List[str] = ["long_context"]
 
-RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {
-    "smoke": {
-        "tasks": ["qasper", "quality"],
-        "max_samples": 2,
-    },
-    "preflight": {
-        "tasks": SCROLLS_TASKS.copy(),
-        "max_samples": 1,
-    },
-    "scrolls_subset": {
-        "tasks": SCROLLS_TASKS.copy(),
-        "max_samples": 50,
-    },
-    "subset": {
-        "tasks": SCROLLS_QA_TASKS.copy(),
-        "max_samples": 50,
-    },
-    "full": {
-        "tasks": SCROLLS_QA_TASKS.copy(),
-        "max_samples": -1,
-    },
-    "scrolls_full": {
-        "tasks": SCROLLS_TASKS.copy(),
-        "max_samples": -1,
-    },
-}
-
-# ---------------------------------------------------------------------------
-# Prompt templates (per task type)
-# ---------------------------------------------------------------------------
-
-SYSTEM_PROMPTS: Dict[str, str] = {
-    "summarization": (
-        "You are a careful research assistant. Summarize the document based only "
-        "on the provided context."
-    ),
-    "query_summarization": (
-        "You are a careful research assistant. Answer the query based only on the "
-        "provided context."
-    ),
-    "question_answering": (
-        "You are a careful research assistant. Answer the question concisely and "
-        "based only on the provided context. When the answer appears explicitly "
-        "in the context, copy the exact answer text rather than paraphrasing. "
-        "If the answer is short, reply with the answer only instead of a full sentence."
-    ),
-    "multiple_choice": (
-        "You are a careful research assistant. Answer the multiple-choice question "
-        "based only on the provided context. Reply with ONLY the exact text of "
-        "the correct option, without the option letter, parentheses, or any "
-        "extra words."
-    ),
-    "nli": (
-        "You are a careful research assistant. Classify the hypothesis based only "
-        "on the provided context. Reply with exactly one of: 'Entailment', "
-        "'Contradiction', or 'Not mentioned'. Do not add any explanation."
-    ),
-}
-
-USER_PROMPT_TEMPLATES: Dict[str, str] = {
-    "summarization": (
-        "{context_label}:\n{context}\n\nProvide a comprehensive summary of the "
-        "document based only on the provided text."
-    ),
-    "query_summarization": (
-        "{context_label}:\n{context}\n\nQuery: {query}\n\nAnswer the query "
-        "based only on the provided context."
-    ),
-    "question_answering": (
-        "{context_label}:\n{context}\n\nQuestion: {query}\n\nAnswer concisely "
-        "and based only on the provided context. If the answer appears verbatim "
-        "in the context, copy that exact text. If the answer is short, answer "
-        "with the answer only, not a full sentence."
-    ),
-    "multiple_choice": (
-        "{context_label}:\n{context}\n\n{query}\n\nAnswer with ONLY the "
-        "exact text of the correct option, without the option letter, "
-        "parentheses, or any extra words."
-    ),
-    "nli": (
-        "{context_label}:\n{context}\n\nHypothesis: {query}\n\nClassify as "
-        "'Entailment', 'Contradiction', or 'Not mentioned'. Reply with only the "
-        "label and no explanation."
-    ),
-}
+RUN_TIER_DEFAULTS = SCROLLS_RUN_TIER_DEFAULTS
 
 # ---------------------------------------------------------------------------
 # Defaults
@@ -191,23 +64,6 @@ DEFAULT_RANDOM_SEED = 13
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-
-def resolve_run_settings(
-    run_tier: str,
-    tasks: Optional[List[str]] = None,
-    max_samples: Optional[int] = None,
-) -> Tuple[List[str], int]:
-    """Resolve tasks/max_samples from a run tier with optional overrides."""
-    if run_tier not in RUN_TIER_DEFAULTS:
-        raise ValueError(f"Unknown run_tier: {run_tier!r}")
-
-    defaults = RUN_TIER_DEFAULTS[run_tier]
-    resolved_tasks = tasks if tasks is not None else list(defaults["tasks"])
-    resolved_max_samples = (
-        max_samples if max_samples is not None else int(defaults["max_samples"])
-    )
-    return resolved_tasks, resolved_max_samples
 
 
 def recommended_top_k_for_context_budget(context_budget: int) -> int:
@@ -245,6 +101,7 @@ class BenchmarkConfig:
     """
 
     # --- Benchmark mode -----------------------------------------------------
+    benchmark_name: str = DEFAULT_BENCHMARK_NAME
     methods: List[str] = field(default_factory=lambda: DEFAULT_METHODS.copy())
     run_tier: str = "full"
     analysis_sample_size: int = DEFAULT_ANALYSIS_SAMPLE_SIZE
@@ -286,11 +143,27 @@ class BenchmarkConfig:
     save_raw: bool = True
     overwrite_existing: bool = False
 
-    # --- Official SCROLLS evaluation ---------------------------------------
-    use_official_scrolls_eval: bool = True
-    scrolls_repo_dir: str = "scrolls"
-    scrolls_eval_python: Optional[str] = None
-    scrolls_eval_cache_dir: Optional[str] = None
+    # --- Official benchmark evaluation -------------------------------------
+    use_official_evaluator: bool = True
+    benchmark_repo_dir: str = "scrolls"
+    official_eval_python: Optional[str] = None
+    official_eval_cache_dir: Optional[str] = None
+
+    @property
+    def use_official_scrolls_eval(self) -> bool:
+        return self.use_official_evaluator
+
+    @property
+    def scrolls_repo_dir(self) -> str:
+        return self.benchmark_repo_dir
+
+    @property
+    def scrolls_eval_python(self) -> Optional[str]:
+        return self.official_eval_python
+
+    @property
+    def scrolls_eval_cache_dir(self) -> Optional[str]:
+        return self.official_eval_cache_dir
 
     @property
     def uses_long_context(self) -> bool:
@@ -320,7 +193,7 @@ class BenchmarkConfig:
     @property
     def run_output_dir(self) -> str:
         """Top-level directory for the selected run tier."""
-        return f"{self.output_dir}/{self.run_tier}"
+        return f"{self.output_dir}/{self.benchmark_name}/{self.run_tier}"
 
 
 # Backwards-compatible alias for older imports.

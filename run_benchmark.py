@@ -6,10 +6,8 @@ This is the entrypoint you use for real runs. It turns command-line flags into a
 ``BenchmarkConfig`` object, resolves run-tier defaults, configures logging, and
 hands execution to ``BenchmarkPipeline``.
 
-Run-tier intent:
-
-- ``subset`` / ``full``: the repo's default QA-focused experiment surface
-- ``scrolls_subset`` / ``scrolls_full``: all 7 official SCROLLS tasks
+Run-tier intent is benchmark-specific and resolved through the selected
+benchmark plugin.
 """
 
 import argparse
@@ -20,42 +18,45 @@ import sys
 
 from config import (
     BenchmarkConfig,
+    DEFAULT_BENCHMARK_NAME,
     DEFAULT_ANALYSIS_SAMPLE_SIZE,
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
     PAPER_LONG_QA_CONTEXT_BUDGETS,
     PAPER_SHORT_QA_CONTEXT_BUDGETS,
-    SCROLLS_TASKS,
-    SUPPORTED_METHODS,
     recommended_top_k_for_context_budget,
-    resolve_run_settings,
 )
+from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="SCROLLS vanilla RAG vs DOS RAG benchmark",
+        description="Long-document benchmark runner",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
     parser.add_argument(
+        "--benchmark",
+        default=DEFAULT_BENCHMARK_NAME,
+        choices=benchmark_names(),
+        help="Benchmark plugin to run",
+    )
+    parser.add_argument(
         "--run-tier",
         default="full",
-        choices=["smoke", "preflight", "subset", "full", "scrolls_subset", "scrolls_full"],
     )
     parser.add_argument(
         "--methods",
         nargs="+",
-        default=SUPPORTED_METHODS,
-        choices=SUPPORTED_METHODS,
+        default=ACTIVE_METHOD_NAMES,
+        choices=method_names(),
         help="Benchmark methods to execute",
     )
     parser.add_argument(
         "--tasks",
         nargs="+",
         default=None,
-        choices=SCROLLS_TASKS,
         help="Override the tasks implied by --run-tier",
     )
     parser.add_argument(
@@ -114,24 +115,24 @@ def parse_args():
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
     parser.add_argument(
-        "--scrolls-repo-dir",
+        "--benchmark-repo-dir",
         default="scrolls",
-        help="Path to the local clone of the official SCROLLS repo.",
+        help="Path to the local clone of the benchmark repo used by the official evaluator.",
     )
     parser.add_argument(
-        "--scrolls-eval-python",
+        "--official-eval-python",
         default=None,
-        help="Python executable for the official SCROLLS evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
+        help="Python executable for the official evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
     )
     parser.add_argument(
-        "--scrolls-eval-cache-dir",
+        "--official-eval-cache-dir",
         default=None,
-        help="Optional cache dir passed through to the official SCROLLS evaluator.",
+        help="Optional cache dir passed through to the official evaluator.",
     )
     parser.add_argument(
-        "--no-official-scrolls-eval",
+        "--no-official-eval",
         action="store_true",
-        help="Disable the official SCROLLS evaluator and keep only local diagnostic metrics.",
+        help="Disable the official benchmark evaluator and keep only local diagnostic metrics.",
     )
 
     parser.add_argument("--analysis-sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
@@ -173,7 +174,12 @@ def main():
             )
         ) from exc
 
-    tasks, max_samples = resolve_run_settings(args.run_tier, args.tasks, args.max_samples)
+    benchmark = create_benchmark(args.benchmark, None)
+    tasks, max_samples = benchmark.resolve_run_settings(
+        args.run_tier,
+        args.tasks,
+        args.max_samples,
+    )
 
     if args.context_budgets and args.context_budget_preset:
         raise SystemExit("Use either --context-budgets or --context-budget-preset, not both.")
@@ -200,6 +206,7 @@ def main():
             run_output_base = os.path.join(args.output_dir, f"context_{context_budget}")
 
         config = BenchmarkConfig(
+            benchmark_name=args.benchmark,
             methods=args.methods,
             run_tier=args.run_tier,
             analysis_sample_size=args.analysis_sample_size,
@@ -224,10 +231,10 @@ def main():
             output_dir=run_output_base,
             save_raw=not args.no_save_raw,
             overwrite_existing=args.overwrite_existing,
-            use_official_scrolls_eval=not args.no_official_scrolls_eval,
-            scrolls_repo_dir=args.scrolls_repo_dir,
-            scrolls_eval_python=args.scrolls_eval_python,
-            scrolls_eval_cache_dir=args.scrolls_eval_cache_dir,
+            use_official_evaluator=not args.no_official_eval,
+            benchmark_repo_dir=args.benchmark_repo_dir,
+            official_eval_python=args.official_eval_python,
+            official_eval_cache_dir=args.official_eval_cache_dir,
         )
 
         os.makedirs(config.run_output_dir, exist_ok=True)
