@@ -1,0 +1,18 @@
+{
+  "task": "contract_nli",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "exact_match",
+  "metrics": {
+    "exact_match": 0.0
+  },
+  "elapsed_seconds": 3.57,
+  "token_stats": {
+    "avg_input_tokens": 2238.0,
+    "avg_context_tokens": 2142.0,
+    "avg_generation_tokens": 55.0,
+    "total_input_tokens": 2238
+  },
+  "results_file": "outputs/preflight/vanilla_rag/contract_nli/results.jsonl"
+}

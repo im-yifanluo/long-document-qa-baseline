@@ -1,0 +1,173 @@
+2026-03-24 11:33:39,611 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-03-24 11:33:39,612 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-03-24 11:33:42,190 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-03-24 11:34:15,063 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-03-24 11:34:15,526 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-03-24 11:34:16,846 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-03-24 11:34:16,847 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-03-24 11:34:16,848 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=gov_report
+============================================================
+2026-03-24 11:34:16,848 [INFO] data_loader: Loading SCROLLS task=gov_report split=validation …
+2026-03-24 11:34:59,606 [INFO] data_loader: Loaded 1 examples for gov_report
+2026-03-24 11:34:59,616 [INFO] rag_pipeline: [vanilla_rag/gov_report] Preparing 1 / 1  (id=crs_RS21048)
+2026-03-24 11:35:00,026 [INFO] rag_pipeline: [vanilla_rag/gov_report] Prompt preparation done for 1 new examples in 0.4s
+2026-03-24 11:35:00,026 [INFO] rag_pipeline: [vanilla_rag/gov_report] Generating 1 answers ...
+2026-03-24 11:35:14,636 [INFO] rag_pipeline: [vanilla_rag/gov_report] Generation done in 14.6s
+2026-03-24 11:35:14,642 [INFO] absl: Using default tokenizer.
+2026-03-24 11:35:14,678 [INFO] rag_pipeline: [vanilla_rag/gov_report] {'rouge1': 28.668941979522188, 'rouge2': 6.451612903225808, 'rougeL': 18.430034129692835, 'rougeLsum': 26.621160409556317, 'rouge_geo_mean': 15.04996080898753}  (15.1s)
+2026-03-24 11:35:14,678 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=summ_screen_fd
+============================================================
+2026-03-24 11:35:14,678 [INFO] data_loader: Loading SCROLLS task=summ_screen_fd split=validation …
+2026-03-24 11:35:20,430 [INFO] data_loader: Loaded 1 examples for summ_screen_fd
+2026-03-24 11:35:20,432 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Preparing 1 / 1  (id=fd_FRIENDS_05x03)
+2026-03-24 11:35:20,666 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 11:35:20,667 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Generating 1 answers ...
+2026-03-24 11:35:42,881 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Generation done in 22.2s
+2026-03-24 11:35:42,886 [INFO] absl: Using default tokenizer.
+2026-03-24 11:35:42,901 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] {'rouge1': 31.043256997455472, 'rouge2': 7.672634271099745, 'rougeL': 13.740458015267176, 'rougeLsum': 27.989821882951656, 'rouge_geo_mean': 14.84696423503795}  (22.5s)
+2026-03-24 11:35:42,902 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qmsum
+============================================================
+2026-03-24 11:35:42,902 [INFO] data_loader: Loading SCROLLS task=qmsum split=validation …
+2026-03-24 11:35:43,409 [INFO] data_loader: Loaded 1 examples for qmsum
+2026-03-24 11:35:43,411 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 1 / 1  (id=va-sq-1)
+2026-03-24 11:35:44,327 [INFO] rag_pipeline: [vanilla_rag/qmsum] Prompt preparation done for 1 new examples in 0.9s
+2026-03-24 11:35:44,327 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generating 1 answers ...
+2026-03-24 11:35:52,396 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generation done in 8.1s
+2026-03-24 11:35:52,403 [INFO] absl: Using default tokenizer.
+2026-03-24 11:35:52,407 [INFO] rag_pipeline: [vanilla_rag/qmsum] {'rouge1': 20.967741935483872, 'rouge2': 0.0, 'rougeL': 12.903225806451612, 'rougeLsum': 17.741935483870964, 'rouge_geo_mean': 0.0006467701780078521}  (9.0s)
+2026-03-24 11:35:52,407 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-03-24 11:35:52,407 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-24 11:35:52,777 [INFO] data_loader: Loaded 1 examples for qasper
+2026-03-24 11:35:52,779 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-24 11:35:53,018 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 11:35:53,018 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 1 answers ...
+2026-03-24 11:35:55,428 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 2.4s
+2026-03-24 11:35:55,438 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 22.222222222222225}  (2.7s)
+2026-03-24 11:35:55,438 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-03-24 11:35:55,439 [INFO] data_loader: Loading SCROLLS task=narrative_qa split=validation …
+2026-03-24 11:51:25,933 [INFO] data_loader: Loaded 1 examples for narrative_qa
+2026-03-24 11:51:25,939 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-03-24 11:51:26,573 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 1 new examples in 0.6s
+2026-03-24 11:51:26,573 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generating 1 answers ...
+2026-03-24 11:51:30,103 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 3.5s
+2026-03-24 11:51:30,112 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 44.44444444444445}  (4.2s)
+2026-03-24 11:51:30,112 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-03-24 11:51:30,112 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-24 11:51:30,562 [INFO] data_loader: Loaded 1 examples for quality
+2026-03-24 11:51:30,575 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 1  (id=52845_75VB1ISR_1)
+2026-03-24 11:51:30,827 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 1 new examples in 0.3s
+2026-03-24 11:51:30,827 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 1 answers ...
+2026-03-24 11:51:32,818 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 2.0s
+2026-03-24 11:51:32,826 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0}  (2.2s)
+2026-03-24 11:51:32,826 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-03-24 11:51:32,826 [INFO] data_loader: Loading SCROLLS task=contract_nli split=validation …
+2026-03-24 11:51:37,769 [INFO] data_loader: Loaded 1 examples for contract_nli
+2026-03-24 11:51:37,771 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 1  (id=3_nda-11)
+2026-03-24 11:51:37,895 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 1 new examples in 0.1s
+2026-03-24 11:51:37,896 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generating 1 answers ...
+2026-03-24 11:51:41,335 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generation done in 3.4s
+2026-03-24 11:51:41,342 [INFO] rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 0.0}  (3.6s)
+2026-03-24 11:51:41,342 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=gov_report
+============================================================
+2026-03-24 11:51:41,342 [INFO] data_loader: Loading SCROLLS task=gov_report split=validation …
+2026-03-24 11:51:41,739 [INFO] data_loader: Loaded 1 examples for gov_report
+2026-03-24 11:51:41,741 [INFO] rag_pipeline: [dos_rag/gov_report] Preparing 1 / 1  (id=crs_RS21048)
+2026-03-24 11:51:41,977 [INFO] rag_pipeline: [dos_rag/gov_report] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 11:51:41,977 [INFO] rag_pipeline: [dos_rag/gov_report] Generating 1 answers ...
+2026-03-24 11:52:11,939 [INFO] rag_pipeline: [dos_rag/gov_report] Generation done in 30.0s
+2026-03-24 11:52:11,949 [INFO] absl: Using default tokenizer.
+2026-03-24 11:52:12,017 [INFO] rag_pipeline: [dos_rag/gov_report] {'rouge1': 31.444241316270567, 'rouge2': 9.174311926605503, 'rougeL': 15.356489945155394, 'rougeLsum': 29.250457038391218, 'rouge_geo_mean': 16.423618969766473}  (30.3s)
+2026-03-24 11:52:12,017 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=summ_screen_fd
+============================================================
+2026-03-24 11:52:12,018 [INFO] data_loader: Loading SCROLLS task=summ_screen_fd split=validation …
+2026-03-24 11:52:12,407 [INFO] data_loader: Loaded 1 examples for summ_screen_fd
+2026-03-24 11:52:12,408 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] Preparing 1 / 1  (id=fd_FRIENDS_05x03)
+2026-03-24 11:52:12,636 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 11:52:12,636 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] Generating 1 answers ...
+2026-03-24 11:52:36,653 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] Generation done in 24.0s
+2026-03-24 11:52:36,670 [INFO] absl: Using default tokenizer.
+2026-03-24 11:52:36,688 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] {'rouge1': 30.357142857142854, 'rouge2': 8.968609865470851, 'rougeL': 15.178571428571427, 'rougeLsum': 28.124999999999993, 'rouge_geo_mean': 16.047435615039415}  (24.3s)
+2026-03-24 11:52:36,689 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qmsum
+============================================================
+2026-03-24 11:52:36,689 [INFO] data_loader: Loading SCROLLS task=qmsum split=validation …
+2026-03-24 11:52:37,092 [INFO] data_loader: Loaded 1 examples for qmsum
+2026-03-24 11:52:37,094 [INFO] rag_pipeline: [dos_rag/qmsum] Preparing 1 / 1  (id=va-sq-1)
+2026-03-24 11:52:38,003 [INFO] rag_pipeline: [dos_rag/qmsum] Prompt preparation done for 1 new examples in 0.9s
+2026-03-24 11:52:38,003 [INFO] rag_pipeline: [dos_rag/qmsum] Generating 1 answers ...
+2026-03-24 11:52:44,470 [INFO] rag_pipeline: [dos_rag/qmsum] Generation done in 6.5s
+2026-03-24 11:52:44,498 [INFO] absl: Using default tokenizer.
+2026-03-24 11:52:44,501 [INFO] rag_pipeline: [dos_rag/qmsum] {'rouge1': 22.222222222222225, 'rouge2': 0.0, 'rougeL': 16.16161616161616, 'rougeLsum': 20.2020202020202, 'rouge_geo_mean': 0.00071081637617429}  (7.4s)
+2026-03-24 11:52:44,501 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-03-24 11:52:44,502 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-24 11:52:44,883 [INFO] data_loader: Loaded 1 examples for qasper
+2026-03-24 11:52:44,892 [INFO] rag_pipeline: [dos_rag/qasper] Preparing 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-24 11:52:45,113 [INFO] rag_pipeline: [dos_rag/qasper] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 11:52:45,113 [INFO] rag_pipeline: [dos_rag/qasper] Generating 1 answers ...
+2026-03-24 11:52:48,269 [INFO] rag_pipeline: [dos_rag/qasper] Generation done in 3.2s
+2026-03-24 11:52:48,276 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 13.333333333333336}  (3.4s)
+2026-03-24 11:52:48,277 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=narrative_qa
+============================================================
+2026-03-24 11:52:48,277 [INFO] data_loader: Loading SCROLLS task=narrative_qa split=validation …
+2026-03-24 11:52:48,590 [INFO] data_loader: Loaded 1 examples for narrative_qa
+2026-03-24 11:52:48,591 [INFO] rag_pipeline: [dos_rag/narrative_qa] Preparing 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-03-24 11:52:49,216 [INFO] rag_pipeline: [dos_rag/narrative_qa] Prompt preparation done for 1 new examples in 0.6s
+2026-03-24 11:52:49,216 [INFO] rag_pipeline: [dos_rag/narrative_qa] Generating 1 answers ...
+2026-03-24 11:52:53,120 [INFO] rag_pipeline: [dos_rag/narrative_qa] Generation done in 3.9s
+2026-03-24 11:52:53,128 [INFO] rag_pipeline: [dos_rag/narrative_qa] {'f1': 33.333333333333336}  (4.5s)
+2026-03-24 11:52:53,129 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-03-24 11:52:53,129 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-24 11:52:53,431 [INFO] data_loader: Loaded 1 examples for quality
+2026-03-24 11:52:53,432 [INFO] rag_pipeline: [dos_rag/quality] Preparing 1 / 1  (id=52845_75VB1ISR_1)
+2026-03-24 11:52:53,686 [INFO] rag_pipeline: [dos_rag/quality] Prompt preparation done for 1 new examples in 0.3s
+2026-03-24 11:52:53,687 [INFO] rag_pipeline: [dos_rag/quality] Generating 1 answers ...
+2026-03-24 11:52:55,703 [INFO] rag_pipeline: [dos_rag/quality] Generation done in 2.0s
+2026-03-24 11:52:55,710 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 100.0}  (2.3s)
+2026-03-24 11:52:55,711 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=contract_nli
+============================================================
+2026-03-24 11:52:55,711 [INFO] data_loader: Loading SCROLLS task=contract_nli split=validation …
+2026-03-24 11:52:56,021 [INFO] data_loader: Loaded 1 examples for contract_nli
+2026-03-24 11:52:56,022 [INFO] rag_pipeline: [dos_rag/contract_nli] Preparing 1 / 1  (id=3_nda-11)
+2026-03-24 11:52:56,141 [INFO] rag_pipeline: [dos_rag/contract_nli] Prompt preparation done for 1 new examples in 0.1s
+2026-03-24 11:52:56,141 [INFO] rag_pipeline: [dos_rag/contract_nli] Generating 1 answers ...
+2026-03-24 11:53:03,525 [INFO] rag_pipeline: [dos_rag/contract_nli] Generation done in 7.4s
+2026-03-24 11:53:03,534 [INFO] rag_pipeline: [dos_rag/contract_nli] {'exact_match': 0.0}  (7.5s)
+2026-03-24 11:53:03,543 [INFO] absl: Using default tokenizer.
+2026-03-24 11:53:03,574 [INFO] absl: Using default tokenizer.
+2026-03-24 11:53:03,644 [INFO] absl: Using default tokenizer.
+2026-03-24 11:53:03,657 [INFO] absl: Using default tokenizer.
+2026-03-24 11:53:03,680 [INFO] absl: Using default tokenizer.
+2026-03-24 11:53:03,681 [INFO] absl: Using default tokenizer.

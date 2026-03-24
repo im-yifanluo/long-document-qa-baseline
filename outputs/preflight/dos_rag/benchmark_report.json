@@ -1,0 +1,68 @@
+{
+  "method": "dos_rag",
+  "config": {
+    "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "active_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "chunk_size": 100,
+    "chunk_overlap": 0,
+    "chunking_strategy": "sentence",
+    "top_k": 200,
+    "context_budget": 10000,
+    "lc_context_budget": 131072,
+    "split": "validation",
+    "run_tier": "preflight"
+  },
+  "per_task_scores": {
+    "gov_report": 16.423618969766473,
+    "summ_screen_fd": 16.047435615039415,
+    "qmsum": 0.00071081637617429,
+    "qasper": 13.333333333333336,
+    "narrative_qa": 33.333333333333336,
+    "quality": 100.0,
+    "contract_nli": 0.0
+  },
+  "average_score": 25.591204581121247,
+  "detailed_metrics": {
+    "gov_report": {
+      "rouge1": 31.444241316270567,
+      "rouge2": 9.174311926605503,
+      "rougeL": 15.356489945155394,
+      "rougeLsum": 29.250457038391218,
+      "rouge_geo_mean": 16.423618969766473
+    },
+    "summ_screen_fd": {
+      "rouge1": 30.357142857142854,
+      "rouge2": 8.968609865470851,
+      "rougeL": 15.178571428571427,
+      "rougeLsum": 28.124999999999993,
+      "rouge_geo_mean": 16.047435615039415
+    },
+    "qmsum": {
+      "rouge1": 22.222222222222225,
+      "rouge2": 0.0,
+      "rougeL": 16.16161616161616,
+      "rougeLsum": 20.2020202020202,
+      "rouge_geo_mean": 0.00071081637617429
+    },
+    "qasper": {
+      "f1": 13.333333333333336
+    },
+    "narrative_qa": {
+      "f1": 33.333333333333336
+    },
+    "quality": {
+      "exact_match": 100.0
+    },
+    "contract_nli": {
+      "exact_match": 0.0
+    }
+  },
+  "token_cost_summary": {
+    "avg_input_tokens": 6523.714285714285,
+    "avg_context_tokens": 6441.142857142857,
+    "avg_generation_tokens": 172.14285714285714,
+    "total_input_tokens": 45666
+  }
+}

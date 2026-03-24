@@ -1,0 +1,22 @@
+{
+  "task": "gov_report",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 28.668941979522188,
+    "rouge2": 6.451612903225808,
+    "rougeL": 18.430034129692835,
+    "rougeLsum": 26.621160409556317,
+    "rouge_geo_mean": 15.04996080898753
+  },
+  "elapsed_seconds": 15.06,
+  "token_stats": {
+    "avg_input_tokens": 5766.0,
+    "avg_context_tokens": 5712.0,
+    "avg_generation_tokens": 244.0,
+    "total_input_tokens": 5766
+  },
+  "results_file": "outputs/preflight/vanilla_rag/gov_report/results.jsonl"
+}

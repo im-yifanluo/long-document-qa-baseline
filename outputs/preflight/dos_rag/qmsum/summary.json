@@ -1,0 +1,22 @@
+{
+  "task": "qmsum",
+  "method": "dos_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 22.222222222222225,
+    "rouge2": 0.0,
+    "rougeL": 16.16161616161616,
+    "rougeLsum": 20.2020202020202,
+    "rouge_geo_mean": 0.00071081637617429
+  },
+  "elapsed_seconds": 7.41,
+  "token_stats": {
+    "avg_input_tokens": 10032.0,
+    "avg_context_tokens": 9980.0,
+    "avg_generation_tokens": 64.0,
+    "total_input_tokens": 10032
+  },
+  "results_file": "outputs/preflight/dos_rag/qmsum/results.jsonl"
+}

@@ -1,0 +1,22 @@
+{
+  "task": "qmsum",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 20.967741935483872,
+    "rouge2": 0.0,
+    "rougeL": 12.903225806451612,
+    "rougeLsum": 17.741935483870964,
+    "rouge_geo_mean": 0.0006467701780078521
+  },
+  "elapsed_seconds": 8.99,
+  "token_stats": {
+    "avg_input_tokens": 10032.0,
+    "avg_context_tokens": 9980.0,
+    "avg_generation_tokens": 93.0,
+    "total_input_tokens": 10032
+  },
+  "results_file": "outputs/preflight/vanilla_rag/qmsum/results.jsonl"
+}

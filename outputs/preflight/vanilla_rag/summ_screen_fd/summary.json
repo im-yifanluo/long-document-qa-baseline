@@ -1,0 +1,22 @@
+{
+  "task": "summ_screen_fd",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 31.043256997455472,
+    "rouge2": 7.672634271099745,
+    "rougeL": 13.740458015267176,
+    "rougeLsum": 27.989821882951656,
+    "rouge_geo_mean": 14.84696423503795
+  },
+  "elapsed_seconds": 22.47,
+  "token_stats": {
+    "avg_input_tokens": 5494.0,
+    "avg_context_tokens": 5446.0,
+    "avg_generation_tokens": 391.0,
+    "total_input_tokens": 5494
+  },
+  "results_file": "outputs/preflight/vanilla_rag/summ_screen_fd/results.jsonl"
+}

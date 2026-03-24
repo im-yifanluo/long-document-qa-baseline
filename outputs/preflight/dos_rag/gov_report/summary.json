@@ -1,0 +1,22 @@
+{
+  "task": "gov_report",
+  "method": "dos_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 31.444241316270567,
+    "rouge2": 9.174311926605503,
+    "rougeL": 15.356489945155394,
+    "rougeLsum": 29.250457038391218,
+    "rouge_geo_mean": 16.423618969766473
+  },
+  "elapsed_seconds": 30.27,
+  "token_stats": {
+    "avg_input_tokens": 5766.0,
+    "avg_context_tokens": 5712.0,
+    "avg_generation_tokens": 535.0,
+    "total_input_tokens": 5766
+  },
+  "results_file": "outputs/preflight/dos_rag/gov_report/results.jsonl"
+}

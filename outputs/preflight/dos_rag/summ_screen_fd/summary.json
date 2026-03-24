@@ -1,0 +1,22 @@
+{
+  "task": "summ_screen_fd",
+  "method": "dos_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge1": 30.357142857142854,
+    "rouge2": 8.968609865470851,
+    "rougeL": 15.178571428571427,
+    "rougeLsum": 28.124999999999993,
+    "rouge_geo_mean": 16.047435615039415
+  },
+  "elapsed_seconds": 24.28,
+  "token_stats": {
+    "avg_input_tokens": 5494.0,
+    "avg_context_tokens": 5446.0,
+    "avg_generation_tokens": 425.0,
+    "total_input_tokens": 5494
+  },
+  "results_file": "outputs/preflight/dos_rag/summ_screen_fd/results.jsonl"
+}
