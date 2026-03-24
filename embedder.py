@@ -1,37 +1,37 @@
 """
-Dense embedding wrapper for the RAG retriever.
+Dense embedding wrapper for retrieval.
 
-The benchmark keeps the embedding model fixed at ``BAAI/bge-large-en-v1.5`` so
-that RAG-vs-long-context comparisons are driven by retrieval strategy, not by a
-changing retriever.
-
-Important detail:
-- queries are prefixed with the BGE-recommended retrieval instruction
-- passages are encoded as-is
-- embeddings are L2-normalized so FAISS inner product behaves like cosine
+The benchmark defaults to the retriever used in the DOS RAG paper,
+`Snowflake/snowflake-arctic-embed-m-v1.5`, but keeps support for instruction-
+prefixed embedding models such as BGE for future experiments.
 """
 
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 
 class Embedder:
-    """Thin wrapper around SentenceTransformer for BGE-style models."""
+    """Thin wrapper around SentenceTransformer retrieval encoders."""
 
     def __init__(
         self,
-        model_name: str = "BAAI/bge-large-en-v1.5",
+        model_name: str,
         device: str = "cuda",
         batch_size: int = 64,
-        query_instruction: str = "Represent this sentence for searching relevant passages: ",
+        query_instruction: Optional[str] = None,
     ):
-        self.model = SentenceTransformer(model_name, device=device)
+        self.model_name = model_name
+        self.model = SentenceTransformer(
+            model_name,
+            device=device,
+            trust_remote_code=True,
+        )
         self.batch_size = batch_size
         self.query_instruction = query_instruction
+        self._uses_prompt_name_query = "snowflake-arctic-embed" in model_name.lower()
 
-    # ------------------------------------------------------------------
     def embed_passages(self, passages: List[str]) -> np.ndarray:
         """Encode chunk texts for retrieval indexing."""
         return self.model.encode(
@@ -41,10 +41,18 @@ class Embedder:
             normalize_embeddings=True,
         ).astype(np.float32)
 
-    # ------------------------------------------------------------------
     def embed_query(self, query: str) -> np.ndarray:
-        """Encode one retrieval query with the BGE query instruction prefix."""
-        return self.model.encode(
-            self.query_instruction + query,
-            normalize_embeddings=True,
-        ).astype(np.float32)
+        """Encode one retrieval query with model-appropriate query formatting."""
+        kwargs = {
+            "show_progress_bar": False,
+            "normalize_embeddings": True,
+        }
+        if self._uses_prompt_name_query:
+            return self.model.encode(
+                query,
+                prompt_name="query",
+                **kwargs,
+            ).astype(np.float32)
+
+        text = f"{self.query_instruction}{query}" if self.query_instruction else query
+        return self.model.encode(text, **kwargs).astype(np.float32)

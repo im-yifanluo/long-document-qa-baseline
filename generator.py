@@ -15,8 +15,8 @@ Responsibilities:
 
 The benchmark uses the same ``Generator`` object for both methods:
 
-- RAG uses it to count prompt tokens for retrieved context prompts
-- long-context uses it to truncate and count whole-document prompts
+- retrieval methods use it to count prompt tokens for retrieved-context prompts
+- the retained long-context scaffold uses it to truncate whole-document prompts
 """
 
 import logging
@@ -234,10 +234,9 @@ class Generator:
     def truncate_text(self, text: str, max_tokens: int) -> Tuple[str, int, bool]:
         """Trim raw document text to a token budget.
 
-        This is the key helper used by the long-context method. The benchmark
-        treats long-context as "pass the document directly", but it still needs a
-        deterministic truncation rule when the document is longer than the
-        currently allowed budget.
+        This is primarily used by the retained long-context scaffold. Even
+        though long-context is not an active default method right now, the
+        helper remains available for future experiments.
         """
         token_ids = self.tokenizer.encode(text, add_special_tokens=False)
         truncated = len(token_ids) > max_tokens

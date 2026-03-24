@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# SCROLLS RAG vs Long-Context Benchmark - Environment Setup
+# SCROLLS Vanilla RAG and DOS RAG Benchmark - Environment Setup
 # ============================================================
 set -euo pipefail
 
@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "========================================"
-echo "  SCROLLS RAG vs Long-Context - Setup"
+echo "  SCROLLS Vanilla RAG + DOS RAG - Setup"
 echo "========================================"
 echo "Environment manager: Python venv"
 echo "Note: venv isolates packages, but it does not install a new Python version."
@@ -76,7 +76,7 @@ echo "  Important:    bash setup.sh runs in a child shell."
 echo "                It cannot leave your current shell activated."
 echo "                Run the next command in your current shell:"
 echo "  Activate:     source venv/bin/activate"
-echo "  Smoke tier:   python run_benchmark.py --run-tier smoke"
+echo "  Smoke tier:   python smoke_test.py"
 echo "  Subset tier:  python run_benchmark.py --run-tier subset"
 echo "  Analysis:     python analyze_outputs.py --run-tier subset"
 echo "========================================"

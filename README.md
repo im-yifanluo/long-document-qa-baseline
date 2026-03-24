@@ -1,157 +1,117 @@
-# SCROLLS RAG vs Long-Context Benchmark
+# SCROLLS Vanilla RAG and DOS RAG Benchmark
 
-This repo compares two ways of answering questions over long documents on [SCROLLS](https://www.scrolls-benchmark.com/):
+This repo benchmarks two retrieval-based long-document QA baselines on SCROLLS:
 
-- `rag`: retrieve a small set of relevant chunks and answer from them
-- `long_context`: pass the source document directly to a long-context model and answer without retrieval
+- `vanilla_rag`: retrieve relevant passages and prompt the reader in retrieval-rank order
+- `dos_rag`: retrieve the same passages but restore their original document order before prompting
 
-The benchmark is set up so both methods use the same generator family and the same task prompts. That keeps the comparison focused on retrieval strategy rather than model-family differences.
+The implementation follows the EMNLP 2025 paper *Stronger Baselines for Retrieval-Augmented Generation with Long-Context Language Models* for the active baselines:
 
-A deeper explanation of the full architecture lives in [ARCHITECTURE.md](ARCHITECTURE.md).
+- short sentence-aware passages with a `100` token target
+- dense retrieval with `Snowflake/snowflake-arctic-embed-m-v1.5`
+- budgeted retrieve-then-read prompting
+- DOS RAG differing from vanilla RAG only in prompt ordering
+
+Long-context scaffolding is still present in the codebase, but it is intentionally not part of the active benchmark defaults because the current target hardware is a single A40 48GB system.
 
 ## Current Defaults
 
 | Parameter | Value |
 |---|---|
-| Embedding model | `BAAI/bge-large-en-v1.5` |
-| Generator | `Qwen/Qwen2.5-7B-Instruct-1M` |
-| Fallback generator | `Qwen/Qwen2.5-7B-Instruct` |
-| Chunk size | `512` tokens |
-| Chunk overlap | `64` tokens |
-| Top-k | `10` |
-| RAG context budget | `16000` tokens |
-| Long-context document budget | `300000` tokens |
+| Methods | `vanilla_rag`, `dos_rag` |
+| Reader | `Qwen/Qwen2.5-14B-Instruct` |
+| Fallback reader | `Qwen/Qwen2.5-7B-Instruct` |
+| Retriever | `Snowflake/snowflake-arctic-embed-m-v1.5` |
+| Chunking | sentence-aware |
+| Chunk size | `100` tokens |
+| Chunk overlap | `0` |
+| Top-k cap | derived from budget, `200` at `10000` tokens |
+| Retrieval context budget | `10000` tokens |
 | Thinking mode | disabled by default |
 
-## Why The LC Budget Is `300000` By Default
+## Why These Defaults
 
-The benchmark still uses the `Qwen/Qwen2.5-7B-Instruct-1M` model, but the
-default long-context *document* budget is now `300,000` tokens rather than the
-full 1M window.
+- `Qwen/Qwen2.5-14B-Instruct` is a strong local reader that is realistic on a single A40 once the benchmark is focused on retrieval rather than extreme long-context inference.
+- `Snowflake/snowflake-arctic-embed-m-v1.5` and `100`-token passages match the paper’s vanilla/DOS RAG setup.
+- `top_k` is derived from the context budget with the paper-style heuristic `top_k ~= budget / 50`. At the default `10000`-token budget that yields `top_k=200`.
 
-That is a practical hardware decision:
+## Task Scope
 
-- the model is 1M-capable
-- true full-1M runs generally need about `128GB` of VRAM-class capacity
-- this repo is often run on smaller local servers, including single-A40 setups
+The default tiers focus on SCROLLS tasks that are QA-style or query-conditioned:
 
-So `300,000` is the default "large but still somewhat practical" LC setting.
+- `qmsum`
+- `squality`
+- `qasper`
+- `narrative_qa`
+- `quality`
+- `contract_nli`
 
-You can still override it manually on larger hardware:
+Pure summarization tasks are still available through manual task overrides, but they are not part of the default benchmark tiers because the current repo focus is long-document QA.
 
-```bash
-python run_benchmark.py --run-tier subset --lc-context-budget 1000000
-```
-
-The repo still reserves room for:
-
-- the system prompt
-- the query/question text
-- chat-template wrapper tokens
-- answer generation
-
-So the long-context path still behaves as intended: pass the document directly,
-and truncate only if the document exceeds the configured LC budget.
-
-## Environment Setup On A Server
-
-This repo uses Python's built-in virtual environment mechanism, `venv/`.
-
-That means there are two separate concerns:
-
-- Python version management: provided by the machine, `conda`, `micromamba`, `pyenv`, or an HPC module system
-- Package isolation: provided by this repo's local `venv/`
-
-`venv` is not a Python version manager. It does not download or install Python
-3.11 for you. It simply creates an isolated package environment on top of an
-interpreter that already exists on the machine.
-
-The setup script:
-
-- prefers `python3.12`, then `3.11`, then `3.10`
-- refuses unsupported Python versions for the vLLM setup path
-- creates `venv/`
-- installs Python dependencies
-- downloads NLTK tokenizer data locally into `nltk_data/`
-
-Recommended setup:
+## Setup
 
 ```bash
-cd /path/to/long-document-qa-baseline
-bash setup.sh
-source venv/bin/activate
-python --version
-```
-
-`bash setup.sh` runs in a child shell, so it cannot leave your current shell
-activated after it exits. You always need to run `source venv/bin/activate` in
-your current shell before launching the benchmark.
-
-If you see `(base)` in your prompt and then run `python run_benchmark.py ...`,
-you are still using your conda base environment, not this repo's `venv/`.
-
-If the server does not already have a good system Python for vLLM, use conda:
-
-```bash
-conda create -n scrolls-lc python=3.11 -y
-conda activate scrolls-lc
-pip install -r requirements.txt
-```
-
-If your cluster uses environment modules instead of conda, the equivalent flow
-is:
-
-```bash
-module avail python
-module load python/3.11
 bash setup.sh
 source venv/bin/activate
 ```
 
 ## Quick Start
 
-### 1. Verify The Generator Loads
+Verify the reader loads:
 
 ```bash
 python test_generator.py \
-  --llm-model Qwen/Qwen2.5-7B-Instruct-1M \
+  --llm-model Qwen/Qwen2.5-14B-Instruct \
   --prompt "What is the capital of France?"
 ```
 
-### 2. Smoke Test
+Run a smoke test:
 
 ```bash
-python run_benchmark.py --run-tier smoke
+python smoke_test.py
 ```
 
-Defaults for `smoke`:
-
-- methods: `rag`, `long_context`
-- tasks: `qasper`, `qmsum`
-- samples: `2` per task
-
-### 3. Subset Run
+Run the subset benchmark:
 
 ```bash
 python run_benchmark.py --run-tier subset
 ```
 
-### 4. Full Run
+Run the paper-style long-QA context-budget sweep:
 
 ```bash
-python run_benchmark.py --run-tier full
+python run_benchmark.py --run-tier subset --context-budget-preset paper_long_qa
 ```
 
-## Key Scripts
+Run a custom budget sweep:
 
-| Script | Purpose |
-|---|---|
-| `run_benchmark.py` | main entrypoint for benchmark runs |
-| `smoke_test.py` | quick end-to-end validation |
-| `test_generator.py` | load the model and test prompts directly |
-| `analyze_outputs.py` | generate PI-facing tables, CSVs, and plots |
-| `run_lost_in_middle.py` | run the long-context position probe |
-| `setup.sh` | create the environment and install dependencies |
+```bash
+python run_benchmark.py --run-tier subset --context-budgets 1500 5000 10000 20000
+```
+
+Run one method only:
+
+```bash
+python run_benchmark.py --run-tier subset --methods dos_rag
+```
+
+## Analysis
+
+Generate post-hoc analysis artifacts from saved outputs:
+
+```bash
+python analyze_outputs.py --run-tier subset
+```
+
+The analysis package includes:
+
+- score tables
+- score-vs-token-cost plots
+- agreement between the first two methods
+- qualitative sample exports
+- retrieval evidence-rank analysis
+
+`run_lost_in_middle.py` is retained as an experimental scaffold for future long-context work. It is not part of the active benchmark workflow right now.
 
 ## Output Layout
 
@@ -160,12 +120,12 @@ outputs/
   smoke|subset|full/
     comparison_report.json
     benchmark.log
-    rag/
+    vanilla_rag/
       benchmark_report.json
       <task>/
         results.jsonl
         summary.json
-    long_context/
+    dos_rag/
       benchmark_report.json
       <task>/
         results.jsonl
@@ -174,47 +134,24 @@ outputs/
       ... generated by analyze_outputs.py ...
 ```
 
-## Analysis Workflow
+## Main Files
 
-Generate the main post-hoc analysis package:
+| File | Purpose |
+|---|---|
+| `run_benchmark.py` | main benchmark CLI |
+| `rag_pipeline.py` | method execution, generation, evaluation, reporting |
+| `chunker.py` | sentence-aware passage chunking |
+| `embedder.py` | dense retrieval embedding wrapper |
+| `retriever.py` | FAISS retrieval |
+| `generator.py` | vLLM reader wrapper |
+| `analyze_outputs.py` | analysis artifacts |
+| `smoke_test.py` | end-to-end validation |
+| `run_lost_in_middle.py` | reserved long-context probe scaffold |
 
-```bash
-python analyze_outputs.py --run-tier subset
-```
+## References
 
-Run the long-context lost-in-the-middle probe:
-
-```bash
-python run_lost_in_middle.py --run-tier subset
-```
-
-## Important Notes
-
-- `top_k=10` is intentional. The repo is using flat retrieval without reranking, so deeper retrieval tends to add noise.
-- Long-context is configured to pass the document directly and only truncates when the source document is larger than the allowed LC budget.
-- When the repo loads `Qwen/Qwen2.5-7B-Instruct-1M`, it automatically switches vLLM to the Qwen long-context runtime path by setting `VLLM_ATTENTION_BACKEND=DUAL_CHUNK_FLASH_ATTN`, `VLLM_USE_V1=0`, and eager execution.
-- The subset tier excludes `gov_report` and `summ_screen_fd` because the first PI-facing slice is meant to be more evidence-focused.
-- Official Qwen guidance for the 1M model recommends their custom vLLM branch for best long-context behavior and warns that older/standard inference paths may degrade beyond `262144` tokens.
-- The repo now defaults to `300000` LC tokens because full 1M inference is treated as a larger-hardware setting, roughly in the `128GB` VRAM class rather than a single-A40 default.
-- If your server has the memory for it, you can still raise `--lc-context-budget` manually.
-
-## Common Server Failures
-
-- `CXXABI_1.3.15 not found`
-  - fix inside the conda env:
-  ```bash
-  conda install -y -c conda-forge libstdcxx-ng libgcc-ng
-  export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
-  ```
-- `FlashAttentionImpl.__init__() got an unexpected keyword argument 'layer_idx'`
-  - this is usually the Qwen-1M attention backend mismatch; the repo now sets the required vLLM env vars automatically before importing vLLM
-- `User-specified max_model_len ... is greater than the derived max_model_len`
-  - this happens when the fallback model is standard Qwen2.5 rather than the 1M checkpoint; the repo now clamps fallback max length to the actual model config
-- `Dataset scripts are no longer supported, but found scrolls.py`
-  - your `datasets` package is too new for `tau/scrolls`; use `datasets<4.0.0`
-
-## Official References
-
-- [Qwen2.5-7B-Instruct-1M model card](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-1M)
-- [Qwen 1M release post](https://qwenlm.github.io/blog/qwen2.5-1m/)
-- [vLLM installation docs](https://docs.vllm.ai/en/stable/getting_started/installation/index.html)
+- Paper: https://aclanthology.org/2025.emnlp-main.1656/
+- Overview repo: https://github.com/alex-laitenberger/stronger-baselines-rag
+- Vanilla RAG reference code: https://github.com/alex-laitenberger/vanilla-rag-eval
+- DOS RAG reference code: https://github.com/alex-laitenberger/dos-rag-eval
+- Qwen2.5-14B-Instruct model card: https://huggingface.co/Qwen/Qwen2.5-14B-Instruct

@@ -8,6 +8,7 @@ hands execution to ``BenchmarkPipeline``.
 """
 
 import argparse
+import json
 import logging
 import os
 import sys
@@ -15,19 +16,21 @@ import sys
 from config import (
     BenchmarkConfig,
     DEFAULT_ANALYSIS_SAMPLE_SIZE,
+    DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
-    DEFAULT_LC_CONTEXT_BUDGET,
     DEFAULT_LLM_MODEL,
-    DEFAULT_TOP_K,
+    PAPER_LONG_QA_CONTEXT_BUDGETS,
+    PAPER_SHORT_QA_CONTEXT_BUDGETS,
     SCROLLS_TASKS,
     SUPPORTED_METHODS,
+    recommended_top_k_for_context_budget,
     resolve_run_settings,
 )
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="SCROLLS RAG vs long-context benchmark",
+        description="SCROLLS vanilla RAG vs DOS RAG benchmark",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -60,19 +63,41 @@ def parse_args():
 
     parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
     parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
-    parser.add_argument("--embedding-model", default="BAAI/bge-large-en-v1.5")
+    parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
 
-    parser.add_argument("--chunk-size", type=int, default=512)
-    parser.add_argument("--chunk-overlap", type=int, default=64)
-    parser.add_argument("--top-k", type=int, default=DEFAULT_TOP_K)
-    parser.add_argument("--context-budget", type=int, default=16000)
-    parser.add_argument("--lc-context-budget", type=int, default=DEFAULT_LC_CONTEXT_BUDGET)
+    parser.add_argument("--chunk-size", type=int, default=100)
+    parser.add_argument("--chunk-overlap", type=int, default=0)
+    parser.add_argument(
+        "--chunking-strategy",
+        default="sentence",
+        choices=["sentence", "sliding_window"],
+    )
+    parser.add_argument(
+        "--top-k",
+        type=int,
+        default=None,
+        help="Override the retrieval candidate cap. By default this is derived from the context budget using the paper-style heuristic.",
+    )
+    parser.add_argument("--context-budget", type=int, default=10000)
+    parser.add_argument(
+        "--context-budgets",
+        nargs="+",
+        type=int,
+        default=None,
+        help="Run a sweep over multiple retrieval context budgets.",
+    )
+    parser.add_argument(
+        "--context-budget-preset",
+        choices=["paper_long_qa", "paper_short_qa"],
+        default=None,
+        help="Convenience preset for paper-style context-budget sweeps.",
+    )
     parser.add_argument("--max-new-tokens", type=int, default=1024)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument(
         "--enable-thinking",
         action="store_true",
-        help="Enable model thinking mode when supported. Ignored by Qwen2.5-1M.",
+        help="Enable model thinking mode when supported by the active Qwen tokenizer/template.",
     )
     parser.add_argument("--max-model-len", type=int, default=None)
 
@@ -111,45 +136,97 @@ def main():
 
     tasks, max_samples = resolve_run_settings(args.run_tier, args.tasks, args.max_samples)
 
-    config = BenchmarkConfig(
-        methods=args.methods,
-        run_tier=args.run_tier,
-        analysis_sample_size=args.analysis_sample_size,
-        embedding_model=args.embedding_model,
-        embedding_device=args.embedding_device,
-        chunk_size=args.chunk_size,
-        chunk_overlap=args.chunk_overlap,
-        top_k=args.top_k,
-        context_budget=args.context_budget,
-        lc_context_budget=args.lc_context_budget,
-        llm_model=args.llm_model,
-        fallback_llm_model=args.fallback_llm_model,
-        max_new_tokens=args.max_new_tokens,
-        temperature=args.temperature,
-        gpu_memory_utilization=args.gpu_memory_utilization,
-        tensor_parallel_size=args.tensor_parallel_size,
-        enable_thinking=args.enable_thinking,
-        max_model_len=args.max_model_len,
-        split=args.split,
-        max_samples=max_samples,
-        tasks=tasks,
-        output_dir=args.output_dir,
-        save_raw=not args.no_save_raw,
-    )
+    if args.context_budgets and args.context_budget_preset:
+        raise SystemExit("Use either --context-budgets or --context-budget-preset, not both.")
 
-    os.makedirs(config.run_output_dir, exist_ok=True)
-    log_path = os.path.join(config.run_output_dir, "benchmark.log")
-    logging.basicConfig(
-        level=getattr(logging, args.log_level),
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler(log_path, mode="a"),
-        ],
-    )
+    if args.context_budget_preset == "paper_long_qa":
+        context_budgets = PAPER_LONG_QA_CONTEXT_BUDGETS
+    elif args.context_budget_preset == "paper_short_qa":
+        context_budgets = PAPER_SHORT_QA_CONTEXT_BUDGETS
+    elif args.context_budgets:
+        context_budgets = args.context_budgets
+    else:
+        context_budgets = [args.context_budget]
 
-    pipeline = BenchmarkPipeline(config)
-    pipeline.run_all()
+    sweep_results = []
+    multiple_budgets = len(context_budgets) > 1
+
+    for context_budget in context_budgets:
+        resolved_top_k = args.top_k
+        if resolved_top_k is None:
+            resolved_top_k = recommended_top_k_for_context_budget(context_budget)
+
+        run_output_base = args.output_dir
+        if multiple_budgets:
+            run_output_base = os.path.join(args.output_dir, f"context_{context_budget}")
+
+        config = BenchmarkConfig(
+            methods=args.methods,
+            run_tier=args.run_tier,
+            analysis_sample_size=args.analysis_sample_size,
+            embedding_model=args.embedding_model,
+            embedding_device=args.embedding_device,
+            chunk_size=args.chunk_size,
+            chunk_overlap=args.chunk_overlap,
+            chunking_strategy=args.chunking_strategy,
+            top_k=resolved_top_k,
+            context_budget=context_budget,
+            llm_model=args.llm_model,
+            fallback_llm_model=args.fallback_llm_model,
+            max_new_tokens=args.max_new_tokens,
+            temperature=args.temperature,
+            gpu_memory_utilization=args.gpu_memory_utilization,
+            tensor_parallel_size=args.tensor_parallel_size,
+            enable_thinking=args.enable_thinking,
+            max_model_len=args.max_model_len,
+            split=args.split,
+            max_samples=max_samples,
+            tasks=tasks,
+            output_dir=run_output_base,
+            save_raw=not args.no_save_raw,
+        )
+
+        os.makedirs(config.run_output_dir, exist_ok=True)
+        log_path = os.path.join(config.run_output_dir, "benchmark.log")
+        logging.basicConfig(
+            level=getattr(logging, args.log_level),
+            format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            handlers=[
+                logging.StreamHandler(sys.stdout),
+                logging.FileHandler(log_path, mode="a"),
+            ],
+            force=True,
+        )
+
+        logging.getLogger(__name__).info(
+            "Running benchmark with context_budget=%d and top_k=%d",
+            context_budget,
+            resolved_top_k,
+        )
+        pipeline = BenchmarkPipeline(config)
+        pipeline.run_all()
+        sweep_results.append(
+            {
+                "context_budget": context_budget,
+                "top_k": resolved_top_k,
+                "run_output_dir": config.run_output_dir,
+            }
+        )
+
+    if multiple_budgets:
+        sweep_manifest = {
+            "run_tier": args.run_tier,
+            "tasks": tasks,
+            "methods": args.methods,
+            "llm_model": args.llm_model,
+            "embedding_model": args.embedding_model,
+            "context_budget_preset": args.context_budget_preset,
+            "runs": sweep_results,
+        }
+        manifest_path = os.path.join(args.output_dir, f"{args.run_tier}_context_budget_sweep.json")
+        with open(manifest_path, "w") as fh:
+            json.dump(sweep_manifest, fh, indent=2)
+        print(f"Context-budget sweep manifest saved to: {manifest_path}")
 
 
 if __name__ == "__main__":

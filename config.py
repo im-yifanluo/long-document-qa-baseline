@@ -1,10 +1,10 @@
 """
-Central configuration for the SCROLLS RAG vs long-context benchmark.
+Central configuration for the SCROLLS long-document QA benchmark.
 
 This module is the single source of truth for:
 
 - which SCROLLS tasks exist and how they are scored
-- which benchmark methods are supported (`rag` and `long_context`)
+- which benchmark methods are supported (`vanilla_rag` and `dos_rag`)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
 - run-tier presets used by the main CLI (`smoke`, `subset`, `full`)
@@ -17,6 +17,7 @@ The goal is that a reader can inspect this file first and immediately answer:
 - which settings are safe to override from the command line
 """
 
+import math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
@@ -27,6 +28,15 @@ from typing import Dict, List, Optional, Tuple
 SCROLLS_TASKS: List[str] = [
     "gov_report",
     "summ_screen_fd",
+    "qmsum",
+    "squality",
+    "qasper",
+    "narrative_qa",
+    "quality",
+    "contract_nli",
+]
+
+SCROLLS_QA_TASKS: List[str] = [
     "qmsum",
     "squality",
     "qasper",
@@ -61,27 +71,21 @@ TASK_TYPE: Dict[str, str] = {
 # Supported methods and run tiers
 # ---------------------------------------------------------------------------
 
-SUPPORTED_METHODS: List[str] = ["rag", "long_context"]
+SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()
+EXPERIMENTAL_METHODS: List[str] = ["long_context"]
 
 RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {
     "smoke": {
-        "tasks": ["qasper", "qmsum"],
+        "tasks": ["qasper", "quality"],
         "max_samples": 2,
     },
     "subset": {
-        "tasks": [
-            "qmsum",
-            "squality",
-            "qasper",
-            "narrative_qa",
-            "quality",
-            "contract_nli",
-        ],
+        "tasks": SCROLLS_QA_TASKS.copy(),
         "max_samples": 50,
     },
     "full": {
-        "tasks": SCROLLS_TASKS.copy(),
+        "tasks": SCROLLS_QA_TASKS.copy(),
         "max_samples": -1,
     },
 }
@@ -142,27 +146,26 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
 # Defaults
 # ---------------------------------------------------------------------------
 
-# Qwen2.5-7B-Instruct-1M is the long-context generator used for both RAG and
-# long-context runs. We keep both methods on the same model family so the
-# comparison isolates retrieval strategy rather than model-family differences.
-DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct-1M"
-
-# Fallback keeps the same parameter scale but drops back to the standard
-# Qwen2.5 7B instruct checkpoint if the 1M model cannot be loaded in the local
-# runtime setup. This is mainly a sanity-check fallback, not an equivalent
-# long-context replacement.
+# Qwen2.5-14B-Instruct is a strong and stable local reader for a single A40
+# once the benchmark is focused on retrieval-based methods rather than 1M-token
+# long-context runs.
+DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-14B-Instruct"
 DEFAULT_FALLBACK_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct"
 
-DEFAULT_EMBEDDING_MODEL = "BAAI/bge-large-en-v1.5"
-DEFAULT_CONTEXT_BUDGET = 16000
+# The DOS RAG paper uses Snowflake Arctic Embed m v1.5 for dense retrieval.
+DEFAULT_EMBEDDING_MODEL = "Snowflake/snowflake-arctic-embed-m-v1.5"
+DEFAULT_CONTEXT_BUDGET = 10_000
 
-# The 1M model can support much larger contexts, but the practical default in
-# this repo is capped at 300k tokens because true 1M inference generally needs
-# roughly 128GB-class VRAM. This keeps the default long-context setup closer to
-# what a smaller local server can realistically run.
-DEFAULT_LC_CONTEXT_BUDGET = 300_000
+# Long-context is intentionally not an active benchmark method right now, but
+# the config keeps a placeholder budget so the method can be reintroduced later
+# without redesigning the configuration surface.
+DEFAULT_LC_CONTEXT_BUDGET = 131_072
 
-DEFAULT_TOP_K = 10
+# DOS/vanilla RAG select chunks until the token budget is hit, so top-k should
+# be comfortably larger than the final number of chunks that fit in context.
+DEFAULT_TOP_K = 200
+PAPER_LONG_QA_CONTEXT_BUDGETS: List[int] = [1500, 5000, 10000, 20000, 30000, 40000]
+PAPER_SHORT_QA_CONTEXT_BUDGETS: List[int] = [500, 1000, 1500, 2000, 4000, 6000, 8000]
 DEFAULT_ANALYSIS_SAMPLE_SIZE = 30
 DEFAULT_RANDOM_SEED = 13
 
@@ -187,6 +190,19 @@ def resolve_run_settings(
         max_samples if max_samples is not None else int(defaults["max_samples"])
     )
     return resolved_tasks, resolved_max_samples
+
+
+def recommended_top_k_for_context_budget(context_budget: int) -> int:
+    """Approximate the paper's retrieve-then-truncate top-k heuristic.
+
+    The reference implementations preserve sentence boundaries, which yields
+    chunk lengths of roughly 50-100 tokens. They therefore scale top-k to about
+    ``max_tokens / 50`` so the retriever surfaces enough material before the
+    final token-budget truncation is applied.
+    """
+    if context_budget < 1:
+        raise ValueError("context_budget must be positive")
+    return max(10, math.ceil(context_budget / 50))
 
 
 # ---------------------------------------------------------------------------
@@ -220,14 +236,15 @@ class BenchmarkConfig:
     embedding_model: str = DEFAULT_EMBEDDING_MODEL
     embedding_batch_size: int = 64
     embedding_device: str = "cuda"
-    query_instruction: str = "Represent this sentence for searching relevant passages: "
+    query_instruction: Optional[str] = None
 
     # --- Chunking -----------------------------------------------------------
-    chunk_size: int = 512
-    chunk_overlap: int = 64
+    chunk_size: int = 100
+    chunk_overlap: int = 0
+    chunking_strategy: str = "sentence"
 
     # --- Retrieval ----------------------------------------------------------
-    top_k: int = DEFAULT_TOP_K
+    top_k: Optional[int] = None
     context_budget: int = DEFAULT_CONTEXT_BUDGET
     lc_context_budget: int = DEFAULT_LC_CONTEXT_BUDGET
 
@@ -244,32 +261,36 @@ class BenchmarkConfig:
     # --- Data ---------------------------------------------------------------
     split: str = "validation"
     max_samples: int = -1
-    tasks: List[str] = field(default_factory=lambda: SCROLLS_TASKS.copy())
+    tasks: List[str] = field(default_factory=lambda: SCROLLS_QA_TASKS.copy())
 
     # --- Output -------------------------------------------------------------
     output_dir: str = "outputs"
     save_raw: bool = True
 
     @property
+    def uses_long_context(self) -> bool:
+        return "long_context" in self.methods
+
+    @property
     def effective_max_model_len(self) -> int:
         """Maximum sequence length passed to vLLM.
 
         If the caller explicitly sets ``max_model_len`` we respect it. Otherwise
-        we derive a value from the larger of the RAG and long-context budgets,
-        then add space for generation plus a small prompt-wrapper margin.
-
-        With the current defaults:
-        - RAG budget: 16,000 tokens
-        - LC document budget: 300,000 tokens
-        - generation budget: 1,024 tokens
-
-        The model itself is 1M-capable, but the benchmark default is set to a
-        much smaller practical budget for single-server use.
+        we derive a value from the active method budgets, then add space for
+        generation plus a small prompt-wrapper margin.
         """
         if self.max_model_len is not None:
             return self.max_model_len
-        longest_context = max(self.context_budget, self.lc_context_budget)
+        longest_context = self.context_budget
+        if self.uses_long_context:
+            longest_context = max(longest_context, self.lc_context_budget)
         return longest_context + self.max_new_tokens + 2048
+
+    @property
+    def effective_top_k(self) -> int:
+        if self.top_k is not None:
+            return self.top_k
+        return recommended_top_k_for_context_budget(self.context_budget)
 
     @property
     def run_output_dir(self) -> str:

@@ -1,5 +1,5 @@
 """
-Core benchmark pipeline for the SCROLLS RAG vs long-context comparison.
+Core benchmark pipeline for SCROLLS retrieval-based long-document QA.
 
 Conceptually, the pipeline has three layers:
 
@@ -7,12 +7,12 @@ Conceptually, the pipeline has three layers:
    SCROLLS examples are loaded as ``document`` + ``query`` + ``references``.
 
 2. method-specific prompt construction
-   - RAG: chunk -> embed -> retrieve -> assemble retrieved context
-   - long_context: pass the raw document directly, truncated only if it exceeds
-     the configured LC budget
+   - vanilla_rag: retrieve chunks and present them in retrieval-rank order
+   - dos_rag: retrieve the same chunks but restore original document order
+   - long_context: retained as an inactive extension point for future work
 
 3. shared generation / evaluation / reporting
-   Both methods are generated with the same ``Generator`` wrapper and scored
+   All active methods are generated with the same ``Generator`` wrapper and scored
    with the same SCROLLS metrics.
 
 The file is intentionally written as a shared execution surface so that future
@@ -30,7 +30,6 @@ from chunker import TokenChunker
 from config import (
     BenchmarkConfig,
     DEFAULT_METHODS,
-    DEFAULT_TOP_K,
     SYSTEM_PROMPTS,
     TASK_METRIC_TYPE,
     TASK_TYPE,
@@ -52,10 +51,12 @@ class BenchmarkPipeline:
         self.config = config
 
         logger.info("Initialising benchmark pipeline ...")
+        self.generator = Generator(config)
         self.chunker = TokenChunker(
-            tokenizer_name=config.embedding_model,
+            tokenizer_name=self.generator.active_model,
             chunk_size=config.chunk_size,
             chunk_overlap=config.chunk_overlap,
+            chunking_strategy=config.chunking_strategy,
         )
         self.embedder = Embedder(
             model_name=config.embedding_model,
@@ -63,7 +64,6 @@ class BenchmarkPipeline:
             batch_size=config.embedding_batch_size,
             query_instruction=config.query_instruction,
         )
-        self.generator = Generator(config)
 
         os.makedirs(config.run_output_dir, exist_ok=True)
         logger.info("Benchmark pipeline ready.")
@@ -136,19 +136,22 @@ class BenchmarkPipeline:
             return "middle"
         return "end"
 
-    def _prepare_rag_example(self, example: Dict) -> Dict[str, Any]:
-        """Build one RAG prompt and its trace metadata.
+    def _prepare_retrieval_example(self, example: Dict, method: str) -> Dict[str, Any]:
+        """Build one retrieval-based prompt and its trace metadata.
 
         Flow:
         1. chunk the document
         2. embed each chunk
         3. retrieve top-k chunks against the query
-        4. keep adding retrieved chunks until the RAG context budget is full
-        5. sort selected chunks back into document order before prompting
+        4. keep adding retrieved chunks until the context budget is full
+        5. order the selected chunks according to the requested method
 
         The returned dict is not just a prompt container. It also stores the
         retrieval trace needed for error analysis and qualitative inspection.
         """
+        if method not in {"vanilla_rag", "dos_rag"}:
+            raise ValueError(f"Unsupported retrieval method: {method!r}")
+
         task_type = TASK_TYPE[example["task"]]
         chunk_records = self.chunker.chunk_with_metadata(example["document"])
         if not chunk_records:
@@ -167,7 +170,7 @@ class BenchmarkPipeline:
         retriever = Retriever()
         retriever.build_index(chunk_embs, chunk_records)
         q_emb = self.embedder.embed_query(example["query"])
-        retrieved = retriever.retrieve(q_emb, top_k=self.config.top_k)
+        retrieved = retriever.retrieve(q_emb, top_k=self.config.effective_top_k)
 
         selected: List[Dict[str, Any]] = []
         budget_used = 0
@@ -178,7 +181,12 @@ class BenchmarkPipeline:
             selected.append(record)
             budget_used += tok_len
 
-        selected_for_prompt = sorted(selected, key=lambda x: x["index"])
+        if method == "dos_rag":
+            selected_for_prompt = sorted(selected, key=lambda x: x["index"])
+            prompt_ordering = "document_order"
+        else:
+            selected_for_prompt = list(selected)
+            prompt_ordering = "retrieval_rank"
         context = "\n\n".join(r["chunk"] for r in selected_for_prompt)
 
         system_prompt = SYSTEM_PROMPTS[task_type]
@@ -192,7 +200,7 @@ class BenchmarkPipeline:
         return {
             "id": example["id"],
             "task": example["task"],
-            "method": "rag",
+            "method": method,
             "query": example["query"],
             "references": example["references"],
             "document_tokens": document_tokens,
@@ -204,6 +212,7 @@ class BenchmarkPipeline:
             "document_truncated": False,
             "answer_position_ratio": ref_ratio,
             "answer_position_bucket": ref_bucket,
+            "prompt_ordering": prompt_ordering,
             "retrieved_chunks": retrieved,
             "retrieval_scores": [r["score"] for r in retrieved],
             "chunk_offsets": [
@@ -216,6 +225,7 @@ class BenchmarkPipeline:
                 for r in retrieved
             ],
             "selected_chunk_indices": [r["index"] for r in selected_for_prompt],
+            "selected_chunk_indices_by_retrieval": [r["index"] for r in selected],
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
@@ -224,9 +234,9 @@ class BenchmarkPipeline:
     def _prepare_long_context_example(self, example: Dict) -> Dict[str, Any]:
         """Build one long-context prompt and its trace metadata.
 
-        Long-context deliberately bypasses chunking, embedding, and retrieval.
-        The method tries to pass the original document as-is and only truncates
-        when the document exceeds the configured LC budget.
+        This path is intentionally retained as an extension point for future
+        work. It is not exposed by the active CLI defaults because the current
+        benchmark focus is DOS RAG vs vanilla RAG on single-A40 hardware.
 
         The configured LC budget is the experiment target, not an unconditional
         guarantee. If the active generator model has a smaller maximum context
@@ -286,8 +296,8 @@ class BenchmarkPipeline:
 
     def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Dispatch one example to its method-specific prompt builder."""
-        if method == "rag":
-            return self._prepare_rag_example(example)
+        if method in {"vanilla_rag", "dos_rag"}:
+            return self._prepare_retrieval_example(example, method)
         if method == "long_context":
             return self._prepare_long_context_example(example)
         raise ValueError(f"Unsupported method: {method!r}")
@@ -547,7 +557,8 @@ class BenchmarkPipeline:
                     "fallback_llm_model": self.config.fallback_llm_model,
                     "chunk_size": self.config.chunk_size,
                     "chunk_overlap": self.config.chunk_overlap,
-                    "top_k": self.config.top_k,
+                    "chunking_strategy": self.config.chunking_strategy,
+                    "top_k": self.config.effective_top_k,
                     "context_budget": self.config.context_budget,
                     "lc_context_budget": self.config.lc_context_budget,
                     "split": self.config.split,
@@ -566,14 +577,17 @@ class BenchmarkPipeline:
                 json.dump(report, fh, indent=2)
 
         deltas: Dict[str, Optional[float]] = {}
-        if "rag" in method_reports and "long_context" in method_reports:
+        delta_label: Optional[str] = None
+        if len(methods) >= 2:
+            left, right = methods[:2]
+            delta_label = f"{right}_minus_{left}"
             for task in self.config.tasks:
-                rag_score = method_reports["rag"]["per_task_scores"].get(task)
-                lc_score = method_reports["long_context"]["per_task_scores"].get(task)
-                if rag_score is None or lc_score is None:
+                left_score = method_reports.get(left, {}).get("per_task_scores", {}).get(task)
+                right_score = method_reports.get(right, {}).get("per_task_scores", {}).get(task)
+                if left_score is None or right_score is None:
                     deltas[task] = None
                 else:
-                    deltas[task] = lc_score - rag_score
+                    deltas[task] = right_score - left_score
 
         comparison = {
             "config": {
@@ -582,14 +596,16 @@ class BenchmarkPipeline:
                 "tasks": self.config.tasks,
                 "llm_model": self.config.llm_model,
                 "fallback_llm_model": self.config.fallback_llm_model,
-                "top_k": self.config.top_k,
+                "top_k": self.config.effective_top_k,
                 "context_budget": self.config.context_budget,
-                "lc_context_budget": self.config.lc_context_budget,
+                "chunk_size": self.config.chunk_size,
+                "chunking_strategy": self.config.chunking_strategy,
                 "enable_thinking": self.config.enable_thinking,
             },
             "methods": method_reports,
             "comparison": {
-                "long_context_minus_rag": deltas,
+                "pairwise_delta_label": delta_label,
+                "pairwise_delta": deltas,
                 "agreement": self._compute_agreement(methods),
             },
         }
@@ -609,8 +625,8 @@ class BenchmarkPipeline:
                 print(f"    {task:20s}  {metric_type:14s}  {score:.4f}")
             print(f"    {'AVERAGE':20s}  {'':14s}  {report.get('average_score', 0.0):.4f}")
             print("-" * 74)
-        if deltas:
-            print("  long_context - rag")
+        if deltas and delta_label:
+            print(f"  {delta_label}")
             for task, delta in deltas.items():
                 if delta is None:
                     continue

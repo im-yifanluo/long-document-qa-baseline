@@ -71,6 +71,23 @@ def primary_score(metric_type: str, prediction: str, references: List[str]) -> f
     return 0.0
 
 
+def method_field_name(method: Optional[str]) -> str:
+    return (method or "method").replace("-", "_")
+
+
+def pick_retrieval_method(
+    method_rows: Dict[str, Dict[str, Dict[str, Dict]]],
+    methods: List[str],
+) -> Optional[str]:
+    preferred = [m for m in ("dos_rag", "vanilla_rag", "rag") if m in methods]
+    ordered = preferred + [m for m in methods if m not in preferred]
+    for method in ordered:
+        task_rows = method_rows.get(method, {})
+        if any(task_rows.get(task) for task in task_rows):
+            return method
+    return None
+
+
 def infer_tasks(run_root: str, methods: List[str], tasks: Optional[List[str]]) -> List[str]:
     if tasks:
         return tasks
@@ -240,29 +257,38 @@ def make_qualitative_exports(
 
     manual_rows: List[Dict] = []
     case_candidates: List[Dict] = []
-    left = methods[0] if methods else "rag"
+    left = methods[0] if methods else "vanilla_rag"
     right = methods[1] if len(methods) > 1 else None
+    left_field = f"{method_field_name(left)}_prediction"
+    right_field = f"{method_field_name(right)}_prediction" if right else None
 
     for task, per_method in sampled:
-        rag_row = per_method.get("rag") or next(iter(per_method.values()))
-        lc_row = per_method.get("long_context") if right else None
-        rank = first_supporting_rank(rag_row.get("retrieved_chunks", []), rag_row.get("references", []))
-        manual_rows.append(
-            {
-                "task": task,
-                "id": rag_row.get("id"),
-                "query": rag_row.get("query", ""),
-                "reference": (rag_row.get("references") or [""])[0],
-                "rag_prediction": rag_row.get("prediction", ""),
-                "long_context_prediction": lc_row.get("prediction", "") if lc_row else "",
-                "rag_supporting_rank": rank if rank is not None else "miss",
-                "answer_position_bucket": rag_row.get("answer_position_bucket", "unknown"),
-                "manual_answer_correct": "",
-                "manual_rag_evidence_sufficient": "",
-                "manual_lc_supported": "",
-                "manual_generation_notes": "",
-            }
+        anchor_method = next(
+            (method for method in methods if method in per_method),
+            next(iter(per_method)),
         )
+        anchor_row = per_method[anchor_method]
+        left_row = per_method.get(left) or anchor_row
+        right_row = per_method.get(right) if right else None
+        rank = first_supporting_rank(
+            anchor_row.get("retrieved_chunks", []),
+            anchor_row.get("references", []),
+        )
+        row = {
+            "task": task,
+            "id": anchor_row.get("id"),
+            "query": anchor_row.get("query", ""),
+            "reference": (anchor_row.get("references") or [""])[0],
+            left_field: left_row.get("prediction", ""),
+            "supporting_rank": rank if rank is not None else "miss",
+            "answer_position_bucket": anchor_row.get("answer_position_bucket", "unknown"),
+            "manual_answer_correct": "",
+            "manual_context_sufficient": "",
+            "manual_generation_notes": "",
+        }
+        if right_field:
+            row[right_field] = right_row.get("prediction", "") if right_row else ""
+        manual_rows.append(row)
 
     if right:
         for task, per_method in shared_rows:
@@ -276,31 +302,37 @@ def make_qualitative_exports(
                     "id": left_row.get("id"),
                     "query": left_row.get("query", ""),
                     "reference": (left_row.get("references") or [""])[0],
-                    "rag_prediction": left_row.get("prediction", ""),
-                    "long_context_prediction": right_row.get("prediction", ""),
-                    "rag_retrieved_preview": " | ".join(
+                    left_field: left_row.get("prediction", ""),
+                    right_field: right_row.get("prediction", ""),
+                    "retrieved_preview": " | ".join(
                         chunk.get("chunk", "")[:120] for chunk in left_row.get("retrieved_chunks", [])[:3]
                     ),
                 }
             )
 
+    fieldnames = [
+        "task",
+        "id",
+        "query",
+        "reference",
+        left_field,
+    ]
+    if right_field:
+        fieldnames.append(right_field)
+    fieldnames.extend(
+        [
+            "supporting_rank",
+            "answer_position_bucket",
+            "manual_answer_correct",
+            "manual_context_sufficient",
+            "manual_generation_notes",
+        ]
+    )
+
     write_csv(
         os.path.join(analysis_dir, "qualitative_sample.csv"),
         manual_rows,
-        [
-            "task",
-            "id",
-            "query",
-            "reference",
-            "rag_prediction",
-            "long_context_prediction",
-            "rag_supporting_rank",
-            "answer_position_bucket",
-            "manual_answer_correct",
-            "manual_rag_evidence_sufficient",
-            "manual_lc_supported",
-            "manual_generation_notes",
-        ],
+        fieldnames,
     )
 
     with open(os.path.join(analysis_dir, "case_studies.json"), "w") as fh:
@@ -309,15 +341,19 @@ def make_qualitative_exports(
 
 def make_rag_rank_analysis(
     method_rows: Dict[str, Dict[str, Dict[str, Dict]]],
+    methods: List[str],
     tasks: List[str],
     analysis_dir: str,
 ) -> None:
     rows: List[Dict] = []
     bucket_scores: Dict[str, List[float]] = {}
+    retrieval_method = pick_retrieval_method(method_rows, methods)
+    if retrieval_method is None:
+        return
 
     for task in tasks:
         metric_type = TASK_METRIC_TYPE[task]
-        for row in method_rows.get("rag", {}).get(task, {}).values():
+        for row in method_rows.get(retrieval_method, {}).get(task, {}).values():
             rank = first_supporting_rank(row.get("retrieved_chunks", []), row.get("references", []))
             bucket = rank_bucket(rank)
             score = primary_score(metric_type, row.get("prediction", ""), row.get("references", []))
@@ -358,7 +394,7 @@ def make_rag_rank_analysis(
         plt.bar(labels, values)
         plt.ylabel("Average primary score")
         plt.xlabel("First supporting retrieved chunk rank bucket")
-        plt.title("RAG evidence-rank analysis")
+        plt.title(f"{retrieval_method} evidence-rank analysis")
         plt.tight_layout()
         plt.savefig(os.path.join(analysis_dir, "rag_rank_analysis.png"), dpi=200)
         plt.close()
@@ -407,8 +443,8 @@ def main():
     make_score_table(run_root, args.methods, tasks, analysis_dir)
     make_agreement_artifacts(method_rows, args.methods, tasks, analysis_dir)
     make_qualitative_exports(method_rows, args.methods, args.sample_size, args.seed, analysis_dir)
-    if "rag" in args.methods:
-        make_rag_rank_analysis(method_rows, tasks, analysis_dir)
+    if any(method in args.methods for method in ("dos_rag", "vanilla_rag", "rag")):
+        make_rag_rank_analysis(method_rows, args.methods, tasks, analysis_dir)
     maybe_copy_probe_plot(run_root, analysis_dir)
 
     manifest = {

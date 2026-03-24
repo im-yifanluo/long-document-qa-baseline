@@ -2,10 +2,11 @@
 """
 Run a simple long-context lost-in-the-middle probe on saved benchmark examples.
 
-The main benchmark evaluates the model on the natural document layout. This
-probe intentionally perturbs where the answer-bearing chunk appears inside the
-long-context prompt so you can measure whether performance drops when evidence
-is moved to the middle of the prompt.
+The active benchmark currently focuses on retrieval-based methods, but this
+probe is retained as an experimental utility for future long-context work. When
+saved `long_context` outputs are present, it perturbs where the answer-bearing
+chunk appears inside the prompt so you can measure whether performance drops
+when evidence is moved to the middle of the prompt.
 """
 
 import argparse
@@ -16,6 +17,7 @@ from typing import Dict, List, Sequence, Tuple
 
 from config import (
     BenchmarkConfig,
+    DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LC_CONTEXT_BUDGET,
     DEFAULT_LLM_MODEL,
@@ -135,7 +137,7 @@ def main():
     parser.add_argument("--run-tier", default="subset", choices=["smoke", "subset", "full"])
     parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
     parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
-    parser.add_argument("--embedding-model", default="BAAI/bge-large-en-v1.5")
+    parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
     parser.add_argument("--lc-context-budget", type=int, default=DEFAULT_LC_CONTEXT_BUDGET)
     parser.add_argument("--max-examples", type=int, default=30)
     parser.add_argument("--min-evidence-score", type=float, default=0.8)

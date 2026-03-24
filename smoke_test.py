@@ -6,7 +6,7 @@ Use this before a subset or full benchmark run to verify that:
 
 - the model loads
 - the dataset downloads
-- both methods execute
+- both retrieval methods execute
 - outputs are written in the expected structure
 """
 
@@ -18,8 +18,8 @@ import sys
 
 from config import (
     BenchmarkConfig,
+    DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
-    DEFAULT_LC_CONTEXT_BUDGET,
     DEFAULT_LLM_MODEL,
     SUPPORTED_METHODS,
 )
@@ -27,7 +27,7 @@ from config import (
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Smoke test for the SCROLLS RAG vs long-context benchmark",
+        description="Smoke test for the SCROLLS vanilla RAG vs DOS RAG benchmark",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
@@ -38,13 +38,13 @@ def main():
         default=SUPPORTED_METHODS,
         choices=SUPPORTED_METHODS,
     )
-    parser.add_argument("--tasks", nargs="+", default=["qasper", "qmsum"])
+    parser.add_argument("--tasks", nargs="+", default=["qasper", "quality"])
     parser.add_argument("--num-samples", type=int, default=2)
+    parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
     parser.add_argument("--embedding-device", default="cuda")
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
-    parser.add_argument("--lc-context-budget", type=int, default=DEFAULT_LC_CONTEXT_BUDGET)
     parser.add_argument("--enable-thinking", action="store_true")
     args = parser.parse_args()
 
@@ -71,10 +71,10 @@ def main():
         tasks=args.tasks,
         output_dir=args.output_dir,
         save_raw=True,
+        embedding_model=args.embedding_model,
         embedding_device=args.embedding_device,
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
-        lc_context_budget=args.lc_context_budget,
         enable_thinking=args.enable_thinking,
     )
 
@@ -87,11 +87,12 @@ def main():
     log = logging.getLogger("smoke_test")
 
     log.info("=" * 60)
-    log.info("  SMOKE TEST - SCROLLS RAG vs long-context")
+    log.info("  SMOKE TEST - SCROLLS vanilla RAG vs DOS RAG")
     log.info("  Methods:    %s", args.methods)
     log.info("  Tasks:      %s", args.tasks)
     log.info("  Samples:    %d per task", args.num_samples)
     log.info("  LLM:        %s (fallback=%s)", args.llm_model, args.fallback_llm_model)
+    log.info("  Retriever:  %s", args.embedding_model)
     log.info("  Thinking:   %s", args.enable_thinking)
     log.info("=" * 60)
 
