@@ -29,7 +29,6 @@ SCROLLS_TASKS: List[str] = [
     "gov_report",
     "summ_screen_fd",
     "qmsum",
-    "squality",
     "qasper",
     "narrative_qa",
     "quality",
@@ -38,7 +37,6 @@ SCROLLS_TASKS: List[str] = [
 
 SCROLLS_QA_TASKS: List[str] = [
     "qmsum",
-    "squality",
     "qasper",
     "narrative_qa",
     "quality",
@@ -49,7 +47,6 @@ TASK_METRIC_TYPE: Dict[str, str] = {
     "gov_report": "rouge",
     "summ_screen_fd": "rouge",
     "qmsum": "rouge",
-    "squality": "rouge",
     "qasper": "f1",
     "narrative_qa": "f1",
     "quality": "exact_match",
@@ -60,7 +57,6 @@ TASK_TYPE: Dict[str, str] = {
     "gov_report": "summarization",
     "summ_screen_fd": "summarization",
     "qmsum": "query_summarization",
-    "squality": "query_summarization",
     "qasper": "question_answering",
     "narrative_qa": "question_answering",
     "quality": "multiple_choice",
@@ -70,6 +66,8 @@ TASK_TYPE: Dict[str, str] = {
 # ---------------------------------------------------------------------------
 # Supported methods and run tiers
 # ---------------------------------------------------------------------------
+
+RESULTS_FORMAT_VERSION = 2
 
 SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()
@@ -109,13 +107,13 @@ SYSTEM_PROMPTS: Dict[str, str] = {
     ),
     "multiple_choice": (
         "You are a careful research assistant. Answer the multiple-choice question "
-        "based only on the provided context. Reply with ONLY the letter of the "
-        "correct option."
+        "based only on the provided context. Reply with ONLY the exact text of "
+        "the correct option."
     ),
     "nli": (
         "You are a careful research assistant. Classify the hypothesis based only "
         "on the provided context. Reply with exactly one of: 'Entailment', "
-        "'Contradiction', or 'NotMentioned'."
+        "'Contradiction', or 'Not mentioned'."
     ),
 }
 
@@ -134,11 +132,11 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
     ),
     "multiple_choice": (
         "{context_label}:\n{context}\n\n{query}\n\nAnswer with ONLY the "
-        "letter (A, B, C, or D)."
+        "exact text of the correct option."
     ),
     "nli": (
         "{context_label}:\n{context}\n\nHypothesis: {query}\n\nClassify as "
-        "'Entailment', 'Contradiction', or 'NotMentioned'."
+        "'Entailment', 'Contradiction', or 'Not mentioned'."
     ),
 }
 
@@ -266,6 +264,7 @@ class BenchmarkConfig:
     # --- Output -------------------------------------------------------------
     output_dir: str = "outputs"
     save_raw: bool = True
+    overwrite_existing: bool = False
 
     @property
     def uses_long_context(self) -> bool:

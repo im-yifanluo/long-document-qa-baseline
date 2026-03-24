@@ -1,12 +1,12 @@
 """
 Evaluation metrics for the SCROLLS benchmark.
 
-* ROUGE  (rouge-1, rouge-2, rouge-L, geometric mean) – summarisation tasks
-* Token-level F1                                      – QA tasks
-* Exact match (accuracy)                              – classification tasks
+This file now follows the official SCROLLS evaluator closely:
 
-When multiple reference answers exist the maximum score across references
-is used (standard practice for SCROLLS).
+- ROUGE uses ``rouge_score`` without stemming and reports percentages
+- F1 / exact match use the SQuAD-style normalization from the official helper
+- multiple references are handled by taking the best score per example
+- ROUGE uses the geometric mean of ROUGE-1/2/L as the primary dataset score
 """
 
 import math
@@ -23,12 +23,27 @@ from rouge_score import rouge_scorer
 # ---------------------------------------------------------------------------
 
 def normalize_answer(s: str) -> str:
-    """Lower-case, strip articles / punctuation / extra whitespace."""
+    """SCROLLS F1/EM normalization copied from the official helpers."""
     s = s.lower()
     s = re.sub(r"\b(a|an|the)\b", " ", s)
     s = "".join(c for c in s if c not in string.punctuation)
     s = " ".join(s.split())
     return s
+
+
+def _rouge_postprocess_text(text: str) -> str:
+    """Approximate the SCROLLS ROUGE pre-processing without requiring NLTK.
+
+    The official helper inserts newlines between sentences before computing
+    ROUGE so ``rougeLsum`` can be reported. The SCROLLS score itself is based
+    on ROUGE-1/2/L, but we still expose ``rougeLsum`` for consistency.
+    """
+    text = (text or "").strip()
+    if not text:
+        return ""
+    # Lightweight sentence segmentation for ROUGE-Lsum formatting.
+    text = re.sub(r"([.!?])\s+(?=[A-Z0-9\"'])", r"\1\n", text)
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -39,22 +54,23 @@ def compute_rouge(
     predictions: List[str], references: List[List[str]]
 ) -> Dict[str, float]:
     scorer = rouge_scorer.RougeScorer(
-        ["rouge1", "rouge2", "rougeL"], use_stemmer=True
+        ["rouge1", "rouge2", "rougeL", "rougeLsum"], use_stemmer=False
     )
-    accum = {"rouge1": [], "rouge2": [], "rougeL": []}
+    accum = {"rouge1": [], "rouge2": [], "rougeL": [], "rougeLsum": []}
 
     for pred, refs in zip(predictions, references):
+        pred = _rouge_postprocess_text(pred)
         best = {k: 0.0 for k in accum}
         for ref in refs:
-            result = scorer.score(ref, pred)
+            result = scorer.score(_rouge_postprocess_text(ref), pred)
             for k in accum:
                 best[k] = max(best[k], result[k].fmeasure)
         for k in accum:
-            accum[k].append(best[k])
+            accum[k].append(best[k] * 100.0)
 
     avg = {k: (sum(v) / len(v)) if v else 0.0 for k, v in accum.items()}
     geo = math.exp(
-        sum(math.log(max(avg[k], 1e-12)) for k in avg) / len(avg)
+        sum(math.log(max(avg[k], 1e-12)) for k in ("rouge1", "rouge2", "rougeL")) / 3.0
     )
     avg["rouge_geo_mean"] = geo
     return avg
@@ -83,7 +99,7 @@ def compute_f1(
                 f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) > 0 else 0.0
             best = max(best, f1)
         scores.append(best)
-    return {"f1": (sum(scores) / len(scores)) if scores else 0.0}
+    return {"f1": (100.0 * sum(scores) / len(scores)) if scores else 0.0}
 
 
 # ---------------------------------------------------------------------------
@@ -98,7 +114,7 @@ def compute_exact_match(
         if any(normalize_answer(ref) == normalize_answer(pred) for ref in refs):
             correct += 1
     return {
-        "exact_match": (correct / len(predictions)) if predictions else 0.0
+        "exact_match": (100.0 * correct / len(predictions)) if predictions else 0.0
     }
 
 

@@ -46,6 +46,11 @@ def main():
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--enable-thinking", action="store_true")
+    parser.add_argument(
+        "--overwrite-existing",
+        action="store_true",
+        help="Ignore and replace any existing saved smoke-test results.",
+    )
     args = parser.parse_args()
 
     try:
@@ -76,6 +81,7 @@ def main():
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
         enable_thinking=args.enable_thinking,
+        overwrite_existing=args.overwrite_existing,
     )
 
     os.makedirs(config.run_output_dir, exist_ok=True)
@@ -123,6 +129,9 @@ def main():
                     print(f"\n[{method}/{task} #{idx}]")
                     print(f"  Query:      {record.get('query', '')[:120]}")
                     print(f"  Prediction: {record.get('prediction', '')[:200]}")
+                    scoring_prediction = record.get("scoring_prediction")
+                    if scoring_prediction and scoring_prediction != record.get("prediction", ""):
+                        print(f"  Scored as:  {scoring_prediction[:200]}")
                     refs = record.get("references", [""])
                     print(f"  Reference:  {refs[0][:200]}")
 

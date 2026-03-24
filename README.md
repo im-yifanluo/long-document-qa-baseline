@@ -40,7 +40,6 @@ Long-context scaffolding is still present in the codebase, but it is intentional
 The default tiers focus on SCROLLS tasks that are QA-style or query-conditioned:
 
 - `qmsum`
-- `squality`
 - `qasper`
 - `narrative_qa`
 - `quality`
@@ -55,6 +54,81 @@ bash setup.sh
 source venv/bin/activate
 ```
 
+## Server Runbook
+
+On shared servers, do not assume the system `python3` module is usable for this
+repo. Before creating the project `venv`, verify the base Python can import
+both `ctypes` and `sqlite3`:
+
+```bash
+python3 -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
+```
+
+If that fails, the clean fix is to use a user-space Miniforge or conda Python
+and then build the repo `venv` on top of that environment.
+
+### Recommended Path For Shared Servers
+
+If Miniforge is already installed in your home directory:
+
+```bash
+module purge
+eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
+conda activate longdocqa
+python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
+cd ~/long-document-qa-baseline
+mv venv venv_old_cluster 2>/dev/null || true
+bash setup.sh
+source venv/bin/activate
+python --version
+```
+
+If the `longdocqa` environment does not exist yet:
+
+```bash
+module purge
+eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
+conda create -n longdocqa python=3.11 -y
+conda activate longdocqa
+python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
+cd ~/long-document-qa-baseline
+mv venv venv_old_cluster 2>/dev/null || true
+bash setup.sh
+source venv/bin/activate
+python --version
+```
+
+If Miniforge is not installed yet:
+
+```bash
+module purge
+cd ~
+curl -fsSLo Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
+bash Miniforge3.sh -b -p "$HOME/miniforge3"
+eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
+conda create -n longdocqa python=3.11 -y
+conda activate longdocqa
+python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
+cd ~/long-document-qa-baseline
+mv venv venv_old_cluster 2>/dev/null || true
+bash setup.sh
+source venv/bin/activate
+python --version
+```
+
+### Why This Is Necessary
+
+On some research-group servers, the module-provided Python 3.10-3.12 builds are
+present but unusable for ML workloads because they fail imports like:
+
+```bash
+python3 -c "import ctypes"
+python3 -c "import sqlite3"
+```
+
+If either of those fails, `torch` and `vllm` will also fail. In that case, use
+the Miniforge path above instead of the cluster Python modules.
+
 ## Quick Start
 
 Verify the reader loads:
@@ -68,13 +142,13 @@ python test_generator.py \
 Run a smoke test:
 
 ```bash
-python smoke_test.py
+python smoke_test.py --overwrite-existing
 ```
 
 Run the subset benchmark:
 
 ```bash
-python run_benchmark.py --run-tier subset
+python run_benchmark.py --run-tier subset --overwrite-existing
 ```
 
 Run the paper-style long-QA context-budget sweep:

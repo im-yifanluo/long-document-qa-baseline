@@ -30,6 +30,7 @@ from chunker import TokenChunker
 from config import (
     BenchmarkConfig,
     DEFAULT_METHODS,
+    RESULTS_FORMAT_VERSION,
     SYSTEM_PROMPTS,
     TASK_METRIC_TYPE,
     TASK_TYPE,
@@ -135,6 +136,15 @@ class BenchmarkPipeline:
         if position_ratio < (2.0 / 3.0):
             return "middle"
         return "end"
+
+    def _prediction_for_scoring(self, task: str, prediction: str, query: str) -> str:
+        del task
+        del query
+        return (prediction or "").strip()
+
+    def _references_for_scoring(self, task: str, references: List[str]) -> List[str]:
+        del task
+        return references
 
     def _prepare_retrieval_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Build one retrieval-based prompt and its trace metadata.
@@ -320,13 +330,30 @@ class BenchmarkPipeline:
         results_file = self._task_results_file(method, task)
 
         done: Dict[str, Dict] = {}
+        if self.config.overwrite_existing and os.path.exists(results_file):
+            os.remove(results_file)
         if os.path.exists(results_file):
+            incompatible_count = 0
             with open(results_file) as fh:
                 for line in fh:
                     if not line.strip():
                         continue
                     record = json.loads(line)
+                    if record.get("results_format_version") != RESULTS_FORMAT_VERSION:
+                        incompatible_count += 1
+                        continue
                     done[record["id"]] = record
+            if incompatible_count:
+                logger.info(
+                    "Ignoring %d cached %s/%s results with outdated format version.",
+                    incompatible_count,
+                    method,
+                    task,
+                )
+                if self.config.save_raw:
+                    with open(results_file, "w") as fh:
+                        for record in done.values():
+                            fh.write(json.dumps(record) + "\n")
             logger.info(
                 "Resuming %s/%s: %d / %d already done.",
                 method,
@@ -376,8 +403,21 @@ class BenchmarkPipeline:
             fh = open(results_file, write_mode) if write_mode else None
             try:
                 for (idx, meta), pred in zip(to_generate, predictions):
+                    meta["results_format_version"] = RESULTS_FORMAT_VERSION
                     meta["prediction"] = pred
                     meta["normalized_prediction"] = normalize_answer(pred)
+                    meta["scoring_prediction"] = self._prediction_for_scoring(
+                        task,
+                        pred,
+                        meta.get("query", ""),
+                    )
+                    meta["normalized_scoring_prediction"] = normalize_answer(
+                        meta["scoring_prediction"]
+                    )
+                    meta["scoring_references"] = self._references_for_scoring(
+                        task,
+                        meta.get("references", [""]),
+                    )
                     meta["generation_tokens"] = self.generator.count_tokens(pred)
                     meta["model_name"] = self.generator.active_model
                     all_meta[idx] = meta
@@ -394,8 +434,18 @@ class BenchmarkPipeline:
             if meta is None:
                 continue
             completed_meta.append(meta)
-            predictions_list.append(meta.get("prediction", ""))
-            references_list.append(meta.get("references", [""]))
+            predictions_list.append(
+                meta.get("scoring_prediction")
+                or self._prediction_for_scoring(
+                    task,
+                    meta.get("prediction", ""),
+                    meta.get("query", ""),
+                )
+            )
+            references_list.append(
+                meta.get("scoring_references")
+                or self._references_for_scoring(task, meta.get("references", [""]))
+            )
 
         metric_type = TASK_METRIC_TYPE[task]
         metrics = compute_metrics(predictions_list, references_list, metric_type)
@@ -469,7 +519,9 @@ class BenchmarkPipeline:
         with open(results_file) as fh:
             for line in fh:
                 if line.strip():
-                    rows.append(json.loads(line))
+                    record = json.loads(line)
+                    if record.get("results_format_version") == RESULTS_FORMAT_VERSION:
+                        rows.append(record)
         return rows
 
     def _compute_agreement(self, methods: List[str]) -> Dict[str, Any]:
@@ -490,11 +542,27 @@ class BenchmarkPipeline:
             task_agreed = 0
             disagreements: List[str] = []
             for ex_id in shared_ids:
-                left = base_rows[ex_id].get("normalized_prediction") or normalize_answer(
-                    base_rows[ex_id].get("prediction", "")
+                left = (
+                    base_rows[ex_id].get("normalized_scoring_prediction")
+                    or normalize_answer(
+                        base_rows[ex_id].get("scoring_prediction")
+                        or self._prediction_for_scoring(
+                            task,
+                            base_rows[ex_id].get("prediction", ""),
+                            base_rows[ex_id].get("query", ""),
+                        )
+                    )
                 )
-                right = compare_rows[ex_id].get("normalized_prediction") or normalize_answer(
-                    compare_rows[ex_id].get("prediction", "")
+                right = (
+                    compare_rows[ex_id].get("normalized_scoring_prediction")
+                    or normalize_answer(
+                        compare_rows[ex_id].get("scoring_prediction")
+                        or self._prediction_for_scoring(
+                            task,
+                            compare_rows[ex_id].get("prediction", ""),
+                            compare_rows[ex_id].get("query", ""),
+                        )
+                    )
                 )
                 if left == right:
                     task_agreed += 1

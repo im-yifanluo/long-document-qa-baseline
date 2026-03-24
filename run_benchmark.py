@@ -109,6 +109,11 @@ def parse_args():
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--no-save-raw", action="store_true")
     parser.add_argument(
+        "--overwrite-existing",
+        action="store_true",
+        help="Ignore and replace any existing saved results for the selected runs.",
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
@@ -184,6 +189,7 @@ def main():
             tasks=tasks,
             output_dir=run_output_base,
             save_raw=not args.no_save_raw,
+            overwrite_existing=args.overwrite_existing,
         )
 
         os.makedirs(config.run_output_dir, exist_ok=True)

@@ -7,9 +7,9 @@ need that string split into:
 - ``document``: the long source text
 - ``query``: the task-specific question / prompt / hypothesis
 
-That separation is essential for RAG, because retrieval should use the query
-against document chunks. The long-context path also benefits because it can
-build cleaner prompts once the raw document and the user query are separated.
+For the active SCROLLS QA tasks, the packed format is query-first, not
+document-first. The parser therefore needs to recover the leading query block
+reliably instead of assuming question markers appear at the end.
 """
 
 import logging
@@ -33,66 +33,47 @@ def _parse_summarization(input_text: str, default_query: str) -> Dict[str, str]:
     return {"document": input_text, "query": default_query}
 
 
-def _parse_question_at_end(input_text: str) -> Dict[str, str]:
-    """Generic parser for tasks where the query appears at the end.
-
-    This is intentionally heuristic because SCROLLS task formats are not fully
-    uniform. We first look for explicit markers, then fall back to a
-    last-paragraph heuristic if needed.
-    """
-    markers = [
-        ("\nQuestion: ", "question"),
-        ("\nQuery: ", "query"),
-        ("\nHypothesis: ", "hypothesis"),
-    ]
-    for marker, _label in markers:
-        idx = input_text.rfind(marker)
-        if idx != -1:
-            doc = input_text[:idx].strip()
-            query = input_text[idx + len(marker):].strip()
-            return {"document": doc, "query": query}
-
-    # Fallback – last paragraph (if short) is probably the question
-    parts = input_text.rsplit("\n\n", 1)
-    if len(parts) == 2 and len(parts[1]) < 600:
-        return {"document": parts[0].strip(), "query": parts[1].strip()}
-
-    return {"document": input_text, "query": "Answer based on the document."}
+def _split_query_first(input_text: str, fallback_query: str) -> Dict[str, str]:
+    """Split a SCROLLS packed input where the query/hypothesis comes first."""
+    match = re.match(r"^\s*(.+?)\n\s*\n+(.*)$", input_text, flags=re.S)
+    if match:
+        query = match.group(1).strip()
+        document = match.group(2).strip()
+        if query and document:
+            return {"document": document, "query": query}
+    return {"document": input_text.strip(), "query": fallback_query}
 
 
 def _parse_quality(input_text: str) -> Dict[str, str]:
-    """QuALITY – article followed by a question + (A)/(B)/(C)/(D) options."""
-    # Try to locate options block
-    m = re.search(r"\n\(A\)\s", input_text)
-    if m:
-        # Walk backwards from the option block to find the question line
-        pre = input_text[: m.start()].rstrip()
-        last_nl = pre.rfind("\n")
-        if last_nl != -1:
-            doc = pre[:last_nl].strip()
-            query = pre[last_nl:].strip() + input_text[m.start():]
-            return {"document": doc, "query": query}
-
-    # Fallback
-    return _parse_question_at_end(input_text)
+    """QuALITY – question + options first, then the story/article."""
+    match = re.match(
+        r"^\s*(?P<query>.*?\n\s*\(D\)\s.*?)(?:\n\s*\n+)(?P<document>.+)$",
+        input_text,
+        flags=re.S,
+    )
+    if match:
+        query = match.group("query").strip()
+        document = match.group("document").strip()
+        if query and document:
+            return {"document": document, "query": query}
+    return _split_query_first(input_text, "Answer the multiple-choice question.")
 
 
 # Dispatcher ----------------------------------------------------------------
 _PARSERS = {
     "gov_report":      lambda t: _parse_summarization(t, "Summarize the report."),
     "summ_screen_fd":  lambda t: _parse_summarization(t, "Summarize the episode."),
-    "qmsum":           _parse_question_at_end,
-    "squality":        _parse_question_at_end,
-    "qasper":          _parse_question_at_end,
-    "narrative_qa":    _parse_question_at_end,
+    "qmsum":           lambda t: _split_query_first(t, "Summarize the requested content."),
+    "qasper":          lambda t: _split_query_first(t, "Answer based on the document."),
+    "narrative_qa":    lambda t: _split_query_first(t, "Answer based on the document."),
     "quality":         _parse_quality,
-    "contract_nli":    _parse_question_at_end,
+    "contract_nli":    lambda t: _split_query_first(t, "Classify the hypothesis."),
 }
 
 
 def parse_scrolls_input(input_text: str, task: str) -> Dict[str, str]:
     """Split a SCROLLS ``input`` string into *document* and *query*."""
-    parser = _PARSERS.get(task, _parse_question_at_end)
+    parser = _PARSERS.get(task, lambda t: _split_query_first(t, "Answer based on the document."))
     return parser(input_text)
 
 
