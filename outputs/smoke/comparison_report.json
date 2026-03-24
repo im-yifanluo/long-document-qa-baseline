@@ -48,10 +48,10 @@
         }
       },
       "token_cost_summary": {
-        "avg_input_tokens": 6019.5,
-        "avg_context_tokens": 5960.5,
-        "avg_generation_tokens": 12.5,
-        "total_input_tokens": 12039
+        "avg_input_tokens": 6015.0,
+        "avg_context_tokens": 5929.0,
+        "avg_generation_tokens": 15.0,
+        "total_input_tokens": 12030
       }
     },
     "dos_rag": {
@@ -84,10 +84,10 @@
         }
       },
       "token_cost_summary": {
-        "avg_input_tokens": 6019.5,
-        "avg_context_tokens": 5960.5,
-        "avg_generation_tokens": 29.5,
-        "total_input_tokens": 12039
+        "avg_input_tokens": 6015.0,
+        "avg_context_tokens": 5929.0,
+        "avg_generation_tokens": 14.0,
+        "total_input_tokens": 12030
       }
     }
   },

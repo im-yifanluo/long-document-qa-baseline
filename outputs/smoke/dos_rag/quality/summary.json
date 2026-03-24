@@ -7,12 +7,12 @@
   "metrics": {
     "exact_match": 0.0
   },
-  "elapsed_seconds": 2.15,
+  "elapsed_seconds": 2.41,
   "token_stats": {
-    "avg_input_tokens": 6569.0,
-    "avg_context_tokens": 6508.0,
-    "avg_generation_tokens": 1.0,
-    "total_input_tokens": 6569
+    "avg_input_tokens": 6566.0,
+    "avg_context_tokens": 6454.0,
+    "avg_generation_tokens": 6.0,
+    "total_input_tokens": 6566
   },
   "results_file": "outputs/smoke/dos_rag/quality/results.jsonl"
 }

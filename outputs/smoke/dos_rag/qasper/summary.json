@@ -7,12 +7,12 @@
   "metrics": {
     "f1": 0.0
   },
-  "elapsed_seconds": 4.81,
+  "elapsed_seconds": 2.89,
   "token_stats": {
-    "avg_input_tokens": 5470.0,
-    "avg_context_tokens": 5413.0,
-    "avg_generation_tokens": 58.0,
-    "total_input_tokens": 5470
+    "avg_input_tokens": 5464.0,
+    "avg_context_tokens": 5404.0,
+    "avg_generation_tokens": 22.0,
+    "total_input_tokens": 5464
   },
   "results_file": "outputs/smoke/dos_rag/qasper/results.jsonl"
 }
