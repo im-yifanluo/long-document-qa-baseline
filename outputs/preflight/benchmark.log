@@ -171,3 +171,98 @@
 2026-03-24 11:53:03,657 [INFO] absl: Using default tokenizer.
 2026-03-24 11:53:03,680 [INFO] absl: Using default tokenizer.
 2026-03-24 11:53:03,681 [INFO] absl: Using default tokenizer.
+2026-03-24 12:11:29,537 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-03-24 12:11:29,538 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-03-24 12:11:32,723 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-03-24 12:12:05,970 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-03-24 12:12:06,404 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-03-24 12:12:07,595 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-03-24 12:12:07,596 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-03-24 12:12:07,596 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-03-24 12:12:07,597 [INFO] data_loader: Loading SCROLLS task=contract_nli split=validation …
+2026-03-24 12:12:08,086 [INFO] data_loader: Loaded 1 examples for contract_nli
+2026-03-24 12:12:08,087 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 1  (id=3_nda-11)
+2026-03-24 12:12:08,412 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 1 new examples in 0.3s
+2026-03-24 12:12:08,412 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generating 1 answers ...
+2026-03-24 12:12:09,193 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generation done in 0.8s
+2026-03-24 12:12:09,197 [INFO] rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 100.0}  (1.1s)
+2026-03-24 12:12:09,197 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-03-24 12:12:09,198 [INFO] data_loader: Loading SCROLLS task=narrative_qa split=validation …
+2026-03-24 12:12:09,492 [INFO] data_loader: Loaded 1 examples for narrative_qa
+2026-03-24 12:12:09,493 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-03-24 12:12:10,103 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 1 new examples in 0.6s
+2026-03-24 12:12:10,103 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generating 1 answers ...
+2026-03-24 12:12:13,263 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 3.2s
+2026-03-24 12:12:13,270 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 100.0}  (3.8s)
+2026-03-24 12:12:13,270 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-03-24 12:12:13,271 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-24 12:12:13,577 [INFO] data_loader: Loaded 1 examples for quality
+2026-03-24 12:12:13,578 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 1  (id=52845_75VB1ISR_1)
+2026-03-24 12:12:13,828 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 12:12:13,828 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 1 answers ...
+2026-03-24 12:12:15,821 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 2.0s
+2026-03-24 12:12:15,828 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0}  (2.2s)
+2026-03-24 12:12:15,828 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-03-24 12:12:15,828 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-24 12:12:16,148 [INFO] data_loader: Loaded 1 examples for qasper
+2026-03-24 12:12:16,149 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-24 12:12:16,367 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 12:12:16,367 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 1 answers ...
+2026-03-24 12:12:18,561 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 2.2s
+2026-03-24 12:12:18,568 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 33.33333333333333}  (2.4s)
+2026-03-24 12:12:18,568 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=contract_nli
+============================================================
+2026-03-24 12:12:18,569 [INFO] data_loader: Loading SCROLLS task=contract_nli split=validation …
+2026-03-24 12:12:18,862 [INFO] data_loader: Loaded 1 examples for contract_nli
+2026-03-24 12:12:18,863 [INFO] rag_pipeline: [dos_rag/contract_nli] Preparing 1 / 1  (id=3_nda-11)
+2026-03-24 12:12:18,978 [INFO] rag_pipeline: [dos_rag/contract_nli] Prompt preparation done for 1 new examples in 0.1s
+2026-03-24 12:12:18,979 [INFO] rag_pipeline: [dos_rag/contract_nli] Generating 1 answers ...
+2026-03-24 12:12:19,736 [INFO] rag_pipeline: [dos_rag/contract_nli] Generation done in 0.8s
+2026-03-24 12:12:19,741 [INFO] rag_pipeline: [dos_rag/contract_nli] {'exact_match': 100.0}  (0.9s)
+2026-03-24 12:12:19,741 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=narrative_qa
+============================================================
+2026-03-24 12:12:19,742 [INFO] data_loader: Loading SCROLLS task=narrative_qa split=validation …
+2026-03-24 12:12:20,040 [INFO] data_loader: Loaded 1 examples for narrative_qa
+2026-03-24 12:12:20,041 [INFO] rag_pipeline: [dos_rag/narrative_qa] Preparing 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-03-24 12:12:20,645 [INFO] rag_pipeline: [dos_rag/narrative_qa] Prompt preparation done for 1 new examples in 0.6s
+2026-03-24 12:12:20,645 [INFO] rag_pipeline: [dos_rag/narrative_qa] Generating 1 answers ...
+2026-03-24 12:12:23,880 [INFO] rag_pipeline: [dos_rag/narrative_qa] Generation done in 3.2s
+2026-03-24 12:12:23,888 [INFO] rag_pipeline: [dos_rag/narrative_qa] {'f1': 40.0}  (3.8s)
+2026-03-24 12:12:23,889 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-03-24 12:12:23,889 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-24 12:12:24,183 [INFO] data_loader: Loaded 1 examples for quality
+2026-03-24 12:12:24,184 [INFO] rag_pipeline: [dos_rag/quality] Preparing 1 / 1  (id=52845_75VB1ISR_1)
+2026-03-24 12:12:24,426 [INFO] rag_pipeline: [dos_rag/quality] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 12:12:24,426 [INFO] rag_pipeline: [dos_rag/quality] Generating 1 answers ...
+2026-03-24 12:12:26,439 [INFO] rag_pipeline: [dos_rag/quality] Generation done in 2.0s
+2026-03-24 12:12:26,446 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 100.0}  (2.3s)
+2026-03-24 12:12:26,446 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-03-24 12:12:26,447 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-24 12:12:26,747 [INFO] data_loader: Loaded 1 examples for qasper
+2026-03-24 12:12:26,749 [INFO] rag_pipeline: [dos_rag/qasper] Preparing 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-24 12:12:26,968 [INFO] rag_pipeline: [dos_rag/qasper] Prompt preparation done for 1 new examples in 0.2s
+2026-03-24 12:12:26,968 [INFO] rag_pipeline: [dos_rag/qasper] Generating 1 answers ...
+2026-03-24 12:12:29,171 [INFO] rag_pipeline: [dos_rag/qasper] Generation done in 2.2s
+2026-03-24 12:12:29,177 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 33.33333333333333}  (2.4s)

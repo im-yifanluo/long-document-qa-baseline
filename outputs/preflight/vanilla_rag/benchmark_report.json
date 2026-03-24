@@ -15,54 +15,30 @@
     "run_tier": "preflight"
   },
   "per_task_scores": {
-    "gov_report": 15.04996080898753,
-    "summ_screen_fd": 14.84696423503795,
-    "qmsum": 0.0006467701780078521,
-    "qasper": 22.222222222222225,
-    "narrative_qa": 44.44444444444445,
+    "contract_nli": 100.0,
+    "narrative_qa": 100.0,
     "quality": 0.0,
-    "contract_nli": 0.0
+    "qasper": 33.33333333333333
   },
-  "average_score": 13.79489121155288,
+  "average_score": 58.33333333333333,
   "detailed_metrics": {
-    "gov_report": {
-      "rouge1": 28.668941979522188,
-      "rouge2": 6.451612903225808,
-      "rougeL": 18.430034129692835,
-      "rougeLsum": 26.621160409556317,
-      "rouge_geo_mean": 15.04996080898753
-    },
-    "summ_screen_fd": {
-      "rouge1": 31.043256997455472,
-      "rouge2": 7.672634271099745,
-      "rougeL": 13.740458015267176,
-      "rougeLsum": 27.989821882951656,
-      "rouge_geo_mean": 14.84696423503795
-    },
-    "qmsum": {
-      "rouge1": 20.967741935483872,
-      "rouge2": 0.0,
-      "rougeL": 12.903225806451612,
-      "rougeLsum": 17.741935483870964,
-      "rouge_geo_mean": 0.0006467701780078521
-    },
-    "qasper": {
-      "f1": 22.222222222222225
+    "contract_nli": {
+      "exact_match": 100.0
     },
     "narrative_qa": {
-      "f1": 44.44444444444445
+      "f1": 100.0
     },
     "quality": {
       "exact_match": 0.0
     },
-    "contract_nli": {
-      "exact_match": 0.0
+    "qasper": {
+      "f1": 33.33333333333333
     }
   },
   "token_cost_summary": {
-    "avg_input_tokens": 6523.714285714285,
-    "avg_context_tokens": 6441.142857142857,
-    "avg_generation_tokens": 116.14285714285714,
-    "total_input_tokens": 45666
+    "avg_input_tokens": 6114.25,
+    "avg_context_tokens": 5987.5,
+    "avg_generation_tokens": 5.5,
+    "total_input_tokens": 24457
   }
 }

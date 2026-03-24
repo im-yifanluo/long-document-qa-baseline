@@ -5,14 +5,14 @@
   "num_generated": 1,
   "metric_type": "f1",
   "metrics": {
-    "f1": 13.333333333333336
+    "f1": 33.33333333333333
   },
-  "elapsed_seconds": 3.38,
+  "elapsed_seconds": 2.43,
   "token_stats": {
-    "avg_input_tokens": 5498.0,
+    "avg_input_tokens": 5532.0,
     "avg_context_tokens": 5404.0,
-    "avg_generation_tokens": 31.0,
-    "total_input_tokens": 5498
+    "avg_generation_tokens": 13.0,
+    "total_input_tokens": 5532
   },
   "results_file": "outputs/preflight/dos_rag/qasper/results.jsonl"
 }

@@ -5,14 +5,14 @@
   "num_generated": 1,
   "metric_type": "f1",
   "metrics": {
-    "f1": 44.44444444444445
+    "f1": 100.0
   },
-  "elapsed_seconds": 4.17,
+  "elapsed_seconds": 3.78,
   "token_stats": {
-    "avg_input_tokens": 10048.0,
+    "avg_input_tokens": 10082.0,
     "avg_context_tokens": 9950.0,
-    "avg_generation_tokens": 10.0,
-    "total_input_tokens": 10048
+    "avg_generation_tokens": 3.0,
+    "total_input_tokens": 10082
   },
   "results_file": "outputs/preflight/vanilla_rag/narrative_qa/results.jsonl"
 }
