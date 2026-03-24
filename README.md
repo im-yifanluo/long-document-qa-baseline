@@ -4,7 +4,13 @@ This repo is now structured as a modular benchmark runner:
 
 - benchmark plugins live under `benchmarks/`
 - method plugins live under `methods/`
-- the pipeline in `rag_pipeline.py` only orchestrates loading, generation, caching, and reporting
+- the generic runner lives under `core/`
+- retrieval / model-facing components live under `runtime/`
+- evaluation and analysis helpers live under `evaluation/`, `analysis/`, and `utils/`
+
+The top level is intentionally kept for docs, entrypoints, and first-class
+extension packages. The internal plumbing is grouped by responsibility so a new
+benchmark or method does not need to live beside unrelated runtime code.
 
 The current benchmark plugin is SCROLLS, and the current active methods are:
 
@@ -345,15 +351,13 @@ benchmark artifacts under:
 | File | Purpose |
 |---|---|
 | `run_benchmark.py` | main benchmark CLI |
-| `rag_pipeline.py` | method execution, generation, evaluation, reporting |
-| `registry.py` | benchmark and method plugin registry |
-| `interfaces.py` | shared benchmark/method contracts |
+| `core/` | config, shared contracts, plugin registry, generic pipeline |
 | `benchmarks/` | benchmark plugins, currently `scrolls` |
 | `methods/` | method plugins, currently retrieval and long-context scaffolds |
-| `chunker.py` | sentence-aware passage chunking |
-| `embedder.py` | dense retrieval embedding wrapper |
-| `retriever.py` | FAISS retrieval |
-| `generator.py` | vLLM reader wrapper |
+| `runtime/` | sentence chunking, embeddings, retrieval, vLLM wrapper |
+| `evaluation/` | local diagnostic metrics and official benchmark bridges |
+| `analysis/` | shared analysis helpers used by reporting scripts |
+| `utils/` | lightweight shared helpers that stay dependency-light |
 | `analyze_outputs.py` | analysis artifacts |
 | `smoke_test.py` | end-to-end validation |
 | `run_lost_in_middle.py` | reserved long-context probe scaffold |

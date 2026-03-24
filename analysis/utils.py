@@ -14,7 +14,7 @@ that the benchmark can use for:
 import random
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
-from metrics import normalize_answer
+from utils.text import normalize_answer
 
 
 def reference_match_score(text: str, references: Sequence[str]) -> float:

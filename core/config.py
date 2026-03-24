@@ -13,11 +13,6 @@ from typing import List, Optional
 from benchmarks.scrolls import (
     SCROLLS_QA_TASKS,
     SCROLLS_RUN_TIER_DEFAULTS,
-    SCROLLS_TASKS,
-    SYSTEM_PROMPTS,
-    TASK_METRIC_TYPE,
-    TASK_TYPE,
-    USER_PROMPT_TEMPLATES,
 )
 
 # ---------------------------------------------------------------------------

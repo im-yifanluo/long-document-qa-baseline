@@ -8,8 +8,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple
 
-from interfaces import BenchmarkExample, PreparedPrompt
-from text_utils import normalize_answer
+from core.interfaces import BenchmarkExample, PreparedPrompt
+from utils.text import normalize_answer
 
 
 @dataclass

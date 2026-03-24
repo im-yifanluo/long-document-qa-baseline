@@ -16,7 +16,7 @@ import logging
 import os
 import sys
 
-from config import (
+from core.config import (
     BenchmarkConfig,
     DEFAULT_BENCHMARK_NAME,
     DEFAULT_ANALYSIS_SAMPLE_SIZE,
@@ -27,7 +27,7 @@ from config import (
     PAPER_SHORT_QA_CONTEXT_BUDGETS,
     recommended_top_k_for_context_budget,
 )
-from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
+from core.registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
 
 
 def parse_args():
@@ -160,7 +160,7 @@ def parse_args():
 def main():
     args = parse_args()
     try:
-        from rag_pipeline import BenchmarkPipeline
+        from core.pipeline import BenchmarkPipeline
     except ModuleNotFoundError as exc:
         missing = exc.name or "a required package"
         raise SystemExit(

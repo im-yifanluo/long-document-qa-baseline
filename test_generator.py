@@ -9,12 +9,12 @@ fastest way to check model/runtime problems before launching a full benchmark.
 
 import argparse
 
-from config import BenchmarkConfig, DEFAULT_FALLBACK_LLM_MODEL, DEFAULT_LLM_MODEL
+from core.config import BenchmarkConfig, DEFAULT_FALLBACK_LLM_MODEL, DEFAULT_LLM_MODEL
 
 
 def main():
     try:
-        from generator import Generator
+        from runtime.generator import Generator
     except ModuleNotFoundError as exc:
         missing = exc.name or "a required package"
         raise SystemExit(

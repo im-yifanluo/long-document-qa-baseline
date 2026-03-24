@@ -17,8 +17,8 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from interfaces import BenchmarkExample, TaskSpec
-from official_scrolls import (
+from core.interfaces import BenchmarkExample, TaskSpec
+from evaluation.official_scrolls import (
     EXPECTED_TASKS as OFFICIAL_SCROLLS_TASKS,
     evaluate_benchmark as official_evaluate_benchmark,
     evaluate_dataset as official_evaluate_dataset,
@@ -26,7 +26,7 @@ from official_scrolls import (
     write_predictions_json as write_official_predictions_json,
     write_subset_test_with_output as write_official_subset_test_with_output,
 )
-from text_utils import normalize_answer
+from utils.text import normalize_answer
 
 from .base import BenchmarkDefinition
 
@@ -542,7 +542,7 @@ class ScrollsBenchmark(BenchmarkDefinition):
         task_dir: str,
         refreshed_from_cache: bool = False,
     ) -> Dict[str, Any]:
-        from metrics import compute_metrics
+        from evaluation.metrics import compute_metrics
 
         metric_type = self.task_metric_type(task)
         diagnostic_predictions = [row.get("scoring_prediction", "") for row in rows]

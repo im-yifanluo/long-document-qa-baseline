@@ -1,10 +1,12 @@
 # Architecture And Execution Guide
 
-This repo is now organized around three separable layers:
+This repo is now organized around a small set of separable packages:
 
 1. benchmark plugins in `benchmarks/`
 2. method plugins in `methods/`
-3. the generic pipeline in `rag_pipeline.py`
+3. generic runner code in `core/`
+4. model / retrieval runtime code in `runtime/`
+5. evaluation and analysis support in `evaluation/`, `analysis/`, and `utils/`
 
 The current concrete setup is:
 
@@ -32,15 +34,20 @@ Each benchmark plugin is responsible for normalizing its raw examples into the s
 - `query`
 - `references`
 
-For SCROLLS this happens in `benchmarks/scrolls.py`, with `data_loader.py`
-retained as a compatibility wrapper.
+For SCROLLS this happens in `benchmarks/scrolls.py`.
 
 Important boundary:
 
 - benchmark plugins own prompts, task metadata, and scoring logic
 - method plugins own prompt construction and retrieval / LC traces
-- the pipeline only manages batching, caching, generation, and reporting
+- `core/pipeline.py` only manages batching, caching, generation, and reporting
 - official scoring still comes from the cloned `scrolls/evaluator` scripts for the `scrolls` plugin
+
+Top-level design rule:
+
+- keep the repository root for entrypoints, docs, and extension packages
+- keep internal implementation details inside the packages above
+- avoid flat utility files at the root once they become internal plumbing
 
 ## 3. Retrieval Pipeline
 
@@ -121,18 +128,20 @@ The analysis script then derives:
 
 | File | Role |
 |---|---|
-| `config.py` | defaults, run tiers, supported methods |
-| `interfaces.py` | shared benchmark/method contracts |
-| `registry.py` | benchmark and method plugin registry |
+| `core/config.py` | runtime defaults and benchmark config dataclass |
+| `core/interfaces.py` | shared benchmark/method contracts |
+| `core/registry.py` | benchmark and method plugin registry |
+| `core/pipeline.py` | method execution, generation, evaluation, reporting |
 | `benchmarks/` | benchmark plugins |
 | `methods/` | method plugins |
-| `data_loader.py` | compatibility wrapper for SCROLLS loading |
-| `official_scrolls.py` | bridge to the official `scrolls/evaluator` scripts |
-| `chunker.py` | sentence-aware chunking |
-| `embedder.py` | retrieval embeddings |
-| `retriever.py` | FAISS ranking |
-| `generator.py` | vLLM reader wrapper |
-| `rag_pipeline.py` | method execution and reporting |
+| `runtime/chunker.py` | sentence-aware chunking |
+| `runtime/embedder.py` | retrieval embeddings |
+| `runtime/retriever.py` | FAISS ranking |
+| `runtime/generator.py` | vLLM reader wrapper |
+| `evaluation/official_scrolls.py` | bridge to the official `scrolls/evaluator` scripts |
+| `evaluation/metrics.py` | local diagnostic metrics |
+| `analysis/utils.py` | shared analysis heuristics |
+| `utils/text.py` | dependency-light text normalization helpers |
 | `run_benchmark.py` | main CLI |
 | `smoke_test.py` | small end-to-end validation |
 | `analyze_outputs.py` | post-hoc analysis |

@@ -7,8 +7,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple
 
-from interfaces import BenchmarkExample, TaskSpec
-from text_utils import normalize_answer
+from core.interfaces import BenchmarkExample, TaskSpec
+from utils.text import normalize_answer
 
 
 class BenchmarkDefinition(ABC):
@@ -126,7 +126,7 @@ class BenchmarkDefinition(ABC):
         return 0.0
 
     def row_primary_score(self, row: Dict[str, Any]) -> float:
-        from metrics import compute_metrics
+        from evaluation.metrics import compute_metrics
 
         task = row["task"]
         metrics = compute_metrics(
@@ -163,7 +163,7 @@ class BenchmarkDefinition(ABC):
         task_dir: str,
         refreshed_from_cache: bool = False,
     ) -> Dict[str, Any]:
-        from metrics import compute_metrics
+        from evaluation.metrics import compute_metrics
 
         metric_type = self.task_metric_type(task)
         diagnostic_predictions = [row.get("scoring_prediction", "") for row in rows]

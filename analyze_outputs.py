@@ -20,8 +20,16 @@ import os
 from statistics import mean
 from typing import Dict, List, Optional, Tuple
 
-from config import DEFAULT_ANALYSIS_SAMPLE_SIZE, DEFAULT_BENCHMARK_NAME
-from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
+from analysis.utils import (
+    deterministic_sample,
+    first_supporting_rank,
+    rank_bucket,
+    shared_method_rows,
+)
+from benchmarks.scrolls import SCROLLS_TASKS
+from core.config import DEFAULT_ANALYSIS_SAMPLE_SIZE, DEFAULT_BENCHMARK_NAME
+from core.registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
+from utils.text import normalize_answer
 
 try:
     import matplotlib.pyplot as plt
@@ -29,22 +37,9 @@ except ModuleNotFoundError:  # pragma: no cover - optional until deps are instal
     plt = None
 
 try:
-    from analysis_utils import (
-        deterministic_sample,
-        first_supporting_rank,
-        rank_bucket,
-        shared_method_rows,
-    )
-    from metrics import compute_metrics, normalize_answer
+    from evaluation.metrics import compute_metrics
 except ModuleNotFoundError:  # pragma: no cover - optional until deps are installed
-    deterministic_sample = None
-    first_supporting_rank = None
-    rank_bucket = None
-    shared_method_rows = None
     compute_metrics = None
-
-    def normalize_answer(text: str) -> str:
-        return " ".join(text.lower().split())
 
 
 def load_json(path: str) -> Dict:

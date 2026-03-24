@@ -16,13 +16,13 @@ import os
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
-from chunker import TokenChunker
-from config import BenchmarkConfig, DEFAULT_METHODS, RESULTS_FORMAT_VERSION
-from embedder import Embedder
-from generator import Generator
+from core.config import BenchmarkConfig, DEFAULT_METHODS, RESULTS_FORMAT_VERSION
+from core.registry import create_benchmark, create_method
 from methods.base import MethodResources
-from registry import create_benchmark, create_method
-from text_utils import normalize_answer
+from runtime.chunker import TokenChunker
+from runtime.embedder import Embedder
+from runtime.generator import Generator
+from utils.text import normalize_answer
 
 logger = logging.getLogger(__name__)
 

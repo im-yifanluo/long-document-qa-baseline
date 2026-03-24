@@ -15,18 +15,15 @@ import os
 from statistics import mean
 from typing import Dict, List, Sequence, Tuple
 
-from config import (
+from core.config import (
     BenchmarkConfig,
+    DEFAULT_BENCHMARK_NAME,
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LC_CONTEXT_BUDGET,
     DEFAULT_LLM_MODEL,
-    RUN_TIER_DEFAULTS,
-    SYSTEM_PROMPTS,
-    TASK_METRIC_TYPE,
-    TASK_TYPE,
-    USER_PROMPT_TEMPLATES,
 )
+from core.registry import create_benchmark
 
 try:
     import matplotlib.pyplot as plt
@@ -34,16 +31,14 @@ except ModuleNotFoundError:  # pragma: no cover - optional until deps are instal
     plt = None
 
 try:
-    from analysis_utils import deterministic_sample, reference_match_score
-    from chunker import TokenChunker
-    from data_loader import load_scrolls_task
-    from generator import Generator
-    from metrics import compute_metrics
+    from analysis.utils import deterministic_sample, reference_match_score
+    from evaluation.metrics import compute_metrics
+    from runtime.chunker import TokenChunker
+    from runtime.generator import Generator
 except ModuleNotFoundError:  # pragma: no cover - optional until deps are installed
     deterministic_sample = None
     reference_match_score = None
     TokenChunker = None
-    load_scrolls_task = None
     Generator = None
     compute_metrics = None
 
@@ -117,14 +112,9 @@ def assemble_context(
     return "\n\n".join(chunk["chunk"] for chunk in ordered)
 
 
-def build_prompt(task: str, context: str, query: str) -> Tuple[str, str]:
-    task_type = TASK_TYPE[task]
-    system_prompt = SYSTEM_PROMPTS[task_type]
-    user_prompt = USER_PROMPT_TEMPLATES[task_type].format(
-        context=context,
-        query=query,
-        context_label="Context",
-    )
+def build_prompt(benchmark, task: str, context: str, query: str) -> Tuple[str, str]:
+    system_prompt = benchmark.system_prompt_for_task(task)
+    user_prompt = benchmark.build_user_prompt(task, context, query)
     return system_prompt, user_prompt
 
 
@@ -133,8 +123,9 @@ def main():
         description="Run a long-context lost-in-the-middle probe",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
+    parser.add_argument("--benchmark", default=DEFAULT_BENCHMARK_NAME)
     parser.add_argument("--output-dir", default="outputs")
-    parser.add_argument("--run-tier", default="subset", choices=["smoke", "subset", "full"])
+    parser.add_argument("--run-tier", default="subset")
     parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
     parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
     parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
@@ -150,7 +141,6 @@ def main():
             deterministic_sample,
             reference_match_score,
             TokenChunker,
-            load_scrolls_task,
             Generator,
             compute_metrics,
         )
@@ -159,12 +149,14 @@ def main():
             "Probe dependencies are missing. Install requirements.txt first."
         )
 
-    tasks = list(RUN_TIER_DEFAULTS[args.run_tier]["tasks"])
-    run_root = os.path.join(args.output_dir, args.run_tier)
+    benchmark = create_benchmark(args.benchmark, None)
+    tasks, _ = benchmark.resolve_run_settings(args.run_tier)
+    run_root = os.path.join(args.output_dir, args.benchmark, args.run_tier)
     probe_dir = os.path.join(run_root, "analysis", "lost_in_middle")
     os.makedirs(probe_dir, exist_ok=True)
 
     config = BenchmarkConfig(
+        benchmark_name=args.benchmark,
         llm_model=args.llm_model,
         fallback_llm_model=args.fallback_llm_model,
         embedding_model=args.embedding_model,
@@ -175,7 +167,7 @@ def main():
     )
     generator = Generator(config)
     chunker = TokenChunker(
-        tokenizer_name=args.embedding_model,
+        tokenizer_name=generator.active_model,
         chunk_size=512,
         chunk_overlap=64,
     )
@@ -185,16 +177,16 @@ def main():
         saved_ids = set(load_saved_ids(run_root, task))
         if not saved_ids:
             continue
-        examples = load_scrolls_task(task, split="validation", max_samples=-1)
-        filtered = [example for example in examples if example["id"] in saved_ids]
+        examples = benchmark.load_examples(task, split="validation", max_samples=-1)
+        filtered = [example for example in examples if example.id in saved_ids]
         filtered = deterministic_sample(filtered, args.max_examples, seed=13)
-        metric_type = TASK_METRIC_TYPE[task]
+        metric_type = benchmark.task_metric_type(task)
 
         for example in filtered:
-            chunk_records = chunker.chunk_with_metadata(example["document"])
+            chunk_records = chunker.chunk_with_metadata(example.document)
             if len(chunk_records) < 2:
                 continue
-            evidence_idx, evidence_score = select_evidence_chunk(chunk_records, example["references"])
+            evidence_idx, evidence_score = select_evidence_chunk(chunk_records, example.references)
             if evidence_idx < 0 or evidence_score < args.min_evidence_score:
                 continue
 
@@ -207,15 +199,15 @@ def main():
                     position,
                     args.lc_context_budget,
                 )
-                prompts.append(build_prompt(task, context, example["query"]))
+                prompts.append(build_prompt(benchmark, task, context, example.query))
 
             predictions = generator.generate_batch(prompts)
             for position, prediction in zip(POSITIONS, predictions):
-                score = primary_score(metric_type, prediction, example["references"])
+                score = primary_score(metric_type, prediction, example.references)
                 probe_rows.append(
                     {
                         "task": task,
-                        "id": example["id"],
+                        "id": example.id,
                         "position": position,
                         "evidence_score": evidence_score,
                         "primary_score": score,

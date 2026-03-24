@@ -16,14 +16,14 @@ import logging
 import os
 import sys
 
-from config import (
+from core.config import (
     BenchmarkConfig,
     DEFAULT_BENCHMARK_NAME,
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
 )
-from registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
+from core.registry import ACTIVE_METHOD_NAMES, benchmark_names, create_benchmark, method_names
 
 
 def main():
@@ -103,7 +103,7 @@ def main():
         args.num_samples = resolved_samples
 
     try:
-        from rag_pipeline import BenchmarkPipeline
+        from core.pipeline import BenchmarkPipeline
     except ModuleNotFoundError as exc:
         missing = exc.name or "a required package"
         raise SystemExit(

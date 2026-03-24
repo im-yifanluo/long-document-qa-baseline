@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from interfaces import BenchmarkExample, PreparedPrompt
+from core.interfaces import BenchmarkExample, PreparedPrompt
 
 from .base import MethodDefinition
 
@@ -19,7 +19,7 @@ class RetrievalMethodBase(MethodDefinition):
         raise NotImplementedError
 
     def prepare_example(self, example: BenchmarkExample, benchmark: Any) -> PreparedPrompt:
-        from retriever import Retriever
+        from runtime.retriever import Retriever
 
         chunker = self.resources.chunker
         embedder = self.resources.embedder

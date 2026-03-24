@@ -15,7 +15,7 @@ from collections import Counter
 from typing import Dict, List
 
 from rouge_score import rouge_scorer
-from text_utils import normalize_answer
+from utils.text import normalize_answer
 
 
 def _rouge_postprocess_text(text: str) -> str:
