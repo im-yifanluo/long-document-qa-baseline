@@ -58,13 +58,7 @@ pip install --upgrade pip --quiet
 echo "[3/4] Installing Python dependencies ..."
 pip install -r requirements.txt --quiet
 
-echo "[4/4] Downloading NLTK tokenizer data ..."
-python -c "
-import nltk, os
-nltk.download('punkt', quiet=True, download_dir=os.path.join(os.getcwd(), 'nltk_data'))
-nltk.download('punkt_tab', quiet=True, download_dir=os.path.join(os.getcwd(), 'nltk_data'))
-os.environ['NLTK_DATA'] = os.path.join(os.getcwd(), 'nltk_data')
-"
+echo "[4/4] Finalizing output directories ..."
 
 mkdir -p outputs
 

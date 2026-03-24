@@ -10,7 +10,6 @@ faiss-cpu>=1.7.4
 vllm>=0.4.0
 
 rouge-score>=0.1.2
-nltk>=3.8.0
 matplotlib>=3.8.0
 
 numpy>=1.24.0

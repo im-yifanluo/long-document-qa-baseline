@@ -5,18 +5,16 @@ The DOS RAG paper uses short passages capped at roughly 100 tokens while
 preserving sentence boundaries where possible. This module therefore defaults
 to sentence-aware chunking, with a sliding-window fallback retained so future
 methods can opt into the older behavior if needed.
+
+The implementation intentionally avoids heavyweight sentence-tokenizer
+dependencies so it remains portable on shared servers with incomplete Python
+module builds.
 """
 
-import os
 import re
 from typing import Dict, List, Sequence
 
-import nltk
 from transformers import AutoTokenizer
-
-LOCAL_NLTK_DATA = os.path.join(os.path.dirname(__file__), "nltk_data")
-if os.path.isdir(LOCAL_NLTK_DATA) and LOCAL_NLTK_DATA not in nltk.data.path:
-    nltk.data.path.insert(0, LOCAL_NLTK_DATA)
 
 
 class TokenChunker:
@@ -47,15 +45,6 @@ class TokenChunker:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.chunking_strategy = chunking_strategy
-        self._ensure_sentence_tokenizer()
-
-    @staticmethod
-    def _ensure_sentence_tokenizer() -> None:
-        try:
-            nltk.data.find("tokenizers/punkt_tab")
-        except LookupError:
-            nltk.download("punkt", quiet=True)
-            nltk.download("punkt_tab", quiet=True)
 
     def count_tokens(self, text: str) -> int:
         """Return the number of tokens in *text*."""
@@ -174,10 +163,36 @@ class TokenChunker:
                 final_pieces.extend(self._split_by_tokens_hard(piece))
         return final_pieces
 
+    @staticmethod
+    def _split_sentences(text: str) -> List[str]:
+        """Best-effort sentence splitter without external tokenizer data."""
+        stripped = text.strip()
+        if not stripped:
+            return []
+
+        # Prefer paragraph boundaries first so transcripts and QA inputs with
+        # explicit block structure are preserved reasonably well.
+        paragraphs = [
+            paragraph.strip()
+            for paragraph in re.split(r"\n\s*\n+", stripped)
+            if paragraph.strip()
+        ]
+
+        sentence_like_units: List[str] = []
+        split_pattern = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[])")
+        for paragraph in paragraphs:
+            pieces = [piece.strip() for piece in split_pattern.split(paragraph) if piece.strip()]
+            if pieces:
+                sentence_like_units.extend(pieces)
+            else:
+                sentence_like_units.append(paragraph)
+
+        return sentence_like_units
+
     def _sentence_passages(self, text: str) -> Sequence[str]:
         sentences = [
             sentence.strip()
-            for sentence in nltk.tokenize.sent_tokenize(text)
+            for sentence in self._split_sentences(text)
             if sentence and sentence.strip()
         ]
         if not sentences:
