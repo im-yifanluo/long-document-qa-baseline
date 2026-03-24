@@ -57,6 +57,11 @@ def main():
         action="store_true",
         help="Ignore and replace any existing saved smoke-test results.",
     )
+    parser.add_argument(
+        "--refresh-only",
+        action="store_true",
+        help="Do not run generation. Recompute scoring and reports from existing cached smoke-test results.",
+    )
     args = parser.parse_args()
     if args.all_datasets:
         args.tasks = SCROLLS_TASKS.copy()
@@ -111,8 +116,8 @@ def main():
     log.info("  Thinking:   %s", args.enable_thinking)
     log.info("=" * 60)
 
-    pipeline = BenchmarkPipeline(config)
-    results = pipeline.run_all()
+    pipeline = BenchmarkPipeline(config, load_models=not args.refresh_only)
+    results = pipeline.refresh_from_cached() if args.refresh_only else pipeline.run_all()
 
     ok = True
     print("\n" + "-" * 60)

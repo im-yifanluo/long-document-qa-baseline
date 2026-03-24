@@ -108,7 +108,8 @@ SYSTEM_PROMPTS: Dict[str, str] = {
     "question_answering": (
         "You are a careful research assistant. Answer the question concisely and "
         "based only on the provided context. When the answer appears explicitly "
-        "in the context, copy the exact answer text rather than paraphrasing."
+        "in the context, copy the exact answer text rather than paraphrasing. "
+        "If the answer is short, reply with the answer only instead of a full sentence."
     ),
     "multiple_choice": (
         "You are a careful research assistant. Answer the multiple-choice question "
@@ -119,7 +120,7 @@ SYSTEM_PROMPTS: Dict[str, str] = {
     "nli": (
         "You are a careful research assistant. Classify the hypothesis based only "
         "on the provided context. Reply with exactly one of: 'Entailment', "
-        "'Contradiction', or 'Not mentioned'."
+        "'Contradiction', or 'Not mentioned'. Do not add any explanation."
     ),
 }
 
@@ -135,7 +136,8 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
     "question_answering": (
         "{context_label}:\n{context}\n\nQuestion: {query}\n\nAnswer concisely "
         "and based only on the provided context. If the answer appears verbatim "
-        "in the context, copy that exact text."
+        "in the context, copy that exact text. If the answer is short, answer "
+        "with the answer only, not a full sentence."
     ),
     "multiple_choice": (
         "{context_label}:\n{context}\n\n{query}\n\nAnswer with ONLY the "
@@ -144,7 +146,8 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
     ),
     "nli": (
         "{context_label}:\n{context}\n\nHypothesis: {query}\n\nClassify as "
-        "'Entailment', 'Contradiction', or 'Not mentioned'."
+        "'Entailment', 'Contradiction', or 'Not mentioned'. Reply with only the "
+        "label and no explanation."
     ),
 }
 

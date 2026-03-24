@@ -118,6 +118,11 @@ def parse_args():
         help="Ignore and replace any existing saved results for the selected runs.",
     )
     parser.add_argument(
+        "--refresh-only",
+        action="store_true",
+        help="Do not run generation. Recompute scoring and reports from existing cached results.",
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
@@ -208,13 +213,24 @@ def main():
             force=True,
         )
 
-        logging.getLogger(__name__).info(
-            "Running benchmark with context_budget=%d and top_k=%d",
-            context_budget,
-            resolved_top_k,
-        )
-        pipeline = BenchmarkPipeline(config)
-        pipeline.run_all()
+        logger = logging.getLogger(__name__)
+        if args.refresh_only:
+            logger.info(
+                "Refreshing cached benchmark reports with context_budget=%d and top_k=%d",
+                context_budget,
+                resolved_top_k,
+            )
+        else:
+            logger.info(
+                "Running benchmark with context_budget=%d and top_k=%d",
+                context_budget,
+                resolved_top_k,
+            )
+        pipeline = BenchmarkPipeline(config, load_models=not args.refresh_only)
+        if args.refresh_only:
+            pipeline.refresh_from_cached()
+        else:
+            pipeline.run_all()
         sweep_results.append(
             {
                 "context_budget": context_budget,

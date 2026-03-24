@@ -49,26 +49,33 @@ logger = logging.getLogger(__name__)
 class BenchmarkPipeline:
     """Orchestrates prompt construction, generation, evaluation, and reporting."""
 
-    def __init__(self, config: BenchmarkConfig):
+    def __init__(self, config: BenchmarkConfig, load_models: bool = True):
         self.config = config
+        self.generator = None
+        self.chunker = None
+        self.embedder = None
 
         logger.info("Initialising benchmark pipeline ...")
-        self.generator = Generator(config)
-        self.chunker = TokenChunker(
-            tokenizer_name=self.generator.active_model,
-            chunk_size=config.chunk_size,
-            chunk_overlap=config.chunk_overlap,
-            chunking_strategy=config.chunking_strategy,
-        )
-        self.embedder = Embedder(
-            model_name=config.embedding_model,
-            device=config.embedding_device,
-            batch_size=config.embedding_batch_size,
-            query_instruction=config.query_instruction,
-        )
+        if load_models:
+            self.generator = Generator(config)
+            self.chunker = TokenChunker(
+                tokenizer_name=self.generator.active_model,
+                chunk_size=config.chunk_size,
+                chunk_overlap=config.chunk_overlap,
+                chunking_strategy=config.chunking_strategy,
+            )
+            self.embedder = Embedder(
+                model_name=config.embedding_model,
+                device=config.embedding_device,
+                batch_size=config.embedding_batch_size,
+                query_instruction=config.query_instruction,
+            )
 
         os.makedirs(config.run_output_dir, exist_ok=True)
-        logger.info("Benchmark pipeline ready.")
+        if load_models:
+            logger.info("Benchmark pipeline ready.")
+        else:
+            logger.info("Benchmark pipeline ready in cache-refresh mode.")
 
     def _method_root(self, method: str) -> str:
         return os.path.join(self.config.run_output_dir, method)
@@ -138,9 +145,21 @@ class BenchmarkPipeline:
             return "middle"
         return "end"
 
-    def _prediction_for_scoring(self, task: str, prediction: str, query: str) -> str:
-        text = (prediction or "").strip()
-        if task != "quality":
+    @staticmethod
+    def _find_sublist(tokens: List[str], sub_tokens: List[str]) -> Optional[int]:
+        """Return the start index of ``sub_tokens`` inside ``tokens`` if present."""
+        if not tokens or not sub_tokens or len(sub_tokens) > len(tokens):
+            return None
+        limit = len(tokens) - len(sub_tokens) + 1
+        for idx in range(limit):
+            if tokens[idx : idx + len(sub_tokens)] == sub_tokens:
+                return idx
+        return None
+
+    def _canonicalize_quality_prediction(self, text: str, query: str) -> str:
+        """Map multiple-choice style outputs back to the official option text."""
+        text = (text or "").strip()
+        if not text:
             return text
 
         option_matches = list(
@@ -187,9 +206,152 @@ class BenchmarkPipeline:
 
         return text
 
+    @staticmethod
+    def _canonicalize_nli_prediction(text: str) -> str:
+        """Extract the predicted class label from label-plus-explanation outputs."""
+        text = (text or "").strip()
+        if not text:
+            return text
+
+        label_map = {
+            "entailment": "Entailment",
+            "contradiction": "Contradiction",
+            "not mentioned": "Not mentioned",
+            "notmentioned": "Not mentioned",
+        }
+
+        leading = re.match(
+            r"^\s*(?:answer\s*[:\-]\s*)?"
+            r"(entailment|contradiction|not\s*mentioned|notmentioned)\b",
+            text,
+            flags=re.I,
+        )
+        if leading:
+            key = " ".join(leading.group(1).lower().split())
+            return label_map.get(key, label_map.get(key.replace(" ", ""), text))
+
+        normalized = normalize_answer(text)
+        return label_map.get(normalized, text)
+
+    def _canonicalize_short_answer_prediction(
+        self,
+        text: str,
+        query: str,
+        references: List[str],
+    ) -> str:
+        """Reduce sentence-wrapped short answers to the exact answer span.
+
+        This is intentionally conservative. It only fires when:
+        - the task has a single gold reference
+        - that exact normalized reference appears contiguously in the prediction
+        - every extra token outside that span is query boilerplate / scaffolding
+
+        This fixes cases like:
+        - "Miss Miranda Hope comes from Bangor, Maine."
+        - "The answer is Miranda Hope."
+
+        while avoiding credit for outputs that introduce extra candidate answers
+        or unsupported content.
+        """
+        text = (text or "").strip()
+        if not text or len(references) != 1:
+            return text
+
+        ref = (references[0] or "").strip()
+        if not ref:
+            return text
+
+        pred_tokens = normalize_answer(text).split()
+        ref_tokens = normalize_answer(ref).split()
+        if not pred_tokens or not ref_tokens or len(pred_tokens) <= len(ref_tokens):
+            return text
+
+        match_idx = self._find_sublist(pred_tokens, ref_tokens)
+        if match_idx is None:
+            return text
+
+        extra_tokens = pred_tokens[:match_idx] + pred_tokens[match_idx + len(ref_tokens) :]
+        if not extra_tokens:
+            return ref
+
+        allowed_tokens = set(normalize_answer(query or "").split())
+        allowed_tokens.update(
+            {
+                "answer",
+                "is",
+                "it",
+                "its",
+                "this",
+                "that",
+                "correct",
+                "option",
+                "choice",
+                "person",
+                "character",
+                "name",
+                "who",
+                "what",
+                "where",
+                "which",
+                "comes",
+                "from",
+                "came",
+                "mr",
+                "mrs",
+                "ms",
+                "miss",
+                "dr",
+                "doctor",
+                "professor",
+            }
+        )
+        if all(token in allowed_tokens for token in extra_tokens):
+            return ref
+        return text
+
+    def _prediction_for_scoring(
+        self,
+        task: str,
+        prediction: str,
+        query: str,
+        references: Optional[List[str]] = None,
+    ) -> str:
+        text = (prediction or "").strip()
+        if task == "quality":
+            return self._canonicalize_quality_prediction(text, query)
+        if task == "contract_nli":
+            return self._canonicalize_nli_prediction(text)
+        if task in {"qasper", "narrative_qa"}:
+            return self._canonicalize_short_answer_prediction(
+                text,
+                query,
+                references or [],
+            )
+        return text
+
     def _references_for_scoring(self, task: str, references: List[str]) -> List[str]:
         del task
         return references
+
+    def _apply_scoring_fields(self, task: str, row: Dict[str, Any]) -> Dict[str, Any]:
+        """Populate the scoring-normalized fields used by metrics and reports."""
+        prediction = row.get("prediction", "")
+        query = row.get("query", "")
+        references = row.get("references", [""])
+
+        scoring_prediction = self._prediction_for_scoring(
+            task,
+            prediction,
+            query,
+            references,
+        )
+        scoring_references = self._references_for_scoring(task, references)
+
+        row["normalized_prediction"] = normalize_answer(prediction)
+        row["scoring_prediction"] = scoring_prediction
+        row["normalized_scoring_prediction"] = normalize_answer(scoring_prediction)
+        row["scoring_references"] = scoring_references
+        return row
 
     def _prepare_retrieval_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Build one retrieval-based prompt and its trace metadata.
@@ -375,6 +537,7 @@ class BenchmarkPipeline:
         results_file = self._task_results_file(method, task)
 
         done: Dict[str, Dict] = {}
+        cached_rows_changed = False
         if self.config.overwrite_existing and os.path.exists(results_file):
             os.remove(results_file)
         if os.path.exists(results_file):
@@ -387,6 +550,21 @@ class BenchmarkPipeline:
                     if record.get("results_format_version") != RESULTS_FORMAT_VERSION:
                         incompatible_count += 1
                         continue
+                    original = {
+                        "scoring_prediction": record.get("scoring_prediction"),
+                        "normalized_scoring_prediction": record.get("normalized_scoring_prediction"),
+                        "scoring_references": record.get("scoring_references"),
+                        "normalized_prediction": record.get("normalized_prediction"),
+                    }
+                    self._apply_scoring_fields(task, record)
+                    current = {
+                        "scoring_prediction": record.get("scoring_prediction"),
+                        "normalized_scoring_prediction": record.get("normalized_scoring_prediction"),
+                        "scoring_references": record.get("scoring_references"),
+                        "normalized_prediction": record.get("normalized_prediction"),
+                    }
+                    if current != original:
+                        cached_rows_changed = True
                     done[record["id"]] = record
             if incompatible_count:
                 logger.info(
@@ -399,6 +577,15 @@ class BenchmarkPipeline:
                     with open(results_file, "w") as fh:
                         for record in done.values():
                             fh.write(json.dumps(record) + "\n")
+            elif cached_rows_changed and self.config.save_raw:
+                logger.info(
+                    "Refreshing scoring fields for cached %s/%s results.",
+                    method,
+                    task,
+                )
+                with open(results_file, "w") as fh:
+                    for record in done.values():
+                        fh.write(json.dumps(record) + "\n")
             logger.info(
                 "Resuming %s/%s: %d / %d already done.",
                 method,
@@ -450,19 +637,7 @@ class BenchmarkPipeline:
                 for (idx, meta), pred in zip(to_generate, predictions):
                     meta["results_format_version"] = RESULTS_FORMAT_VERSION
                     meta["prediction"] = pred
-                    meta["normalized_prediction"] = normalize_answer(pred)
-                    meta["scoring_prediction"] = self._prediction_for_scoring(
-                        task,
-                        pred,
-                        meta.get("query", ""),
-                    )
-                    meta["normalized_scoring_prediction"] = normalize_answer(
-                        meta["scoring_prediction"]
-                    )
-                    meta["scoring_references"] = self._references_for_scoring(
-                        task,
-                        meta.get("references", [""]),
-                    )
+                    self._apply_scoring_fields(task, meta)
                     meta["generation_tokens"] = self.generator.count_tokens(pred)
                     meta["model_name"] = self.generator.active_model
                     all_meta[idx] = meta
@@ -478,19 +653,10 @@ class BenchmarkPipeline:
         for meta in all_meta:
             if meta is None:
                 continue
+            self._apply_scoring_fields(task, meta)
             completed_meta.append(meta)
-            predictions_list.append(
-                meta.get("scoring_prediction")
-                or self._prediction_for_scoring(
-                    task,
-                    meta.get("prediction", ""),
-                    meta.get("query", ""),
-                )
-            )
-            references_list.append(
-                meta.get("scoring_references")
-                or self._references_for_scoring(task, meta.get("references", [""]))
-            )
+            predictions_list.append(meta.get("scoring_prediction", ""))
+            references_list.append(meta.get("scoring_references", [""]))
 
         metric_type = TASK_METRIC_TYPE[task]
         metrics = compute_metrics(predictions_list, references_list, metric_type)
@@ -543,6 +709,76 @@ class BenchmarkPipeline:
         self._report(all_results)
         return all_results
 
+    def refresh_from_cached(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
+        """Recompute scoring fields, summaries, and comparison reports from cache.
+
+        This path intentionally avoids loading the generator or embedder. It is
+        useful after scoring/prompt changes when raw generations are already
+        saved and only the evaluation artifacts need to be refreshed.
+        """
+        all_results: Dict[str, Dict[str, Dict[str, Any]]] = {}
+        methods = self.config.methods or DEFAULT_METHODS
+
+        for method in methods:
+            all_results[method] = {}
+            for task in self.config.tasks:
+                logger.info(
+                    "Refreshing cached scores for method=%s task=%s",
+                    method,
+                    task,
+                )
+                rows = self._load_method_task_results(method, task)
+                if not rows:
+                    logger.warning("No cached results for %s/%s - skipping.", method, task)
+                    all_results[method][task] = {
+                        "task": task,
+                        "method": method,
+                        "error": "no cached results loaded",
+                    }
+                    continue
+
+                if self.config.save_raw:
+                    with open(self._task_results_file(method, task), "w") as fh:
+                        for row in rows:
+                            fh.write(json.dumps(row) + "\n")
+
+                metric_type = TASK_METRIC_TYPE[task]
+                predictions_list = [row.get("scoring_prediction", "") for row in rows]
+                references_list = [row.get("scoring_references", [""]) for row in rows]
+                metrics = compute_metrics(predictions_list, references_list, metric_type)
+
+                input_tokens = [row.get("input_tokens", 0) for row in rows]
+                context_tokens = [row.get("context_tokens", 0) for row in rows]
+                generation_tokens = [row.get("generation_tokens", 0) for row in rows]
+
+                summary = {
+                    "task": task,
+                    "method": method,
+                    "num_examples": len(rows),
+                    "num_generated": 0,
+                    "metric_type": metric_type,
+                    "metrics": metrics,
+                    "elapsed_seconds": 0.0,
+                    "results_refreshed_from_cache": True,
+                    "token_stats": {
+                        "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
+                        "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
+                        "avg_generation_tokens": (
+                            (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
+                        ),
+                        "total_input_tokens": sum(input_tokens),
+                    },
+                    "results_file": self._task_results_file(method, task) if self.config.save_raw else None,
+                }
+                with open(self._task_summary_file(method, task), "w") as fh:
+                    json.dump(summary, fh, indent=2)
+
+                logger.info("[%s/%s] refreshed metrics: %s", method, task, metrics)
+                all_results[method][task] = summary
+
+        self._report(all_results)
+        return all_results
+
     def _primary_score(self, task: str, result: Dict[str, Any]) -> float:
         if "error" in result:
             return 0.0
@@ -566,6 +802,7 @@ class BenchmarkPipeline:
                 if line.strip():
                     record = json.loads(line)
                     if record.get("results_format_version") == RESULTS_FORMAT_VERSION:
+                        self._apply_scoring_fields(task, record)
                         rows.append(record)
         return rows
 
@@ -595,6 +832,7 @@ class BenchmarkPipeline:
                             task,
                             base_rows[ex_id].get("prediction", ""),
                             base_rows[ex_id].get("query", ""),
+                            base_rows[ex_id].get("references", [""]),
                         )
                     )
                 )
@@ -606,6 +844,7 @@ class BenchmarkPipeline:
                             task,
                             compare_rows[ex_id].get("prediction", ""),
                             compare_rows[ex_id].get("query", ""),
+                            compare_rows[ex_id].get("references", [""]),
                         )
                     )
                 )
@@ -628,10 +867,11 @@ class BenchmarkPipeline:
         }
 
     def _row_scoring_prediction(self, task: str, row: Dict[str, Any]) -> str:
-        return row.get("scoring_prediction") or self._prediction_for_scoring(
+        return self._prediction_for_scoring(
             task,
             row.get("prediction", ""),
             row.get("query", ""),
+            row.get("references", [""]),
         )
 
     def _row_scoring_references(self, task: str, row: Dict[str, Any]) -> List[str]:
