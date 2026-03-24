@@ -35,23 +35,23 @@
         "run_tier": "smoke"
       },
       "per_task_scores": {
-        "qasper": 0.0,
+        "qasper": 22.222222222222225,
         "quality": 0.0
       },
-      "average_score": 0.0,
+      "average_score": 11.111111111111112,
       "detailed_metrics": {
         "qasper": {
-          "f1": 0.0
+          "f1": 22.222222222222225
         },
         "quality": {
           "exact_match": 0.0
         }
       },
       "token_cost_summary": {
-        "avg_input_tokens": 6015.0,
+        "avg_input_tokens": 6044.0,
         "avg_context_tokens": 5929.0,
-        "avg_generation_tokens": 15.0,
-        "total_input_tokens": 12030
+        "avg_generation_tokens": 10.0,
+        "total_input_tokens": 12088
       }
     },
     "dos_rag": {
@@ -71,31 +71,31 @@
         "run_tier": "smoke"
       },
       "per_task_scores": {
-        "qasper": 0.0,
-        "quality": 0.0
+        "qasper": 13.333333333333336,
+        "quality": 100.0
       },
-      "average_score": 0.0,
+      "average_score": 56.66666666666667,
       "detailed_metrics": {
         "qasper": {
-          "f1": 0.0
+          "f1": 13.333333333333336
         },
         "quality": {
-          "exact_match": 0.0
+          "exact_match": 100.0
         }
       },
       "token_cost_summary": {
-        "avg_input_tokens": 6015.0,
+        "avg_input_tokens": 6044.0,
         "avg_context_tokens": 5929.0,
-        "avg_generation_tokens": 14.0,
-        "total_input_tokens": 12030
+        "avg_generation_tokens": 17.0,
+        "total_input_tokens": 12088
       }
     }
   },
   "comparison": {
     "pairwise_delta_label": "dos_rag_minus_vanilla_rag",
     "pairwise_delta": {
-      "qasper": 0.0,
-      "quality": 0.0
+      "qasper": -8.88888888888889,
+      "quality": 100.0
     },
     "agreement": {
       "overall_agreement_rate": 0.0,

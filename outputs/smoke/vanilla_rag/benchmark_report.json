@@ -15,22 +15,22 @@
     "run_tier": "smoke"
   },
   "per_task_scores": {
-    "qasper": 0.0,
+    "qasper": 22.222222222222225,
     "quality": 0.0
   },
-  "average_score": 0.0,
+  "average_score": 11.111111111111112,
   "detailed_metrics": {
     "qasper": {
-      "f1": 0.0
+      "f1": 22.222222222222225
     },
     "quality": {
       "exact_match": 0.0
     }
   },
   "token_cost_summary": {
-    "avg_input_tokens": 6015.0,
+    "avg_input_tokens": 6044.0,
     "avg_context_tokens": 5929.0,
-    "avg_generation_tokens": 15.0,
-    "total_input_tokens": 12030
+    "avg_generation_tokens": 10.0,
+    "total_input_tokens": 12088
   }
 }

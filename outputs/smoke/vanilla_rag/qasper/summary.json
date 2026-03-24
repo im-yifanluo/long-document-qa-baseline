@@ -5,14 +5,14 @@
   "num_generated": 1,
   "metric_type": "f1",
   "metrics": {
-    "f1": 0.0
+    "f1": 22.222222222222225
   },
-  "elapsed_seconds": 3.19,
+  "elapsed_seconds": 2.9,
   "token_stats": {
-    "avg_input_tokens": 5464.0,
+    "avg_input_tokens": 5498.0,
     "avg_context_tokens": 5404.0,
-    "avg_generation_tokens": 24.0,
-    "total_input_tokens": 5464
+    "avg_generation_tokens": 17.0,
+    "total_input_tokens": 5498
   },
   "results_file": "outputs/smoke/vanilla_rag/qasper/results.jsonl"
 }
