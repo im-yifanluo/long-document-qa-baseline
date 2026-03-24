@@ -1,0 +1,121 @@
+{
+  "config": {
+    "methods": [
+      "vanilla_rag",
+      "dos_rag"
+    ],
+    "run_tier": "smoke",
+    "tasks": [
+      "qasper",
+      "quality"
+    ],
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "top_k": 200,
+    "context_budget": 10000,
+    "chunk_size": 100,
+    "chunking_strategy": "sentence",
+    "enable_thinking": false
+  },
+  "methods": {
+    "vanilla_rag": {
+      "method": "vanilla_rag",
+      "config": {
+        "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+        "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+        "active_model": "Qwen/Qwen2.5-14B-Instruct",
+        "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+        "chunk_size": 100,
+        "chunk_overlap": 0,
+        "chunking_strategy": "sentence",
+        "top_k": 200,
+        "context_budget": 10000,
+        "lc_context_budget": 131072,
+        "split": "validation",
+        "run_tier": "smoke"
+      },
+      "per_task_scores": {
+        "qasper": 0.0,
+        "quality": 0.0
+      },
+      "average_score": 0.0,
+      "detailed_metrics": {
+        "qasper": {
+          "f1": 0.0
+        },
+        "quality": {
+          "exact_match": 0.0
+        }
+      },
+      "token_cost_summary": {
+        "avg_input_tokens": 6019.5,
+        "avg_context_tokens": 5960.5,
+        "avg_generation_tokens": 12.5,
+        "total_input_tokens": 12039
+      }
+    },
+    "dos_rag": {
+      "method": "dos_rag",
+      "config": {
+        "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+        "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+        "active_model": "Qwen/Qwen2.5-14B-Instruct",
+        "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+        "chunk_size": 100,
+        "chunk_overlap": 0,
+        "chunking_strategy": "sentence",
+        "top_k": 200,
+        "context_budget": 10000,
+        "lc_context_budget": 131072,
+        "split": "validation",
+        "run_tier": "smoke"
+      },
+      "per_task_scores": {
+        "qasper": 0.0,
+        "quality": 0.0
+      },
+      "average_score": 0.0,
+      "detailed_metrics": {
+        "qasper": {
+          "f1": 0.0
+        },
+        "quality": {
+          "exact_match": 0.0
+        }
+      },
+      "token_cost_summary": {
+        "avg_input_tokens": 6019.5,
+        "avg_context_tokens": 5960.5,
+        "avg_generation_tokens": 29.5,
+        "total_input_tokens": 12039
+      }
+    }
+  },
+  "comparison": {
+    "pairwise_delta_label": "dos_rag_minus_vanilla_rag",
+    "pairwise_delta": {
+      "qasper": 0.0,
+      "quality": 0.0
+    },
+    "agreement": {
+      "overall_agreement_rate": 0.0,
+      "matched_examples": 2,
+      "per_task": {
+        "qasper": {
+          "matched_examples": 1,
+          "agreement_rate": 0.0,
+          "disagreement_example_ids": [
+            "b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54"
+          ]
+        },
+        "quality": {
+          "matched_examples": 1,
+          "agreement_rate": 0.0,
+          "disagreement_example_ids": [
+            "52845_75VB1ISR_1"
+          ]
+        }
+      }
+    }
+  }
+}
