@@ -67,7 +67,7 @@ TASK_TYPE: Dict[str, str] = {
 # Supported methods and run tiers
 # ---------------------------------------------------------------------------
 
-RESULTS_FORMAT_VERSION = 2
+RESULTS_FORMAT_VERSION = 3
 
 SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()
@@ -103,12 +103,14 @@ SYSTEM_PROMPTS: Dict[str, str] = {
     ),
     "question_answering": (
         "You are a careful research assistant. Answer the question concisely and "
-        "based only on the provided context."
+        "based only on the provided context. When the answer appears explicitly "
+        "in the context, copy the exact answer text rather than paraphrasing."
     ),
     "multiple_choice": (
         "You are a careful research assistant. Answer the multiple-choice question "
         "based only on the provided context. Reply with ONLY the exact text of "
-        "the correct option."
+        "the correct option, without the option letter, parentheses, or any "
+        "extra words."
     ),
     "nli": (
         "You are a careful research assistant. Classify the hypothesis based only "
@@ -128,11 +130,13 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
     ),
     "question_answering": (
         "{context_label}:\n{context}\n\nQuestion: {query}\n\nAnswer concisely "
-        "and based only on the provided context."
+        "and based only on the provided context. If the answer appears verbatim "
+        "in the context, copy that exact text."
     ),
     "multiple_choice": (
         "{context_label}:\n{context}\n\n{query}\n\nAnswer with ONLY the "
-        "exact text of the correct option."
+        "exact text of the correct option, without the option letter, "
+        "parentheses, or any extra words."
     ),
     "nli": (
         "{context_label}:\n{context}\n\nHypothesis: {query}\n\nClassify as "

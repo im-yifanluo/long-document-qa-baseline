@@ -23,6 +23,7 @@ rewriting the rest of the runner.
 import json
 import logging
 import os
+import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -138,9 +139,53 @@ class BenchmarkPipeline:
         return "end"
 
     def _prediction_for_scoring(self, task: str, prediction: str, query: str) -> str:
-        del task
-        del query
-        return (prediction or "").strip()
+        text = (prediction or "").strip()
+        if task != "quality":
+            return text
+
+        option_matches = list(
+            re.finditer(
+                r"\(\s*([A-D])\s*\)\s*(.*?)(?=(?:\n\s*\([A-D]\)\s)|$)",
+                query or "",
+                flags=re.S,
+            )
+        )
+        if not option_matches:
+            return text
+
+        options: Dict[str, str] = {}
+        ordered_options: List[str] = []
+        for match in option_matches:
+            label = match.group(1).upper()
+            option_text = " ".join(match.group(2).strip().split())
+            if option_text:
+                options[label] = option_text
+                ordered_options.append(option_text)
+
+        label_match = re.match(
+            r"^(?:answer\s*[:\-]\s*)?\(?\s*([A-D])\s*\)?(?:[\s\.\:\-]|$)",
+            text,
+            flags=re.I,
+        )
+        if label_match:
+            mapped = options.get(label_match.group(1).upper())
+            if mapped is not None:
+                return mapped
+
+        norm_text = normalize_answer(text)
+        for option_text in ordered_options:
+            if normalize_answer(option_text) == norm_text:
+                return option_text
+
+        containing = [
+            option_text
+            for option_text in ordered_options
+            if normalize_answer(option_text) in norm_text
+        ]
+        if len(containing) == 1:
+            return containing[0]
+
+        return text
 
     def _references_for_scoring(self, task: str, references: List[str]) -> List[str]:
         del task
