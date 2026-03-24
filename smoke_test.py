@@ -21,6 +21,7 @@ from config import (
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
+    SCROLLS_TASKS,
     SUPPORTED_METHODS,
 )
 
@@ -40,6 +41,11 @@ def main():
     )
     parser.add_argument("--tasks", nargs="+", default=["qasper", "quality"])
     parser.add_argument("--num-samples", type=int, default=2)
+    parser.add_argument(
+        "--all-datasets",
+        action="store_true",
+        help="Run exactly one example for every SCROLLS dataset as a preflight check.",
+    )
     parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
     parser.add_argument("--embedding-device", default="cuda")
     parser.add_argument("--output-dir", default="outputs")
@@ -52,6 +58,9 @@ def main():
         help="Ignore and replace any existing saved smoke-test results.",
     )
     args = parser.parse_args()
+    if args.all_datasets:
+        args.tasks = SCROLLS_TASKS.copy()
+        args.num_samples = 1
 
     try:
         from rag_pipeline import BenchmarkPipeline

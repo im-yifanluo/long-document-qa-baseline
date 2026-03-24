@@ -627,6 +627,224 @@ class BenchmarkPipeline:
             "per_task": per_task,
         }
 
+    def _row_scoring_prediction(self, task: str, row: Dict[str, Any]) -> str:
+        return row.get("scoring_prediction") or self._prediction_for_scoring(
+            task,
+            row.get("prediction", ""),
+            row.get("query", ""),
+        )
+
+    def _row_scoring_references(self, task: str, row: Dict[str, Any]) -> List[str]:
+        return row.get("scoring_references") or self._references_for_scoring(
+            task,
+            row.get("references", [""]),
+        )
+
+    def _row_primary_score(self, task: str, row: Dict[str, Any]) -> float:
+        metric_type = TASK_METRIC_TYPE[task]
+        metrics = compute_metrics(
+            [self._row_scoring_prediction(task, row)],
+            [self._row_scoring_references(task, row)],
+            metric_type,
+        )
+        if metric_type == "rouge":
+            return metrics.get("rouge_geo_mean", 0.0)
+        if metric_type == "f1":
+            return metrics.get("f1", 0.0)
+        if metric_type == "exact_match":
+            return metrics.get("exact_match", 0.0)
+        return 0.0
+
+    @staticmethod
+    def _trim_text(text: str, limit: int = 240) -> str:
+        text = " ".join((text or "").split())
+        if len(text) <= limit:
+            return text
+        return text[: limit - 1].rstrip() + "…"
+
+    def _chunk_previews(self, row: Dict[str, Any], limit: int = 3) -> List[Dict[str, Any]]:
+        previews: List[Dict[str, Any]] = []
+        for chunk in row.get("retrieved_chunks", [])[:limit]:
+            previews.append(
+                {
+                    "rank": chunk.get("rank"),
+                    "index": chunk.get("index"),
+                    "score": chunk.get("score"),
+                    "chunk_preview": self._trim_text(chunk.get("chunk", "")),
+                }
+            )
+        return previews
+
+    def _build_example_artifacts(self, methods: List[str]) -> Tuple[List[Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+        all_examples: List[Dict[str, Any]] = []
+        per_task: Dict[str, Dict[str, Any]] = {}
+
+        for task in self.config.tasks:
+            method_rows = {
+                method: {row["id"]: row for row in self._load_method_task_results(method, task)}
+                for method in methods
+            }
+            example_ids = sorted(set().union(*(set(rows.keys()) for rows in method_rows.values())))
+            task_examples: List[Dict[str, Any]] = []
+
+            for ex_id in example_ids:
+                available_methods = [method for method in methods if ex_id in method_rows[method]]
+                if not available_methods:
+                    continue
+
+                anchor = method_rows[available_methods[0]][ex_id]
+                example: Dict[str, Any] = {
+                    "task": task,
+                    "id": ex_id,
+                    "query": anchor.get("query", ""),
+                    "references": anchor.get("references", []),
+                    "scoring_references": self._row_scoring_references(task, anchor),
+                    "answer_position_bucket": anchor.get("answer_position_bucket", "unknown"),
+                    "methods": {},
+                }
+
+                normalized_predictions: Dict[str, str] = {}
+                scores: Dict[str, float] = {}
+                for method in available_methods:
+                    row = method_rows[method][ex_id]
+                    scoring_prediction = self._row_scoring_prediction(task, row)
+                    normalized_prediction = row.get("normalized_scoring_prediction") or normalize_answer(
+                        scoring_prediction
+                    )
+                    score = self._row_primary_score(task, row)
+                    normalized_predictions[method] = normalized_prediction
+                    scores[method] = score
+                    example["methods"][method] = {
+                        "prediction": row.get("prediction", ""),
+                        "scoring_prediction": scoring_prediction,
+                        "normalized_scoring_prediction": normalized_prediction,
+                        "primary_score": score,
+                        "context_tokens": row.get("context_tokens", 0),
+                        "generation_tokens": row.get("generation_tokens", 0),
+                        "prompt_ordering": row.get("prompt_ordering"),
+                        "selected_chunk_indices": row.get("selected_chunk_indices", []),
+                        "top_retrieved_chunks": self._chunk_previews(row),
+                    }
+
+                best_score = max(scores.values()) if scores else 0.0
+                example["best_score"] = best_score
+                example["best_methods"] = [method for method, score in scores.items() if score == best_score]
+                example["any_method_scored_positive"] = any(score > 0.0 for score in scores.values())
+                example["all_methods_scored_positive"] = all(score > 0.0 for score in scores.values()) if scores else False
+                example["disagreement"] = len(set(normalized_predictions.values())) > 1 if len(normalized_predictions) > 1 else False
+                task_examples.append(example)
+                all_examples.append(example)
+
+            preview_examples = sorted(
+                task_examples,
+                key=lambda ex: (
+                    0 if ex.get("disagreement") else 1,
+                    0 if not ex.get("all_methods_scored_positive") else 1,
+                    ex.get("best_score", 0.0),
+                    ex.get("id", ""),
+                ),
+            )[: min(10, len(task_examples))]
+
+            per_task[task] = {
+                "num_examples": len(task_examples),
+                "num_disagreements": sum(1 for ex in task_examples if ex.get("disagreement")),
+                "num_any_positive": sum(1 for ex in task_examples if ex.get("any_method_scored_positive")),
+                "preview_examples": preview_examples,
+            }
+
+        return all_examples, per_task
+
+    def _write_example_artifacts(
+        self,
+        methods: List[str],
+        method_reports: Dict[str, Dict[str, Any]],
+        deltas: Dict[str, Optional[float]],
+        delta_label: Optional[str],
+        all_examples: List[Dict[str, Any]],
+        per_task_examples: Dict[str, Dict[str, Any]],
+    ) -> Dict[str, str]:
+        jsonl_path = os.path.join(self.config.run_output_dir, "comparison_examples.jsonl")
+        with open(jsonl_path, "w") as fh:
+            for row in all_examples:
+                fh.write(json.dumps(row) + "\n")
+
+        markdown_path = os.path.join(self.config.run_output_dir, "comparison_report.md")
+        lines: List[str] = []
+        lines.append("# Comparison Report")
+        lines.append("")
+        lines.append(f"Run tier: `{self.config.run_tier}`")
+        lines.append("")
+        lines.append("## Score Summary")
+        lines.append("")
+        header = ["Task", "Metric"] + methods
+        if delta_label:
+            header.append(delta_label)
+        lines.append("| " + " | ".join(header) + " |")
+        lines.append("| " + " | ".join(["---"] * len(header)) + " |")
+        for task in self.config.tasks:
+            row = [task, TASK_METRIC_TYPE[task]]
+            for method in methods:
+                score = method_reports.get(method, {}).get("per_task_scores", {}).get(task)
+                row.append("n/a" if score is None else f"{score:.4f}")
+            if delta_label:
+                delta = deltas.get(task)
+                row.append("n/a" if delta is None else f"{delta:+.4f}")
+            lines.append("| " + " | ".join(row) + " |")
+        lines.append("")
+        lines.append("## Example Previews")
+        lines.append("")
+        for task in self.config.tasks:
+            task_info = per_task_examples.get(task, {})
+            lines.append(f"### {task}")
+            lines.append("")
+            lines.append(
+                f"- examples: {task_info.get('num_examples', 0)}"
+            )
+            lines.append(
+                f"- disagreements: {task_info.get('num_disagreements', 0)}"
+            )
+            lines.append(
+                f"- any-positive-score: {task_info.get('num_any_positive', 0)}"
+            )
+            lines.append("")
+            for example in task_info.get("preview_examples", [])[:5]:
+                lines.append(f"#### {task} / {example.get('id')}")
+                lines.append("")
+                lines.append(f"- query: {self._trim_text(example.get('query', ''), 400)}")
+                lines.append(f"- references: {self._trim_text(' | '.join(example.get('scoring_references', [])), 400)}")
+                lines.append(f"- best_methods: {', '.join(example.get('best_methods', [])) or 'n/a'}")
+                lines.append(f"- disagreement: {example.get('disagreement')}")
+                for method in methods:
+                    method_row = example.get("methods", {}).get(method)
+                    if method_row is None:
+                        continue
+                    lines.append(f"- {method} score: {method_row.get('primary_score', 0.0):.4f}")
+                    lines.append(
+                        f"  prediction: {self._trim_text(method_row.get('prediction', ''), 400)}"
+                    )
+                    scoring_prediction = method_row.get("scoring_prediction", "")
+                    if scoring_prediction != method_row.get("prediction", ""):
+                        lines.append(
+                            f"  scored_as: {self._trim_text(scoring_prediction, 400)}"
+                        )
+                    top_chunks = method_row.get("top_retrieved_chunks", [])
+                    if top_chunks:
+                        chunk = top_chunks[0]
+                        score = chunk.get("score")
+                        score_text = "n/a" if score is None else f"{score:.4f}"
+                        lines.append(
+                            f"  top_chunk: rank={chunk.get('rank')} score={score_text} {self._trim_text(chunk.get('chunk_preview', ''), 300)}"
+                        )
+                lines.append("")
+
+        with open(markdown_path, "w") as fh:
+            fh.write("\n".join(lines).rstrip() + "\n")
+
+        return {
+            "comparison_examples_jsonl": jsonl_path,
+            "comparison_report_markdown": markdown_path,
+        }
+
     def _report(self, all_results: Dict[str, Dict[str, Dict[str, Any]]]) -> None:
         """Write per-method reports plus one combined comparison report."""
         methods = list(all_results.keys())
@@ -702,6 +920,16 @@ class BenchmarkPipeline:
                 else:
                     deltas[task] = right_score - left_score
 
+        all_examples, per_task_examples = self._build_example_artifacts(methods)
+        artifact_paths = self._write_example_artifacts(
+            methods,
+            method_reports,
+            deltas,
+            delta_label,
+            all_examples,
+            per_task_examples,
+        )
+
         comparison = {
             "config": {
                 "methods": methods,
@@ -715,11 +943,13 @@ class BenchmarkPipeline:
                 "chunking_strategy": self.config.chunking_strategy,
                 "enable_thinking": self.config.enable_thinking,
             },
+            "artifacts": artifact_paths,
             "methods": method_reports,
             "comparison": {
                 "pairwise_delta_label": delta_label,
                 "pairwise_delta": deltas,
                 "agreement": self._compute_agreement(methods),
+                "per_task_examples": per_task_examples,
             },
         }
 
@@ -749,6 +979,8 @@ class BenchmarkPipeline:
                 print(f"  Agreement rate: {agreement:.4f}")
         print("=" * 74)
         print(f"  Comparison report saved to: {path}")
+        print(f"  Example cases saved to: {artifact_paths['comparison_examples_jsonl']}")
+        print(f"  Markdown report saved to: {artifact_paths['comparison_report_markdown']}")
 
 
 # Backwards-compatible alias.

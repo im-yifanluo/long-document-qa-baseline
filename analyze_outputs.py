@@ -71,6 +71,14 @@ def primary_score(metric_type: str, prediction: str, references: List[str]) -> f
     return 0.0
 
 
+def scoring_prediction(row: Dict) -> str:
+    return row.get("scoring_prediction") or row.get("prediction", "")
+
+
+def scoring_references(row: Dict) -> List[str]:
+    return row.get("scoring_references") or row.get("references", [])
+
+
 def method_field_name(method: Optional[str]) -> str:
     return (method or "method").replace("-", "_")
 
@@ -207,11 +215,11 @@ def make_agreement_artifacts(
             continue
         agrees = 0
         for ex_id in shared_ids:
-            lp = left_rows[ex_id].get("normalized_prediction") or normalize_answer(
-                left_rows[ex_id].get("prediction", "")
+            lp = left_rows[ex_id].get("normalized_scoring_prediction") or normalize_answer(
+                scoring_prediction(left_rows[ex_id])
             )
-            rp = right_rows[ex_id].get("normalized_prediction") or normalize_answer(
-                right_rows[ex_id].get("prediction", "")
+            rp = right_rows[ex_id].get("normalized_scoring_prediction") or normalize_answer(
+                scoring_prediction(right_rows[ex_id])
             )
             if lp == rp:
                 agrees += 1
@@ -278,23 +286,29 @@ def make_qualitative_exports(
             "task": task,
             "id": anchor_row.get("id"),
             "query": anchor_row.get("query", ""),
-            "reference": (anchor_row.get("references") or [""])[0],
-            left_field: left_row.get("prediction", ""),
-            "supporting_rank": rank if rank is not None else "miss",
-            "answer_position_bucket": anchor_row.get("answer_position_bucket", "unknown"),
-            "manual_answer_correct": "",
-            "manual_context_sufficient": "",
-            "manual_generation_notes": "",
+                    "reference": (anchor_row.get("references") or [""])[0],
+                    left_field: left_row.get("prediction", ""),
+                    f"{method_field_name(left)}_scored_as": scoring_prediction(left_row),
+                    "supporting_rank": rank if rank is not None else "miss",
+                    "answer_position_bucket": anchor_row.get("answer_position_bucket", "unknown"),
+                    "manual_answer_correct": "",
+                    "manual_context_sufficient": "",
+                    "manual_generation_notes": "",
         }
         if right_field:
             row[right_field] = right_row.get("prediction", "") if right_row else ""
+            row[f"{method_field_name(right)}_scored_as"] = scoring_prediction(right_row) if right_row else ""
         manual_rows.append(row)
 
     if right:
         for task, per_method in shared_rows:
             left_row = per_method[left]
             right_row = per_method[right]
-            if (left_row.get("normalized_prediction") or "") == (right_row.get("normalized_prediction") or ""):
+            if (
+                left_row.get("normalized_scoring_prediction") or normalize_answer(scoring_prediction(left_row))
+            ) == (
+                right_row.get("normalized_scoring_prediction") or normalize_answer(scoring_prediction(right_row))
+            ):
                 continue
             case_candidates.append(
                 {
@@ -303,7 +317,9 @@ def make_qualitative_exports(
                     "query": left_row.get("query", ""),
                     "reference": (left_row.get("references") or [""])[0],
                     left_field: left_row.get("prediction", ""),
+                    f"{method_field_name(left)}_scored_as": scoring_prediction(left_row),
                     right_field: right_row.get("prediction", ""),
+                    f"{method_field_name(right)}_scored_as": scoring_prediction(right_row),
                     "retrieved_preview": " | ".join(
                         chunk.get("chunk", "")[:120] for chunk in left_row.get("retrieved_chunks", [])[:3]
                     ),
@@ -316,9 +332,11 @@ def make_qualitative_exports(
         "query",
         "reference",
         left_field,
+        f"{method_field_name(left)}_scored_as",
     ]
     if right_field:
         fieldnames.append(right_field)
+        fieldnames.append(f"{method_field_name(right)}_scored_as")
     fieldnames.extend(
         [
             "supporting_rank",
@@ -356,7 +374,7 @@ def make_rag_rank_analysis(
         for row in method_rows.get(retrieval_method, {}).get(task, {}).values():
             rank = first_supporting_rank(row.get("retrieved_chunks", []), row.get("references", []))
             bucket = rank_bucket(rank)
-            score = primary_score(metric_type, row.get("prediction", ""), row.get("references", []))
+            score = primary_score(metric_type, scoring_prediction(row), scoring_references(row))
             bucket_scores.setdefault(bucket, []).append(score)
             rows.append(
                 {
@@ -416,7 +434,11 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--output-dir", default="outputs")
-    parser.add_argument("--run-tier", default="subset", choices=["smoke", "subset", "full"])
+    parser.add_argument(
+        "--run-tier",
+        default="subset",
+        choices=["smoke", "preflight", "subset", "full"],
+    )
     parser.add_argument(
         "--methods",
         nargs="+",

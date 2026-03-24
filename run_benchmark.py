@@ -34,7 +34,11 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    parser.add_argument("--run-tier", default="full", choices=["smoke", "subset", "full"])
+    parser.add_argument(
+        "--run-tier",
+        default="full",
+        choices=["smoke", "preflight", "subset", "full"],
+    )
     parser.add_argument(
         "--methods",
         nargs="+",

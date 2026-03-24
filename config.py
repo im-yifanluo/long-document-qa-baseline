@@ -7,7 +7,7 @@ This module is the single source of truth for:
 - which benchmark methods are supported (`vanilla_rag` and `dos_rag`)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
-- run-tier presets used by the main CLI (`smoke`, `subset`, `full`)
+- run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`, `full`)
 
 The goal is that a reader can inspect this file first and immediately answer:
 
@@ -77,6 +77,10 @@ RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {
     "smoke": {
         "tasks": ["qasper", "quality"],
         "max_samples": 2,
+    },
+    "preflight": {
+        "tasks": SCROLLS_TASKS.copy(),
+        "max_samples": 1,
     },
     "subset": {
         "tasks": SCROLLS_QA_TASKS.copy(),
