@@ -1,0 +1,52 @@
+{
+  "method": "vanilla_rag",
+  "config": {
+    "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "active_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "chunk_size": 100,
+    "chunk_overlap": 0,
+    "chunking_strategy": "sentence",
+    "top_k": 200,
+    "context_budget": 10000,
+    "lc_context_budget": 131072,
+    "split": "validation",
+    "run_tier": "subset"
+  },
+  "per_task_scores": {
+    "qmsum": 16.650475232294554,
+    "qasper": 43.05754809053441,
+    "narrative_qa": 11.372744373439435,
+    "quality": 70.0,
+    "contract_nli": 72.0
+  },
+  "average_score": 42.61615353925368,
+  "detailed_metrics": {
+    "qmsum": {
+      "rouge1": 31.330751485307363,
+      "rouge2": 7.696158789235211,
+      "rougeL": 19.144105067203306,
+      "rougeLsum": 27.244442915181576,
+      "rouge_geo_mean": 16.650475232294554
+    },
+    "qasper": {
+      "f1": 43.05754809053441
+    },
+    "narrative_qa": {
+      "f1": 11.372744373439435
+    },
+    "quality": {
+      "exact_match": 70.0
+    },
+    "contract_nli": {
+      "exact_match": 72.0
+    }
+  },
+  "token_cost_summary": {
+    "avg_input_tokens": 7040.472,
+    "avg_context_tokens": 6920.732000000001,
+    "avg_generation_tokens": 39.544,
+    "total_input_tokens": 1760118
+  }
+}

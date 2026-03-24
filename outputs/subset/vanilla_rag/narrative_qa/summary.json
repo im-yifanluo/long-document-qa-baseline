@@ -1,0 +1,18 @@
+{
+  "task": "narrative_qa",
+  "method": "vanilla_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 11.372744373439435
+  },
+  "elapsed_seconds": 174.39,
+  "token_stats": {
+    "avg_input_tokens": 10083.76,
+    "avg_context_tokens": 9951.96,
+    "avg_generation_tokens": 12.74,
+    "total_input_tokens": 504188
+  },
+  "results_file": "outputs/subset/vanilla_rag/narrative_qa/results.jsonl"
+}

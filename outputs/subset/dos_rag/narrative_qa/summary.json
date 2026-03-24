@@ -1,0 +1,18 @@
+{
+  "task": "narrative_qa",
+  "method": "dos_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 11.765115854771027
+  },
+  "elapsed_seconds": 177.44,
+  "token_stats": {
+    "avg_input_tokens": 10083.76,
+    "avg_context_tokens": 9951.96,
+    "avg_generation_tokens": 17.48,
+    "total_input_tokens": 504188
+  },
+  "results_file": "outputs/subset/dos_rag/narrative_qa/results.jsonl"
+}
