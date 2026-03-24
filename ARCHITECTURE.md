@@ -5,7 +5,7 @@ This repo currently benchmarks retrieval-based long-document QA on SCROLLS with 
 - `vanilla_rag`
 - `dos_rag`
 
-The important design choice is that both methods share the same chunker, retriever, reader, prompts, and evaluation. The only behavioral difference is the order in which retrieved passages are presented to the language model.
+The important design choice is that both methods share the same chunker, retriever, reader, prompts, and evaluation path. The only behavioral difference is the order in which retrieved passages are presented to the language model.
 
 ## 1. Goal
 
@@ -15,6 +15,8 @@ At the moment:
 
 - active methods: `vanilla_rag`, `dos_rag`
 - inactive scaffold retained for future work: `long_context`
+- QA-focused experiment tiers: `subset`, `full`
+- full 7-task SCROLLS tiers: `scrolls_subset`, `scrolls_full`
 
 ## 2. Data Flow
 
@@ -27,6 +29,13 @@ Each SCROLLS example is normalized into:
 - `references`
 
 This happens in `data_loader.py`.
+
+Important boundary:
+
+- `data_loader.py` exists for generation-time parsing and example selection
+- official scoring still comes from the cloned `scrolls/evaluator` scripts
+- the loader mirrors the evaluator's duplicate-ID handling so generation and
+  scoring operate on the same unique example IDs
 
 ## 3. Retrieval Pipeline
 
@@ -89,6 +98,13 @@ Each run writes:
 - per-method `benchmark_report.json`
 - a top-level `comparison_report.json`
 
+When official evaluation is enabled:
+
+- per-task `summary.json` uses official SCROLLS metrics as the primary score
+- local in-process metrics are retained only as diagnostics
+- complete `scrolls_full` validation runs also write official benchmark-level
+  artifacts via `prepare_submission.py` and `benchmark_evaluator.py`
+
 The analysis script then derives:
 
 - score tables
@@ -102,6 +118,7 @@ The analysis script then derives:
 |---|---|
 | `config.py` | defaults, run tiers, supported methods |
 | `data_loader.py` | SCROLLS parsing |
+| `official_scrolls.py` | bridge to the official `scrolls/evaluator` scripts |
 | `chunker.py` | sentence-aware chunking |
 | `embedder.py` | retrieval embeddings |
 | `retriever.py` | FAISS ranking |
@@ -115,6 +132,8 @@ The analysis script then derives:
 ## 9. References
 
 - Paper: https://aclanthology.org/2025.emnlp-main.1656/
+- SCROLLS paper: https://www.scrolls-benchmark.com/pdf/2201.03533.pdf
+- Official SCROLLS evaluator: `scrolls/evaluator/`
 - Overview repo: https://github.com/alex-laitenberger/stronger-baselines-rag
 - Vanilla RAG reference code: https://github.com/alex-laitenberger/vanilla-rag-eval
 - DOS RAG reference code: https://github.com/alex-laitenberger/dos-rag-eval

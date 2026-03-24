@@ -41,6 +41,14 @@ from data_loader import load_scrolls_task
 from embedder import Embedder
 from generator import Generator
 from metrics import compute_metrics, normalize_answer
+from official_scrolls import (
+    EXPECTED_TASKS as OFFICIAL_SCROLLS_TASKS,
+    evaluate_benchmark as official_evaluate_benchmark,
+    evaluate_dataset as official_evaluate_dataset,
+    prepare_submission as official_prepare_submission,
+    write_predictions_json as write_official_predictions_json,
+    write_subset_test_with_output as write_official_subset_test_with_output,
+)
 from retriever import Retriever
 
 logger = logging.getLogger(__name__)
@@ -88,6 +96,18 @@ class BenchmarkPipeline:
 
     def _task_summary_file(self, method: str, task: str) -> str:
         return os.path.join(self._task_dir(method, task), "summary.json")
+
+    def _official_task_dir(self, method: str, task: str) -> str:
+        return os.path.join(self._task_dir(method, task), "official_scrolls")
+
+    def _official_predictions_file(self, method: str, task: str) -> str:
+        return os.path.join(self._official_task_dir(method, task), "predictions.json")
+
+    def _official_subset_file(self, method: str, task: str) -> str:
+        return os.path.join(self._official_task_dir(method, task), "test_with_output.jsonl")
+
+    def _official_task_metrics_dir(self, method: str, task: str) -> str:
+        return os.path.join(self._official_task_dir(method, task), "metrics")
 
     def _build_user_prompt(
         self,
@@ -352,6 +372,146 @@ class BenchmarkPipeline:
         row["normalized_scoring_prediction"] = normalize_answer(scoring_prediction)
         row["scoring_references"] = scoring_references
         return row
+
+    @staticmethod
+    def _metrics_primary_score(metric_type: str, metrics: Dict[str, Any]) -> float:
+        """Resolve the primary task score from either official or local metrics."""
+        if "scrolls_score" in metrics:
+            return float(metrics.get("scrolls_score", 0.0))
+        if metric_type == "rouge":
+            return float(metrics.get("rouge_geo_mean", 0.0))
+        if metric_type == "f1":
+            return float(metrics.get("f1", 0.0))
+        if metric_type == "exact_match":
+            return float(metrics.get("exact_match", 0.0))
+        return 0.0
+
+    @staticmethod
+    def _index_examples_by_id(examples: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+        return {example["id"]: example for example in examples}
+
+    def _enrich_rows_with_examples(
+        self,
+        rows: List[Dict[str, Any]],
+        examples: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Backfill raw SCROLLS fields needed by the official evaluator."""
+        example_by_id = self._index_examples_by_id(examples)
+        enriched: List[Dict[str, Any]] = []
+        for row in rows:
+            merged = dict(row)
+            example = example_by_id.get(row["id"])
+            if example is not None:
+                merged.setdefault("pid", example.get("pid", ""))
+                merged.setdefault("raw_input", example.get("raw_input", ""))
+                merged["references"] = example.get("references", merged.get("references", [""]))
+                merged["query"] = example.get("query", merged.get("query", ""))
+            enriched.append(merged)
+        return enriched
+
+    def _evaluate_task_with_official_scrolls(
+        self,
+        task: str,
+        method: str,
+        rows: List[Dict[str, Any]],
+    ) -> Tuple[Dict[str, Any], Dict[str, str]]:
+        """Score one task with the official SCROLLS evaluator on the executed rows."""
+        if not self.config.use_official_scrolls_eval:
+            raise RuntimeError("Official SCROLLS evaluation is disabled in the config.")
+
+        official_dir = self._official_task_dir(method, task)
+        os.makedirs(official_dir, exist_ok=True)
+        predictions_json = write_official_predictions_json(
+            rows,
+            self._official_predictions_file(method, task),
+        )
+        subset_file = write_official_subset_test_with_output(
+            rows,
+            self._official_subset_file(method, task),
+        )
+        metrics_dir = self._official_task_metrics_dir(method, task)
+        metrics = official_evaluate_dataset(
+            repo_dir=self.config.scrolls_repo_dir,
+            python_bin=self.config.scrolls_eval_python,
+            dataset_name=task,
+            predictions_json=predictions_json,
+            metrics_output_dir=metrics_dir,
+            split="test",
+            test_data_file=subset_file,
+            cache_dir=self.config.scrolls_eval_cache_dir,
+        )
+        return metrics, {
+            "predictions_json": predictions_json,
+            "subset_test_with_output": subset_file,
+            "metrics_dir": metrics_dir,
+            "metrics_file": os.path.join(metrics_dir, f"{task}_metrics.json"),
+        }
+
+    def _build_task_summary(
+        self,
+        *,
+        task: str,
+        method: str,
+        rows: List[Dict[str, Any]],
+        examples: List[Dict[str, Any]],
+        elapsed: float,
+        num_generated: int,
+        results_file: str,
+        refreshed_from_cache: bool = False,
+    ) -> Dict[str, Any]:
+        metric_type = TASK_METRIC_TYPE[task]
+        diagnostic_predictions = [row.get("scoring_prediction", "") for row in rows]
+        diagnostic_references = [row.get("scoring_references", [""]) for row in rows]
+        diagnostic_metrics = compute_metrics(
+            diagnostic_predictions,
+            diagnostic_references,
+            metric_type,
+        )
+
+        enriched_rows = self._enrich_rows_with_examples(rows, examples)
+        official_metrics: Optional[Dict[str, Any]] = None
+        official_artifacts: Optional[Dict[str, str]] = None
+        if self.config.use_official_scrolls_eval:
+            official_metrics, official_artifacts = self._evaluate_task_with_official_scrolls(
+                task,
+                method,
+                enriched_rows,
+            )
+
+        metrics = official_metrics or diagnostic_metrics
+        metric_source = "official_scrolls" if official_metrics is not None else "local_diagnostic"
+
+        input_tokens = [row.get("input_tokens", 0) for row in rows]
+        context_tokens = [row.get("context_tokens", 0) for row in rows]
+        generation_tokens = [row.get("generation_tokens", 0) for row in rows]
+
+        summary = {
+            "task": task,
+            "method": method,
+            "num_examples": len(rows),
+            "num_generated": num_generated,
+            "metric_type": metric_type,
+            "metric_source": metric_source,
+            "metrics": metrics,
+            "diagnostic_metrics": diagnostic_metrics,
+            "primary_score": self._metrics_primary_score(metric_type, metrics),
+            "elapsed_seconds": round(elapsed, 2),
+            "token_stats": {
+                "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
+                "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
+                "avg_generation_tokens": (
+                    (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
+                ),
+                "total_input_tokens": sum(input_tokens),
+            },
+            "results_file": results_file if self.config.save_raw else None,
+            "results_refreshed_from_cache": refreshed_from_cache,
+            "official_scrolls": {
+                "used": official_metrics is not None,
+                "artifacts": official_artifacts,
+            },
+        }
+        return summary
 
     def _prepare_retrieval_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Build one retrieval-based prompt and its trace metadata.
@@ -647,47 +807,26 @@ class BenchmarkPipeline:
                 if fh is not None:
                     fh.close()
 
-        predictions_list: List[str] = []
-        references_list: List[List[str]] = []
         completed_meta: List[Dict[str, Any]] = []
         for meta in all_meta:
             if meta is None:
                 continue
             self._apply_scoring_fields(task, meta)
             completed_meta.append(meta)
-            predictions_list.append(meta.get("scoring_prediction", ""))
-            references_list.append(meta.get("scoring_references", [""]))
-
-        metric_type = TASK_METRIC_TYPE[task]
-        metrics = compute_metrics(predictions_list, references_list, metric_type)
         elapsed = time.time() - t0
-
-        input_tokens = [m.get("input_tokens", 0) for m in completed_meta]
-        context_tokens = [m.get("context_tokens", 0) for m in completed_meta]
-        generation_tokens = [m.get("generation_tokens", 0) for m in completed_meta]
-
-        summary = {
-            "task": task,
-            "method": method,
-            "num_examples": len(examples),
-            "num_generated": len(to_generate),
-            "metric_type": metric_type,
-            "metrics": metrics,
-            "elapsed_seconds": round(elapsed, 2),
-            "token_stats": {
-                "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
-                "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
-                "avg_generation_tokens": (
-                    (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
-                ),
-                "total_input_tokens": sum(input_tokens),
-            },
-            "results_file": results_file if self.config.save_raw else None,
-        }
+        summary = self._build_task_summary(
+            task=task,
+            method=method,
+            rows=completed_meta,
+            examples=examples,
+            elapsed=elapsed,
+            num_generated=len(to_generate),
+            results_file=results_file,
+        )
         with open(self._task_summary_file(method, task), "w") as fh:
             json.dump(summary, fh, indent=2)
 
-        logger.info("[%s/%s] %s  (%.1fs)", method, task, metrics, elapsed)
+        logger.info("[%s/%s] %s  (%.1fs)", method, task, summary["metrics"], elapsed)
         return summary
 
     def run_all(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
@@ -742,38 +881,21 @@ class BenchmarkPipeline:
                         for row in rows:
                             fh.write(json.dumps(row) + "\n")
 
-                metric_type = TASK_METRIC_TYPE[task]
-                predictions_list = [row.get("scoring_prediction", "") for row in rows]
-                references_list = [row.get("scoring_references", [""]) for row in rows]
-                metrics = compute_metrics(predictions_list, references_list, metric_type)
-
-                input_tokens = [row.get("input_tokens", 0) for row in rows]
-                context_tokens = [row.get("context_tokens", 0) for row in rows]
-                generation_tokens = [row.get("generation_tokens", 0) for row in rows]
-
-                summary = {
-                    "task": task,
-                    "method": method,
-                    "num_examples": len(rows),
-                    "num_generated": 0,
-                    "metric_type": metric_type,
-                    "metrics": metrics,
-                    "elapsed_seconds": 0.0,
-                    "results_refreshed_from_cache": True,
-                    "token_stats": {
-                        "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
-                        "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
-                        "avg_generation_tokens": (
-                            (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
-                        ),
-                        "total_input_tokens": sum(input_tokens),
-                    },
-                    "results_file": self._task_results_file(method, task) if self.config.save_raw else None,
-                }
+                examples = load_scrolls_task(task, self.config.split, self.config.max_samples)
+                summary = self._build_task_summary(
+                    task=task,
+                    method=method,
+                    rows=rows,
+                    examples=examples,
+                    elapsed=0.0,
+                    num_generated=0,
+                    results_file=self._task_results_file(method, task),
+                    refreshed_from_cache=True,
+                )
                 with open(self._task_summary_file(method, task), "w") as fh:
                     json.dump(summary, fh, indent=2)
 
-                logger.info("[%s/%s] refreshed metrics: %s", method, task, metrics)
+                logger.info("[%s/%s] refreshed metrics: %s", method, task, summary["metrics"])
                 all_results[method][task] = summary
 
         self._report(all_results)
@@ -782,15 +904,9 @@ class BenchmarkPipeline:
     def _primary_score(self, task: str, result: Dict[str, Any]) -> float:
         if "error" in result:
             return 0.0
-        metric_type = result["metric_type"]
-        metrics = result["metrics"]
-        if metric_type == "rouge":
-            return metrics.get("rouge_geo_mean", 0.0)
-        if metric_type == "f1":
-            return metrics.get("f1", 0.0)
-        if metric_type == "exact_match":
-            return metrics.get("exact_match", 0.0)
-        return 0.0
+        if "primary_score" in result:
+            return float(result.get("primary_score", 0.0))
+        return self._metrics_primary_score(result["metric_type"], result["metrics"])
 
     def _load_method_task_results(self, method: str, task: str) -> List[Dict[str, Any]]:
         results_file = self._task_results_file(method, task)
@@ -944,7 +1060,7 @@ class BenchmarkPipeline:
                 }
 
                 normalized_predictions: Dict[str, str] = {}
-                scores: Dict[str, float] = {}
+                diagnostic_scores: Dict[str, float] = {}
                 for method in available_methods:
                     row = method_rows[method][ex_id]
                     scoring_prediction = self._row_scoring_prediction(task, row)
@@ -953,12 +1069,12 @@ class BenchmarkPipeline:
                     )
                     score = self._row_primary_score(task, row)
                     normalized_predictions[method] = normalized_prediction
-                    scores[method] = score
+                    diagnostic_scores[method] = score
                     example["methods"][method] = {
                         "prediction": row.get("prediction", ""),
                         "scoring_prediction": scoring_prediction,
                         "normalized_scoring_prediction": normalized_prediction,
-                        "primary_score": score,
+                        "diagnostic_primary_score": score,
                         "context_tokens": row.get("context_tokens", 0),
                         "generation_tokens": row.get("generation_tokens", 0),
                         "prompt_ordering": row.get("prompt_ordering"),
@@ -966,11 +1082,15 @@ class BenchmarkPipeline:
                         "top_retrieved_chunks": self._chunk_previews(row),
                     }
 
-                best_score = max(scores.values()) if scores else 0.0
-                example["best_score"] = best_score
-                example["best_methods"] = [method for method, score in scores.items() if score == best_score]
-                example["any_method_scored_positive"] = any(score > 0.0 for score in scores.values())
-                example["all_methods_scored_positive"] = all(score > 0.0 for score in scores.values()) if scores else False
+                best_score = max(diagnostic_scores.values()) if diagnostic_scores else 0.0
+                example["best_diagnostic_score"] = best_score
+                example["best_methods"] = [
+                    method for method, score in diagnostic_scores.items() if score == best_score
+                ]
+                example["any_method_scored_positive"] = any(score > 0.0 for score in diagnostic_scores.values())
+                example["all_methods_scored_positive"] = (
+                    all(score > 0.0 for score in diagnostic_scores.values()) if diagnostic_scores else False
+                )
                 example["disagreement"] = len(set(normalized_predictions.values())) > 1 if len(normalized_predictions) > 1 else False
                 task_examples.append(example)
                 all_examples.append(example)
@@ -980,7 +1100,7 @@ class BenchmarkPipeline:
                 key=lambda ex: (
                     0 if ex.get("disagreement") else 1,
                     0 if not ex.get("all_methods_scored_positive") else 1,
-                    ex.get("best_score", 0.0),
+                    ex.get("best_diagnostic_score", 0.0),
                     ex.get("id", ""),
                 ),
             )[: min(10, len(task_examples))]
@@ -1013,6 +1133,12 @@ class BenchmarkPipeline:
         lines.append("# Comparison Report")
         lines.append("")
         lines.append(f"Run tier: `{self.config.run_tier}`")
+        lines.append("")
+        lines.append(
+            "Aggregate task scores below use the official SCROLLS evaluator when available. "
+            "The example-level scores in the preview section are diagnostic local scores only, "
+            "because the official evaluator reports aggregate task metrics rather than per-example metrics."
+        )
         lines.append("")
         lines.append("## Score Summary")
         lines.append("")
@@ -1058,7 +1184,9 @@ class BenchmarkPipeline:
                     method_row = example.get("methods", {}).get(method)
                     if method_row is None:
                         continue
-                    lines.append(f"- {method} score: {method_row.get('primary_score', 0.0):.4f}")
+                    lines.append(
+                        f"- {method} diagnostic_score: {method_row.get('diagnostic_primary_score', 0.0):.4f}"
+                    )
                     lines.append(
                         f"  prediction: {self._trim_text(method_row.get('prediction', ''), 400)}"
                     )
@@ -1083,6 +1211,49 @@ class BenchmarkPipeline:
         return {
             "comparison_examples_jsonl": jsonl_path,
             "comparison_report_markdown": markdown_path,
+        }
+
+    def _can_run_official_benchmark_eval(self) -> bool:
+        return (
+            self.config.use_official_scrolls_eval
+            and self.config.split == "validation"
+            and self.config.max_samples < 0
+            and set(self.config.tasks) == set(OFFICIAL_SCROLLS_TASKS)
+        )
+
+    def _run_official_method_benchmark_eval(self, method: str) -> Tuple[Dict[str, Any], Dict[str, str]]:
+        task_prediction_files = {
+            task: self._official_predictions_file(method, task)
+            for task in OFFICIAL_SCROLLS_TASKS
+        }
+        missing = [task for task, path in task_prediction_files.items() if not os.path.exists(path)]
+        if missing:
+            raise RuntimeError(
+                f"Cannot run official SCROLLS benchmark evaluation for {method}; "
+                f"missing exported prediction files for tasks: {missing}"
+            )
+
+        benchmark_dir = os.path.join(self._method_root(method), "official_scrolls_benchmark")
+        submission_dir = os.path.join(benchmark_dir, "submission")
+        metrics_dir = os.path.join(benchmark_dir, "metrics")
+        submission_csv = official_prepare_submission(
+            repo_dir=self.config.scrolls_repo_dir,
+            python_bin=self.config.scrolls_eval_python,
+            task_prediction_files=task_prediction_files,
+            output_dir=submission_dir,
+        )
+        metrics = official_evaluate_benchmark(
+            repo_dir=self.config.scrolls_repo_dir,
+            python_bin=self.config.scrolls_eval_python,
+            all_predictions_csv=submission_csv,
+            metrics_output_dir=metrics_dir,
+            split="validation",
+            cache_dir=self.config.scrolls_eval_cache_dir,
+        )
+        return metrics, {
+            "submission_csv": submission_csv,
+            "metrics_dir": metrics_dir,
+            "metrics_file": os.path.join(metrics_dir, "scrolls.json"),
         }
 
     def _report(self, all_results: Dict[str, Dict[str, Dict[str, Any]]]) -> None:
@@ -1124,7 +1295,7 @@ class BenchmarkPipeline:
                 "config": {
                     "embedding_model": self.config.embedding_model,
                     "llm_model": self.config.llm_model,
-                    "active_model": self.generator.active_model,
+                    "active_model": self.generator.active_model if self.generator is not None else None,
                     "fallback_llm_model": self.config.fallback_llm_model,
                     "chunk_size": self.config.chunk_size,
                     "chunk_overlap": self.config.chunk_overlap,
@@ -1137,9 +1308,16 @@ class BenchmarkPipeline:
                 },
                 "per_task_scores": scores,
                 "average_score": average,
+                "average_score_is_official_benchmark": False,
                 "detailed_metrics": details,
                 "token_cost_summary": token_costs,
             }
+            if self._can_run_official_benchmark_eval():
+                benchmark_metrics, benchmark_artifacts = self._run_official_method_benchmark_eval(method)
+                report["official_scrolls_benchmark"] = benchmark_metrics
+                report["official_scrolls_benchmark_artifacts"] = benchmark_artifacts
+                report["average_score"] = benchmark_metrics.get("scrolls_score", average)
+                report["average_score_is_official_benchmark"] = True
             method_reports[method] = report
 
             path = os.path.join(self._method_root(method), "benchmark_report.json")

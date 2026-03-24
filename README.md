@@ -37,7 +37,12 @@ Long-context scaffolding is still present in the codebase, but it is intentional
 
 ## Task Scope
 
-The default tiers focus on SCROLLS tasks that are QA-style or query-conditioned:
+The repo has two benchmark surfaces:
+
+- QA-focused default tiers: `subset` and `full`
+- Official 7-task SCROLLS tiers: `scrolls_subset` and `scrolls_full`
+
+The QA-focused default tiers use SCROLLS tasks that are QA-style or query-conditioned:
 
 - `qmsum`
 - `qasper`
@@ -45,7 +50,9 @@ The default tiers focus on SCROLLS tasks that are QA-style or query-conditioned:
 - `quality`
 - `contract_nli`
 
-Pure summarization tasks are still available through manual task overrides, but they are not part of the default benchmark tiers because the current repo focus is long-document QA.
+Pure summarization tasks are still available, and the official full-benchmark
+tiers include them. They are not part of the default QA tiers because the
+current repo focus is long-document QA.
 
 ## Setup
 
@@ -53,6 +60,44 @@ Pure summarization tasks are still available through manual task overrides, but 
 bash setup.sh
 source venv/bin/activate
 ```
+
+## Official SCROLLS Evaluation
+
+This repo now uses the official SCROLLS evaluator from the local `scrolls/`
+clone as the primary task scorer whenever it is enabled.
+
+Important constraint: the official evaluator is an older toolchain
+(`scrolls/evaluator/requirements.txt` pins `datasets==1.17.0`), so it is often
+best installed in a separate Python environment. Point the benchmark at that
+interpreter with either:
+
+```bash
+export SCROLLS_EVAL_PYTHON=/path/to/scrolls-eval/bin/python
+```
+
+or:
+
+```bash
+python run_benchmark.py --scrolls-eval-python /path/to/scrolls-eval/bin/python ...
+```
+
+For reproducibility, treat the local `scrolls/` clone as a pinned dependency:
+use a known commit or tag rather than an untracked moving `main` branch.
+
+For partial runs such as `smoke`, `preflight`, `subset`, or `scrolls_subset`,
+the benchmark
+materializes a SCROLLS-format `test_with_output.jsonl` for the exact executed
+examples and then calls the official `dataset_evaluator.py` on that file. For
+complete validation runs over all 7 tasks, `scrolls_full` also runs the
+official `prepare_submission.py` and `benchmark_evaluator.py`.
+
+That means:
+
+- per-task scores can be official even on partial runs
+- the single aggregated SCROLLS benchmark score is only official on
+  `scrolls_full` validation runs
+- per-example comparison previews remain local diagnostics, because the official
+  evaluator does not expose per-example scores
 
 ## Server Runbook
 
@@ -157,10 +202,34 @@ Or use the smoke entrypoint for a one-example-per-dataset sanity run:
 python smoke_test.py --all-datasets --overwrite-existing
 ```
 
+That path writes to the `preflight` output directory so it stays aligned with
+the one-example-per-dataset tier.
+
 Run the subset benchmark:
 
 ```bash
 python run_benchmark.py --run-tier subset --overwrite-existing
+```
+
+Run a subset over all 7 SCROLLS tasks:
+
+```bash
+python run_benchmark.py --run-tier scrolls_subset --overwrite-existing
+```
+
+Run the full official 7-task SCROLLS validation benchmark:
+
+```bash
+python run_benchmark.py --run-tier scrolls_full --overwrite-existing
+```
+
+Run with an explicit SCROLLS evaluator interpreter:
+
+```bash
+python run_benchmark.py \
+  --run-tier scrolls_full \
+  --scrolls-eval-python /path/to/scrolls-eval/bin/python \
+  --overwrite-existing
 ```
 
 Run the paper-style long-QA context-budget sweep:
@@ -203,7 +272,7 @@ The analysis package includes:
 
 ```text
 outputs/
-  smoke|preflight|subset|full/
+  smoke|preflight|subset|full|scrolls_subset|scrolls_full/
     comparison_report.json
     comparison_report.md
     comparison_examples.jsonl
@@ -232,6 +301,19 @@ outputs/
 - prompt ordering
 - selected chunk indices
 - top retrieved evidence previews
+
+Each task directory also contains official SCROLLS evaluation artifacts when
+official evaluation is enabled:
+
+- `official_scrolls/predictions.json`
+- `official_scrolls/test_with_output.jsonl`
+- `official_scrolls/metrics/<task>_metrics.json`
+
+Complete 7-task validation runs additionally write per-method official
+benchmark artifacts under:
+
+- `<method>/official_scrolls_benchmark/submission/scrolls_predictions.csv`
+- `<method>/official_scrolls_benchmark/metrics/scrolls.json`
 
 ## Main Files
 

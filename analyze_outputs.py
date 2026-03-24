@@ -141,18 +141,23 @@ def make_score_table(run_root: str, methods: List[str], tasks: List[str], analys
             summary = load_json(summary_path)
             metric_type = summary["metric_type"]
             metrics = summary["metrics"]
-            if metric_type == "rouge":
-                primary = metrics.get("rouge_geo_mean", 0.0)
-            elif metric_type == "f1":
-                primary = metrics.get("f1", 0.0)
-            else:
-                primary = metrics.get("exact_match", 0.0)
+            primary = summary.get("primary_score")
+            if primary is None:
+                if "scrolls_score" in metrics:
+                    primary = metrics.get("scrolls_score", 0.0)
+                elif metric_type == "rouge":
+                    primary = metrics.get("rouge_geo_mean", 0.0)
+                elif metric_type == "f1":
+                    primary = metrics.get("f1", 0.0)
+                else:
+                    primary = metrics.get("exact_match", 0.0)
             token_stats = summary.get("token_stats", {})
             rows.append(
                 {
                     "method": method,
                     "task": task,
                     "metric_type": metric_type,
+                    "metric_source": summary.get("metric_source", "unknown"),
                     "primary_score": f"{primary:.6f}",
                     "avg_input_tokens": f"{token_stats.get('avg_input_tokens', 0.0):.2f}",
                     "avg_context_tokens": f"{token_stats.get('avg_context_tokens', 0.0):.2f}",
@@ -166,6 +171,7 @@ def make_score_table(run_root: str, methods: List[str], tasks: List[str], analys
             "method",
             "task",
             "metric_type",
+            "metric_source",
             "primary_score",
             "avg_input_tokens",
             "avg_context_tokens",
@@ -437,7 +443,7 @@ def main():
     parser.add_argument(
         "--run-tier",
         default="subset",
-        choices=["smoke", "preflight", "subset", "full"],
+        choices=["smoke", "preflight", "subset", "full", "scrolls_subset", "scrolls_full"],
     )
     parser.add_argument(
         "--methods",

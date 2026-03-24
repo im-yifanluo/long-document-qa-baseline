@@ -10,6 +10,11 @@ need that string split into:
 For the active SCROLLS QA tasks, the packed format is query-first, not
 document-first. The parser therefore needs to recover the leading query block
 reliably instead of assuming question markers appear at the end.
+
+The official SCROLLS evaluator merges duplicate example IDs into one prediction
+target with multiple valid outputs. This loader mirrors that behavior so the
+generation side operates on the same unique-ID example set that the evaluator
+scores.
 """
 
 import logging
@@ -119,14 +124,12 @@ def load_scrolls_task(
         logger.warning("Could not load task %s: %s", task, exc)
         return []
 
-    examples: List[Dict] = []
+    examples_by_id: Dict[str, Dict] = {}
+    example_order: List[str] = []
+
     for i, row in enumerate(dataset):
-        if 0 < max_samples <= i:
-            break
+        ex_id = row.get("id", str(i))
 
-        parsed = parse_scrolls_input(row["input"], task)
-
-        # References – may be a string with newline-separated answers
         raw_output = row.get("output", "")
         if isinstance(raw_output, list):
             refs = [r.strip() for r in raw_output if r and r.strip()]
@@ -137,16 +140,30 @@ def load_scrolls_task(
         if not refs:
             refs = [""]
 
-        examples.append(
-            {
-                "id": row.get("id", str(i)),
-                "task": task,
-                "document": parsed["document"],
-                "query": parsed["query"],
-                "references": refs,
-                "raw_input_preview": row["input"][:300],
-            }
-        )
+        if ex_id in examples_by_id:
+            existing_refs = examples_by_id[ex_id]["references"]
+            for ref in refs:
+                if ref not in existing_refs:
+                    existing_refs.append(ref)
+            continue
+
+        parsed = parse_scrolls_input(row["input"], task)
+        examples_by_id[ex_id] = {
+            "id": ex_id,
+            "pid": row.get("pid", ""),
+            "task": task,
+            "document": parsed["document"],
+            "query": parsed["query"],
+            "references": refs,
+            "raw_input": row["input"],
+            "raw_input_preview": row["input"][:300],
+        }
+        example_order.append(ex_id)
+
+    if max_samples > 0:
+        example_order = example_order[:max_samples]
+
+    examples = [examples_by_id[ex_id] for ex_id in example_order]
 
     logger.info("Loaded %d examples for %s", len(examples), task)
     return examples

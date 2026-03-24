@@ -53,19 +53,41 @@ def main():
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--enable-thinking", action="store_true")
     parser.add_argument(
+        "--scrolls-repo-dir",
+        default="scrolls",
+        help="Path to the local clone of the official SCROLLS repo.",
+    )
+    parser.add_argument(
+        "--scrolls-eval-python",
+        default=None,
+        help="Python executable for the official SCROLLS evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
+    )
+    parser.add_argument(
+        "--scrolls-eval-cache-dir",
+        default=None,
+        help="Optional cache dir passed through to the official SCROLLS evaluator.",
+    )
+    parser.add_argument(
+        "--no-official-scrolls-eval",
+        action="store_true",
+        help="Disable the official SCROLLS evaluator and keep only local diagnostic metrics.",
+    )
+    parser.add_argument(
         "--overwrite-existing",
         action="store_true",
-        help="Ignore and replace any existing saved smoke-test results.",
+        help="Ignore and replace any existing saved smoke/preflight results.",
     )
     parser.add_argument(
         "--refresh-only",
         action="store_true",
-        help="Do not run generation. Recompute scoring and reports from existing cached smoke-test results.",
+        help="Do not run generation. Recompute scoring and reports from existing cached smoke/preflight results.",
     )
     args = parser.parse_args()
+    run_tier = "smoke"
     if args.all_datasets:
         args.tasks = SCROLLS_TASKS.copy()
         args.num_samples = 1
+        run_tier = "preflight"
 
     try:
         from rag_pipeline import BenchmarkPipeline
@@ -83,7 +105,7 @@ def main():
 
     config = BenchmarkConfig(
         methods=args.methods,
-        run_tier="smoke",
+        run_tier=run_tier,
         llm_model=args.llm_model,
         fallback_llm_model=args.fallback_llm_model,
         max_samples=args.num_samples,
@@ -96,6 +118,10 @@ def main():
         gpu_memory_utilization=args.gpu_memory_utilization,
         enable_thinking=args.enable_thinking,
         overwrite_existing=args.overwrite_existing,
+        use_official_scrolls_eval=not args.no_official_scrolls_eval,
+        scrolls_repo_dir=args.scrolls_repo_dir,
+        scrolls_eval_python=args.scrolls_eval_python,
+        scrolls_eval_cache_dir=args.scrolls_eval_cache_dir,
     )
 
     os.makedirs(config.run_output_dir, exist_ok=True)
@@ -111,6 +137,7 @@ def main():
     log.info("  Methods:    %s", args.methods)
     log.info("  Tasks:      %s", args.tasks)
     log.info("  Samples:    %d per task", args.num_samples)
+    log.info("  Run tier:   %s", run_tier)
     log.info("  LLM:        %s (fallback=%s)", args.llm_model, args.fallback_llm_model)
     log.info("  Retriever:  %s", args.embedding_model)
     log.info("  Thinking:   %s", args.enable_thinking)
@@ -127,7 +154,8 @@ def main():
                 print(f"  FAIL  {method}/{task}: {result['error']}")
                 ok = False
             else:
-                print(f"  PASS  {method}/{task}: {result['metrics']}")
+                source = result.get("metric_source", "unknown")
+                print(f"  PASS  {method}/{task}: {result['metrics']}  [source={source}]")
 
     print("\n--- Sample raw outputs ---")
     for method in args.methods:
@@ -145,7 +173,7 @@ def main():
                     print(f"  Prediction: {record.get('prediction', '')[:200]}")
                     scoring_prediction = record.get("scoring_prediction")
                     if scoring_prediction and scoring_prediction != record.get("prediction", ""):
-                        print(f"  Scored as:  {scoring_prediction[:200]}")
+                        print(f"  Diagnostic: {scoring_prediction[:200]}")
                     refs = record.get("references", [""])
                     print(f"  Reference:  {refs[0][:200]}")
 

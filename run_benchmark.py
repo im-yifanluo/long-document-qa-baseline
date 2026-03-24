@@ -5,6 +5,11 @@ Main CLI for benchmark execution.
 This is the entrypoint you use for real runs. It turns command-line flags into a
 ``BenchmarkConfig`` object, resolves run-tier defaults, configures logging, and
 hands execution to ``BenchmarkPipeline``.
+
+Run-tier intent:
+
+- ``subset`` / ``full``: the repo's default QA-focused experiment surface
+- ``scrolls_subset`` / ``scrolls_full``: all 7 official SCROLLS tasks
 """
 
 import argparse
@@ -37,7 +42,7 @@ def parse_args():
     parser.add_argument(
         "--run-tier",
         default="full",
-        choices=["smoke", "preflight", "subset", "full"],
+        choices=["smoke", "preflight", "subset", "full", "scrolls_subset", "scrolls_full"],
     )
     parser.add_argument(
         "--methods",
@@ -108,6 +113,26 @@ def parse_args():
     parser.add_argument("--embedding-device", default="cuda")
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
+    parser.add_argument(
+        "--scrolls-repo-dir",
+        default="scrolls",
+        help="Path to the local clone of the official SCROLLS repo.",
+    )
+    parser.add_argument(
+        "--scrolls-eval-python",
+        default=None,
+        help="Python executable for the official SCROLLS evaluator environment. Defaults to $SCROLLS_EVAL_PYTHON or the current interpreter.",
+    )
+    parser.add_argument(
+        "--scrolls-eval-cache-dir",
+        default=None,
+        help="Optional cache dir passed through to the official SCROLLS evaluator.",
+    )
+    parser.add_argument(
+        "--no-official-scrolls-eval",
+        action="store_true",
+        help="Disable the official SCROLLS evaluator and keep only local diagnostic metrics.",
+    )
 
     parser.add_argument("--analysis-sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
     parser.add_argument("--output-dir", default="outputs")
@@ -199,6 +224,10 @@ def main():
             output_dir=run_output_base,
             save_raw=not args.no_save_raw,
             overwrite_existing=args.overwrite_existing,
+            use_official_scrolls_eval=not args.no_official_scrolls_eval,
+            scrolls_repo_dir=args.scrolls_repo_dir,
+            scrolls_eval_python=args.scrolls_eval_python,
+            scrolls_eval_cache_dir=args.scrolls_eval_cache_dir,
         )
 
         os.makedirs(config.run_output_dir, exist_ok=True)

@@ -7,7 +7,8 @@ This module is the single source of truth for:
 - which benchmark methods are supported (`vanilla_rag` and `dos_rag`)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
-- run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`, `full`)
+- run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`,
+  `full`, `scrolls_subset`, `scrolls_full`)
 
 The goal is that a reader can inspect this file first and immediately answer:
 
@@ -82,12 +83,20 @@ RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {
         "tasks": SCROLLS_TASKS.copy(),
         "max_samples": 1,
     },
+    "scrolls_subset": {
+        "tasks": SCROLLS_TASKS.copy(),
+        "max_samples": 50,
+    },
     "subset": {
         "tasks": SCROLLS_QA_TASKS.copy(),
         "max_samples": 50,
     },
     "full": {
         "tasks": SCROLLS_QA_TASKS.copy(),
+        "max_samples": -1,
+    },
+    "scrolls_full": {
+        "tasks": SCROLLS_TASKS.copy(),
         "max_samples": -1,
     },
 }
@@ -276,6 +285,12 @@ class BenchmarkConfig:
     output_dir: str = "outputs"
     save_raw: bool = True
     overwrite_existing: bool = False
+
+    # --- Official SCROLLS evaluation ---------------------------------------
+    use_official_scrolls_eval: bool = True
+    scrolls_repo_dir: str = "scrolls"
+    scrolls_eval_python: Optional[str] = None
+    scrolls_eval_cache_dir: Optional[str] = None
 
     @property
     def uses_long_context(self) -> bool:
