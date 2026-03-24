@@ -1,222 +1,220 @@
-# SCROLLS RAG Baseline Benchmark
+# SCROLLS RAG vs Long-Context Benchmark
 
-A flat-RAG baseline system evaluated on the [SCROLLS](https://www.scrolls-benchmark.com/) long-document benchmark.
+This repo compares two ways of answering questions over long documents on [SCROLLS](https://www.scrolls-benchmark.com/):
 
-## Architecture
+- `rag`: retrieve a small set of relevant chunks and answer from them
+- `long_context`: pass the source document directly to a long-context model and answer without retrieval
 
-```
-Document ─► TokenChunker (512 tok, 64 overlap)
-         ─► BGE-large-en-v1.5 embedding
-         ─► FAISS flat-IP index
-         ─► Top-40 retrieval → context assembly (≤ 16 000 tokens)
-         ─► Qwen 2.5-32B-Instruct generation
-         ─► ROUGE / F1 / Exact-Match evaluation
-```
+The benchmark is set up so both methods use the same generator family and the same task prompts. That keeps the comparison focused on retrieval strategy rather than model-family differences.
 
-| Parameter        | Value                   |
-|------------------|-------------------------|
-| Embedding model  | `BAAI/bge-large-en-v1.5`|
-| LLM              | Qwen 2.5-32B-Instruct (local vLLM) |
-| Chunk size       | 512 tokens              |
-| Chunk overlap    | 64 tokens               |
-| Top-k            | 40                      |
-| Context budget   | 16 000 tokens           |
+A deeper explanation of the full architecture lives in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## SCROLLS Tasks & Metrics
+## Current Defaults
 
-| Task           | Type                  | Metric                      |
-|----------------|-----------------------|-----------------------------|
-| gov_report     | Summarisation         | ROUGE-1/2/L (geo mean)      |
-| summ_screen_fd | Summarisation         | ROUGE-1/2/L (geo mean)      |
-| qmsum          | Query summarisation   | ROUGE-1/2/L (geo mean)      |
-| squality       | Query summarisation   | ROUGE-1/2/L (geo mean)      |
-| qasper         | Question answering    | Token-level F1              |
-| narrative_qa   | Question answering    | Token-level F1              |
-| quality        | Multiple choice       | Exact match (accuracy)      |
-| contract_nli   | NLI classification    | Exact match (accuracy)      |
+| Parameter | Value |
+|---|---|
+| Embedding model | `BAAI/bge-large-en-v1.5` |
+| Generator | `Qwen/Qwen2.5-7B-Instruct-1M` |
+| Fallback generator | `Qwen/Qwen2.5-7B-Instruct` |
+| Chunk size | `512` tokens |
+| Chunk overlap | `64` tokens |
+| Top-k | `10` |
+| RAG context budget | `16000` tokens |
+| Long-context document budget | `300000` tokens |
+| Thinking mode | disabled by default |
 
----
+## Why The LC Budget Is `300000` By Default
 
-## Quick start (SSH server workflow)
+The benchmark still uses the `Qwen/Qwen2.5-7B-Instruct-1M` model, but the
+default long-context *document* budget is now `300,000` tokens rather than the
+full 1M window.
 
-### 1. Setup
+That is a practical hardware decision:
+
+- the model is 1M-capable
+- true full-1M runs generally need about `128GB` of VRAM-class capacity
+- this repo is often run on smaller local servers, including single-A40 setups
+
+So `300,000` is the default "large but still somewhat practical" LC setting.
+
+You can still override it manually on larger hardware:
 
 ```bash
-# SSH into the server
-ssh user@server
+python run_benchmark.py --run-tier subset --lc-context-budget 1000000
+```
 
-# Clone / navigate to the project
-cd /path/to/baseline_benchmark
+The repo still reserves room for:
 
-# One-time setup (creates venv, installs deps)
+- the system prompt
+- the query/question text
+- chat-template wrapper tokens
+- answer generation
+
+So the long-context path still behaves as intended: pass the document directly,
+and truncate only if the document exceeds the configured LC budget.
+
+## Environment Setup On A Server
+
+This repo uses Python's built-in virtual environment mechanism, `venv/`.
+
+That means there are two separate concerns:
+
+- Python version management: provided by the machine, `conda`, `micromamba`, `pyenv`, or an HPC module system
+- Package isolation: provided by this repo's local `venv/`
+
+`venv` is not a Python version manager. It does not download or install Python
+3.11 for you. It simply creates an isolated package environment on top of an
+interpreter that already exists on the machine.
+
+The setup script:
+
+- prefers `python3.12`, then `3.11`, then `3.10`
+- refuses unsupported Python versions for the vLLM setup path
+- creates `venv/`
+- installs Python dependencies
+- downloads NLTK tokenizer data locally into `nltk_data/`
+
+Recommended setup:
+
+```bash
+cd /path/to/long-document-qa-baseline
+bash setup.sh
+source venv/bin/activate
+python --version
+```
+
+`bash setup.sh` runs in a child shell, so it cannot leave your current shell
+activated after it exits. You always need to run `source venv/bin/activate` in
+your current shell before launching the benchmark.
+
+If you see `(base)` in your prompt and then run `python run_benchmark.py ...`,
+you are still using your conda base environment, not this repo's `venv/`.
+
+If the server does not already have a good system Python for vLLM, use conda:
+
+```bash
+conda create -n scrolls-lc python=3.11 -y
+conda activate scrolls-lc
+pip install -r requirements.txt
+```
+
+If your cluster uses environment modules instead of conda, the equivalent flow
+is:
+
+```bash
+module avail python
+module load python/3.11
 bash setup.sh
 source venv/bin/activate
 ```
 
-### 2. Verify the generator works
+## Quick Start
 
-Test that the LLM loads and responds before committing to a full benchmark run.
+### 1. Verify The Generator Loads
 
 ```bash
-# Single prompt
 python test_generator.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct \
-    --prompt "What is the capital of France?"
-
-# Interactive REPL
-python test_generator.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct
-
-# Custom system prompt
-python test_generator.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct \
-    --system-prompt "You are a helpful research assistant." \
-    --prompt "Explain RAG in one paragraph."
+  --llm-model Qwen/Qwen2.5-7B-Instruct-1M \
+  --prompt "What is the capital of France?"
 ```
 
-### 3. Smoke test (end-to-end validation)
-
-Runs 2 examples from `qasper` + `gov_report` through the full pipeline.
+### 2. Smoke Test
 
 ```bash
-python smoke_test.py --llm-model Qwen/Qwen2.5-32B-Instruct
+python run_benchmark.py --run-tier smoke
 ```
 
-Override tasks / sample count:
+Defaults for `smoke`:
+
+- methods: `rag`, `long_context`
+- tasks: `qasper`, `qmsum`
+- samples: `2` per task
+
+### 3. Subset Run
 
 ```bash
-python smoke_test.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct \
-    --tasks qasper narrative_qa quality contract_nli \
-    --num-samples 3
+python run_benchmark.py --run-tier subset
 ```
 
-### 4. Full benchmark
+### 4. Full Run
 
 ```bash
-# All 8 tasks, full validation set
-python run_benchmark.py --llm-model Qwen/Qwen2.5-32B-Instruct
-
-# Specific tasks
-python run_benchmark.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct \
-    --tasks qasper narrative_qa quality
-
-# Limit samples (for quick iteration)
-python run_benchmark.py \
-    --llm-model Qwen/Qwen2.5-32B-Instruct \
-    --max-samples 50
+python run_benchmark.py --run-tier full
 ```
 
----
+## Key Scripts
 
-## CLI reference
+| Script | Purpose |
+|---|---|
+| `run_benchmark.py` | main entrypoint for benchmark runs |
+| `smoke_test.py` | quick end-to-end validation |
+| `test_generator.py` | load the model and test prompts directly |
+| `analyze_outputs.py` | generate PI-facing tables, CSVs, and plots |
+| `run_lost_in_middle.py` | run the long-context position probe |
+| `setup.sh` | create the environment and install dependencies |
 
-### `run_benchmark.py`
+## Output Layout
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--tasks` | all 8 | SCROLLS tasks to evaluate |
-| `--split` | `validation` | Dataset split |
-| `--max-samples` | `-1` (all) | Cap examples per task |
-| `--llm-model` | `Qwen/Qwen2.5-32B-Instruct` | LLM model ID or path |
-| `--embedding-model` | `BAAI/bge-large-en-v1.5` | Embedding model |
-| `--chunk-size` | `512` | Tokens per chunk |
-| `--chunk-overlap` | `64` | Token overlap between chunks |
-| `--top-k` | `40` | Chunks to retrieve |
-| `--context-budget` | `16000` | Max context tokens |
-| `--max-new-tokens` | `1024` | Max generation tokens |
-| `--temperature` | `0.0` | Sampling temperature |
-| `--embedding-device` | `cuda` | Device for embedding model |
-| `--gpu-memory-utilization` | `0.90` | vLLM GPU memory fraction |
-| `--tensor-parallel-size` | `1` | GPUs for tensor parallelism |
-| `--output-dir` | `outputs` | Where to save results |
-| `--no-save-raw` | flag | Disable per-example JSONL output |
-| `--log-level` | `INFO` | Logging verbosity |
-
-### `smoke_test.py`
-
-Same model/hardware flags as above, plus:
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--num-samples` | `2` | Examples per task |
-| `--tasks` | `qasper gov_report` | Tasks to smoke-test |
-
-### `test_generator.py`
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--llm-model` | (required) | Model to load |
-| `--prompt` | (none) | Single user prompt; omit for interactive mode |
-| `--system-prompt` | `You are a helpful assistant.` | Custom system prompt |
-| `--max-new-tokens` | `512` | Max generation length |
-| `--temperature` | `0.0` | Sampling temperature |
-
----
-
-## Output structure
-
-```
+```text
 outputs/
-├── benchmark_report.json          # Overall scores + config
-├── benchmark.log                  # Full log
-├── gov_report/
-│   ├── results.jsonl              # Per-example raw outputs
-│   └── summary.json               # Task-level metrics
-├── qasper/
-│   ├── results.jsonl
-│   └── summary.json
-└── …                              # One folder per task
+  smoke|subset|full/
+    comparison_report.json
+    benchmark.log
+    rag/
+      benchmark_report.json
+      <task>/
+        results.jsonl
+        summary.json
+    long_context/
+      benchmark_report.json
+      <task>/
+        results.jsonl
+        summary.json
+    analysis/
+      ... generated by analyze_outputs.py ...
 ```
 
-### Raw output format (`results.jsonl`)
+## Analysis Workflow
 
-Each line is a JSON object:
+Generate the main post-hoc analysis package:
 
-```json
-{
-  "id": "example_id",
-  "task": "qasper",
-  "query": "What method was used for …?",
-  "prediction": "The authors used …",
-  "references": ["They employed …"],
-  "num_chunks": 87,
-  "num_retrieved": 40,
-  "num_context_chunks": 32,
-  "context_tokens": 15823,
-  "system_prompt": "You are a helpful assistant …",
-  "user_prompt": "Context:\n…\n\nQuestion: …"
-}
+```bash
+python analyze_outputs.py --run-tier subset
 ```
 
-This lets you inspect exactly what the model saw (full prompt) and produced.
+Run the long-context lost-in-the-middle probe:
 
----
-
-## Resume support
-
-If a run is interrupted, simply re-run the same command.  The pipeline
-detects existing `results.jsonl` files and skips already-processed examples.
-
----
-
-## Project structure
-
+```bash
+python run_lost_in_middle.py --run-tier subset
 ```
-baseline_benchmark/
-├── config.py            # Task metadata, prompt templates, RAGConfig dataclass
-├── data_loader.py       # SCROLLS dataset loading & input parsing
-├── chunker.py           # Token-level document chunking
-├── embedder.py          # BGE-large-en-v1.5 sentence-transformers wrapper
-├── retriever.py         # FAISS flat-IP index per document
-├── generator.py         # vLLM local offline generation
-├── rag_pipeline.py      # Full RAG orchestration + evaluation
-├── metrics.py           # ROUGE, F1, exact-match scorers
-├── run_benchmark.py     # Main CLI
-├── smoke_test.py        # Quick end-to-end validation
-├── test_generator.py    # Test LLM with custom prompts
-├── requirements.txt     # Python dependencies
-├── setup.sh             # One-command environment setup
-└── README.md            # This file
-```
+
+## Important Notes
+
+- `top_k=10` is intentional. The repo is using flat retrieval without reranking, so deeper retrieval tends to add noise.
+- Long-context is configured to pass the document directly and only truncates when the source document is larger than the allowed LC budget.
+- When the repo loads `Qwen/Qwen2.5-7B-Instruct-1M`, it automatically switches vLLM to the Qwen long-context runtime path by setting `VLLM_ATTENTION_BACKEND=DUAL_CHUNK_FLASH_ATTN`, `VLLM_USE_V1=0`, and eager execution.
+- The subset tier excludes `gov_report` and `summ_screen_fd` because the first PI-facing slice is meant to be more evidence-focused.
+- Official Qwen guidance for the 1M model recommends their custom vLLM branch for best long-context behavior and warns that older/standard inference paths may degrade beyond `262144` tokens.
+- The repo now defaults to `300000` LC tokens because full 1M inference is treated as a larger-hardware setting, roughly in the `128GB` VRAM class rather than a single-A40 default.
+- If your server has the memory for it, you can still raise `--lc-context-budget` manually.
+
+## Common Server Failures
+
+- `CXXABI_1.3.15 not found`
+  - fix inside the conda env:
+  ```bash
+  conda install -y -c conda-forge libstdcxx-ng libgcc-ng
+  export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
+  ```
+- `FlashAttentionImpl.__init__() got an unexpected keyword argument 'layer_idx'`
+  - this is usually the Qwen-1M attention backend mismatch; the repo now sets the required vLLM env vars automatically before importing vLLM
+- `User-specified max_model_len ... is greater than the derived max_model_len`
+  - this happens when the fallback model is standard Qwen2.5 rather than the 1M checkpoint; the repo now clamps fallback max length to the actual model config
+- `Dataset scripts are no longer supported, but found scrolls.py`
+  - your `datasets` package is too new for `tau/scrolls`; use `datasets<4.0.0`
+
+## Official References
+
+- [Qwen2.5-7B-Instruct-1M model card](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-1M)
+- [Qwen 1M release post](https://qwenlm.github.io/blog/qwen2.5-1m/)
+- [vLLM installation docs](https://docs.vllm.ai/en/stable/getting_started/installation/index.html)

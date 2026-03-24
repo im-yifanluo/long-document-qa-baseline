@@ -1,9 +1,14 @@
 """
-Embedding with BAAI/bge-large-en-v1.5 via sentence-transformers.
+Dense embedding wrapper for the RAG retriever.
 
-Queries are prefixed with the recommended instruction string;
-passages are encoded as-is.  All embeddings are L2-normalised so that
-inner-product == cosine similarity.
+The benchmark keeps the embedding model fixed at ``BAAI/bge-large-en-v1.5`` so
+that RAG-vs-long-context comparisons are driven by retrieval strategy, not by a
+changing retriever.
+
+Important detail:
+- queries are prefixed with the BGE-recommended retrieval instruction
+- passages are encoded as-is
+- embeddings are L2-normalized so FAISS inner product behaves like cosine
 """
 
 from typing import List
@@ -28,7 +33,7 @@ class Embedder:
 
     # ------------------------------------------------------------------
     def embed_passages(self, passages: List[str]) -> np.ndarray:
-        """Encode document passages → (N, D) float32 array, L2-normalised."""
+        """Encode chunk texts for retrieval indexing."""
         return self.model.encode(
             passages,
             batch_size=self.batch_size,
@@ -38,7 +43,7 @@ class Embedder:
 
     # ------------------------------------------------------------------
     def embed_query(self, query: str) -> np.ndarray:
-        """Encode a single query → (D,) float32 array, L2-normalised."""
+        """Encode one retrieval query with the BGE query instruction prefix."""
         return self.model.encode(
             self.query_instruction + query,
             normalize_embeddings=True,

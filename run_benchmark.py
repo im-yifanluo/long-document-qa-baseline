@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 """
-Main CLI — run the full SCROLLS RAG Baseline Benchmark.
+Main CLI for benchmark execution.
 
-Usage examples
-──────────────
-  # Full benchmark (all 8 tasks, validation set)
-  python run_benchmark.py --llm-model Qwen/Qwen2.5-32B-Instruct
-
-  # Single task, limited samples
-  python run_benchmark.py --tasks qasper --max-samples 50 \\
-                          --llm-model Qwen/Qwen2.5-32B-Instruct
+This is the entrypoint you use for real runs. It turns command-line flags into a
+``BenchmarkConfig`` object, resolves run-tier defaults, configures logging, and
+hands execution to ``BenchmarkPipeline``.
 """
 
 import argparse
@@ -17,93 +12,143 @@ import logging
 import os
 import sys
 
-from config import RAGConfig, SCROLLS_TASKS
-from rag_pipeline import RAGPipeline
+from config import (
+    BenchmarkConfig,
+    DEFAULT_ANALYSIS_SAMPLE_SIZE,
+    DEFAULT_FALLBACK_LLM_MODEL,
+    DEFAULT_LC_CONTEXT_BUDGET,
+    DEFAULT_LLM_MODEL,
+    DEFAULT_TOP_K,
+    SCROLLS_TASKS,
+    SUPPORTED_METHODS,
+    resolve_run_settings,
+)
 
 
 def parse_args():
-    p = argparse.ArgumentParser(
-        description="SCROLLS RAG Baseline Benchmark",
+    parser = argparse.ArgumentParser(
+        description="SCROLLS RAG vs long-context benchmark",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    # Task selection
-    p.add_argument(
-        "--tasks", nargs="+", default=SCROLLS_TASKS, choices=SCROLLS_TASKS,
-        help="SCROLLS tasks to evaluate",
+    parser.add_argument("--run-tier", default="full", choices=["smoke", "subset", "full"])
+    parser.add_argument(
+        "--methods",
+        nargs="+",
+        default=SUPPORTED_METHODS,
+        choices=SUPPORTED_METHODS,
+        help="Benchmark methods to execute",
     )
-    p.add_argument("--split", default="validation", choices=["validation", "test"])
-    p.add_argument(
-        "--max-samples", type=int, default=-1,
-        help="Max examples per task (-1 = all)",
+    parser.add_argument(
+        "--tasks",
+        nargs="+",
+        default=None,
+        choices=SCROLLS_TASKS,
+        help="Override the tasks implied by --run-tier",
+    )
+    parser.add_argument(
+        "--split",
+        default="validation",
+        choices=["validation", "test"],
+    )
+    parser.add_argument(
+        "--max-samples",
+        type=int,
+        default=None,
+        help="Override the sample cap implied by --run-tier",
     )
 
-    # Models
-    p.add_argument("--llm-model", default="Qwen/Qwen2.5-32B-Instruct",
-                   help="HuggingFace model ID or local path for the LLM")
-    p.add_argument("--embedding-model", default="BAAI/bge-large-en-v1.5")
+    parser.add_argument("--llm-model", default=DEFAULT_LLM_MODEL)
+    parser.add_argument("--fallback-llm-model", default=DEFAULT_FALLBACK_LLM_MODEL)
+    parser.add_argument("--embedding-model", default="BAAI/bge-large-en-v1.5")
 
-    # RAG knobs
-    p.add_argument("--chunk-size", type=int, default=512)
-    p.add_argument("--chunk-overlap", type=int, default=64)
-    p.add_argument("--top-k", type=int, default=40)
-    p.add_argument("--context-budget", type=int, default=16000)
-    p.add_argument("--max-new-tokens", type=int, default=1024)
-    p.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--chunk-size", type=int, default=512)
+    parser.add_argument("--chunk-overlap", type=int, default=64)
+    parser.add_argument("--top-k", type=int, default=DEFAULT_TOP_K)
+    parser.add_argument("--context-budget", type=int, default=16000)
+    parser.add_argument("--lc-context-budget", type=int, default=DEFAULT_LC_CONTEXT_BUDGET)
+    parser.add_argument("--max-new-tokens", type=int, default=1024)
+    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument(
+        "--enable-thinking",
+        action="store_true",
+        help="Enable model thinking mode when supported. Ignored by Qwen2.5-1M.",
+    )
+    parser.add_argument("--max-model-len", type=int, default=None)
 
-    # Hardware
-    p.add_argument("--embedding-device", default="cuda")
-    p.add_argument("--gpu-memory-utilization", type=float, default=0.90)
-    p.add_argument("--tensor-parallel-size", type=int, default=1)
+    parser.add_argument("--embedding-device", default="cuda")
+    parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
+    parser.add_argument("--tensor-parallel-size", type=int, default=1)
 
-    # Output
-    p.add_argument("--output-dir", default="outputs")
-    p.add_argument("--no-save-raw", action="store_true",
-                   help="Disable saving per-example raw outputs")
+    parser.add_argument("--analysis-sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
+    parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument("--no-save-raw", action="store_true")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+    )
 
-    # Logging
-    p.add_argument("--log-level", default="INFO",
-                   choices=["DEBUG", "INFO", "WARNING", "ERROR"])
-
-    return p.parse_args()
+    return parser.parse_args()
 
 
 def main():
     args = parse_args()
+    try:
+        from rag_pipeline import BenchmarkPipeline
+    except ModuleNotFoundError as exc:
+        missing = exc.name or "a required package"
+        raise SystemExit(
+            "\n".join(
+                [
+                    f"Missing dependency: {missing}",
+                    "This repo installs Python packages into the local venv, not your base environment.",
+                    "Activate it first with: source venv/bin/activate",
+                    "If the venv does not exist yet, run: bash setup.sh",
+                ]
+            )
+        ) from exc
 
-    os.makedirs(args.output_dir, exist_ok=True)
+    tasks, max_samples = resolve_run_settings(args.run_tier, args.tasks, args.max_samples)
 
-    logging.basicConfig(
-        level=getattr(logging, args.log_level),
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler(
-                os.path.join(args.output_dir, "benchmark.log"), mode="a"
-            ),
-        ],
-    )
-
-    config = RAGConfig(
+    config = BenchmarkConfig(
+        methods=args.methods,
+        run_tier=args.run_tier,
+        analysis_sample_size=args.analysis_sample_size,
         embedding_model=args.embedding_model,
         embedding_device=args.embedding_device,
         chunk_size=args.chunk_size,
         chunk_overlap=args.chunk_overlap,
         top_k=args.top_k,
         context_budget=args.context_budget,
+        lc_context_budget=args.lc_context_budget,
         llm_model=args.llm_model,
+        fallback_llm_model=args.fallback_llm_model,
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
         gpu_memory_utilization=args.gpu_memory_utilization,
         tensor_parallel_size=args.tensor_parallel_size,
+        enable_thinking=args.enable_thinking,
+        max_model_len=args.max_model_len,
         split=args.split,
-        max_samples=args.max_samples,
-        tasks=args.tasks,
+        max_samples=max_samples,
+        tasks=tasks,
         output_dir=args.output_dir,
         save_raw=not args.no_save_raw,
     )
 
-    pipeline = RAGPipeline(config)
+    os.makedirs(config.run_output_dir, exist_ok=True)
+    log_path = os.path.join(config.run_output_dir, "benchmark.log")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level),
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            logging.FileHandler(log_path, mode="a"),
+        ],
+    )
+
+    pipeline = BenchmarkPipeline(config)
     pipeline.run_all()
 
 
