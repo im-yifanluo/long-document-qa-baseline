@@ -18,15 +18,33 @@ At the moment:
 
 ## 2. Data Flow
 
-Each SCROLLS example is normalized into:
+Each example starts from the official SCROLLS JSONL row:
 
 - `id`
+- `pid`
+- `input`
+- `output`
+
+The loader mirrors the official evaluator by first collapsing duplicate ids
+into a single example with multiple references. Only after that does this repo
+derive the retrieval-friendly fields below:
+
+- `id`
+- `pid`
 - `task`
+- `input`
 - `document`
 - `query`
 - `references`
 
 This happens in `data_loader.py`.
+
+Important nuance:
+
+- loading and scoring are benchmark-faithful
+- splitting `input` into `document` and `query` is repo-specific preprocessing
+- SCROLLS itself does not define that split because the benchmark interface is
+  just packed `input -> output`
 
 ## 3. Retrieval Pipeline
 
@@ -114,6 +132,9 @@ The analysis script then derives:
 
 ## 9. References
 
+- Official benchmark website: https://www.scrolls-benchmark.com/
+- Official benchmark repo: https://github.com/tau-nlp/scrolls
+- Official dataset: https://huggingface.co/datasets/tau/scrolls
 - Paper: https://aclanthology.org/2025.emnlp-main.1656/
 - Overview repo: https://github.com/alex-laitenberger/stronger-baselines-rag
 - Vanilla RAG reference code: https://github.com/alex-laitenberger/vanilla-rag-eval

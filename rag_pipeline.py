@@ -316,18 +316,8 @@ class BenchmarkPipeline:
         query: str,
         references: Optional[List[str]] = None,
     ) -> str:
-        text = (prediction or "").strip()
-        if task == "quality":
-            return self._canonicalize_quality_prediction(text, query)
-        if task == "contract_nli":
-            return self._canonicalize_nli_prediction(text)
-        if task in {"qasper", "narrative_qa"}:
-            return self._canonicalize_short_answer_prediction(
-                text,
-                query,
-                references or [],
-            )
-        return text
+        del task, query, references
+        return (prediction or "").strip()
 
     def _references_for_scoring(self, task: str, references: List[str]) -> List[str]:
         del task
@@ -659,7 +649,12 @@ class BenchmarkPipeline:
             references_list.append(meta.get("scoring_references", [""]))
 
         metric_type = TASK_METRIC_TYPE[task]
-        metrics = compute_metrics(predictions_list, references_list, metric_type)
+        metrics = compute_metrics(
+            predictions_list,
+            references_list,
+            metric_type=metric_type,
+            task_name=task,
+        )
         elapsed = time.time() - t0
 
         input_tokens = [m.get("input_tokens", 0) for m in completed_meta]
@@ -745,7 +740,12 @@ class BenchmarkPipeline:
                 metric_type = TASK_METRIC_TYPE[task]
                 predictions_list = [row.get("scoring_prediction", "") for row in rows]
                 references_list = [row.get("scoring_references", [""]) for row in rows]
-                metrics = compute_metrics(predictions_list, references_list, metric_type)
+                metrics = compute_metrics(
+                    predictions_list,
+                    references_list,
+                    metric_type=metric_type,
+                    task_name=task,
+                )
 
                 input_tokens = [row.get("input_tokens", 0) for row in rows]
                 context_tokens = [row.get("context_tokens", 0) for row in rows]
@@ -782,15 +782,8 @@ class BenchmarkPipeline:
     def _primary_score(self, task: str, result: Dict[str, Any]) -> float:
         if "error" in result:
             return 0.0
-        metric_type = result["metric_type"]
         metrics = result["metrics"]
-        if metric_type == "rouge":
-            return metrics.get("rouge_geo_mean", 0.0)
-        if metric_type == "f1":
-            return metrics.get("f1", 0.0)
-        if metric_type == "exact_match":
-            return metrics.get("exact_match", 0.0)
-        return 0.0
+        return metrics.get("scrolls_score") or 0.0
 
     def _load_method_task_results(self, method: str, task: str) -> List[Dict[str, Any]]:
         results_file = self._task_results_file(method, task)
@@ -885,15 +878,10 @@ class BenchmarkPipeline:
         metrics = compute_metrics(
             [self._row_scoring_prediction(task, row)],
             [self._row_scoring_references(task, row)],
-            metric_type,
+            metric_type=metric_type,
+            task_name=task,
         )
-        if metric_type == "rouge":
-            return metrics.get("rouge_geo_mean", 0.0)
-        if metric_type == "f1":
-            return metrics.get("f1", 0.0)
-        if metric_type == "exact_match":
-            return metrics.get("exact_match", 0.0)
-        return 0.0
+        return metrics.get("scrolls_score") or 0.0
 
     @staticmethod
     def _trim_text(text: str, limit: int = 240) -> str:
