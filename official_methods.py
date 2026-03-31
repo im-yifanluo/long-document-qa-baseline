@@ -24,6 +24,7 @@ Important scope note:
 from __future__ import annotations
 
 import hashlib
+import importlib
 import logging
 import os
 import re
@@ -330,11 +331,45 @@ class OfficialMethodRunner:
             return self._dos_imports
 
         repo_root = os.path.join(os.path.dirname(__file__), "dos-rag-eval")
-        if repo_root not in sys.path:
-            sys.path.insert(0, repo_root)
+        package_root = os.path.join(repo_root, "source")
+        if not os.path.isdir(package_root):
+            raise RuntimeError(
+                "DOS-RAG repository not found. Expected cloned repo at "
+                f"{package_root}."
+            )
 
-        from source.method.EmbeddingModels import BaseEmbeddingModel as DosBaseEmbeddingModel
-        from source.method.RAG import RAG as DosRAG
+        for path in (package_root, repo_root):
+            if path not in sys.path:
+                sys.path.insert(0, path)
+
+        try:
+            DosBaseEmbeddingModel = importlib.import_module(
+                "method.EmbeddingModels"
+            ).BaseEmbeddingModel
+            DosRAG = importlib.import_module("method.RAG").RAG
+        except ModuleNotFoundError as exc:
+            dependency_names = {
+                "tiktoken",
+                "nltk",
+                "scipy",
+                "sentence_transformers",
+                "openai",
+                "tenacity",
+                "numpy",
+            }
+            if exc.name in dependency_names:
+                raise RuntimeError(
+                    "DOS-RAG dependency missing while importing the official "
+                    f"repo: '{exc.name}'. Activate the benchmark environment "
+                    "and run `pip install -r requirements.txt` from the repo "
+                    "root, then rerun the benchmark."
+                ) from exc
+            raise RuntimeError(
+                "Could not import the official DOS-RAG code from "
+                f"{package_root}. This usually means the checkout is stale or "
+                "the repo layout differs from the expected official clone. "
+                f"Original error: {exc}"
+            ) from exc
 
         self._dos_imports = {
             "DosBaseEmbeddingModel": DosBaseEmbeddingModel,

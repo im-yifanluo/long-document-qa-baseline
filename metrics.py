@@ -22,6 +22,7 @@ the rest of this repo can transition cleanly.
 """
 
 import math
+import os
 import re
 import string
 from collections import Counter, defaultdict
@@ -102,7 +103,39 @@ def normalize_answer(text: str) -> str:
 
 def _rouge_postprocess_text(text: str) -> str:
     """Match the official ROUGE sentence segmentation."""
+    _ensure_nltk_punkt()
     return "\n".join(nltk.sent_tokenize((text or "").strip()))
+
+
+def _ensure_nltk_punkt() -> None:
+    """Make ROUGE sentence segmentation robust on fresh machines.
+
+    Newer NLTK releases require both ``punkt`` and ``punkt_tab``. The benchmark
+    should not crash late in evaluation just because the setup script did not
+    download them yet, so we lazily fetch them into a repo-local ``nltk_data``
+    directory the first time a ROUGE task is scored.
+    """
+    resources = (
+        ("tokenizers/punkt", "punkt"),
+        ("tokenizers/punkt_tab/english", "punkt_tab"),
+    )
+    missing = []
+    for resource_path, package_name in resources:
+        try:
+            nltk.data.find(resource_path)
+        except LookupError:
+            missing.append(package_name)
+
+    if not missing:
+        return
+
+    download_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
+    os.makedirs(download_dir, exist_ok=True)
+    if download_dir not in nltk.data.path:
+        nltk.data.path.insert(0, download_dir)
+
+    for package_name in missing:
+        nltk.download(package_name, quiet=True, download_dir=download_dir)
 
 
 def _compute_rouge_per_reference(
