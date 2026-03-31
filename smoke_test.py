@@ -21,6 +21,7 @@ from config import (
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
+    DEFAULT_METHODS,
     SCROLLS_TASKS,
     SUPPORTED_METHODS,
 )
@@ -36,7 +37,7 @@ def main():
     parser.add_argument(
         "--methods",
         nargs="+",
-        default=SUPPORTED_METHODS,
+        default=DEFAULT_METHODS,
         choices=SUPPORTED_METHODS,
     )
     parser.add_argument("--tasks", nargs="+", default=["qasper", "quality"])
@@ -107,7 +108,7 @@ def main():
     log = logging.getLogger("smoke_test")
 
     log.info("=" * 60)
-    log.info("  SMOKE TEST - SCROLLS vanilla RAG vs DOS RAG")
+    log.info("  SMOKE TEST - SCROLLS retrieval benchmark")
     log.info("  Methods:    %s", args.methods)
     log.info("  Tasks:      %s", args.tasks)
     log.info("  Samples:    %d per task", args.num_samples)

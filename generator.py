@@ -39,14 +39,23 @@ class Generator:
         self.active_max_model_len = config.effective_max_model_len
         self._init_vllm()
 
-    def _build_sampling_params(self):
-        """Create the shared sampling configuration for all generations."""
+    def _make_sampling_params(self, max_tokens: Optional[int] = None):
+        """Create sampling parameters for one generation call.
+
+        Most benchmark prompts use the repo-wide ``max_new_tokens`` default,
+        but some official method adapters need shorter caps for intermediate
+        substeps such as RAPTOR summaries or ReadAgent pagination decisions.
+        """
         from vllm import SamplingParams
 
-        self.sampling_params = SamplingParams(
+        return SamplingParams(
             temperature=self.config.temperature,
-            max_tokens=self.config.max_new_tokens,
+            max_tokens=max_tokens or self.config.max_new_tokens,
         )
+
+    def _build_sampling_params(self):
+        """Create the shared sampling configuration for default generations."""
+        self.sampling_params = self._make_sampling_params()
 
     def _load_model(self, model_name: str) -> None:
         """Instantiate the vLLM engine for one model name."""
@@ -248,17 +257,36 @@ class Generator:
             truncated,
         )
 
-    def generate(self, system_prompt: str, user_prompt: str) -> str:
+    def generate(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        max_tokens: Optional[int] = None,
+    ) -> str:
         """Generate one answer for a single prompt pair."""
         prompt = self._format_chat_prompt(system_prompt, user_prompt)
-        outputs = self.llm.generate([prompt], self.sampling_params)
+        sampling_params = (
+            self.sampling_params
+            if max_tokens is None
+            else self._make_sampling_params(max_tokens=max_tokens)
+        )
+        outputs = self.llm.generate([prompt], sampling_params)
         return self.clean_output(outputs[0].outputs[0].text)
 
-    def generate_batch(self, prompts: List[Tuple[str, str]]) -> List[str]:
+    def generate_batch(
+        self,
+        prompts: List[Tuple[str, str]],
+        max_tokens: Optional[int] = None,
+    ) -> List[str]:
         """Generate a batch of answers in one vLLM call."""
         if not prompts:
             return []
 
         formatted = [self._format_chat_prompt(s, u) for s, u in prompts]
-        outputs = self.llm.generate(formatted, self.sampling_params)
+        sampling_params = (
+            self.sampling_params
+            if max_tokens is None
+            else self._make_sampling_params(max_tokens=max_tokens)
+        )
+        outputs = self.llm.generate(formatted, sampling_params)
         return [self.clean_output(o.outputs[0].text) for o in outputs]

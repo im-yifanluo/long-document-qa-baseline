@@ -4,7 +4,8 @@ Central configuration for the SCROLLS long-document QA benchmark.
 This module is the single source of truth for:
 
 - which SCROLLS tasks exist and how they are scored
-- which benchmark methods are supported (`vanilla_rag` and `dos_rag`)
+- which benchmark methods are supported (`vanilla_rag`, `dos_rag`, `raptor`,
+  and ReadAgent variants)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
 - run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`, `full`)
@@ -69,8 +70,14 @@ TASK_TYPE: Dict[str, str] = {
 
 RESULTS_FORMAT_VERSION = 4
 
-SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
-DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()
+SUPPORTED_METHODS: List[str] = [
+    "vanilla_rag",
+    "dos_rag",
+    "raptor",
+    "read_agent_parallel",
+    "read_agent_sequential",
+]
+DEFAULT_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 EXPERIMENTAL_METHODS: List[str] = ["long_context"]
 
 RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {

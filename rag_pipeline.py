@@ -6,9 +6,12 @@ Conceptually, the pipeline has three layers:
 1. data normalization
    SCROLLS examples are loaded as ``document`` + ``query`` + ``references``.
 
-2. method-specific prompt construction
-   - vanilla_rag: retrieve chunks and present them in retrieval-rank order
-   - dos_rag: retrieve the same chunks but restore original document order
+2. method-specific prompt construction / execution
+   - vanilla_rag: repo baseline retrieve-then-read
+   - dos_rag: official DOS-RAG adapter
+   - raptor: official RAPTOR adapter
+   - read_agent_parallel / read_agent_sequential: official ReadAgent-style
+     multi-step prompting adapters
    - long_context: retained as an inactive extension point for future work
 
 3. shared generation / evaluation / reporting
@@ -41,6 +44,7 @@ from data_loader import load_scrolls_task
 from embedder import Embedder
 from generator import Generator
 from metrics import compute_metrics, normalize_answer
+from official_methods import OfficialMethodRunner
 from retriever import Retriever
 
 logger = logging.getLogger(__name__)
@@ -49,11 +53,19 @@ logger = logging.getLogger(__name__)
 class BenchmarkPipeline:
     """Orchestrates prompt construction, generation, evaluation, and reporting."""
 
+    _STATEFUL_METHODS = {
+        "dos_rag",
+        "raptor",
+        "read_agent_parallel",
+        "read_agent_sequential",
+    }
+
     def __init__(self, config: BenchmarkConfig, load_models: bool = True):
         self.config = config
         self.generator = None
         self.chunker = None
         self.embedder = None
+        self.official_methods = None
 
         logger.info("Initialising benchmark pipeline ...")
         if load_models:
@@ -69,6 +81,11 @@ class BenchmarkPipeline:
                 device=config.embedding_device,
                 batch_size=config.embedding_batch_size,
                 query_instruction=config.query_instruction,
+            )
+            self.official_methods = OfficialMethodRunner(
+                config=config,
+                generator=self.generator,
+                embedder=self.embedder,
             )
 
         os.makedirs(config.run_output_dir, exist_ok=True)
@@ -503,11 +520,153 @@ class BenchmarkPipeline:
 
     def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Dispatch one example to its method-specific prompt builder."""
-        if method in {"vanilla_rag", "dos_rag"}:
+        if method == "vanilla_rag":
             return self._prepare_retrieval_example(example, method)
         if method == "long_context":
             return self._prepare_long_context_example(example)
         raise ValueError(f"Unsupported method: {method!r}")
+
+    def _unsupported_method_summary(self, task: str, method: str, reason: str) -> Dict[str, Any]:
+        logger.warning("[%s/%s] %s", method, task, reason)
+        return {
+            "task": task,
+            "method": method,
+            "error": reason,
+        }
+
+    def _error_result_row(
+        self,
+        example: Dict[str, Any],
+        method: str,
+        exc: Exception,
+    ) -> Dict[str, Any]:
+        message = str(exc).strip() or exc.__class__.__name__
+        logger.exception("[%s/%s] Example %s failed: %s", method, example["task"], example["id"], message)
+        return {
+            "id": example["id"],
+            "pid": example.get("pid"),
+            "task": example["task"],
+            "method": method,
+            "query": example.get("query", ""),
+            "references": example.get("references", [""]),
+            "document_tokens": self.generator.count_tokens(example.get("document", "")),
+            "context_tokens": 0,
+            "input_tokens": 0,
+            "num_chunks": 0,
+            "num_retrieved": 0,
+            "num_context_chunks": 0,
+            "document_truncated": False,
+            "retrieved_chunks": [],
+            "retrieval_scores": [],
+            "chunk_offsets": [],
+            "selected_chunk_indices": [],
+            "model_name": self.generator.active_model,
+            "system_prompt": "",
+            "user_prompt": "",
+            "prediction": "",
+            "method_error": message,
+        }
+
+    def _run_stateful_task(
+        self,
+        examples: List[Dict[str, Any]],
+        task: str,
+        method: str,
+        done: Dict[str, Dict[str, Any]],
+        results_file: str,
+    ) -> Dict[str, Any]:
+        """Execute methods that manage their own multi-step prompting.
+
+        DOS-RAG, RAPTOR, and ReadAgent are not a single prompt-construction
+        function followed by one shared batched generation call. They can build
+        indices/trees, gist pages, or run multiple sub-prompts per example, so
+        they execute one example at a time through ``OfficialMethodRunner``.
+        """
+        all_meta: List[Optional[Dict[str, Any]]] = [None] * len(examples)
+        for idx, ex in enumerate(examples):
+            if ex["id"] in done:
+                all_meta[idx] = done[ex["id"]]
+
+        t0 = time.time()
+        write_mode = "a" if self.config.save_raw else None
+        fh = open(results_file, write_mode) if write_mode else None
+
+        try:
+            for idx, ex in enumerate(examples):
+                if all_meta[idx] is not None:
+                    continue
+
+                logger.info(
+                    "[%s/%s] Running %d / %d  (id=%s)",
+                    method,
+                    task,
+                    idx + 1,
+                    len(examples),
+                    ex["id"],
+                )
+                try:
+                    meta = self.official_methods.run_example(method, ex)
+                except Exception as exc:  # pragma: no cover - defensive recovery
+                    meta = self._error_result_row(ex, method, exc)
+
+                meta["results_format_version"] = RESULTS_FORMAT_VERSION
+                self._apply_scoring_fields(task, meta)
+                meta["generation_tokens"] = self.generator.count_tokens(meta.get("prediction", ""))
+                meta["model_name"] = self.generator.active_model
+                all_meta[idx] = meta
+                if fh is not None:
+                    fh.write(json.dumps(meta) + "\n")
+        finally:
+            if fh is not None:
+                fh.close()
+
+        predictions_list: List[str] = []
+        references_list: List[List[str]] = []
+        completed_meta: List[Dict[str, Any]] = []
+        for meta in all_meta:
+            if meta is None:
+                continue
+            self._apply_scoring_fields(task, meta)
+            completed_meta.append(meta)
+            predictions_list.append(meta.get("scoring_prediction", ""))
+            references_list.append(meta.get("scoring_references", [""]))
+
+        metric_type = TASK_METRIC_TYPE[task]
+        metrics = compute_metrics(
+            predictions_list,
+            references_list,
+            metric_type=metric_type,
+            task_name=task,
+        )
+        elapsed = time.time() - t0
+
+        input_tokens = [m.get("input_tokens", 0) for m in completed_meta]
+        context_tokens = [m.get("context_tokens", 0) for m in completed_meta]
+        generation_tokens = [m.get("generation_tokens", 0) for m in completed_meta]
+
+        summary = {
+            "task": task,
+            "method": method,
+            "num_examples": len(examples),
+            "num_generated": max(0, len(examples) - len(done)),
+            "metric_type": metric_type,
+            "metrics": metrics,
+            "elapsed_seconds": round(elapsed, 2),
+            "token_stats": {
+                "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
+                "avg_context_tokens": (sum(context_tokens) / len(context_tokens)) if context_tokens else 0.0,
+                "avg_generation_tokens": (
+                    (sum(generation_tokens) / len(generation_tokens)) if generation_tokens else 0.0
+                ),
+                "total_input_tokens": sum(input_tokens),
+            },
+            "results_file": results_file if self.config.save_raw else None,
+        }
+        with open(self._task_summary_file(method, task), "w") as fh:
+            json.dump(summary, fh, indent=2)
+
+        logger.info("[%s/%s] %s  (%.1fs)", method, task, metrics, elapsed)
+        return summary
 
     def run_task(self, task: str, method: str) -> Dict[str, Any]:
         """Run one task for one method end-to-end.
@@ -517,6 +676,14 @@ class BenchmarkPipeline:
         durable source of per-example outputs. If an example id already exists
         there, the pipeline reuses it instead of regenerating.
         """
+        if method in self._STATEFUL_METHODS and self.official_methods is not None:
+            if not self.official_methods.supports(method, task):
+                return self._unsupported_method_summary(
+                    task,
+                    method,
+                    f"Method {method} is not supported for SCROLLS task {task}.",
+                )
+
         examples = load_scrolls_task(task, self.config.split, self.config.max_samples)
         if not examples:
             logger.warning("No examples for task %s - skipping.", task)
@@ -583,6 +750,9 @@ class BenchmarkPipeline:
                 len(done),
                 len(examples),
             )
+
+        if method in self._STATEFUL_METHODS:
+            return self._run_stateful_task(examples, task, method, done, results_file)
 
         to_generate: List[Tuple[int, Dict[str, Any]]] = []
         all_meta: List[Optional[Dict[str, Any]]] = [None] * len(examples)

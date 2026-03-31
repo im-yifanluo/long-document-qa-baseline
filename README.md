@@ -1,16 +1,22 @@
-# SCROLLS Vanilla RAG and DOS RAG Benchmark
+# SCROLLS Retrieval Benchmark
 
-This repo benchmarks two retrieval-based long-document QA baselines on SCROLLS:
+This repo benchmarks retrieval-oriented long-document QA systems on SCROLLS.
+
+Currently integrated methods:
 
 - `vanilla_rag`: retrieve relevant passages and prompt the reader in retrieval-rank order
-- `dos_rag`: retrieve the same passages but restore their original document order before prompting
+- `dos_rag`: official DOS-RAG adapter from the authors' released code
+- `raptor`: official RAPTOR tree builder / tree retriever adapter
+- `read_agent_parallel`: ReadAgent parallel look-up adapter from the released notebook prompts
+- `read_agent_sequential`: ReadAgent sequential look-up adapter from the released notebook prompts
 
-The implementation follows the EMNLP 2025 paper *Stronger Baselines for Retrieval-Augmented Generation with Long-Context Language Models* for the active baselines:
+The implementation follows the official released method code or prompts where available:
 
 - short sentence-aware passages with a `100` token target
 - dense retrieval with `Snowflake/snowflake-arctic-embed-m-v1.5`
-- budgeted retrieve-then-read prompting
-- DOS RAG differing from vanilla RAG only in prompt ordering
+- DOS-RAG chunking/retrieve-then-read behavior from `dos-rag-eval`
+- RAPTOR tree construction / retrieval from `parthsarthi03/raptor`
+- ReadAgent pagination / gisting / lookup prompts from `read-agent.github.io/assets/read_agent_demo.ipynb`
 
 Long-context scaffolding is still present in the codebase, but it is intentionally not part of the active benchmark defaults because the current target hardware is a single A40 48GB system.
 
@@ -33,7 +39,7 @@ One thing remains repo-specific by necessity:
 
 | Parameter | Value |
 |---|---|
-| Methods | `vanilla_rag`, `dos_rag` |
+| Methods | `vanilla_rag`, `dos_rag` by default; `raptor` and `read_agent_*` available by CLI |
 | Reader | `Qwen/Qwen2.5-14B-Instruct` |
 | Fallback reader | `Qwen/Qwen2.5-7B-Instruct` |
 | Retriever | `Snowflake/snowflake-arctic-embed-m-v1.5` |
@@ -47,8 +53,9 @@ One thing remains repo-specific by necessity:
 ## Why These Defaults
 
 - `Qwen/Qwen2.5-14B-Instruct` is a strong local reader that is realistic on a single A40 once the benchmark is focused on retrieval rather than extreme long-context inference.
-- `Snowflake/snowflake-arctic-embed-m-v1.5` and `100`-token passages match the paper’s vanilla/DOS RAG setup.
+- `Snowflake/snowflake-arctic-embed-m-v1.5` and `100`-token passages match the DOS-RAG paper setup.
 - `top_k` is derived from the context budget with the paper-style heuristic `top_k ~= budget / 50`. At the default `10000`-token budget that yields `top_k=200`.
+- `vanilla_rag` and `dos_rag` remain the default methods because RAPTOR and ReadAgent are materially more expensive per example.
 
 ## Task Scope
 
@@ -71,6 +78,11 @@ The default tiers focus on the QA-style or query-conditioned subset:
 - `contract_nli`
 
 Pure summarization tasks are still available through manual task overrides, but they are not part of the default benchmark tiers because the current repo focus is long-document QA.
+
+ReadAgent has narrower official task coverage in this repo:
+
+- supported: `quality`, `qmsum`, `narrative_qa`
+- unsupported: `gov_report`, `summ_screen_fd`, `qasper`, `contract_nli`
 
 ## Setup
 
@@ -204,6 +216,18 @@ Run one method only:
 
 ```bash
 python run_benchmark.py --run-tier subset --methods dos_rag
+```
+
+Run RAPTOR on the QA subset:
+
+```bash
+python run_benchmark.py --run-tier subset --methods raptor
+```
+
+Run ReadAgent on the overlapping official tasks only:
+
+```bash
+python run_benchmark.py --run-tier subset --methods read_agent_parallel --tasks qmsum narrative_qa quality
 ```
 
 ## Analysis

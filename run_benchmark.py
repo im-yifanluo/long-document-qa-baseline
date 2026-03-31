@@ -19,6 +19,7 @@ from config import (
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
+    DEFAULT_METHODS,
     PAPER_LONG_QA_CONTEXT_BUDGETS,
     PAPER_SHORT_QA_CONTEXT_BUDGETS,
     SCROLLS_TASKS,
@@ -30,7 +31,7 @@ from config import (
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="SCROLLS vanilla RAG vs DOS RAG benchmark",
+        description="SCROLLS retrieval benchmark with vanilla RAG, DOS-RAG, RAPTOR, and ReadAgent adapters",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -42,7 +43,7 @@ def parse_args():
     parser.add_argument(
         "--methods",
         nargs="+",
-        default=SUPPORTED_METHODS,
+        default=DEFAULT_METHODS,
         choices=SUPPORTED_METHODS,
         help="Benchmark methods to execute",
     )

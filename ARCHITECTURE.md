@@ -1,19 +1,26 @@
 # Architecture And Execution Guide
 
-This repo currently benchmarks retrieval-based long-document QA on SCROLLS with two closely matched baselines:
+This repo currently benchmarks retrieval-based long-document QA on SCROLLS with:
 
 - `vanilla_rag`
 - `dos_rag`
+- `raptor`
+- `read_agent_parallel`
+- `read_agent_sequential`
 
-The important design choice is that both methods share the same chunker, retriever, reader, prompts, and evaluation. The only behavioral difference is the order in which retrieved passages are presented to the language model.
+The important design choice is that all methods share the same SCROLLS loader,
+official evaluator, local reader model, and reporting stack. What changes from
+method to method is the retrieval or reading mechanism.
 
 ## 1. Goal
 
-The benchmark is meant to establish strong retrieval baselines before adding more complex systems such as RAPTOR-style, ReadAgent-style, or long-context methods.
+The benchmark is meant to compare strong retrieval/read-process baselines on one
+shared SCROLLS evaluation surface.
 
 At the moment:
 
-- active methods: `vanilla_rag`, `dos_rag`
+- default methods: `vanilla_rag`, `dos_rag`
+- additional supported methods: `raptor`, `read_agent_parallel`, `read_agent_sequential`
 - inactive scaffold retained for future work: `long_context`
 
 ## 2. Data Flow
@@ -46,33 +53,37 @@ Important nuance:
 - SCROLLS itself does not define that split because the benchmark interface is
   just packed `input -> output`
 
-## 3. Retrieval Pipeline
-
-The active retrieval pipeline is:
-
-1. Split the document into sentence-aware passages with a target size of `100` tokens.
-2. Embed passages with `Snowflake/snowflake-arctic-embed-m-v1.5`.
-3. Embed the query with the same retriever.
-4. Retrieve a ranked list of passages with FAISS cosine-style similarity.
-5. Add retrieved passages until the configured context budget is reached.
-6. Build the final prompt for the reader model.
-
-`top_k` is scaled with the context budget using the same rule of thumb as the
-paper's reference repos: roughly `top_k = context_budget / 50`.
-
-## 4. Vanilla vs DOS
+## 3. Method Families
 
 `vanilla_rag`:
 
-- retrieves passages by similarity
-- keeps the selected passages in retrieval-rank order
+- repo baseline
+- sentence-aware chunking
+- dense retrieval with FAISS
+- prompt passages in retrieval-rank order
 
 `dos_rag`:
 
-- uses the exact same retrieved passage set as vanilla
-- reorders those passages back into their original document order before prompting
+- uses the official `dos-rag-eval` chunking/retrieval code path
+- preserves DOS's retrieve-then-restore-document-order behavior
 
-In other words, DOS RAG changes prompt ordering, not retrieval itself.
+`raptor`:
+
+- uses the official RAPTOR tree builder and tree retriever
+- builds a hierarchical summary tree per document
+- retrieves node text from the built tree before final answer generation
+
+`read_agent_parallel` / `read_agent_sequential`:
+
+- use the official released ReadAgent prompts
+- paginate the document into reading episodes
+- gist each page into a compressed memory
+- choose pages to look up again either in one shot or one-by-one
+- answer from the mixture of gists and re-read raw pages
+
+For `vanilla_rag` and `dos_rag`, `top_k` is scaled with the context budget
+using the same rule of thumb as the paper's reference repos:
+roughly `top_k = context_budget / 50`.
 
 ## 5. Reader Model
 
@@ -124,7 +135,8 @@ The analysis script then derives:
 | `embedder.py` | retrieval embeddings |
 | `retriever.py` | FAISS ranking |
 | `generator.py` | vLLM reader wrapper |
-| `rag_pipeline.py` | method execution and reporting |
+| `official_methods.py` | adapters for DOS-RAG, RAPTOR, and ReadAgent |
+| `rag_pipeline.py` | method dispatch, execution, and reporting |
 | `run_benchmark.py` | main CLI |
 | `smoke_test.py` | small end-to-end validation |
 | `analyze_outputs.py` | post-hoc analysis |
@@ -135,7 +147,9 @@ The analysis script then derives:
 - Official benchmark website: https://www.scrolls-benchmark.com/
 - Official benchmark repo: https://github.com/tau-nlp/scrolls
 - Official dataset: https://huggingface.co/datasets/tau/scrolls
-- Paper: https://aclanthology.org/2025.emnlp-main.1656/
-- Overview repo: https://github.com/alex-laitenberger/stronger-baselines-rag
-- Vanilla RAG reference code: https://github.com/alex-laitenberger/vanilla-rag-eval
 - DOS RAG reference code: https://github.com/alex-laitenberger/dos-rag-eval
+- DOS RAG paper: https://aclanthology.org/2025.emnlp-main.1656/
+- RAPTOR paper: https://arxiv.org/abs/2401.18059
+- RAPTOR reference code: https://github.com/parthsarthi03/raptor
+- ReadAgent paper: https://arxiv.org/abs/2402.09727
+- ReadAgent project site and prompts: https://github.com/read-agent/read-agent.github.io
