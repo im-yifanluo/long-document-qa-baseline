@@ -1,0 +1,55 @@
+2026-03-31 08:58:25,680 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-03-31 08:58:25,681 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-03-31 08:58:36,570 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-03-31 09:04:26,210 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-03-31 09:04:26,685 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-03-31 09:04:33,780 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-03-31 09:04:33,781 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-03-31 09:04:33,781 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-03-31 09:04:33,782 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-31 09:04:34,804 [INFO] data_loader: Loaded 2 examples for qasper
+2026-03-31 09:04:34,806 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-31 09:04:36,772 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-31 09:04:36,981 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 2 new examples in 2.2s
+2026-03-31 09:04:36,981 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 2 answers ...
+2026-03-31 09:04:39,635 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 2.7s
+2026-03-31 09:04:39,737 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 66.66666666666666}  (4.9s)
+2026-03-31 09:04:39,737 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-03-31 09:04:39,738 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-31 09:04:40,149 [INFO] data_loader: Loaded 2 examples for quality
+2026-03-31 09:04:40,152 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-03-31 09:04:40,412 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-03-31 09:04:40,658 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 2 new examples in 0.5s
+2026-03-31 09:04:40,658 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 2 answers ...
+2026-03-31 09:04:45,717 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 5.1s
+2026-03-31 09:04:45,747 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0}  (5.6s)
+2026-03-31 09:04:45,747 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-03-31 09:04:45,748 [INFO] data_loader: Loading SCROLLS task=qasper split=validation …
+2026-03-31 09:04:46,188 [INFO] data_loader: Loaded 2 examples for qasper
+2026-03-31 09:04:46,190 [INFO] rag_pipeline: [dos_rag/qasper] Preparing 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-31 09:04:46,414 [INFO] rag_pipeline: [dos_rag/qasper] Preparing 2 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-03-31 09:04:46,625 [INFO] rag_pipeline: [dos_rag/qasper] Prompt preparation done for 2 new examples in 0.4s
+2026-03-31 09:04:46,625 [INFO] rag_pipeline: [dos_rag/qasper] Generating 2 answers ...
+2026-03-31 09:04:48,915 [INFO] rag_pipeline: [dos_rag/qasper] Generation done in 2.3s
+2026-03-31 09:04:48,942 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 66.66666666666666}  (2.7s)
+2026-03-31 09:04:48,942 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-03-31 09:04:48,943 [INFO] data_loader: Loading SCROLLS task=quality split=validation …
+2026-03-31 09:04:49,239 [INFO] data_loader: Loaded 2 examples for quality
+2026-03-31 09:04:49,241 [INFO] rag_pipeline: [dos_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-03-31 09:04:49,484 [INFO] rag_pipeline: [dos_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-03-31 09:04:49,724 [INFO] rag_pipeline: [dos_rag/quality] Prompt preparation done for 2 new examples in 0.5s
+2026-03-31 09:04:49,724 [INFO] rag_pipeline: [dos_rag/quality] Generating 2 answers ...
+2026-03-31 09:04:53,044 [INFO] rag_pipeline: [dos_rag/quality] Generation done in 3.3s
+2026-03-31 09:04:53,056 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 50.0}  (3.8s)

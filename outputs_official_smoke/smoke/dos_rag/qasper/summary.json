@@ -1,0 +1,18 @@
+{
+  "task": "qasper",
+  "method": "dos_rag",
+  "num_examples": 2,
+  "num_generated": 2,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 66.66666666666666
+  },
+  "elapsed_seconds": 2.73,
+  "token_stats": {
+    "avg_input_tokens": 5532.0,
+    "avg_context_tokens": 5404.0,
+    "avg_generation_tokens": 13.0,
+    "total_input_tokens": 11064
+  },
+  "results_file": "outputs_official_smoke/smoke/dos_rag/qasper/results.jsonl"
+}
