@@ -15,22 +15,40 @@
     "run_tier": "smoke"
   },
   "per_task_scores": {
-    "qasper": 66.66666666666666,
+    "qasper": 75.0,
     "quality": 0.0
   },
-  "average_score": 33.33333333333333,
+  "average_score": 37.5,
   "detailed_metrics": {
     "qasper": {
-      "f1": 66.66666666666666
+      "f1": 75.0,
+      "num_predicted": 2,
+      "mean_prediction_length_characters": 20.0,
+      "scrolls_score": 75.0,
+      "display_keys": [
+        "f1"
+      ],
+      "display": [
+        75.0
+      ]
     },
     "quality": {
-      "exact_match": 0.0
+      "exact_match": 0.0,
+      "num_predicted": 2,
+      "mean_prediction_length_characters": 63.5,
+      "scrolls_score": 0.0,
+      "display_keys": [
+        "exact_match"
+      ],
+      "display": [
+        0.0
+      ]
     }
   },
   "token_cost_summary": {
-    "avg_input_tokens": 6082.0,
+    "avg_input_tokens": 6081.75,
     "avg_context_tokens": 5929.0,
-    "avg_generation_tokens": 13.75,
-    "total_input_tokens": 24328
+    "avg_generation_tokens": 11.25,
+    "total_input_tokens": 24327
   }
 }

@@ -5,14 +5,23 @@
   "num_generated": 2,
   "metric_type": "f1",
   "metrics": {
-    "f1": 66.66666666666666
+    "f1": 75.0,
+    "num_predicted": 2,
+    "mean_prediction_length_characters": 20.0,
+    "scrolls_score": 75.0,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      75.0
+    ]
   },
-  "elapsed_seconds": 4.89,
+  "elapsed_seconds": 4.28,
   "token_stats": {
-    "avg_input_tokens": 5532.0,
+    "avg_input_tokens": 5531.5,
     "avg_context_tokens": 5404.0,
-    "avg_generation_tokens": 13.0,
-    "total_input_tokens": 11064
+    "avg_generation_tokens": 8.0,
+    "total_input_tokens": 11063
   },
   "results_file": "outputs_official_smoke/smoke/vanilla_rag/qasper/results.jsonl"
 }

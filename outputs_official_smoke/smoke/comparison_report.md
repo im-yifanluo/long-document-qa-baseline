@@ -6,21 +6,34 @@ Run tier: `smoke`
 
 | Task | Metric | vanilla_rag | dos_rag | dos_rag_minus_vanilla_rag |
 | --- | --- | --- | --- | --- |
-| qasper | f1 | 66.6667 | 66.6667 | +0.0000 |
+| qasper | f1 | 75.0000 | 100.0000 | +25.0000 |
 | quality | exact_match | 0.0000 | 50.0000 | +50.0000 |
 
 ## Example Previews
 
 ### qasper
 
-- examples: 1
-- disagreements: 0
-- any-positive-score: 1
+- examples: 2
+- disagreements: 1
+- any-positive-score: 2
+
+#### qasper / f5e6f43454332e0521a778db0b769481e23e7682
+
+- query: what are the pivot-based baselines?
+- references: pivoting, pivoting$_{\rm m}$ | firstly translates a source language into the pivot language which is later translated to the target language
+- best_methods: dos_rag
+- disagreement: True
+- vanilla_rag score: 50.0000
+  prediction: pivoting
+  top_chunk: rank=1 score=0.4193 Our approaches use one encoder-decoder model to translate between any zero-shot directions, which is more efficient than pivoting. Regarding the comparison between transfer approaches, our cross-lingual pretraining based transfer outperfor…
+- dos_rag score: 100.0000
+  prediction: pivoting, pivoting$_{\rm m}$_
+  top_chunk: rank=1 score=0.4193 Our approaches use one encoder-decoder model to translate between any zero-shot directions, which is more efficient than pivoting. Regarding the comparison between transfer approaches, our cross-lingual pretraining based transfer outperfor…
 
 #### qasper / b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54
 
 - query: which multilingual approaches do they compare with?
-- references: multilingual NMT (MNMT) BIBREF19
+- references: BIBREF19, BIBREF20 | multilingual NMT (MNMT) BIBREF19
 - best_methods: vanilla_rag, dos_rag
 - disagreement: False
 - vanilla_rag score: 100.0000
