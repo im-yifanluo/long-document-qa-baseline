@@ -14,6 +14,21 @@ The implementation follows the EMNLP 2025 paper *Stronger Baselines for Retrieva
 
 Long-context scaffolding is still present in the codebase, but it is intentionally not part of the active benchmark defaults because the current target hardware is a single A40 48GB system.
 
+## Benchmark Fidelity
+
+The repo now follows the official SCROLLS benchmark assets and evaluation path:
+
+- data is loaded from the official `tau/scrolls` task archives on Hugging Face
+- duplicate validation ids are collapsed exactly as in the official evaluator, so one example id can carry multiple gold outputs
+- benchmark scoring follows the official `tau/scrolls/metrics/*.py` implementation and reports the official `scrolls_score`
+- raw model predictions are scored directly; the benchmark no longer canonicalizes answers before scoring
+
+One thing remains repo-specific by necessity:
+
+- SCROLLS provides a packed `input` string, not separate `document` and `query` fields
+- for retrieval experiments, this repo derives `document` and `query` from the official packed input
+- that split is an experimental preprocessing step for RAG, not part of the official SCROLLS benchmark definition
+
 ## Current Defaults
 
 | Parameter | Value |
@@ -37,7 +52,17 @@ Long-context scaffolding is still present in the codebase, but it is intentional
 
 ## Task Scope
 
-The default tiers focus on SCROLLS tasks that are QA-style or query-conditioned:
+The official SCROLLS benchmark contains 7 tasks:
+
+- `gov_report`
+- `summ_screen_fd`
+- `qmsum`
+- `qasper`
+- `narrative_qa`
+- `quality`
+- `contract_nli`
+
+The default tiers focus on the QA-style or query-conditioned subset:
 
 - `qmsum`
 - `qasper`

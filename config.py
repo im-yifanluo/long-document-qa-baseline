@@ -67,7 +67,7 @@ TASK_TYPE: Dict[str, str] = {
 # Supported methods and run tiers
 # ---------------------------------------------------------------------------
 
-RESULTS_FORMAT_VERSION = 3
+RESULTS_FORMAT_VERSION = 4
 
 SUPPORTED_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 DEFAULT_METHODS: List[str] = SUPPORTED_METHODS.copy()

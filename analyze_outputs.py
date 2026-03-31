@@ -61,14 +61,8 @@ def load_jsonl(path: str) -> List[Dict]:
 
 
 def primary_score(metric_type: str, prediction: str, references: List[str]) -> float:
-    metrics = compute_metrics([prediction], [references], metric_type)
-    if metric_type == "rouge":
-        return metrics.get("rouge_geo_mean", 0.0)
-    if metric_type == "f1":
-        return metrics.get("f1", 0.0)
-    if metric_type == "exact_match":
-        return metrics.get("exact_match", 0.0)
-    return 0.0
+    metrics = compute_metrics([prediction], [references], metric_type=metric_type)
+    return metrics.get("scrolls_score") or 0.0
 
 
 def scoring_prediction(row: Dict) -> str:
@@ -141,12 +135,7 @@ def make_score_table(run_root: str, methods: List[str], tasks: List[str], analys
             summary = load_json(summary_path)
             metric_type = summary["metric_type"]
             metrics = summary["metrics"]
-            if metric_type == "rouge":
-                primary = metrics.get("rouge_geo_mean", 0.0)
-            elif metric_type == "f1":
-                primary = metrics.get("f1", 0.0)
-            else:
-                primary = metrics.get("exact_match", 0.0)
+            primary = metrics.get("scrolls_score") or 0.0
             token_stats = summary.get("token_stats", {})
             rows.append(
                 {

@@ -4,7 +4,7 @@
 torch>=2.1.0
 transformers>=4.40.0
 sentence-transformers>=2.7.0
-datasets>=2.19.0,<4.0.0
+huggingface-hub>=0.23.0
 
 faiss-cpu>=1.7.4
 vllm>=0.4.0
