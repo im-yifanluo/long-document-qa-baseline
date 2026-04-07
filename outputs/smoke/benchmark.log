@@ -1,0 +1,55 @@
+2026-03-31 09:59:50,858 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-03-31 09:59:50,859 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-03-31 09:59:53,362 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-03-31 10:00:23,542 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-03-31 10:00:23,978 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-03-31 10:00:25,038 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-03-31 10:00:25,039 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-03-31 10:00:25,040 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qmsum
+============================================================
+2026-03-31 10:00:25,041 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-03-31 10:00:25,244 [INFO] data_loader: Loaded 2 official SCROLLS examples for qmsum
+2026-03-31 10:00:25,245 [INFO] rag_pipeline: [dos_rag/qmsum] Running 1 / 2  (id=va-sq-1)
+2026-03-31 10:00:25,245 [INFO] official_methods: Building DOS-RAG index for document va-sq-1_0
+2026-03-31 10:00:25,246 [ERROR] rag_pipeline: [dos_rag/qmsum] Example va-sq-1 failed: DOS-RAG repository not found. Expected cloned repo at /home/yifan65/long-document-qa-baseline/dos-rag-eval/source.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 608, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 283, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 451, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 336, in _ensure_dos_imports
+    raise RuntimeError(
+RuntimeError: DOS-RAG repository not found. Expected cloned repo at /home/yifan65/long-document-qa-baseline/dos-rag-eval/source.
+2026-03-31 10:00:25,296 [INFO] rag_pipeline: [dos_rag/qmsum] Running 2 / 2  (id=va-sq-2)
+2026-03-31 10:00:25,296 [INFO] official_methods: Building DOS-RAG index for document va-sq-2_0
+2026-03-31 10:00:25,297 [ERROR] rag_pipeline: [dos_rag/qmsum] Example va-sq-2 failed: DOS-RAG repository not found. Expected cloned repo at /home/yifan65/long-document-qa-baseline/dos-rag-eval/source.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 608, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 283, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 451, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 336, in _ensure_dos_imports
+    raise RuntimeError(
+RuntimeError: DOS-RAG repository not found. Expected cloned repo at /home/yifan65/long-document-qa-baseline/dos-rag-eval/source.
+2026-03-31 10:00:25,872 [INFO] absl: Using default tokenizer.
+2026-03-31 10:00:25,874 [INFO] rag_pipeline: [dos_rag/qmsum] {'rouge/rouge1': 0.0, 'rouge/rouge2': 0.0, 'rouge/rougeL': 0.0, 'rouge/rougeLsum': 0.0, 'rouge/geometric_mean': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 0.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [0.0, 0.0, 0.0], 'rouge_geo_mean': 0.0, 'rouge1': 0.0, 'rouge2': 0.0, 'rougeL': 0.0, 'rougeLsum': 0.0}  (0.6s)
+2026-03-31 10:00:25,878 [INFO] absl: Using default tokenizer.
+2026-03-31 10:00:25,878 [INFO] absl: Using default tokenizer.

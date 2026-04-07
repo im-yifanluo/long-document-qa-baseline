@@ -1,0 +1,40 @@
+{
+  "task": "qmsum",
+  "method": "dos_rag",
+  "num_examples": 2,
+  "num_generated": 2,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 0.0,
+    "rouge/rouge2": 0.0,
+    "rouge/rougeL": 0.0,
+    "rouge/rougeLsum": 0.0,
+    "rouge/geometric_mean": 0.0,
+    "num_predicted": 2,
+    "mean_prediction_length_characters": 0.0,
+    "scrolls_score": 0.0,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rouge_geo_mean": 0.0,
+    "rouge1": 0.0,
+    "rouge2": 0.0,
+    "rougeL": 0.0,
+    "rougeLsum": 0.0
+  },
+  "elapsed_seconds": 0.63,
+  "token_stats": {
+    "avg_input_tokens": 0.0,
+    "avg_context_tokens": 0.0,
+    "avg_generation_tokens": 0.0,
+    "total_input_tokens": 0
+  },
+  "results_file": "outputs/smoke/dos_rag/qmsum/results.jsonl"
+}
