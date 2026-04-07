@@ -1,0 +1,1039 @@
+2026-04-07 01:14:30,939 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-04-07 01:14:30,940 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 01:14:33,410 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-04-07 01:15:04,787 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-07 01:15:05,255 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-07 01:15:06,376 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-07 01:15:06,376 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-04-07 01:15:06,377 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=gov_report
+============================================================
+2026-04-07 01:15:06,377 [INFO] data_loader: Loading official SCROLLS task=gov_report split=validation ...
+2026-04-07 01:15:07,147 [INFO] data_loader: Loaded 1 official SCROLLS examples for gov_report
+2026-04-07 01:15:07,151 [INFO] rag_pipeline: [vanilla_rag/gov_report] Preparing 1 / 1  (id=crs_RS21048)
+2026-04-07 01:15:07,599 [INFO] rag_pipeline: [vanilla_rag/gov_report] Prompt preparation done for 1 new examples in 0.4s
+2026-04-07 01:15:07,599 [INFO] rag_pipeline: [vanilla_rag/gov_report] Generating 1 answers ...
+2026-04-07 01:15:22,140 [INFO] rag_pipeline: [vanilla_rag/gov_report] Generation done in 14.5s
+2026-04-07 01:15:22,419 [INFO] absl: Using default tokenizer.
+2026-04-07 01:15:23,910 [INFO] rag_pipeline: [vanilla_rag/gov_report] {'rouge/rouge1': 29.4627, 'rouge/rouge2': 6.6087, 'rouge/rougeL': 15.2513, 'rouge/rougeLsum': 27.7296, 'rouge/geometric_mean': 14.3736, 'num_predicted': 1, 'mean_prediction_length_characters': 1229.0, 'scrolls_score': 14.3736, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [29.4627, 6.6087, 15.2513], 'rouge_geo_mean': 14.3736, 'rouge1': 29.4627, 'rouge2': 6.6087, 'rougeL': 15.2513, 'rougeLsum': 27.7296}  (16.8s)
+2026-04-07 01:15:23,910 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=summ_screen_fd
+============================================================
+2026-04-07 01:15:23,910 [INFO] data_loader: Loading official SCROLLS task=summ_screen_fd split=validation ...
+2026-04-07 01:15:24,165 [INFO] data_loader: Loaded 1 official SCROLLS examples for summ_screen_fd
+2026-04-07 01:15:24,167 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Preparing 1 / 1  (id=fd_FRIENDS_05x03)
+2026-04-07 01:15:24,402 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Prompt preparation done for 1 new examples in 0.2s
+2026-04-07 01:15:24,403 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Generating 1 answers ...
+2026-04-07 01:15:46,622 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] Generation done in 22.2s
+2026-04-07 01:15:46,630 [INFO] absl: Using default tokenizer.
+2026-04-07 01:15:48,195 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] {'rouge/rouge1': 31.0433, 'rouge/rouge2': 7.6726, 'rouge/rougeL': 13.7405, 'rouge/rougeLsum': 27.9898, 'rouge/geometric_mean': 14.847, 'num_predicted': 1, 'mean_prediction_length_characters': 1736.0, 'scrolls_score': 14.847, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.0433, 7.6726, 13.7405], 'rouge_geo_mean': 14.847, 'rouge1': 31.0433, 'rouge2': 7.6726, 'rougeL': 13.7405, 'rougeLsum': 27.9898}  (24.0s)
+2026-04-07 01:15:48,196 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qmsum
+============================================================
+2026-04-07 01:15:48,196 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 01:15:48,537 [INFO] data_loader: Loaded 1 official SCROLLS examples for qmsum
+2026-04-07 01:15:48,540 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 1 / 1  (id=va-sq-1)
+2026-04-07 01:15:49,433 [INFO] rag_pipeline: [vanilla_rag/qmsum] Prompt preparation done for 1 new examples in 0.9s
+2026-04-07 01:15:49,433 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generating 1 answers ...
+2026-04-07 01:15:57,486 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generation done in 8.1s
+2026-04-07 01:15:57,494 [INFO] absl: Using default tokenizer.
+2026-04-07 01:15:59,139 [INFO] rag_pipeline: [vanilla_rag/qmsum] {'rouge/rouge1': 20.9677, 'rouge/rouge2': 0.0, 'rouge/rougeL': 12.9032, 'rouge/rougeLsum': 17.7419, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 506.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [20.9677, 0.0, 12.9032], 'rouge_geo_mean': 0.0, 'rouge1': 20.9677, 'rouge2': 0.0, 'rougeL': 12.9032, 'rougeLsum': 17.7419}  (10.6s)
+2026-04-07 01:15:59,140 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-07 01:15:59,140 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 01:15:59,475 [INFO] data_loader: Loaded 1 official SCROLLS examples for qasper
+2026-04-07 01:15:59,477 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 01:15:59,705 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 1 new examples in 0.2s
+2026-04-07 01:15:59,705 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 1 answers ...
+2026-04-07 01:16:01,917 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 2.2s
+2026-04-07 01:16:01,923 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}  (2.4s)
+2026-04-07 01:16:01,923 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-04-07 01:16:01,924 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 01:16:27,149 [INFO] data_loader: Loaded 1 official SCROLLS examples for narrative_qa
+2026-04-07 01:16:27,152 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 01:16:27,797 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 1 new examples in 0.6s
+2026-04-07 01:16:27,797 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generating 1 answers ...
+2026-04-07 01:16:30,967 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 3.2s
+2026-04-07 01:16:30,975 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 80.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 80.0, 'display_keys': ['f1'], 'display': [80.0]}  (3.8s)
+2026-04-07 01:16:30,975 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-07 01:16:30,976 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 01:16:31,496 [INFO] data_loader: Loaded 1 official SCROLLS examples for quality
+2026-04-07 01:16:31,498 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 1  (id=52845_75VB1ISR_1)
+2026-04-07 01:16:31,781 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 1 new examples in 0.3s
+2026-04-07 01:16:31,782 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 1 answers ...
+2026-04-07 01:16:33,786 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 2.0s
+2026-04-07 01:16:33,794 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (2.3s)
+2026-04-07 01:16:33,796 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-04-07 01:16:33,797 [INFO] data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-07 01:16:33,956 [INFO] data_loader: Loaded 1 official SCROLLS examples for contract_nli
+2026-04-07 01:16:33,958 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 1  (id=3_nda-11)
+2026-04-07 01:16:34,079 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 1 new examples in 0.1s
+2026-04-07 01:16:34,079 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generating 1 answers ...
+2026-04-07 01:16:34,841 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generation done in 0.8s
+2026-04-07 01:16:34,845 [INFO] rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (0.9s)
+2026-04-07 01:16:34,845 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=gov_report
+============================================================
+2026-04-07 01:16:34,845 [INFO] data_loader: Loading official SCROLLS task=gov_report split=validation ...
+2026-04-07 01:16:35,461 [INFO] data_loader: Loaded 1 official SCROLLS examples for gov_report
+2026-04-07 01:16:35,465 [INFO] rag_pipeline: [dos_rag/gov_report] Running 1 / 1  (id=crs_RS21048)
+2026-04-07 01:16:35,465 [INFO] official_methods: Building DOS-RAG index for document crs_RS21048_0
+2026-04-07 01:17:00,635 [INFO] absl: Using default tokenizer.
+2026-04-07 01:17:02,359 [INFO] rag_pipeline: [dos_rag/gov_report] {'rouge/rouge1': 45.1149, 'rouge/rouge2': 13.5447, 'rouge/rougeL': 20.4023, 'rouge/rougeLsum': 43.1034, 'rouge/geometric_mean': 23.1876, 'num_predicted': 1, 'mean_prediction_length_characters': 2115.0, 'scrolls_score': 23.1876, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.1149, 13.5447, 20.4023], 'rouge_geo_mean': 23.1876, 'rouge1': 45.1149, 'rouge2': 13.5447, 'rougeL': 20.4023, 'rougeLsum': 43.1034}  (26.9s)
+2026-04-07 01:17:02,359 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=summ_screen_fd
+============================================================
+2026-04-07 01:17:02,360 [INFO] data_loader: Loading official SCROLLS task=summ_screen_fd split=validation ...
+2026-04-07 01:17:02,486 [INFO] data_loader: Loaded 1 official SCROLLS examples for summ_screen_fd
+2026-04-07 01:17:02,489 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] Running 1 / 1  (id=fd_FRIENDS_05x03)
+2026-04-07 01:17:02,489 [INFO] official_methods: Building DOS-RAG index for document fd_FRIENDS_05x03_0
+2026-04-07 01:17:21,328 [INFO] absl: Using default tokenizer.
+2026-04-07 01:17:23,031 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] {'rouge/rouge1': 33.0623, 'rouge/rouge2': 8.1744, 'rouge/rougeL': 16.2602, 'rouge/rougeLsum': 28.7263, 'rouge/geometric_mean': 16.3796, 'num_predicted': 1, 'mean_prediction_length_characters': 1512.0, 'scrolls_score': 16.3796, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [33.0623, 8.1744, 16.2602], 'rouge_geo_mean': 16.3796, 'rouge1': 33.0623, 'rouge2': 8.1744, 'rougeL': 16.2602, 'rougeLsum': 28.7263}  (20.5s)
+2026-04-07 01:17:23,032 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qmsum
+============================================================
+2026-04-07 01:17:23,032 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 01:17:23,198 [INFO] data_loader: Loaded 1 official SCROLLS examples for qmsum
+2026-04-07 01:17:23,201 [INFO] rag_pipeline: [dos_rag/qmsum] Running 1 / 1  (id=va-sq-1)
+2026-04-07 01:17:23,201 [INFO] official_methods: Building DOS-RAG index for document va-sq-1_0
+2026-04-07 01:17:38,756 [INFO] absl: Using default tokenizer.
+2026-04-07 01:17:40,896 [INFO] rag_pipeline: [dos_rag/qmsum] {'rouge/rouge1': 14.9254, 'rouge/rouge2': 1.005, 'rouge/rougeL': 11.9403, 'rouge/rougeLsum': 12.9353, 'rouge/geometric_mean': 5.6369, 'num_predicted': 1, 'mean_prediction_length_characters': 926.0, 'scrolls_score': 5.6369, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [14.9254, 1.005, 11.9403], 'rouge_geo_mean': 5.6369, 'rouge1': 14.9254, 'rouge2': 1.005, 'rougeL': 11.9403, 'rougeLsum': 12.9353}  (17.7s)
+2026-04-07 01:17:40,897 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-04-07 01:17:40,897 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 01:17:41,223 [INFO] data_loader: Loaded 1 official SCROLLS examples for qasper
+2026-04-07 01:17:41,226 [INFO] rag_pipeline: [dos_rag/qasper] Running 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 01:17:41,226 [INFO] official_methods: Building DOS-RAG index for document b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54_0
+2026-04-07 01:17:44,058 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}  (2.8s)
+2026-04-07 01:17:44,058 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=narrative_qa
+============================================================
+2026-04-07 01:17:44,059 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 01:18:05,517 [INFO] data_loader: Loaded 1 official SCROLLS examples for narrative_qa
+2026-04-07 01:18:05,520 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 01:18:05,520 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0_0
+2026-04-07 01:18:10,523 [INFO] rag_pipeline: [dos_rag/narrative_qa] {'f1': 40.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 40.0, 'display_keys': ['f1'], 'display': [40.0]}  (5.0s)
+2026-04-07 01:18:10,523 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-04-07 01:18:10,523 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 01:18:11,039 [INFO] data_loader: Loaded 1 official SCROLLS examples for quality
+2026-04-07 01:18:11,041 [INFO] rag_pipeline: [dos_rag/quality] Running 1 / 1  (id=52845_75VB1ISR_1)
+2026-04-07 01:18:11,041 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_1_0
+2026-04-07 01:18:13,757 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (2.7s)
+2026-04-07 01:18:13,757 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=contract_nli
+============================================================
+2026-04-07 01:18:13,758 [INFO] data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-07 01:18:13,852 [INFO] data_loader: Loaded 1 official SCROLLS examples for contract_nli
+2026-04-07 01:18:13,855 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 1 / 1  (id=3_nda-11)
+2026-04-07 01:18:13,855 [INFO] official_methods: Building DOS-RAG index for document 3_nda-11_0
+2026-04-07 01:18:14,875 [INFO] rag_pipeline: [dos_rag/contract_nli] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (1.0s)
+2026-04-07 01:18:14,875 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=gov_report
+============================================================
+2026-04-07 01:18:14,875 [INFO] data_loader: Loading official SCROLLS task=gov_report split=validation ...
+2026-04-07 01:18:15,470 [INFO] data_loader: Loaded 1 official SCROLLS examples for gov_report
+2026-04-07 01:18:15,475 [INFO] rag_pipeline: [raptor/gov_report] Running 1 / 1  (id=crs_RS21048)
+2026-04-07 01:18:15,475 [INFO] official_methods: Building RAPTOR tree for document crs_RS21048_0
+2026-04-07 01:18:32,829 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f79c756d010>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f791f58a910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:18:32,829 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f79c756d010>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f791f58a910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:18:32,829 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f79c756d010>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f791f58a910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f791f58a910>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f791f5e4e10>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:18:32,836 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:18:33,369 [INFO] root: Created 66 Leaf Embeddings
+2026-04-07 01:18:33,369 [INFO] root: Building All Nodes
+2026-04-07 01:18:33,370 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:18:33,371 [INFO] root: Constructing Layer 0
+2026-04-07 01:18:52,947 [INFO] root: Summarization Length: 192
+2026-04-07 01:19:02,711 [INFO] root: Node Texts Length: 230, Summarized Text Length: 184
+2026-04-07 01:19:12,740 [INFO] root: Node Texts Length: 680, Summarized Text Length: 188
+2026-04-07 01:19:21,338 [INFO] root: Node Texts Length: 278, Summarized Text Length: 147
+2026-04-07 01:19:29,266 [INFO] root: Node Texts Length: 351, Summarized Text Length: 152
+2026-04-07 01:19:36,267 [INFO] root: Node Texts Length: 243, Summarized Text Length: 125
+2026-04-07 01:19:43,982 [INFO] root: Node Texts Length: 258, Summarized Text Length: 137
+2026-04-07 01:19:53,986 [INFO] root: Node Texts Length: 579, Summarized Text Length: 190
+2026-04-07 01:20:03,943 [INFO] root: Node Texts Length: 544, Summarized Text Length: 186
+2026-04-07 01:20:12,576 [INFO] root: Node Texts Length: 584, Summarized Text Length: 157
+2026-04-07 01:20:22,603 [INFO] root: Node Texts Length: 634, Summarized Text Length: 182
+2026-04-07 01:20:29,498 [INFO] root: Node Texts Length: 389, Summarized Text Length: 132
+2026-04-07 01:20:39,454 [INFO] root: Node Texts Length: 441, Summarized Text Length: 188
+2026-04-07 01:20:46,317 [INFO] root: Node Texts Length: 305, Summarized Text Length: 123
+2026-04-07 01:20:46,338 [INFO] root: Constructing Layer 1
+2026-04-07 01:20:52,650 [INFO] root: Summarization Length: 192
+2026-04-07 01:21:02,632 [INFO] root: Node Texts Length: 626, Summarized Text Length: 183
+2026-04-07 01:21:12,589 [INFO] root: Node Texts Length: 509, Summarized Text Length: 188
+2026-04-07 01:21:22,703 [INFO] root: Node Texts Length: 972, Summarized Text Length: 182
+2026-04-07 01:21:22,714 [INFO] root: Constructing Layer 2
+2026-04-07 01:21:22,714 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 2
+2026-04-07 01:21:22,715 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f791f58a910>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:21:22,715 [INFO] root: Using collapsed_tree
+2026-04-07 01:22:08,521 [INFO] absl: Using default tokenizer.
+2026-04-07 01:22:10,480 [INFO] rag_pipeline: [raptor/gov_report] {'rouge/rouge1': 45.4642, 'rouge/rouge2': 12.8342, 'rouge/rougeL': 19.8506, 'rouge/rougeLsum': 42.9029, 'rouge/geometric_mean': 22.6258, 'num_predicted': 1, 'mean_prediction_length_characters': 3697.0, 'scrolls_score': 22.6258, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.4642, 12.8342, 19.8506], 'rouge_geo_mean': 22.6258, 'rouge1': 45.4642, 'rouge2': 12.8342, 'rougeL': 19.8506, 'rougeLsum': 42.9029}  (235.0s)
+2026-04-07 01:22:10,480 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=summ_screen_fd
+============================================================
+2026-04-07 01:22:10,481 [INFO] data_loader: Loading official SCROLLS task=summ_screen_fd split=validation ...
+2026-04-07 01:22:10,615 [INFO] data_loader: Loaded 1 official SCROLLS examples for summ_screen_fd
+2026-04-07 01:22:10,618 [INFO] rag_pipeline: [raptor/summ_screen_fd] Running 1 / 1  (id=fd_FRIENDS_05x03)
+2026-04-07 01:22:10,618 [INFO] official_methods: Building RAPTOR tree for document fd_FRIENDS_05x03_0
+2026-04-07 01:22:10,619 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac6d1950>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f7927c25990>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:22:10,619 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac6d1950>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f7927c25990>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:22:10,620 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac6d1950>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f7927c25990>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f7927c25990>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f792785dcd0>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:22:10,628 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:22:11,069 [INFO] root: Created 55 Leaf Embeddings
+2026-04-07 01:22:11,069 [INFO] root: Building All Nodes
+2026-04-07 01:22:11,071 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:22:11,071 [INFO] root: Constructing Layer 0
+2026-04-07 01:22:17,997 [INFO] root: Summarization Length: 192
+2026-04-07 01:22:25,110 [INFO] root: Node Texts Length: 667, Summarized Text Length: 135
+2026-04-07 01:22:32,039 [INFO] root: Node Texts Length: 564, Summarized Text Length: 131
+2026-04-07 01:22:38,917 [INFO] root: Node Texts Length: 571, Summarized Text Length: 130
+2026-04-07 01:22:44,887 [INFO] root: Node Texts Length: 472, Summarized Text Length: 113
+2026-04-07 01:22:50,546 [INFO] root: Node Texts Length: 399, Summarized Text Length: 107
+2026-04-07 01:22:57,636 [INFO] root: Node Texts Length: 407, Summarized Text Length: 135
+2026-04-07 01:23:02,519 [INFO] root: Node Texts Length: 199, Summarized Text Length: 93
+2026-04-07 01:23:09,658 [INFO] root: Node Texts Length: 385, Summarized Text Length: 136
+2026-04-07 01:23:16,805 [INFO] root: Node Texts Length: 486, Summarized Text Length: 136
+2026-04-07 01:23:23,276 [INFO] root: Node Texts Length: 571, Summarized Text Length: 122
+2026-04-07 01:23:28,836 [INFO] root: Node Texts Length: 462, Summarized Text Length: 105
+2026-04-07 01:23:28,856 [INFO] root: Constructing Layer 1
+2026-04-07 01:23:28,856 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 1
+2026-04-07 01:23:28,856 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f7927c25990>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:23:28,857 [INFO] root: Using collapsed_tree
+2026-04-07 01:23:49,720 [INFO] absl: Using default tokenizer.
+2026-04-07 01:23:51,684 [INFO] rag_pipeline: [raptor/summ_screen_fd] {'rouge/rouge1': 36.0825, 'rouge/rouge2': 11.399, 'rouge/rougeL': 17.5258, 'rouge/rougeLsum': 33.5052, 'rouge/geometric_mean': 19.3173, 'num_predicted': 1, 'mean_prediction_length_characters': 1688.0, 'scrolls_score': 19.3173, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [36.0825, 11.399, 17.5258], 'rouge_geo_mean': 19.3173, 'rouge1': 36.0825, 'rouge2': 11.399, 'rougeL': 17.5258, 'rougeLsum': 33.5052}  (101.1s)
+2026-04-07 01:23:51,684 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=qmsum
+============================================================
+2026-04-07 01:23:51,684 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 01:23:51,852 [INFO] data_loader: Loaded 1 official SCROLLS examples for qmsum
+2026-04-07 01:23:51,856 [INFO] rag_pipeline: [raptor/qmsum] Running 1 / 1  (id=va-sq-1)
+2026-04-07 01:23:51,856 [INFO] official_methods: Building RAPTOR tree for document va-sq-1_0
+2026-04-07 01:23:51,857 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f791f253110>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac4da690>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:23:51,857 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f791f253110>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac4da690>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:23:51,858 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f791f253110>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac4da690>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac4da690>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f78ac4da590>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:23:51,879 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:23:54,369 [INFO] root: Created 319 Leaf Embeddings
+2026-04-07 01:23:54,369 [INFO] root: Building All Nodes
+2026-04-07 01:23:54,373 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:23:54,373 [INFO] root: Constructing Layer 0
+2026-04-07 01:24:55,235 [INFO] root: Summarization Length: 192
+2026-04-07 01:25:00,045 [INFO] root: Node Texts Length: 308, Summarized Text Length: 92
+2026-04-07 01:25:04,596 [INFO] root: Node Texts Length: 302, Summarized Text Length: 86
+2026-04-07 01:25:10,269 [INFO] root: Node Texts Length: 268, Summarized Text Length: 108
+2026-04-07 01:25:14,567 [INFO] root: Node Texts Length: 341, Summarized Text Length: 81
+2026-04-07 01:25:19,886 [INFO] root: Node Texts Length: 322, Summarized Text Length: 100
+2026-04-07 01:25:25,717 [INFO] root: Node Texts Length: 348, Summarized Text Length: 111
+2026-04-07 01:25:30,731 [INFO] root: Node Texts Length: 348, Summarized Text Length: 95
+2026-04-07 01:25:35,726 [INFO] root: Node Texts Length: 438, Summarized Text Length: 94
+2026-04-07 01:25:40,173 [INFO] root: Node Texts Length: 287, Summarized Text Length: 84
+2026-04-07 01:25:44,060 [INFO] root: Node Texts Length: 283, Summarized Text Length: 73
+2026-04-07 01:25:49,686 [INFO] root: Node Texts Length: 348, Summarized Text Length: 107
+2026-04-07 01:25:56,364 [INFO] root: Node Texts Length: 616, Summarized Text Length: 126
+2026-04-07 01:26:01,067 [INFO] root: Node Texts Length: 276, Summarized Text Length: 89
+2026-04-07 01:26:05,296 [INFO] root: Node Texts Length: 433, Summarized Text Length: 79
+2026-04-07 01:26:09,696 [INFO] root: Node Texts Length: 340, Summarized Text Length: 83
+2026-04-07 01:26:16,136 [INFO] root: Node Texts Length: 657, Summarized Text Length: 121
+2026-04-07 01:26:20,823 [INFO] root: Node Texts Length: 404, Summarized Text Length: 88
+2026-04-07 01:26:26,242 [INFO] root: Node Texts Length: 294, Summarized Text Length: 103
+2026-04-07 01:26:31,686 [INFO] root: Node Texts Length: 547, Summarized Text Length: 95
+2026-04-07 01:26:38,778 [INFO] root: Node Texts Length: 458, Summarized Text Length: 135
+2026-04-07 01:26:44,222 [INFO] root: Node Texts Length: 544, Summarized Text Length: 102
+2026-04-07 01:26:50,603 [INFO] root: Node Texts Length: 495, Summarized Text Length: 121
+2026-04-07 01:26:54,567 [INFO] root: Node Texts Length: 192, Summarized Text Length: 75
+2026-04-07 01:26:58,277 [INFO] root: Node Texts Length: 233, Summarized Text Length: 70
+2026-04-07 01:27:01,834 [INFO] root: Node Texts Length: 122, Summarized Text Length: 67
+2026-04-07 01:27:04,721 [INFO] root: Node Texts Length: 181, Summarized Text Length: 54
+2026-04-07 01:27:08,882 [INFO] root: Node Texts Length: 146, Summarized Text Length: 76
+2026-04-07 01:27:14,096 [INFO] root: Node Texts Length: 279, Summarized Text Length: 99
+2026-04-07 01:27:19,761 [INFO] root: Node Texts Length: 491, Summarized Text Length: 107
+2026-04-07 01:27:26,497 [INFO] root: Node Texts Length: 628, Summarized Text Length: 127
+2026-04-07 01:27:32,251 [INFO] root: Node Texts Length: 384, Summarized Text Length: 109
+2026-04-07 01:27:36,327 [INFO] root: Node Texts Length: 432, Summarized Text Length: 76
+2026-04-07 01:27:42,466 [INFO] root: Node Texts Length: 360, Summarized Text Length: 117
+2026-04-07 01:27:48,487 [INFO] root: Node Texts Length: 460, Summarized Text Length: 114
+2026-04-07 01:27:53,862 [INFO] root: Node Texts Length: 750, Summarized Text Length: 100
+2026-04-07 01:28:00,301 [INFO] root: Node Texts Length: 637, Summarized Text Length: 121
+2026-04-07 01:28:06,052 [INFO] root: Node Texts Length: 537, Summarized Text Length: 108
+2026-04-07 01:28:10,656 [INFO] root: Node Texts Length: 314, Summarized Text Length: 87
+2026-04-07 01:28:16,027 [INFO] root: Node Texts Length: 328, Summarized Text Length: 99
+2026-04-07 01:28:22,515 [INFO] root: Node Texts Length: 821, Summarized Text Length: 121
+2026-04-07 01:28:27,713 [INFO] root: Node Texts Length: 393, Summarized Text Length: 98
+2026-04-07 01:28:33,785 [INFO] root: Node Texts Length: 460, Summarized Text Length: 115
+2026-04-07 01:28:38,472 [INFO] root: Node Texts Length: 405, Summarized Text Length: 88
+2026-04-07 01:28:43,814 [INFO] root: Node Texts Length: 534, Summarized Text Length: 100
+2026-04-07 01:28:48,508 [INFO] root: Node Texts Length: 479, Summarized Text Length: 88
+2026-04-07 01:28:52,854 [INFO] root: Node Texts Length: 292, Summarized Text Length: 82
+2026-04-07 01:28:55,536 [INFO] root: Node Texts Length: 157, Summarized Text Length: 50
+2026-04-07 01:29:00,237 [INFO] root: Node Texts Length: 264, Summarized Text Length: 89
+2026-04-07 01:29:05,436 [INFO] root: Node Texts Length: 384, Summarized Text Length: 98
+2026-04-07 01:29:11,198 [INFO] root: Node Texts Length: 407, Summarized Text Length: 109
+2026-04-07 01:29:15,695 [INFO] root: Node Texts Length: 259, Summarized Text Length: 85
+2026-04-07 01:29:21,935 [INFO] root: Node Texts Length: 334, Summarized Text Length: 119
+2026-04-07 01:29:24,500 [INFO] root: Node Texts Length: 88, Summarized Text Length: 48
+2026-04-07 01:29:29,201 [INFO] root: Node Texts Length: 266, Summarized Text Length: 85
+2026-04-07 01:29:33,650 [INFO] root: Node Texts Length: 281, Summarized Text Length: 84
+2026-04-07 01:29:39,169 [INFO] root: Node Texts Length: 256, Summarized Text Length: 105
+2026-04-07 01:29:42,722 [INFO] root: Node Texts Length: 561, Summarized Text Length: 65
+2026-04-07 01:29:47,118 [INFO] root: Node Texts Length: 269, Summarized Text Length: 83
+2026-04-07 01:29:52,542 [INFO] root: Node Texts Length: 362, Summarized Text Length: 103
+2026-04-07 01:29:56,155 [INFO] root: Node Texts Length: 388, Summarized Text Length: 67
+2026-04-07 01:30:02,934 [INFO] root: Node Texts Length: 604, Summarized Text Length: 128
+2026-04-07 01:30:07,431 [INFO] root: Node Texts Length: 647, Summarized Text Length: 83
+2026-04-07 01:30:12,430 [INFO] root: Node Texts Length: 474, Summarized Text Length: 94
+2026-04-07 01:30:18,128 [INFO] root: Node Texts Length: 509, Summarized Text Length: 107
+2026-04-07 01:30:26,592 [INFO] root: Node Texts Length: 549, Summarized Text Length: 161
+2026-04-07 01:30:30,485 [INFO] root: Node Texts Length: 356, Summarized Text Length: 73
+2026-04-07 01:30:30,504 [INFO] root: Constructing Layer 1
+2026-04-07 01:30:43,570 [INFO] root: Summarization Length: 192
+2026-04-07 01:30:53,475 [INFO] root: Node Texts Length: 416, Summarized Text Length: 185
+2026-04-07 01:31:03,351 [INFO] root: Node Texts Length: 320, Summarized Text Length: 192
+2026-04-07 01:31:13,074 [INFO] root: Node Texts Length: 326, Summarized Text Length: 186
+2026-04-07 01:31:20,103 [INFO] root: Node Texts Length: 204, Summarized Text Length: 135
+2026-04-07 01:31:27,981 [INFO] root: Node Texts Length: 359, Summarized Text Length: 151
+2026-04-07 01:31:36,044 [INFO] root: Node Texts Length: 408, Summarized Text Length: 154
+2026-04-07 01:31:43,329 [INFO] root: Node Texts Length: 521, Summarized Text Length: 138
+2026-04-07 01:31:53,323 [INFO] root: Node Texts Length: 504, Summarized Text Length: 192
+2026-04-07 01:32:03,092 [INFO] root: Node Texts Length: 285, Summarized Text Length: 189
+2026-04-07 01:32:13,092 [INFO] root: Node Texts Length: 541, Summarized Text Length: 192
+2026-04-07 01:32:22,966 [INFO] root: Node Texts Length: 300, Summarized Text Length: 192
+2026-04-07 01:32:32,930 [INFO] root: Node Texts Length: 601, Summarized Text Length: 192
+2026-04-07 01:32:42,730 [INFO] root: Node Texts Length: 515, Summarized Text Length: 188
+2026-04-07 01:32:51,580 [INFO] root: Node Texts Length: 354, Summarized Text Length: 168
+2026-04-07 01:32:58,177 [INFO] root: Node Texts Length: 654, Summarized Text Length: 122
+2026-04-07 01:32:58,199 [INFO] root: Constructing Layer 2
+2026-04-07 01:33:04,532 [INFO] root: Summarization Length: 192
+2026-04-07 01:33:12,585 [INFO] root: Node Texts Length: 537, Summarized Text Length: 154
+2026-04-07 01:33:22,611 [INFO] root: Node Texts Length: 641, Summarized Text Length: 192
+2026-04-07 01:33:32,676 [INFO] root: Node Texts Length: 897, Summarized Text Length: 187
+2026-04-07 01:33:42,628 [INFO] root: Node Texts Length: 513, Summarized Text Length: 192
+2026-04-07 01:33:42,641 [INFO] root: Constructing Layer 3
+2026-04-07 01:33:42,641 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 3
+2026-04-07 01:33:42,641 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac4da690>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:33:42,642 [INFO] root: Using collapsed_tree
+2026-04-07 01:33:56,967 [INFO] absl: Using default tokenizer.
+2026-04-07 01:33:59,005 [INFO] rag_pipeline: [raptor/qmsum] {'rouge/rouge1': 16.4384, 'rouge/rouge2': 0.0, 'rouge/rougeL': 10.0457, 'rouge/rougeLsum': 13.6986, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 1102.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [16.4384, 0.0, 10.0457], 'rouge_geo_mean': 0.0, 'rouge1': 16.4384, 'rouge2': 0.0, 'rougeL': 10.0457, 'rougeLsum': 13.6986}  (607.1s)
+2026-04-07 01:33:59,005 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=qasper
+============================================================
+2026-04-07 01:33:59,006 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 01:33:59,338 [INFO] data_loader: Loaded 1 official SCROLLS examples for qasper
+2026-04-07 01:33:59,342 [INFO] rag_pipeline: [raptor/qasper] Running 1 / 1  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 01:33:59,342 [INFO] official_methods: Building RAPTOR tree for document b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54_0
+2026-04-07 01:33:59,343 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35e8d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35c9d0>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:33:59,343 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35e8d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35c9d0>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:33:59,344 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35e8d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35c9d0>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35c9d0>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f78ac35fb90>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:33:59,350 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:33:59,887 [INFO] root: Created 67 Leaf Embeddings
+2026-04-07 01:33:59,887 [INFO] root: Building All Nodes
+2026-04-07 01:33:59,888 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:33:59,889 [INFO] root: Constructing Layer 0
+2026-04-07 01:34:06,743 [INFO] root: Summarization Length: 192
+2026-04-07 01:34:16,343 [INFO] root: Node Texts Length: 616, Summarized Text Length: 184
+2026-04-07 01:34:25,642 [INFO] root: Node Texts Length: 229, Summarized Text Length: 170
+2026-04-07 01:34:35,533 [INFO] root: Node Texts Length: 244, Summarized Text Length: 192
+2026-04-07 01:34:43,576 [INFO] root: Node Texts Length: 668, Summarized Text Length: 153
+2026-04-07 01:34:53,580 [INFO] root: Node Texts Length: 585, Summarized Text Length: 191
+2026-04-07 01:35:02,822 [INFO] root: Node Texts Length: 545, Summarized Text Length: 177
+2026-04-07 01:35:11,340 [INFO] root: Node Texts Length: 567, Summarized Text Length: 162
+2026-04-07 01:35:18,802 [INFO] root: Node Texts Length: 252, Summarized Text Length: 143
+2026-04-07 01:35:26,257 [INFO] root: Node Texts Length: 486, Summarized Text Length: 142
+2026-04-07 01:35:34,528 [INFO] root: Node Texts Length: 431, Summarized Text Length: 157
+2026-04-07 01:35:44,447 [INFO] root: Node Texts Length: 315, Summarized Text Length: 192
+2026-04-07 01:35:53,303 [INFO] root: Node Texts Length: 330, Summarized Text Length: 167
+2026-04-07 01:35:53,323 [INFO] root: Constructing Layer 1
+2026-04-07 01:35:59,609 [INFO] root: Summarization Length: 192
+2026-04-07 01:36:09,638 [INFO] root: Node Texts Length: 850, Summarized Text Length: 192
+2026-04-07 01:36:19,592 [INFO] root: Node Texts Length: 503, Summarized Text Length: 191
+2026-04-07 01:36:29,581 [INFO] root: Node Texts Length: 683, Summarized Text Length: 183
+2026-04-07 01:36:29,592 [INFO] root: Constructing Layer 2
+2026-04-07 01:36:29,592 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 2
+2026-04-07 01:36:29,592 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35c9d0>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:36:29,593 [INFO] root: Using collapsed_tree
+2026-04-07 01:36:33,144 [INFO] rag_pipeline: [raptor/qasper] {'f1': 46.1538, 'num_predicted': 1, 'mean_prediction_length_characters': 81.0, 'scrolls_score': 46.1538, 'display_keys': ['f1'], 'display': [46.1538]}  (153.8s)
+2026-04-07 01:36:33,144 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=narrative_qa
+============================================================
+2026-04-07 01:36:33,144 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 01:36:54,412 [INFO] data_loader: Loaded 1 official SCROLLS examples for narrative_qa
+2026-04-07 01:36:54,415 [INFO] rag_pipeline: [raptor/narrative_qa] Running 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 01:36:54,415 [INFO] official_methods: Building RAPTOR tree for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0_0
+2026-04-07 01:36:54,416 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac50cc90>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac50d910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:36:54,416 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac50cc90>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac50d910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:36:54,416 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac50cc90>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac50d910>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac50d910>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f78ac50f810>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:36:54,434 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:36:55,880 [INFO] root: Created 183 Leaf Embeddings
+2026-04-07 01:36:55,880 [INFO] root: Building All Nodes
+2026-04-07 01:36:55,882 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:36:55,882 [INFO] root: Constructing Layer 0
+2026-04-07 01:37:28,048 [INFO] root: Summarization Length: 192
+2026-04-07 01:37:36,155 [INFO] root: Node Texts Length: 1067, Summarized Text Length: 152
+2026-04-07 01:37:45,086 [INFO] root: Node Texts Length: 957, Summarized Text Length: 168
+2026-04-07 01:37:53,505 [INFO] root: Node Texts Length: 972, Summarized Text Length: 158
+2026-04-07 01:37:59,525 [INFO] root: Node Texts Length: 466, Summarized Text Length: 114
+2026-04-07 01:38:04,984 [INFO] root: Node Texts Length: 478, Summarized Text Length: 103
+2026-04-07 01:38:11,766 [INFO] root: Node Texts Length: 392, Summarized Text Length: 129
+2026-04-07 01:38:18,790 [INFO] root: Node Texts Length: 1058, Summarized Text Length: 130
+2026-04-07 01:38:23,494 [INFO] root: Node Texts Length: 290, Summarized Text Length: 89
+2026-04-07 01:38:29,517 [INFO] root: Node Texts Length: 494, Summarized Text Length: 114
+2026-04-07 01:38:35,131 [INFO] root: Node Texts Length: 485, Summarized Text Length: 106
+2026-04-07 01:38:41,009 [INFO] root: Node Texts Length: 282, Summarized Text Length: 112
+2026-04-07 01:38:50,267 [INFO] root: Node Texts Length: 856, Summarized Text Length: 175
+2026-04-07 01:38:59,960 [INFO] root: Node Texts Length: 1034, Summarized Text Length: 181
+2026-04-07 01:39:06,194 [INFO] root: Node Texts Length: 864, Summarized Text Length: 116
+2026-04-07 01:39:13,792 [INFO] root: Node Texts Length: 584, Summarized Text Length: 144
+2026-04-07 01:39:20,070 [INFO] root: Node Texts Length: 484, Summarized Text Length: 119
+2026-04-07 01:39:25,999 [INFO] root: Node Texts Length: 286, Summarized Text Length: 113
+2026-04-07 01:39:31,453 [INFO] root: Node Texts Length: 372, Summarized Text Length: 103
+2026-04-07 01:39:40,139 [INFO] root: Node Texts Length: 778, Summarized Text Length: 164
+2026-04-07 01:39:46,563 [INFO] root: Node Texts Length: 385, Summarized Text Length: 122
+2026-04-07 01:39:53,045 [INFO] root: Node Texts Length: 469, Summarized Text Length: 123
+2026-04-07 01:39:59,033 [INFO] root: Node Texts Length: 370, Summarized Text Length: 114
+2026-04-07 01:40:04,539 [INFO] root: Node Texts Length: 400, Summarized Text Length: 104
+2026-04-07 01:40:12,291 [INFO] root: Node Texts Length: 945, Summarized Text Length: 145
+2026-04-07 01:40:17,812 [INFO] root: Node Texts Length: 271, Summarized Text Length: 105
+2026-04-07 01:40:25,942 [INFO] root: Node Texts Length: 853, Summarized Text Length: 153
+2026-04-07 01:40:33,226 [INFO] root: Node Texts Length: 1036, Summarized Text Length: 133
+2026-04-07 01:40:41,792 [INFO] root: Node Texts Length: 566, Summarized Text Length: 163
+2026-04-07 01:40:41,813 [INFO] root: Constructing Layer 1
+2026-04-07 01:40:48,258 [INFO] root: Summarization Length: 192
+2026-04-07 01:40:58,466 [INFO] root: Node Texts Length: 1300, Summarized Text Length: 191
+2026-04-07 01:41:07,867 [INFO] root: Node Texts Length: 593, Summarized Text Length: 180
+2026-04-07 01:41:17,947 [INFO] root: Node Texts Length: 860, Summarized Text Length: 192
+2026-04-07 01:41:27,906 [INFO] root: Node Texts Length: 574, Summarized Text Length: 192
+2026-04-07 01:41:37,782 [INFO] root: Node Texts Length: 325, Summarized Text Length: 192
+2026-04-07 01:41:37,792 [INFO] root: Constructing Layer 2
+2026-04-07 01:41:37,792 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 2
+2026-04-07 01:41:37,792 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac50d910>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:41:37,793 [INFO] root: Using collapsed_tree
+2026-04-07 01:41:41,758 [INFO] rag_pipeline: [raptor/narrative_qa] {'f1': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 69.0, 'scrolls_score': 0.0, 'display_keys': ['f1'], 'display': [0.0]}  (287.3s)
+2026-04-07 01:41:41,758 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=quality
+============================================================
+2026-04-07 01:41:41,759 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 01:41:42,267 [INFO] data_loader: Loaded 1 official SCROLLS examples for quality
+2026-04-07 01:41:42,270 [INFO] rag_pipeline: [raptor/quality] Running 1 / 1  (id=52845_75VB1ISR_1)
+2026-04-07 01:41:42,270 [INFO] official_methods: Building RAPTOR tree for document 52845_75VB1ISR_1_0
+2026-04-07 01:41:42,270 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35ca50>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35d250>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:41:42,270 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35ca50>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35d250>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:41:42,271 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac35ca50>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35d250>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35d250>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f78ac35e390>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:41:42,281 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:41:42,831 [INFO] root: Created 70 Leaf Embeddings
+2026-04-07 01:41:42,832 [INFO] root: Building All Nodes
+2026-04-07 01:41:42,833 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:41:42,833 [INFO] root: Constructing Layer 0
+2026-04-07 01:41:49,665 [INFO] root: Summarization Length: 192
+2026-04-07 01:41:57,787 [INFO] root: Node Texts Length: 760, Summarized Text Length: 154
+2026-04-07 01:42:06,533 [INFO] root: Node Texts Length: 660, Summarized Text Length: 166
+2026-04-07 01:42:13,691 [INFO] root: Node Texts Length: 654, Summarized Text Length: 135
+2026-04-07 01:42:21,729 [INFO] root: Node Texts Length: 751, Summarized Text Length: 152
+2026-04-07 01:42:28,466 [INFO] root: Node Texts Length: 458, Summarized Text Length: 128
+2026-04-07 01:42:37,087 [INFO] root: Node Texts Length: 583, Summarized Text Length: 164
+2026-04-07 01:42:45,402 [INFO] root: Node Texts Length: 947, Summarized Text Length: 156
+2026-04-07 01:42:52,048 [INFO] root: Node Texts Length: 302, Summarized Text Length: 127
+2026-04-07 01:42:59,604 [INFO] root: Node Texts Length: 467, Summarized Text Length: 144
+2026-04-07 01:43:08,247 [INFO] root: Node Texts Length: 657, Summarized Text Length: 164
+2026-04-07 01:43:14,484 [INFO] root: Node Texts Length: 290, Summarized Text Length: 118
+2026-04-07 01:43:14,504 [INFO] root: Constructing Layer 1
+2026-04-07 01:43:14,505 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 1
+2026-04-07 01:43:14,505 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac35d250>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:43:14,506 [INFO] root: Using collapsed_tree
+2026-04-07 01:43:17,166 [INFO] rag_pipeline: [raptor/quality] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (94.9s)
+2026-04-07 01:43:17,167 [INFO] rag_pipeline: 
+============================================================
+  Running method=raptor task=contract_nli
+============================================================
+2026-04-07 01:43:17,167 [INFO] data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-07 01:43:17,269 [INFO] data_loader: Loaded 1 official SCROLLS examples for contract_nli
+2026-04-07 01:43:17,272 [INFO] rag_pipeline: [raptor/contract_nli] Running 1 / 1  (id=3_nda-11)
+2026-04-07 01:43:17,272 [INFO] official_methods: Building RAPTOR tree for document 3_nda-11_0
+2026-04-07 01:43:17,273 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac4087d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac40bd50>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:43:17,273 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac4087d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac40bd50>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-07 01:43:17,274 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f78ac4087d0>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac40bd50>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac40bd50>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f7930609310>
+            Tree Builder Type: cluster
+        
+2026-04-07 01:43:17,277 [INFO] root: Creating Leaf Nodes
+2026-04-07 01:43:17,485 [INFO] root: Created 26 Leaf Embeddings
+2026-04-07 01:43:17,485 [INFO] root: Building All Nodes
+2026-04-07 01:43:17,485 [INFO] root: Using Cluster TreeBuilder
+2026-04-07 01:43:17,486 [INFO] root: Constructing Layer 0
+2026-04-07 01:43:23,874 [INFO] root: Summarization Length: 192
+2026-04-07 01:43:30,672 [INFO] root: Node Texts Length: 249, Summarized Text Length: 130
+2026-04-07 01:43:37,928 [INFO] root: Node Texts Length: 255, Summarized Text Length: 139
+2026-04-07 01:43:46,090 [INFO] root: Node Texts Length: 377, Summarized Text Length: 155
+2026-04-07 01:43:55,178 [INFO] root: Node Texts Length: 453, Summarized Text Length: 174
+2026-04-07 01:43:59,880 [INFO] root: Node Texts Length: 263, Summarized Text Length: 88
+2026-04-07 01:44:05,736 [INFO] root: Node Texts Length: 240, Summarized Text Length: 112
+2026-04-07 01:44:11,408 [INFO] root: Node Texts Length: 263, Summarized Text Length: 108
+2026-04-07 01:44:11,427 [INFO] root: Constructing Layer 1
+2026-04-07 01:44:11,427 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 1
+2026-04-07 01:44:11,428 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f78ac40bd50>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-07 01:44:11,428 [INFO] root: Using collapsed_tree
+2026-04-07 01:44:12,465 [INFO] rag_pipeline: [raptor/contract_nli] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (55.2s)
+2026-04-07 01:44:12,478 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:15,271 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:18,597 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:21,968 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:25,162 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:28,532 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:31,776 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:34,914 [INFO] absl: Using default tokenizer.
+2026-04-07 01:44:38,143 [INFO] absl: Using default tokenizer.

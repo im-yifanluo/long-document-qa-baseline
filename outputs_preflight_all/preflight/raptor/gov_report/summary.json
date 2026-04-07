@@ -1,0 +1,40 @@
+{
+  "task": "gov_report",
+  "method": "raptor",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 45.4642,
+    "rouge/rouge2": 12.8342,
+    "rouge/rougeL": 19.8506,
+    "rouge/rougeLsum": 42.9029,
+    "rouge/geometric_mean": 22.6258,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 3697.0,
+    "scrolls_score": 22.6258,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      45.4642,
+      12.8342,
+      19.8506
+    ],
+    "rouge_geo_mean": 22.6258,
+    "rouge1": 45.4642,
+    "rouge2": 12.8342,
+    "rougeL": 19.8506,
+    "rougeLsum": 42.9029
+  },
+  "elapsed_seconds": 235.0,
+  "token_stats": {
+    "avg_input_tokens": 8536.0,
+    "avg_context_tokens": 8488.0,
+    "avg_generation_tokens": 799.0,
+    "total_input_tokens": 8536
+  },
+  "results_file": "outputs_preflight_all/preflight/raptor/gov_report/results.jsonl"
+}

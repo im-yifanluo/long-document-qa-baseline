@@ -1,0 +1,27 @@
+{
+  "task": "contract_nli",
+  "method": "dos_rag",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "exact_match",
+  "metrics": {
+    "exact_match": 100.0,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 10.0,
+    "scrolls_score": 100.0,
+    "display_keys": [
+      "exact_match"
+    ],
+    "display": [
+      100.0
+    ]
+  },
+  "elapsed_seconds": 1.02,
+  "token_stats": {
+    "avg_input_tokens": 2256.0,
+    "avg_context_tokens": 2146.0,
+    "avg_generation_tokens": 3.0,
+    "total_input_tokens": 2256
+  },
+  "results_file": "outputs_preflight_all/preflight/dos_rag/contract_nli/results.jsonl"
+}

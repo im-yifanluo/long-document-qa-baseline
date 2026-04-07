@@ -1,0 +1,217 @@
+{
+  "method": "dos_rag",
+  "config": {
+    "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "active_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "chunk_size": 100,
+    "chunk_overlap": 0,
+    "chunking_strategy": "sentence",
+    "top_k": 200,
+    "context_budget": 10000,
+    "lc_context_budget": 131072,
+    "split": "validation",
+    "run_tier": "preflight"
+  },
+  "provenance": {
+    "scrolls_dataset": {
+      "source": "tau/scrolls",
+      "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+      "loading_strategy": "official_task_archives",
+      "duplicate_id_handling": "collapsed_to_multi_reference_example",
+      "input_adapter": "packed_input_to_document_query_for_retrieval",
+      "parser_audit": {
+        "gov_report": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "summ_screen_fd": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "qmsum": {
+          "rule": "split on the first blank-line boundary: query first, transcript second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qmsum.zip."
+        },
+        "qasper": {
+          "rule": "split on the first blank-line boundary: question first, paper second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qasper.zip."
+        },
+        "narrative_qa": {
+          "rule": "split on the first blank-line boundary: question first, story/script second",
+          "local_cache_verified": false,
+          "notes": "Rule follows the official packed-input convention but was not re-verified from local cache in this workspace."
+        },
+        "quality": {
+          "rule": "question + (A-D) options first, article second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/quality.zip."
+        },
+        "contract_nli": {
+          "rule": "hypothesis first, contract second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/contract_nli.zip."
+        }
+      }
+    },
+    "scrolls_metric": {
+      "source": "tau/scrolls",
+      "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+      "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+      "official_metric_files": [
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+      ],
+      "datasets_version": "3.6.0",
+      "compatibility_shim": "datasets.Metric"
+    }
+  },
+  "per_task_scores": {
+    "gov_report": 23.1876,
+    "summ_screen_fd": 16.3796,
+    "qmsum": 5.6369,
+    "qasper": 100.0,
+    "narrative_qa": 40.0,
+    "quality": 100.0,
+    "contract_nli": 100.0
+  },
+  "average_score": 55.02915714285714,
+  "detailed_metrics": {
+    "gov_report": {
+      "rouge/rouge1": 45.1149,
+      "rouge/rouge2": 13.5447,
+      "rouge/rougeL": 20.4023,
+      "rouge/rougeLsum": 43.1034,
+      "rouge/geometric_mean": 23.1876,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 2115.0,
+      "scrolls_score": 23.1876,
+      "display_keys": [
+        "rouge/rouge1",
+        "rouge/rouge2",
+        "rouge/rougeL"
+      ],
+      "display": [
+        45.1149,
+        13.5447,
+        20.4023
+      ],
+      "rouge_geo_mean": 23.1876,
+      "rouge1": 45.1149,
+      "rouge2": 13.5447,
+      "rougeL": 20.4023,
+      "rougeLsum": 43.1034
+    },
+    "summ_screen_fd": {
+      "rouge/rouge1": 33.0623,
+      "rouge/rouge2": 8.1744,
+      "rouge/rougeL": 16.2602,
+      "rouge/rougeLsum": 28.7263,
+      "rouge/geometric_mean": 16.3796,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 1512.0,
+      "scrolls_score": 16.3796,
+      "display_keys": [
+        "rouge/rouge1",
+        "rouge/rouge2",
+        "rouge/rougeL"
+      ],
+      "display": [
+        33.0623,
+        8.1744,
+        16.2602
+      ],
+      "rouge_geo_mean": 16.3796,
+      "rouge1": 33.0623,
+      "rouge2": 8.1744,
+      "rougeL": 16.2602,
+      "rougeLsum": 28.7263
+    },
+    "qmsum": {
+      "rouge/rouge1": 14.9254,
+      "rouge/rouge2": 1.005,
+      "rouge/rougeL": 11.9403,
+      "rouge/rougeLsum": 12.9353,
+      "rouge/geometric_mean": 5.6369,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 926.0,
+      "scrolls_score": 5.6369,
+      "display_keys": [
+        "rouge/rouge1",
+        "rouge/rouge2",
+        "rouge/rougeL"
+      ],
+      "display": [
+        14.9254,
+        1.005,
+        11.9403
+      ],
+      "rouge_geo_mean": 5.6369,
+      "rouge1": 14.9254,
+      "rouge2": 1.005,
+      "rougeL": 11.9403,
+      "rougeLsum": 12.9353
+    },
+    "qasper": {
+      "f1": 100.0,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 32.0,
+      "scrolls_score": 100.0,
+      "display_keys": [
+        "f1"
+      ],
+      "display": [
+        100.0
+      ]
+    },
+    "narrative_qa": {
+      "f1": 40.0,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 17.0,
+      "scrolls_score": 40.0,
+      "display_keys": [
+        "f1"
+      ],
+      "display": [
+        40.0
+      ]
+    },
+    "quality": {
+      "exact_match": 100.0,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 8.0,
+      "scrolls_score": 100.0,
+      "display_keys": [
+        "exact_match"
+      ],
+      "display": [
+        100.0
+      ]
+    },
+    "contract_nli": {
+      "exact_match": 100.0,
+      "num_predicted": 1,
+      "mean_prediction_length_characters": 10.0,
+      "scrolls_score": 100.0,
+      "display_keys": [
+        "exact_match"
+      ],
+      "display": [
+        100.0
+      ]
+    }
+  },
+  "token_cost_summary": {
+    "avg_input_tokens": 6517.285714285715,
+    "avg_context_tokens": 6425.0,
+    "avg_generation_tokens": 135.28571428571428,
+    "total_input_tokens": 45621
+  }
+}

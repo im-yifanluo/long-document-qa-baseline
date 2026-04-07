@@ -1,0 +1,27 @@
+{
+  "task": "qasper",
+  "method": "raptor",
+  "num_examples": 1,
+  "num_generated": 1,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 46.1538,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 81.0,
+    "scrolls_score": 46.1538,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      46.1538
+    ]
+  },
+  "elapsed_seconds": 153.8,
+  "token_stats": {
+    "avg_input_tokens": 8121.0,
+    "avg_context_tokens": 7994.0,
+    "avg_generation_tokens": 21.0,
+    "total_input_tokens": 8121
+  },
+  "results_file": "outputs_preflight_all/preflight/raptor/qasper/results.jsonl"
+}
