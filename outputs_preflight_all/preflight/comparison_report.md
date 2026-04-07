@@ -14,6 +14,14 @@ Run tier: `preflight`
 | quality | exact_match | 0.0000 | 100.0000 | 100.0000 | +100.0000 |
 | contract_nli | exact_match | 100.0000 | 100.0000 | 100.0000 | +0.0000 |
 
+## Runtime Summary
+
+| Method | Total seconds | Total minutes | Seconds / example | Examples / second |
+| --- | --- | --- | --- | --- |
+| vanilla_rag | 60.83 | 1.01 | 8.6900 | 0.1151 |
+| dos_rag | 76.69 | 1.28 | 10.9557 | 0.0913 |
+| raptor | 1534.44 | 25.57 | 219.2057 | 0.0046 |
+
 ## Example Previews
 
 ### gov_report

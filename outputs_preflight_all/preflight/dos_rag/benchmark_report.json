@@ -17,7 +17,7 @@
   "provenance": {
     "scrolls_dataset": {
       "source": "tau/scrolls",
-      "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+      "dataset_script": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
       "loading_strategy": "official_task_archives",
       "duplicate_id_handling": "collapsed_to_multi_reference_example",
       "input_adapter": "packed_input_to_document_query_for_retrieval",
@@ -61,15 +61,15 @@
     },
     "scrolls_metric": {
       "source": "tau/scrolls",
-      "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
-      "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+      "metric_dir": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+      "entrypoint": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
       "official_metric_files": [
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
       ],
-      "datasets_version": "3.6.0",
+      "datasets_version": "4.7.0",
       "compatibility_shim": "datasets.Metric"
     }
   },
@@ -213,5 +213,41 @@
     "avg_context_tokens": 6425.0,
     "avg_generation_tokens": 135.28571428571428,
     "total_input_tokens": 45621
+  },
+  "runtime_summary": {
+    "per_task_elapsed_seconds": {
+      "gov_report": 26.89,
+      "summ_screen_fd": 20.54,
+      "qmsum": 17.69,
+      "qasper": 2.83,
+      "narrative_qa": 5.0,
+      "quality": 2.72,
+      "contract_nli": 1.02
+    },
+    "per_task_seconds_per_example": {
+      "gov_report": 26.89,
+      "summ_screen_fd": 20.54,
+      "qmsum": 17.69,
+      "qasper": 2.83,
+      "narrative_qa": 5.0,
+      "quality": 2.72,
+      "contract_nli": 1.02
+    },
+    "per_task_examples_per_second": {
+      "gov_report": 0.0372,
+      "summ_screen_fd": 0.0487,
+      "qmsum": 0.0565,
+      "qasper": 0.3534,
+      "narrative_qa": 0.2,
+      "quality": 0.3676,
+      "contract_nli": 0.9804
+    },
+    "total_elapsed_seconds": 76.69,
+    "total_elapsed_minutes": 1.28,
+    "total_elapsed_hours": 0.021,
+    "total_examples": 7,
+    "total_generated_examples": 0,
+    "avg_seconds_per_example": 10.9557,
+    "avg_examples_per_second": 0.0913
   }
 }

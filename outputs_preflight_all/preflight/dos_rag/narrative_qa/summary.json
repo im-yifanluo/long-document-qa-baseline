@@ -2,7 +2,7 @@
   "task": "narrative_qa",
   "method": "dos_rag",
   "num_examples": 1,
-  "num_generated": 1,
+  "num_generated": 0,
   "metric_type": "f1",
   "metrics": {
     "f1": 40.0,
@@ -17,6 +17,7 @@
     ]
   },
   "elapsed_seconds": 5.0,
+  "results_refreshed_from_cache": true,
   "token_stats": {
     "avg_input_tokens": 9625.0,
     "avg_context_tokens": 9498.0,
