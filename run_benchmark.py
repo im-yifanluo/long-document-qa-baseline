@@ -112,6 +112,21 @@ def parse_args():
 
     parser.add_argument("--analysis-sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
     parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument(
+        "--dos-rag-repo-dir",
+        default=None,
+        help="Path to the cloned official DOS-RAG repository",
+    )
+    parser.add_argument(
+        "--raptor-repo-dir",
+        default=None,
+        help="Path to the cloned official RAPTOR repository",
+    )
+    parser.add_argument(
+        "--read-agent-repo-dir",
+        default=None,
+        help="Path to the cloned official ReadAgent repository/site",
+    )
     parser.add_argument("--no-save-raw", action="store_true")
     parser.add_argument(
         "--overwrite-existing",
@@ -200,6 +215,9 @@ def main():
             output_dir=run_output_base,
             save_raw=not args.no_save_raw,
             overwrite_existing=args.overwrite_existing,
+            dos_rag_repo_dir=args.dos_rag_repo_dir,
+            raptor_repo_dir=args.raptor_repo_dir,
+            read_agent_repo_dir=args.read_agent_repo_dir,
         )
 
         os.makedirs(config.run_output_dir, exist_ok=True)

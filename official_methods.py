@@ -272,6 +272,52 @@ class OfficialMethodRunner:
         self._dos_imports: Optional[Dict[str, Any]] = None
         self._raptor_imports: Optional[Dict[str, Any]] = None
 
+    def _candidate_repo_paths(self, repo_name: str, config_value: Optional[str], env_var: str) -> List[str]:
+        """Return plausible clone locations for an official method repository."""
+        base_dir = os.path.dirname(__file__)
+        home_dir = os.path.expanduser("~")
+        candidates = [
+            config_value,
+            os.environ.get(env_var),
+            os.path.join(base_dir, repo_name),
+            os.path.join(os.path.dirname(base_dir), repo_name),
+            os.path.join(home_dir, repo_name),
+        ]
+        resolved = []
+        seen = set()
+        for candidate in candidates:
+            if not candidate:
+                continue
+            path = os.path.abspath(os.path.expanduser(candidate))
+            if path in seen:
+                continue
+            seen.add(path)
+            resolved.append(path)
+        return resolved
+
+    def _resolve_repo_root(
+        self,
+        repo_name: str,
+        required_subpath: Optional[str],
+        config_value: Optional[str],
+        env_var: str,
+        cli_flag: str,
+    ) -> str:
+        """Find the cloned official repo in common locations or via explicit config."""
+        candidates = self._candidate_repo_paths(repo_name, config_value, env_var)
+        for repo_root in candidates:
+            probe = os.path.join(repo_root, required_subpath) if required_subpath else repo_root
+            if os.path.isdir(probe):
+                return repo_root
+
+        searched = "\n".join(f"  - {path}" for path in candidates) or "  - <none>"
+        raise RuntimeError(
+            f"{repo_name} repository not found.\n"
+            f"Searched for {required_subpath or repo_name} in:\n{searched}\n"
+            f"Either clone the repo into one of those locations, set {env_var}, "
+            f"or pass {cli_flag}."
+        )
+
     @staticmethod
     def supports(method: str, task: str) -> bool:
         if method in {"read_agent_parallel", "read_agent_sequential"}:
@@ -330,13 +376,14 @@ class OfficialMethodRunner:
         if self._dos_imports is not None:
             return self._dos_imports
 
-        repo_root = os.path.join(os.path.dirname(__file__), "dos-rag-eval")
+        repo_root = self._resolve_repo_root(
+            repo_name="dos-rag-eval",
+            required_subpath="source",
+            config_value=self.config.dos_rag_repo_dir,
+            env_var="DOS_RAG_REPO_DIR",
+            cli_flag="--dos-rag-repo-dir",
+        )
         package_root = os.path.join(repo_root, "source")
-        if not os.path.isdir(package_root):
-            raise RuntimeError(
-                "DOS-RAG repository not found. Expected cloned repo at "
-                f"{package_root}."
-            )
 
         for path in (package_root, repo_root):
             if path not in sys.path:
@@ -381,7 +428,13 @@ class OfficialMethodRunner:
         if self._raptor_imports is not None:
             return self._raptor_imports
 
-        repo_root = os.path.join(os.path.dirname(__file__), "raptor")
+        repo_root = self._resolve_repo_root(
+            repo_name="raptor",
+            required_subpath="raptor",
+            config_value=self.config.raptor_repo_dir,
+            env_var="RAPTOR_REPO_DIR",
+            cli_flag="--raptor-repo-dir",
+        )
         if repo_root not in sys.path:
             sys.path.insert(0, repo_root)
 

@@ -284,6 +284,11 @@ class BenchmarkConfig:
     save_raw: bool = True
     overwrite_existing: bool = False
 
+    # --- External official repos -------------------------------------------
+    dos_rag_repo_dir: Optional[str] = None
+    raptor_repo_dir: Optional[str] = None
+    read_agent_repo_dir: Optional[str] = None
+
     @property
     def uses_long_context(self) -> bool:
         return "long_context" in self.methods
