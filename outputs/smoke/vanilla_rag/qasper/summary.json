@@ -1,18 +1,27 @@
 {
   "task": "qasper",
   "method": "vanilla_rag",
-  "num_examples": 1,
-  "num_generated": 1,
+  "num_examples": 2,
+  "num_generated": 2,
   "metric_type": "f1",
   "metrics": {
-    "f1": 22.222222222222225
+    "f1": 75.0,
+    "num_predicted": 2,
+    "mean_prediction_length_characters": 20.0,
+    "scrolls_score": 75.0,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      75.0
+    ]
   },
-  "elapsed_seconds": 2.9,
+  "elapsed_seconds": 4.54,
   "token_stats": {
-    "avg_input_tokens": 5498.0,
+    "avg_input_tokens": 5531.5,
     "avg_context_tokens": 5404.0,
-    "avg_generation_tokens": 17.0,
-    "total_input_tokens": 5498
+    "avg_generation_tokens": 8.0,
+    "total_input_tokens": 11063
   },
   "results_file": "outputs/smoke/vanilla_rag/qasper/results.jsonl"
 }

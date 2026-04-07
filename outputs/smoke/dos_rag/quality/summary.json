@@ -1,18 +1,27 @@
 {
   "task": "quality",
   "method": "dos_rag",
-  "num_examples": 1,
-  "num_generated": 1,
+  "num_examples": 2,
+  "num_generated": 2,
   "metric_type": "exact_match",
   "metrics": {
-    "exact_match": 100.0
+    "exact_match": 50.0,
+    "num_predicted": 2,
+    "mean_prediction_length_characters": 63.5,
+    "scrolls_score": 50.0,
+    "display_keys": [
+      "exact_match"
+    ],
+    "display": [
+      50.0
+    ]
   },
-  "elapsed_seconds": 2.25,
+  "elapsed_seconds": 4.91,
   "token_stats": {
-    "avg_input_tokens": 6590.0,
-    "avg_context_tokens": 6454.0,
-    "avg_generation_tokens": 3.0,
-    "total_input_tokens": 6590
+    "avg_input_tokens": 6752.0,
+    "avg_context_tokens": 6576.0,
+    "avg_generation_tokens": 14.5,
+    "total_input_tokens": 13504
   },
   "results_file": "outputs/smoke/dos_rag/quality/results.jsonl"
 }

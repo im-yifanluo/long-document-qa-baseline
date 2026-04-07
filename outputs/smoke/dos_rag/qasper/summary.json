@@ -1,18 +1,27 @@
 {
   "task": "qasper",
   "method": "dos_rag",
-  "num_examples": 1,
-  "num_generated": 1,
+  "num_examples": 2,
+  "num_generated": 2,
   "metric_type": "f1",
   "metrics": {
-    "f1": 13.333333333333336
+    "f1": 100.0,
+    "num_predicted": 2,
+    "mean_prediction_length_characters": 30.5,
+    "scrolls_score": 100.0,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      100.0
+    ]
   },
-  "elapsed_seconds": 3.37,
+  "elapsed_seconds": 5.35,
   "token_stats": {
-    "avg_input_tokens": 5498.0,
-    "avg_context_tokens": 5404.0,
-    "avg_generation_tokens": 31.0,
-    "total_input_tokens": 5498
+    "avg_input_tokens": 5588.5,
+    "avg_context_tokens": 5462.0,
+    "avg_generation_tokens": 12.5,
+    "total_input_tokens": 11177
   },
   "results_file": "outputs/smoke/dos_rag/qasper/results.jsonl"
 }

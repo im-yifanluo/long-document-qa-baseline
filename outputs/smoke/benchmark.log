@@ -53,3 +53,233 @@ RuntimeError: DOS-RAG repository not found. Expected cloned repo at /home/yifan6
 2026-03-31 10:00:25,874 [INFO] rag_pipeline: [dos_rag/qmsum] {'rouge/rouge1': 0.0, 'rouge/rouge2': 0.0, 'rouge/rougeL': 0.0, 'rouge/rougeLsum': 0.0, 'rouge/geometric_mean': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 0.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [0.0, 0.0, 0.0], 'rouge_geo_mean': 0.0, 'rouge1': 0.0, 'rouge2': 0.0, 'rougeL': 0.0, 'rougeLsum': 0.0}  (0.6s)
 2026-03-31 10:00:25,878 [INFO] absl: Using default tokenizer.
 2026-03-31 10:00:25,878 [INFO] absl: Using default tokenizer.
+2026-04-07 00:53:43,608 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-04-07 00:53:43,609 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 00:53:54,274 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-04-07 00:59:05,506 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-07 00:59:06,017 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-07 00:59:13,252 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-07 00:59:13,253 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-04-07 00:59:13,253 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-07 00:59:13,254 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 00:59:13,781 [INFO] data_loader: Loaded 2 official SCROLLS examples for qasper
+2026-04-07 00:59:13,786 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 00:59:16,629 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 2  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 00:59:16,846 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 2 new examples in 3.1s
+2026-04-07 00:59:16,847 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 2 answers ...
+2026-04-07 00:59:20,763 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 3.9s
+2026-04-07 00:59:23,469 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 75.0, 'num_predicted': 2, 'mean_prediction_length_characters': 20.0, 'scrolls_score': 75.0, 'display_keys': ['f1'], 'display': [75.0]}  (9.7s)
+2026-04-07 00:59:23,469 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-07 00:59:23,470 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 00:59:24,137 [INFO] data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-07 00:59:24,139 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-07 00:59:24,400 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-07 00:59:24,642 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 2 new examples in 0.5s
+2026-04-07 00:59:24,642 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 2 answers ...
+2026-04-07 00:59:29,732 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 5.1s
+2026-04-07 00:59:29,762 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 63.5, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (5.6s)
+2026-04-07 00:59:29,762 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-04-07 00:59:29,763 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 00:59:30,081 [INFO] data_loader: Loaded 2 official SCROLLS examples for qasper
+2026-04-07 00:59:30,084 [INFO] rag_pipeline: [dos_rag/qasper] Running 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 00:59:30,084 [INFO] official_methods: Building DOS-RAG index for document b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54_0
+2026-04-07 00:59:30,086 [ERROR] rag_pipeline: [dos_rag/qasper] Example b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54 failed: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 390, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 617, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 570, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 496, in _ensure_dos_imports
+    repo_root = self._resolve_method_repo_root("dos_rag")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _resolve_method_repo_root
+    repo_root = self._resolve_repo_root(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 375, in _resolve_repo_root
+    raise RuntimeError(
+RuntimeError: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+2026-04-07 00:59:30,100 [INFO] rag_pipeline: [dos_rag/qasper] Running 2 / 2  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 00:59:30,100 [INFO] official_methods: Building DOS-RAG index for document f5e6f43454332e0521a778db0b769481e23e7682_0
+2026-04-07 00:59:30,100 [ERROR] rag_pipeline: [dos_rag/qasper] Example f5e6f43454332e0521a778db0b769481e23e7682 failed: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 390, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 617, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 570, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 496, in _ensure_dos_imports
+    repo_root = self._resolve_method_repo_root("dos_rag")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _resolve_method_repo_root
+    repo_root = self._resolve_repo_root(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 375, in _resolve_repo_root
+    raise RuntimeError(
+RuntimeError: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+2026-04-07 00:59:30,115 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 0.0, 'scrolls_score': 0.0, 'display_keys': ['f1'], 'display': [0.0]}  (0.0s)
+2026-04-07 00:59:30,115 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-04-07 00:59:30,116 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 00:59:30,635 [INFO] data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-07 00:59:30,638 [INFO] rag_pipeline: [dos_rag/quality] Running 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-07 00:59:30,638 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_1_0
+2026-04-07 00:59:30,639 [ERROR] rag_pipeline: [dos_rag/quality] Example 52845_75VB1ISR_1 failed: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 390, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 617, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 570, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 496, in _ensure_dos_imports
+    repo_root = self._resolve_method_repo_root("dos_rag")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _resolve_method_repo_root
+    repo_root = self._resolve_repo_root(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 375, in _resolve_repo_root
+    raise RuntimeError(
+RuntimeError: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+2026-04-07 00:59:30,655 [INFO] rag_pipeline: [dos_rag/quality] Running 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-07 00:59:30,655 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_2_0
+2026-04-07 00:59:30,655 [ERROR] rag_pipeline: [dos_rag/quality] Example 52845_75VB1ISR_2 failed: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 390, in run_example
+    return self._run_dos_rag(example)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 617, in _run_dos_rag
+    self._dos_cache[cache_key] = self._build_dos_index(example)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 570, in _build_dos_index
+    imports = self._ensure_dos_imports()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 496, in _ensure_dos_imports
+    repo_root = self._resolve_method_repo_root("dos_rag")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 405, in _resolve_method_repo_root
+    repo_root = self._resolve_repo_root(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 375, in _resolve_repo_root
+    raise RuntimeError(
+RuntimeError: dos-rag-eval repository not found.
+Searched for source in:
+  - /home/yifan65/long-document-qa-baseline/dos-rag-eval
+  - /home/yifan65/dos-rag-eval
+Either clone the repo into one of those locations, set DOS_RAG_REPO_DIR, or pass --dos-rag-repo-dir.
+2026-04-07 00:59:30,672 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 0.0, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (0.0s)
+2026-04-07 01:07:41,474 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-04-07 01:07:41,475 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 01:07:44,207 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-04-07 01:08:16,273 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-07 01:08:16,756 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-07 01:08:18,116 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-07 01:08:18,117 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-04-07 01:08:18,118 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-07 01:08:18,118 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 01:08:18,438 [INFO] data_loader: Loaded 2 official SCROLLS examples for qasper
+2026-04-07 01:08:18,439 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 01:08:18,855 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 2  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 01:08:19,069 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 2 new examples in 0.6s
+2026-04-07 01:08:19,069 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 2 answers ...
+2026-04-07 01:08:22,733 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 3.7s
+2026-04-07 01:08:22,981 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 75.0, 'num_predicted': 2, 'mean_prediction_length_characters': 20.0, 'scrolls_score': 75.0, 'display_keys': ['f1'], 'display': [75.0]}  (4.5s)
+2026-04-07 01:08:22,981 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-07 01:08:22,981 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 01:08:23,492 [INFO] data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-07 01:08:23,494 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-07 01:08:23,747 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-07 01:08:23,994 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 2 new examples in 0.5s
+2026-04-07 01:08:23,994 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 2 answers ...
+2026-04-07 01:08:29,057 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 5.1s
+2026-04-07 01:08:29,065 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 63.5, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (5.6s)
+2026-04-07 01:08:29,065 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-04-07 01:08:29,065 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 01:08:29,381 [INFO] data_loader: Loaded 2 official SCROLLS examples for qasper
+2026-04-07 01:08:29,383 [INFO] rag_pipeline: [dos_rag/qasper] Running 1 / 2  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 01:08:29,383 [INFO] official_methods: Building DOS-RAG index for document b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54_0
+2026-04-07 01:08:33,401 [INFO] rag_pipeline: [dos_rag/qasper] Running 2 / 2  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 01:08:33,402 [INFO] official_methods: Building DOS-RAG index for document f5e6f43454332e0521a778db0b769481e23e7682_0
+2026-04-07 01:08:34,736 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 100.0, 'num_predicted': 2, 'mean_prediction_length_characters': 30.5, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}  (5.4s)
+2026-04-07 01:08:34,736 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-04-07 01:08:34,737 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 01:08:35,245 [INFO] data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-07 01:08:35,247 [INFO] rag_pipeline: [dos_rag/quality] Running 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-07 01:08:35,248 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_1_0
+2026-04-07 01:08:37,957 [INFO] rag_pipeline: [dos_rag/quality] Running 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-07 01:08:37,957 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_2_0
+2026-04-07 01:08:40,162 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 50.0, 'num_predicted': 2, 'mean_prediction_length_characters': 63.5, 'scrolls_score': 50.0, 'display_keys': ['exact_match'], 'display': [50.0]}  (4.9s)
