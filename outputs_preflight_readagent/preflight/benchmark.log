@@ -1,0 +1,62 @@
+2026-04-07 01:46:02,884 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-04-07 01:46:02,885 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 01:46:05,367 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-04-07 01:46:36,915 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-07 01:46:37,389 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-07 01:46:38,509 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-07 01:46:38,510 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-04-07 01:46:38,511 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_parallel task=qmsum
+============================================================
+2026-04-07 01:46:38,511 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 01:46:38,677 [INFO] data_loader: Loaded 1 official SCROLLS examples for qmsum
+2026-04-07 01:46:38,681 [INFO] rag_pipeline: [read_agent_parallel/qmsum] Running 1 / 1  (id=va-sq-1)
+2026-04-07 01:46:38,682 [INFO] official_methods: Building ReadAgent pages/gists for document qmsum:va-sq-1_0
+2026-04-07 01:55:14,805 [INFO] absl: Using default tokenizer.
+2026-04-07 01:55:16,350 [INFO] rag_pipeline: [read_agent_parallel/qmsum] {'rouge/rouge1': 15.917, 'rouge/rouge2': 0.6969, 'rouge/rougeL': 9.6886, 'rouge/rougeLsum': 14.5329, 'rouge/geometric_mean': 4.7543, 'num_predicted': 1, 'mean_prediction_length_characters': 1490.0, 'scrolls_score': 4.7543, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [15.917, 0.6969, 9.6886], 'rouge_geo_mean': 4.7543, 'rouge1': 15.917, 'rouge2': 0.6969, 'rougeL': 9.6886, 'rougeLsum': 14.5329}  (517.7s)
+2026-04-07 01:55:16,350 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_parallel task=narrative_qa
+============================================================
+2026-04-07 01:55:16,351 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 01:55:37,797 [INFO] data_loader: Loaded 1 official SCROLLS examples for narrative_qa
+2026-04-07 01:55:37,800 [INFO] rag_pipeline: [read_agent_parallel/narrative_qa] Running 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 01:55:37,800 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0_0
+2026-04-07 02:03:10,247 [INFO] rag_pipeline: [read_agent_parallel/narrative_qa] {'f1': 40.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 40.0, 'display_keys': ['f1'], 'display': [40.0]}  (452.4s)
+2026-04-07 02:03:10,248 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_parallel task=quality
+============================================================
+2026-04-07 02:03:10,248 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 02:03:10,758 [INFO] data_loader: Loaded 1 official SCROLLS examples for quality
+2026-04-07 02:03:10,761 [INFO] rag_pipeline: [read_agent_parallel/quality] Running 1 / 1  (id=52845_75VB1ISR_1)
+2026-04-07 02:03:10,761 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_1_0
+2026-04-07 02:05:09,293 [INFO] rag_pipeline: [read_agent_parallel/quality] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (118.5s)
+2026-04-07 02:05:09,293 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_sequential task=qmsum
+============================================================
+2026-04-07 02:05:09,294 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 02:05:09,461 [INFO] data_loader: Loaded 1 official SCROLLS examples for qmsum
+2026-04-07 02:05:09,466 [INFO] rag_pipeline: [read_agent_sequential/qmsum] Running 1 / 1  (id=va-sq-1)
+2026-04-07 02:05:20,335 [INFO] absl: Using default tokenizer.
+2026-04-07 02:05:22,102 [INFO] rag_pipeline: [read_agent_sequential/qmsum] {'rouge/rouge1': 28.0488, 'rouge/rouge2': 2.4691, 'rouge/rougeL': 14.6341, 'rouge/rougeLsum': 21.9512, 'rouge/geometric_mean': 10.0448, 'num_predicted': 1, 'mean_prediction_length_characters': 700.0, 'scrolls_score': 10.0448, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [28.0488, 2.4691, 14.6341], 'rouge_geo_mean': 10.0448, 'rouge1': 28.0488, 'rouge2': 2.4691, 'rougeL': 14.6341, 'rougeLsum': 21.9512}  (12.6s)
+2026-04-07 02:05:22,102 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_sequential task=narrative_qa
+============================================================
+2026-04-07 02:05:22,103 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 02:05:43,271 [INFO] data_loader: Loaded 1 official SCROLLS examples for narrative_qa
+2026-04-07 02:05:43,275 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 1 / 1  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 02:05:46,568 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] {'f1': 40.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 40.0, 'display_keys': ['f1'], 'display': [40.0]}  (3.3s)
+2026-04-07 02:05:46,568 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_sequential task=quality
+============================================================
+2026-04-07 02:05:46,569 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 02:05:47,100 [INFO] data_loader: Loaded 1 official SCROLLS examples for quality
+2026-04-07 02:05:47,103 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 1 / 1  (id=52845_75VB1ISR_1)
+2026-04-07 02:05:48,623 [INFO] rag_pipeline: [read_agent_sequential/quality] {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (1.5s)
+2026-04-07 02:05:48,630 [INFO] absl: Using default tokenizer.
+2026-04-07 02:05:50,451 [INFO] absl: Using default tokenizer.
