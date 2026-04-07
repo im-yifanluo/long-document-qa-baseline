@@ -1,0 +1,944 @@
+2026-04-07 02:30:35,357 [INFO] __main__: Running benchmark with context_budget=10000 and top_k=200
+2026-04-07 02:30:35,358 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 02:30:37,884 [INFO] generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=13072) ...
+2026-04-07 02:31:08,692 [INFO] generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-07 02:31:09,134 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-07 02:31:10,196 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-07 02:31:10,197 [INFO] rag_pipeline: Benchmark pipeline ready.
+2026-04-07 02:31:10,197 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qmsum
+============================================================
+2026-04-07 02:31:10,198 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 02:31:10,360 [INFO] data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-07 02:31:10,379 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 1 / 50  (id=va-sq-1)
+2026-04-07 02:31:11,453 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 2 / 50  (id=va-sq-2)
+2026-04-07 02:31:12,333 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 3 / 50  (id=va-sq-3)
+2026-04-07 02:31:13,225 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 4 / 50  (id=va-sq-4)
+2026-04-07 02:31:14,103 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 5 / 50  (id=va-gq-5)
+2026-04-07 02:31:14,986 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 6 / 50  (id=va-sq-6)
+2026-04-07 02:31:15,360 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 7 / 50  (id=va-sq-7)
+2026-04-07 02:31:15,719 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 8 / 50  (id=va-sq-8)
+2026-04-07 02:31:16,081 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 9 / 50  (id=va-sq-9)
+2026-04-07 02:31:16,455 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 10 / 50  (id=va-sq-10)
+2026-04-07 02:31:16,820 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 11 / 50  (id=va-sq-11)
+2026-04-07 02:31:17,191 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 12 / 50  (id=va-gq-12)
+2026-04-07 02:31:17,552 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 13 / 50  (id=va-sq-13)
+2026-04-07 02:31:17,872 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 14 / 50  (id=va-sq-14)
+2026-04-07 02:31:18,187 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 15 / 50  (id=va-sq-15)
+2026-04-07 02:31:18,503 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 16 / 50  (id=va-sq-16)
+2026-04-07 02:31:18,820 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 17 / 50  (id=va-sq-17)
+2026-04-07 02:31:19,136 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 18 / 50  (id=va-sq-18)
+2026-04-07 02:31:19,450 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 19 / 50  (id=va-gq-19)
+2026-04-07 02:31:19,767 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 20 / 50  (id=va-sq-20)
+2026-04-07 02:31:20,006 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 21 / 50  (id=va-sq-21)
+2026-04-07 02:31:20,241 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 22 / 50  (id=va-sq-22)
+2026-04-07 02:31:20,481 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 23 / 50  (id=va-sq-23)
+2026-04-07 02:31:20,724 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 24 / 50  (id=va-sq-24)
+2026-04-07 02:31:20,967 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 25 / 50  (id=va-sq-25)
+2026-04-07 02:31:21,208 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 26 / 50  (id=va-sq-26)
+2026-04-07 02:31:21,448 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 27 / 50  (id=va-gq-27)
+2026-04-07 02:31:21,681 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 28 / 50  (id=va-sq-28)
+2026-04-07 02:31:22,066 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 29 / 50  (id=va-sq-29)
+2026-04-07 02:31:22,442 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 30 / 50  (id=va-sq-30)
+2026-04-07 02:31:22,824 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 31 / 50  (id=va-sq-31)
+2026-04-07 02:31:23,213 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 32 / 50  (id=va-sq-32)
+2026-04-07 02:31:23,598 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 33 / 50  (id=va-sq-33)
+2026-04-07 02:31:23,980 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 34 / 50  (id=va-gq-34)
+2026-04-07 02:31:24,360 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 35 / 50  (id=va-sq-35)
+2026-04-07 02:31:24,717 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 36 / 50  (id=va-sq-36)
+2026-04-07 02:31:25,074 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 37 / 50  (id=va-sq-37)
+2026-04-07 02:31:25,427 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 38 / 50  (id=va-sq-38)
+2026-04-07 02:31:25,786 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 39 / 50  (id=va-sq-39)
+2026-04-07 02:31:26,134 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 40 / 50  (id=va-sq-40)
+2026-04-07 02:31:26,490 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 41 / 50  (id=va-sq-41)
+2026-04-07 02:31:26,848 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 42 / 50  (id=va-sq-42)
+2026-04-07 02:31:27,195 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 43 / 50  (id=va-sq-43)
+2026-04-07 02:31:27,543 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 44 / 50  (id=va-gq-44)
+2026-04-07 02:31:27,892 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 45 / 50  (id=va-sq-45)
+2026-04-07 02:31:28,451 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 46 / 50  (id=va-sq-46)
+2026-04-07 02:31:29,001 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 47 / 50  (id=va-sq-47)
+2026-04-07 02:31:29,556 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 48 / 50  (id=va-sq-48)
+2026-04-07 02:31:30,104 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 49 / 50  (id=va-gq-49)
+2026-04-07 02:31:30,666 [INFO] rag_pipeline: [vanilla_rag/qmsum] Preparing 50 / 50  (id=va-sq-50)
+2026-04-07 02:31:31,032 [INFO] rag_pipeline: [vanilla_rag/qmsum] Prompt preparation done for 50 new examples in 20.7s
+2026-04-07 02:31:31,032 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generating 50 answers ...
+2026-04-07 02:35:17,766 [INFO] rag_pipeline: [vanilla_rag/qmsum] Generation done in 226.7s
+2026-04-07 02:35:18,431 [INFO] absl: Using default tokenizer.
+2026-04-07 02:35:20,034 [INFO] rag_pipeline: [vanilla_rag/qmsum] {'rouge/rouge1': 31.3308, 'rouge/rouge2': 7.6962, 'rouge/rougeL': 19.1441, 'rouge/rougeLsum': 27.1371, 'rouge/geometric_mean': 16.6505, 'num_predicted': 50, 'mean_prediction_length_characters': 829.46, 'scrolls_score': 16.6505, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.3308, 7.6962, 19.1441], 'rouge_geo_mean': 16.6505, 'rouge1': 31.3308, 'rouge2': 7.6962, 'rougeL': 19.1441, 'rougeLsum': 27.1371}  (249.6s)
+2026-04-07 02:35:20,034 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-07 02:35:20,034 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 02:35:20,350 [INFO] data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-07 02:35:20,353 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 02:35:20,577 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 02:35:20,795 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-07 02:35:21,009 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-07 02:35:21,222 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-07 02:35:21,383 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-07 02:35:21,532 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-07 02:35:21,681 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-07 02:35:21,893 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-07 02:35:22,109 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-07 02:35:22,462 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-07 02:35:22,829 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-07 02:35:22,951 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-07 02:35:23,078 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-07 02:35:23,195 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-07 02:35:23,350 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-07 02:35:23,504 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-07 02:35:23,772 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-07 02:35:24,038 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-07 02:35:24,303 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-07 02:35:24,573 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-07 02:35:24,809 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-07 02:35:25,034 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-07 02:35:25,264 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-07 02:35:25,486 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-07 02:35:25,709 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-07 02:35:25,932 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-07 02:35:26,095 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-07 02:35:26,253 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-07 02:35:26,418 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-07 02:35:26,578 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-07 02:35:26,775 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-07 02:35:26,966 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-07 02:35:27,154 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-07 02:35:27,347 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-07 02:35:27,538 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-07 02:35:27,719 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-07 02:35:27,895 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-07 02:35:28,014 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-07 02:35:28,128 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-07 02:35:28,248 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-07 02:35:28,362 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-07 02:35:28,594 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-07 02:35:28,826 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-07 02:35:29,061 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-07 02:35:29,153 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-07 02:35:29,246 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-07 02:35:29,326 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-07 02:35:29,404 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-07 02:35:29,655 [INFO] rag_pipeline: [vanilla_rag/qasper] Preparing 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-07 02:35:29,895 [INFO] rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 50 new examples in 9.5s
+2026-04-07 02:35:29,895 [INFO] rag_pipeline: [vanilla_rag/qasper] Generating 50 answers ...
+2026-04-07 02:36:46,796 [INFO] rag_pipeline: [vanilla_rag/qasper] Generation done in 76.9s
+2026-04-07 02:36:47,025 [INFO] rag_pipeline: [vanilla_rag/qasper] {'f1': 51.4486, 'num_predicted': 50, 'mean_prediction_length_characters': 77.36, 'scrolls_score': 51.4486, 'display_keys': ['f1'], 'display': [51.4486]}  (86.7s)
+2026-04-07 02:36:47,027 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-04-07 02:36:47,027 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 02:37:08,448 [INFO] data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-07 02:37:08,461 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 02:37:09,163 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-07 02:37:09,786 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-07 02:37:10,419 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-07 02:37:11,073 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-07 02:37:11,703 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-07 02:37:12,336 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-07 02:37:12,967 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-07 02:37:13,602 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-07 02:37:14,239 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-07 02:37:14,896 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-07 02:37:15,529 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-07 02:37:16,161 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-07 02:37:16,797 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-07 02:37:17,422 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-07 02:37:18,047 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-07 02:37:18,678 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-07 02:37:19,303 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-07 02:37:19,938 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-07 02:37:20,572 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-07 02:37:21,207 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-07 02:37:21,827 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-07 02:37:22,454 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-07 02:37:23,078 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-07 02:37:23,702 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-07 02:37:24,322 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-07 02:37:24,951 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-07 02:37:25,616 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-07 02:37:26,238 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-07 02:37:26,883 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-07 02:37:27,537 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-07 02:37:41,771 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-07 02:37:55,965 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-07 02:38:10,113 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-07 02:38:24,287 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-07 02:38:38,491 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-07 02:38:52,612 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-07 02:39:07,142 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-07 02:39:21,345 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-07 02:39:35,429 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-07 02:39:49,588 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-07 02:40:03,828 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-07 02:40:18,192 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-07 02:40:32,395 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-07 02:40:46,590 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-07 02:41:00,925 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-07 02:41:15,179 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-07 02:41:29,425 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-07 02:41:43,601 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-07 02:41:57,693 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Preparing 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-07 02:42:11,884 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 50 new examples in 303.4s
+2026-04-07 02:42:11,884 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generating 50 answers ...
+2026-04-07 02:44:48,986 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 157.1s
+2026-04-07 02:44:49,557 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 19.53, 'num_predicted': 50, 'mean_prediction_length_characters': 45.72, 'scrolls_score': 19.53, 'display_keys': ['f1'], 'display': [19.53]}  (461.1s)
+2026-04-07 02:44:49,565 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-07 02:44:49,565 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 02:44:50,089 [INFO] data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-07 02:44:50,091 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-07 02:44:50,367 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-07 02:44:50,627 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-07 02:44:50,889 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-07 02:44:51,150 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-07 02:44:51,420 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-07 02:44:51,704 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 7 / 50  (id=30029_F5N22U40_1)
+2026-04-07 02:44:51,959 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 8 / 50  (id=30029_F5N22U40_2)
+2026-04-07 02:44:52,218 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 9 / 50  (id=30029_F5N22U40_3)
+2026-04-07 02:44:52,471 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 10 / 50  (id=30029_F5N22U40_4)
+2026-04-07 02:44:52,724 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 11 / 50  (id=30029_F5N22U40_5)
+2026-04-07 02:44:52,974 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 12 / 50  (id=30029_F5N22U40_6)
+2026-04-07 02:44:53,227 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 13 / 50  (id=30029_F5N22U40_7)
+2026-04-07 02:44:53,480 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 14 / 50  (id=30029_F5N22U40_8)
+2026-04-07 02:44:53,750 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 15 / 50  (id=30029_F5N22U40_9)
+2026-04-07 02:44:54,020 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-07 02:44:54,296 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-07 02:44:54,571 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-07 02:44:54,844 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-07 02:44:55,117 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-07 02:44:55,394 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-07 02:44:55,667 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-07 02:44:55,942 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-07 02:44:56,224 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-07 02:44:56,499 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-07 02:44:56,782 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-07 02:44:57,060 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-07 02:44:57,335 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-07 02:44:57,610 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-07 02:44:57,889 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-07 02:44:58,165 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-07 02:44:58,439 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-07 02:44:58,712 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-07 02:44:58,986 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-07 02:44:59,260 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-07 02:44:59,525 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-07 02:44:59,789 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-07 02:45:00,055 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-07 02:45:00,320 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-07 02:45:00,590 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-07 02:45:00,864 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-07 02:45:01,130 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-07 02:45:01,403 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-07 02:45:01,670 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-07 02:45:01,935 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-07 02:45:02,216 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-07 02:45:02,499 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-07 02:45:02,776 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-07 02:45:03,058 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-07 02:45:03,336 [INFO] rag_pipeline: [vanilla_rag/quality] Preparing 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-07 02:45:03,612 [INFO] rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 50 new examples in 13.5s
+2026-04-07 02:45:03,613 [INFO] rag_pipeline: [vanilla_rag/quality] Generating 50 answers ...
+2026-04-07 02:46:39,643 [INFO] rag_pipeline: [vanilla_rag/quality] Generation done in 96.0s
+2026-04-07 02:46:39,855 [INFO] rag_pipeline: [vanilla_rag/quality] {'exact_match': 70.0, 'num_predicted': 50, 'mean_prediction_length_characters': 73.42, 'scrolls_score': 70.0, 'display_keys': ['exact_match'], 'display': [70.0]}  (109.8s)
+2026-04-07 02:46:39,856 [INFO] rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-04-07 02:46:39,856 [INFO] data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-07 02:46:39,954 [INFO] data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-07 02:46:39,957 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 50  (id=3_nda-11)
+2026-04-07 02:46:40,084 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 2 / 50  (id=3_nda-16)
+2026-04-07 02:46:40,209 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 3 / 50  (id=3_nda-15)
+2026-04-07 02:46:40,333 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 4 / 50  (id=3_nda-10)
+2026-04-07 02:46:40,457 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 5 / 50  (id=3_nda-2)
+2026-04-07 02:46:40,583 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 6 / 50  (id=3_nda-1)
+2026-04-07 02:46:40,708 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 7 / 50  (id=3_nda-19)
+2026-04-07 02:46:40,832 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 8 / 50  (id=3_nda-12)
+2026-04-07 02:46:40,956 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 9 / 50  (id=3_nda-20)
+2026-04-07 02:46:41,080 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 10 / 50  (id=3_nda-3)
+2026-04-07 02:46:41,203 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 11 / 50  (id=3_nda-18)
+2026-04-07 02:46:41,329 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 12 / 50  (id=3_nda-7)
+2026-04-07 02:46:41,454 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 13 / 50  (id=3_nda-17)
+2026-04-07 02:46:41,578 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 14 / 50  (id=3_nda-8)
+2026-04-07 02:46:41,703 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 15 / 50  (id=3_nda-13)
+2026-04-07 02:46:41,829 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 16 / 50  (id=3_nda-5)
+2026-04-07 02:46:41,953 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 17 / 50  (id=3_nda-4)
+2026-04-07 02:46:42,077 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 18 / 50  (id=7_nda-11)
+2026-04-07 02:46:42,410 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 19 / 50  (id=7_nda-16)
+2026-04-07 02:46:42,742 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 20 / 50  (id=7_nda-15)
+2026-04-07 02:46:43,072 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 21 / 50  (id=7_nda-10)
+2026-04-07 02:46:43,405 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 22 / 50  (id=7_nda-2)
+2026-04-07 02:46:43,736 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 23 / 50  (id=7_nda-1)
+2026-04-07 02:46:44,066 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 24 / 50  (id=7_nda-19)
+2026-04-07 02:46:44,400 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 25 / 50  (id=7_nda-12)
+2026-04-07 02:46:44,740 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 26 / 50  (id=7_nda-20)
+2026-04-07 02:46:45,071 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 27 / 50  (id=7_nda-3)
+2026-04-07 02:46:45,402 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 28 / 50  (id=7_nda-18)
+2026-04-07 02:46:45,734 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 29 / 50  (id=7_nda-7)
+2026-04-07 02:46:46,067 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 30 / 50  (id=7_nda-17)
+2026-04-07 02:46:46,415 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 31 / 50  (id=7_nda-8)
+2026-04-07 02:46:46,772 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 32 / 50  (id=7_nda-13)
+2026-04-07 02:46:47,116 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 33 / 50  (id=7_nda-5)
+2026-04-07 02:46:47,454 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 34 / 50  (id=7_nda-4)
+2026-04-07 02:46:47,792 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 35 / 50  (id=9_nda-11)
+2026-04-07 02:46:48,083 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 36 / 50  (id=9_nda-16)
+2026-04-07 02:46:48,368 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 37 / 50  (id=9_nda-15)
+2026-04-07 02:46:48,659 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 38 / 50  (id=9_nda-10)
+2026-04-07 02:46:48,945 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 39 / 50  (id=9_nda-2)
+2026-04-07 02:46:49,228 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 40 / 50  (id=9_nda-1)
+2026-04-07 02:46:49,512 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 41 / 50  (id=9_nda-19)
+2026-04-07 02:46:49,794 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 42 / 50  (id=9_nda-12)
+2026-04-07 02:46:50,079 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 43 / 50  (id=9_nda-20)
+2026-04-07 02:46:50,364 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 44 / 50  (id=9_nda-3)
+2026-04-07 02:46:50,647 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 45 / 50  (id=9_nda-18)
+2026-04-07 02:46:50,929 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 46 / 50  (id=9_nda-7)
+2026-04-07 02:46:51,212 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 47 / 50  (id=9_nda-17)
+2026-04-07 02:46:51,495 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 48 / 50  (id=9_nda-8)
+2026-04-07 02:46:51,783 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 49 / 50  (id=9_nda-13)
+2026-04-07 02:46:52,071 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Preparing 50 / 50  (id=9_nda-5)
+2026-04-07 02:46:52,363 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 50 new examples in 12.4s
+2026-04-07 02:46:52,363 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generating 50 answers ...
+2026-04-07 02:47:44,722 [INFO] rag_pipeline: [vanilla_rag/contract_nli] Generation done in 52.4s
+2026-04-07 02:47:45,096 [INFO] rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 72.0, 'num_predicted': 50, 'mean_prediction_length_characters': 11.32, 'scrolls_score': 72.0, 'display_keys': ['exact_match'], 'display': [72.0]}  (65.1s)
+2026-04-07 02:47:45,097 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qmsum
+============================================================
+2026-04-07 02:47:45,098 [INFO] data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-07 02:47:45,263 [INFO] data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-07 02:47:45,268 [INFO] rag_pipeline: [dos_rag/qmsum] Running 1 / 50  (id=va-sq-1)
+2026-04-07 02:47:45,268 [INFO] official_methods: Building DOS-RAG index for document va-sq-1_0
+2026-04-07 02:48:00,950 [INFO] rag_pipeline: [dos_rag/qmsum] Running 2 / 50  (id=va-sq-2)
+2026-04-07 02:48:00,951 [INFO] official_methods: Building DOS-RAG index for document va-sq-2_0
+2026-04-07 02:48:14,642 [INFO] rag_pipeline: [dos_rag/qmsum] Running 3 / 50  (id=va-sq-3)
+2026-04-07 02:48:14,642 [INFO] official_methods: Building DOS-RAG index for document va-sq-3_0
+2026-04-07 02:48:28,005 [INFO] rag_pipeline: [dos_rag/qmsum] Running 4 / 50  (id=va-sq-4)
+2026-04-07 02:48:28,005 [INFO] official_methods: Building DOS-RAG index for document va-sq-4_0
+2026-04-07 02:48:42,898 [INFO] rag_pipeline: [dos_rag/qmsum] Running 5 / 50  (id=va-gq-5)
+2026-04-07 02:48:42,898 [INFO] official_methods: Building DOS-RAG index for document va-gq-5_0
+2026-04-07 02:49:01,076 [INFO] rag_pipeline: [dos_rag/qmsum] Running 6 / 50  (id=va-sq-6)
+2026-04-07 02:49:01,076 [INFO] official_methods: Building DOS-RAG index for document va-sq-6_0
+2026-04-07 02:49:15,570 [INFO] rag_pipeline: [dos_rag/qmsum] Running 7 / 50  (id=va-sq-7)
+2026-04-07 02:49:15,570 [INFO] official_methods: Building DOS-RAG index for document va-sq-7_0
+2026-04-07 02:49:25,020 [INFO] rag_pipeline: [dos_rag/qmsum] Running 8 / 50  (id=va-sq-8)
+2026-04-07 02:49:25,020 [INFO] official_methods: Building DOS-RAG index for document va-sq-8_0
+2026-04-07 02:49:34,876 [INFO] rag_pipeline: [dos_rag/qmsum] Running 9 / 50  (id=va-sq-9)
+2026-04-07 02:49:34,876 [INFO] official_methods: Building DOS-RAG index for document va-sq-9_0
+2026-04-07 02:49:45,339 [INFO] rag_pipeline: [dos_rag/qmsum] Running 10 / 50  (id=va-sq-10)
+2026-04-07 02:49:45,339 [INFO] official_methods: Building DOS-RAG index for document va-sq-10_0
+2026-04-07 02:49:54,257 [INFO] rag_pipeline: [dos_rag/qmsum] Running 11 / 50  (id=va-sq-11)
+2026-04-07 02:49:54,257 [INFO] official_methods: Building DOS-RAG index for document va-sq-11_0
+2026-04-07 02:50:01,597 [INFO] rag_pipeline: [dos_rag/qmsum] Running 12 / 50  (id=va-gq-12)
+2026-04-07 02:50:01,597 [INFO] official_methods: Building DOS-RAG index for document va-gq-12_0
+2026-04-07 02:50:19,137 [INFO] rag_pipeline: [dos_rag/qmsum] Running 13 / 50  (id=va-sq-13)
+2026-04-07 02:50:19,137 [INFO] official_methods: Building DOS-RAG index for document va-sq-13_0
+2026-04-07 02:50:27,953 [INFO] rag_pipeline: [dos_rag/qmsum] Running 14 / 50  (id=va-sq-14)
+2026-04-07 02:50:27,953 [INFO] official_methods: Building DOS-RAG index for document va-sq-14_0
+2026-04-07 02:50:38,691 [INFO] rag_pipeline: [dos_rag/qmsum] Running 15 / 50  (id=va-sq-15)
+2026-04-07 02:50:38,691 [INFO] official_methods: Building DOS-RAG index for document va-sq-15_0
+2026-04-07 02:50:43,188 [INFO] rag_pipeline: [dos_rag/qmsum] Running 16 / 50  (id=va-sq-16)
+2026-04-07 02:50:43,188 [INFO] official_methods: Building DOS-RAG index for document va-sq-16_0
+2026-04-07 02:50:49,353 [INFO] rag_pipeline: [dos_rag/qmsum] Running 17 / 50  (id=va-sq-17)
+2026-04-07 02:50:49,353 [INFO] official_methods: Building DOS-RAG index for document va-sq-17_0
+2026-04-07 02:50:53,844 [INFO] rag_pipeline: [dos_rag/qmsum] Running 18 / 50  (id=va-sq-18)
+2026-04-07 02:50:53,844 [INFO] official_methods: Building DOS-RAG index for document va-sq-18_0
+2026-04-07 02:51:02,915 [INFO] rag_pipeline: [dos_rag/qmsum] Running 19 / 50  (id=va-gq-19)
+2026-04-07 02:51:02,915 [INFO] official_methods: Building DOS-RAG index for document va-gq-19_0
+2026-04-07 02:51:15,276 [INFO] rag_pipeline: [dos_rag/qmsum] Running 20 / 50  (id=va-sq-20)
+2026-04-07 02:51:15,276 [INFO] official_methods: Building DOS-RAG index for document va-sq-20_0
+2026-04-07 02:51:23,610 [INFO] rag_pipeline: [dos_rag/qmsum] Running 21 / 50  (id=va-sq-21)
+2026-04-07 02:51:23,610 [INFO] official_methods: Building DOS-RAG index for document va-sq-21_0
+2026-04-07 02:51:27,835 [INFO] rag_pipeline: [dos_rag/qmsum] Running 22 / 50  (id=va-sq-22)
+2026-04-07 02:51:27,835 [INFO] official_methods: Building DOS-RAG index for document va-sq-22_0
+2026-04-07 02:51:35,625 [INFO] rag_pipeline: [dos_rag/qmsum] Running 23 / 50  (id=va-sq-23)
+2026-04-07 02:51:35,625 [INFO] official_methods: Building DOS-RAG index for document va-sq-23_0
+2026-04-07 02:51:42,355 [INFO] rag_pipeline: [dos_rag/qmsum] Running 24 / 50  (id=va-sq-24)
+2026-04-07 02:51:42,355 [INFO] official_methods: Building DOS-RAG index for document va-sq-24_0
+2026-04-07 02:51:54,934 [INFO] rag_pipeline: [dos_rag/qmsum] Running 25 / 50  (id=va-sq-25)
+2026-04-07 02:51:54,934 [INFO] official_methods: Building DOS-RAG index for document va-sq-25_0
+2026-04-07 02:52:00,386 [INFO] rag_pipeline: [dos_rag/qmsum] Running 26 / 50  (id=va-sq-26)
+2026-04-07 02:52:00,386 [INFO] official_methods: Building DOS-RAG index for document va-sq-26_0
+2026-04-07 02:52:11,797 [INFO] rag_pipeline: [dos_rag/qmsum] Running 27 / 50  (id=va-gq-27)
+2026-04-07 02:52:11,797 [INFO] official_methods: Building DOS-RAG index for document va-gq-27_0
+2026-04-07 02:52:28,318 [INFO] rag_pipeline: [dos_rag/qmsum] Running 28 / 50  (id=va-sq-28)
+2026-04-07 02:52:28,318 [INFO] official_methods: Building DOS-RAG index for document va-sq-28_0
+2026-04-07 02:52:56,644 [INFO] rag_pipeline: [dos_rag/qmsum] Running 29 / 50  (id=va-sq-29)
+2026-04-07 02:52:56,644 [INFO] official_methods: Building DOS-RAG index for document va-sq-29_0
+2026-04-07 02:53:07,043 [INFO] rag_pipeline: [dos_rag/qmsum] Running 30 / 50  (id=va-sq-30)
+2026-04-07 02:53:07,043 [INFO] official_methods: Building DOS-RAG index for document va-sq-30_0
+2026-04-07 02:53:17,040 [INFO] rag_pipeline: [dos_rag/qmsum] Running 31 / 50  (id=va-sq-31)
+2026-04-07 02:53:17,040 [INFO] official_methods: Building DOS-RAG index for document va-sq-31_0
+2026-04-07 02:53:44,661 [INFO] rag_pipeline: [dos_rag/qmsum] Running 32 / 50  (id=va-sq-32)
+2026-04-07 02:53:44,661 [INFO] official_methods: Building DOS-RAG index for document va-sq-32_0
+2026-04-07 02:53:55,646 [INFO] rag_pipeline: [dos_rag/qmsum] Running 33 / 50  (id=va-sq-33)
+2026-04-07 02:53:55,647 [INFO] official_methods: Building DOS-RAG index for document va-sq-33_0
+2026-04-07 02:54:04,182 [INFO] rag_pipeline: [dos_rag/qmsum] Running 34 / 50  (id=va-gq-34)
+2026-04-07 02:54:04,182 [INFO] official_methods: Building DOS-RAG index for document va-gq-34_0
+2026-04-07 02:54:25,453 [INFO] rag_pipeline: [dos_rag/qmsum] Running 35 / 50  (id=va-sq-35)
+2026-04-07 02:54:25,453 [INFO] official_methods: Building DOS-RAG index for document va-sq-35_0
+2026-04-07 02:54:38,454 [INFO] rag_pipeline: [dos_rag/qmsum] Running 36 / 50  (id=va-sq-36)
+2026-04-07 02:54:38,454 [INFO] official_methods: Building DOS-RAG index for document va-sq-36_0
+2026-04-07 02:54:44,049 [INFO] rag_pipeline: [dos_rag/qmsum] Running 37 / 50  (id=va-sq-37)
+2026-04-07 02:54:44,049 [INFO] official_methods: Building DOS-RAG index for document va-sq-37_0
+2026-04-07 02:54:48,768 [INFO] rag_pipeline: [dos_rag/qmsum] Running 38 / 50  (id=va-sq-38)
+2026-04-07 02:54:48,768 [INFO] official_methods: Building DOS-RAG index for document va-sq-38_0
+2026-04-07 02:55:00,466 [INFO] rag_pipeline: [dos_rag/qmsum] Running 39 / 50  (id=va-sq-39)
+2026-04-07 02:55:00,466 [INFO] official_methods: Building DOS-RAG index for document va-sq-39_0
+2026-04-07 02:55:08,071 [INFO] rag_pipeline: [dos_rag/qmsum] Running 40 / 50  (id=va-sq-40)
+2026-04-07 02:55:08,071 [INFO] official_methods: Building DOS-RAG index for document va-sq-40_0
+2026-04-07 02:55:19,221 [INFO] rag_pipeline: [dos_rag/qmsum] Running 41 / 50  (id=va-sq-41)
+2026-04-07 02:55:19,221 [INFO] official_methods: Building DOS-RAG index for document va-sq-41_0
+2026-04-07 02:55:34,253 [INFO] rag_pipeline: [dos_rag/qmsum] Running 42 / 50  (id=va-sq-42)
+2026-04-07 02:55:34,253 [INFO] official_methods: Building DOS-RAG index for document va-sq-42_0
+2026-04-07 02:55:42,025 [INFO] rag_pipeline: [dos_rag/qmsum] Running 43 / 50  (id=va-sq-43)
+2026-04-07 02:55:42,025 [INFO] official_methods: Building DOS-RAG index for document va-sq-43_0
+2026-04-07 02:55:47,883 [INFO] rag_pipeline: [dos_rag/qmsum] Running 44 / 50  (id=va-gq-44)
+2026-04-07 02:55:47,883 [INFO] official_methods: Building DOS-RAG index for document va-gq-44_0
+2026-04-07 02:56:08,651 [INFO] rag_pipeline: [dos_rag/qmsum] Running 45 / 50  (id=va-sq-45)
+2026-04-07 02:56:08,651 [INFO] official_methods: Building DOS-RAG index for document va-sq-45_0
+2026-04-07 02:56:19,245 [INFO] rag_pipeline: [dos_rag/qmsum] Running 46 / 50  (id=va-sq-46)
+2026-04-07 02:56:19,245 [INFO] official_methods: Building DOS-RAG index for document va-sq-46_0
+2026-04-07 02:56:28,809 [INFO] rag_pipeline: [dos_rag/qmsum] Running 47 / 50  (id=va-sq-47)
+2026-04-07 02:56:28,809 [INFO] official_methods: Building DOS-RAG index for document va-sq-47_0
+2026-04-07 02:56:37,657 [INFO] rag_pipeline: [dos_rag/qmsum] Running 48 / 50  (id=va-sq-48)
+2026-04-07 02:56:37,657 [INFO] official_methods: Building DOS-RAG index for document va-sq-48_0
+2026-04-07 02:56:49,425 [INFO] rag_pipeline: [dos_rag/qmsum] Running 49 / 50  (id=va-gq-49)
+2026-04-07 02:56:49,426 [INFO] official_methods: Building DOS-RAG index for document va-gq-49_0
+2026-04-07 02:56:56,845 [INFO] rag_pipeline: [dos_rag/qmsum] Running 50 / 50  (id=va-sq-50)
+2026-04-07 02:56:56,845 [INFO] official_methods: Building DOS-RAG index for document va-sq-50_0
+2026-04-07 02:57:08,970 [INFO] absl: Using default tokenizer.
+2026-04-07 02:57:10,628 [INFO] rag_pipeline: [dos_rag/qmsum] {'rouge/rouge1': 33.2265, 'rouge/rouge2': 9.022, 'rouge/rougeL': 20.1699, 'rouge/rougeLsum': 28.6422, 'rouge/geometric_mean': 18.2178, 'num_predicted': 50, 'mean_prediction_length_characters': 876.22, 'scrolls_score': 18.2178, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [33.2265, 9.022, 20.1699], 'rouge_geo_mean': 18.2178, 'rouge1': 33.2265, 'rouge2': 9.022, 'rougeL': 20.1699, 'rougeLsum': 28.6422}  (565.4s)
+2026-04-07 02:57:10,632 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=qasper
+============================================================
+2026-04-07 02:57:10,632 [INFO] data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-07 02:57:10,960 [INFO] data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-07 02:57:10,963 [INFO] rag_pipeline: [dos_rag/qasper] Running 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-07 02:57:10,963 [INFO] official_methods: Building DOS-RAG index for document b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54_0
+2026-04-07 02:57:13,795 [INFO] rag_pipeline: [dos_rag/qasper] Running 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-07 02:57:13,795 [INFO] official_methods: Building DOS-RAG index for document f5e6f43454332e0521a778db0b769481e23e7682_0
+2026-04-07 02:57:15,113 [INFO] rag_pipeline: [dos_rag/qasper] Running 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-07 02:57:15,113 [INFO] official_methods: Building DOS-RAG index for document 9a05a5f4351db75da371f7ac12eb0b03607c4b87_0
+2026-04-07 02:57:16,111 [INFO] rag_pipeline: [dos_rag/qasper] Running 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-07 02:57:16,111 [INFO] official_methods: Building DOS-RAG index for document 5eda469a8a77f028d0c5f1acd296111085614537_0
+2026-04-07 02:57:19,436 [INFO] rag_pipeline: [dos_rag/qasper] Running 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-07 02:57:19,436 [INFO] official_methods: Building DOS-RAG index for document 18c5d366b1da8447b5404eab71f4cc658ba12e6f_0
+2026-04-07 02:57:23,298 [INFO] rag_pipeline: [dos_rag/qasper] Running 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-07 02:57:23,298 [INFO] official_methods: Building DOS-RAG index for document b5e4866f0685299f1d7af267bbcc4afe2aab806f_0
+2026-04-07 02:57:24,441 [INFO] rag_pipeline: [dos_rag/qasper] Running 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-07 02:57:24,441 [INFO] official_methods: Building DOS-RAG index for document 1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590_0
+2026-04-07 02:57:25,056 [INFO] rag_pipeline: [dos_rag/qasper] Running 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-07 02:57:25,056 [INFO] official_methods: Building DOS-RAG index for document b6ae8e10c6a0d34c834f18f66ab730b670fb528c_0
+2026-04-07 02:57:28,648 [INFO] rag_pipeline: [dos_rag/qasper] Running 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-07 02:57:28,649 [INFO] official_methods: Building DOS-RAG index for document a87a009c242d57c51fc94fe312af5e02070f898b_0
+2026-04-07 02:57:31,372 [INFO] rag_pipeline: [dos_rag/qasper] Running 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-07 02:57:31,372 [INFO] official_methods: Building DOS-RAG index for document ef4dba073d24042f24886580ae77add5326f2130_0
+2026-04-07 02:57:36,636 [INFO] rag_pipeline: [dos_rag/qasper] Running 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-07 02:57:36,637 [INFO] official_methods: Building DOS-RAG index for document 2df4a045a9cd7b44874340b6fdf9308d3c55327a_0
+2026-04-07 02:57:37,779 [INFO] rag_pipeline: [dos_rag/qasper] Running 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-07 02:57:37,779 [INFO] official_methods: Building DOS-RAG index for document a313e98994fc039a82aa2447c411dda92c65a470_0
+2026-04-07 02:57:40,083 [INFO] rag_pipeline: [dos_rag/qasper] Running 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-07 02:57:40,083 [INFO] official_methods: Building DOS-RAG index for document 37861be6aecd9242c4fdccdfcd06e48f3f1f8f81_0
+2026-04-07 02:57:40,528 [INFO] rag_pipeline: [dos_rag/qasper] Running 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-07 02:57:40,528 [INFO] official_methods: Building DOS-RAG index for document 7e62a53823aba08bc26b2812db016f5ce6159565_0
+2026-04-07 02:57:42,221 [INFO] rag_pipeline: [dos_rag/qasper] Running 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-07 02:57:42,221 [INFO] official_methods: Building DOS-RAG index for document 9eabb54c2408dac24f00f92cf1061258c7ea2e1a_0
+2026-04-07 02:57:44,447 [INFO] rag_pipeline: [dos_rag/qasper] Running 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-07 02:57:44,447 [INFO] official_methods: Building DOS-RAG index for document 3d013f15796ae7fed5272183a166c45f16e24e39_0
+2026-04-07 02:57:45,188 [INFO] rag_pipeline: [dos_rag/qasper] Running 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-07 02:57:45,188 [INFO] official_methods: Building DOS-RAG index for document 9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc_0
+2026-04-07 02:57:48,174 [INFO] rag_pipeline: [dos_rag/qasper] Running 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-07 02:57:48,174 [INFO] official_methods: Building DOS-RAG index for document d3aa0449708cc861a51551b128d73e11d62207d2_0
+2026-04-07 02:57:49,731 [INFO] rag_pipeline: [dos_rag/qasper] Running 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-07 02:57:49,732 [INFO] official_methods: Building DOS-RAG index for document cfbec1ef032ac968560a7c76dec70faf1269b27c_0
+2026-04-07 02:57:50,814 [INFO] rag_pipeline: [dos_rag/qasper] Running 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-07 02:57:50,814 [INFO] official_methods: Building DOS-RAG index for document c0e341c4d2253eb42c8840381b082aae274eddad_0
+2026-04-07 02:57:51,735 [INFO] rag_pipeline: [dos_rag/qasper] Running 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-07 02:57:51,736 [INFO] official_methods: Building DOS-RAG index for document 1ec152119cf756b16191b236c85522afeed11f59_0
+2026-04-07 02:57:55,519 [INFO] rag_pipeline: [dos_rag/qasper] Running 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-07 02:57:55,519 [INFO] official_methods: Building DOS-RAG index for document 891c2001d6baaaf0da4e65b647402acac621a7d2_0
+2026-04-07 02:57:57,225 [INFO] rag_pipeline: [dos_rag/qasper] Running 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-07 02:57:57,225 [INFO] official_methods: Building DOS-RAG index for document 66c96c297c2cffdf5013bab5e95b59101cb38655_0
+2026-04-07 02:58:03,558 [INFO] rag_pipeline: [dos_rag/qasper] Running 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-07 02:58:03,558 [INFO] official_methods: Building DOS-RAG index for document 6b53e1f46ae4ba9b75117fc6e593abded89366be_0
+2026-04-07 02:58:05,309 [INFO] rag_pipeline: [dos_rag/qasper] Running 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-07 02:58:05,310 [INFO] official_methods: Building DOS-RAG index for document c0bee6539eb6956a7347daa9d2419b367bd02064_0
+2026-04-07 02:58:06,102 [INFO] rag_pipeline: [dos_rag/qasper] Running 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-07 02:58:06,103 [INFO] official_methods: Building DOS-RAG index for document 3de0487276bb5961586acc6e9f82934ef8cb668c_0
+2026-04-07 02:58:07,323 [INFO] rag_pipeline: [dos_rag/qasper] Running 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-07 02:58:07,323 [INFO] official_methods: Building DOS-RAG index for document 113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab_0
+2026-04-07 02:58:09,158 [INFO] rag_pipeline: [dos_rag/qasper] Running 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-07 02:58:09,158 [INFO] official_methods: Building DOS-RAG index for document 0752d71a0a1f73b3482a888313622ce9e9870d6e_0
+2026-04-07 02:58:09,841 [INFO] rag_pipeline: [dos_rag/qasper] Running 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-07 02:58:09,841 [INFO] official_methods: Building DOS-RAG index for document 55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3_0
+2026-04-07 02:58:11,840 [INFO] rag_pipeline: [dos_rag/qasper] Running 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-07 02:58:11,840 [INFO] official_methods: Building DOS-RAG index for document 4eaf9787f51cd7cdc45eb85cf223d752328c6ee4_0
+2026-04-07 02:58:13,308 [INFO] rag_pipeline: [dos_rag/qasper] Running 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-07 02:58:13,308 [INFO] official_methods: Building DOS-RAG index for document fb2b536dc8e442dffab408db992b971e86548158_0
+2026-04-07 02:58:15,544 [INFO] rag_pipeline: [dos_rag/qasper] Running 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-07 02:58:15,544 [INFO] official_methods: Building DOS-RAG index for document 31735ec3d83c40b79d11df5c34154849aeb3fb47_0
+2026-04-07 02:58:16,620 [INFO] rag_pipeline: [dos_rag/qasper] Running 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-07 02:58:16,620 [INFO] official_methods: Building DOS-RAG index for document 10d450960907091f13e0be55f40bcb96f44dd074_0
+2026-04-07 02:58:17,261 [INFO] rag_pipeline: [dos_rag/qasper] Running 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-07 02:58:17,261 [INFO] official_methods: Building DOS-RAG index for document b5608076d91450b0d295ad14c3e3a90d7e168d0e_0
+2026-04-07 02:58:19,174 [INFO] rag_pipeline: [dos_rag/qasper] Running 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-07 02:58:19,174 [INFO] official_methods: Building DOS-RAG index for document c21b87c97d1afac85ece2450ee76d01c946de668_0
+2026-04-07 02:58:20,242 [INFO] rag_pipeline: [dos_rag/qasper] Running 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-07 02:58:20,242 [INFO] official_methods: Building DOS-RAG index for document d087539e6a38c42f0a521ff2173ef42c0733878e_0
+2026-04-07 02:58:23,182 [INFO] rag_pipeline: [dos_rag/qasper] Running 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-07 02:58:23,182 [INFO] official_methods: Building DOS-RAG index for document efe9bad55107a6be7704ed97ecce948a8ca7b1d2_0
+2026-04-07 02:58:24,520 [INFO] rag_pipeline: [dos_rag/qasper] Running 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-07 02:58:24,520 [INFO] official_methods: Building DOS-RAG index for document 71e4ba4e87e6596aeca187127c0d088df6570c57_0
+2026-04-07 02:58:26,302 [INFO] rag_pipeline: [dos_rag/qasper] Running 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-07 02:58:26,302 [INFO] official_methods: Building DOS-RAG index for document 7561a968470a8936d10e1ba722d2f38b5a9a4d38_0
+2026-04-07 02:58:27,159 [INFO] rag_pipeline: [dos_rag/qasper] Running 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-07 02:58:27,159 [INFO] official_methods: Building DOS-RAG index for document 6d4400f45bd97b812e946b8a682b018826e841f1_0
+2026-04-07 02:58:29,273 [INFO] rag_pipeline: [dos_rag/qasper] Running 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-07 02:58:29,273 [INFO] official_methods: Building DOS-RAG index for document 26c2e1eb12143d985e4fb50543cf0d1eb4395e67_0
+2026-04-07 02:58:30,190 [INFO] rag_pipeline: [dos_rag/qasper] Running 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-07 02:58:30,191 [INFO] official_methods: Building DOS-RAG index for document f17ca24b135f9fe6bb25dc5084b13e1637ec7744_0
+2026-04-07 02:58:34,039 [INFO] rag_pipeline: [dos_rag/qasper] Running 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-07 02:58:34,039 [INFO] official_methods: Building DOS-RAG index for document bd5bd1765362c2d972a762ca12675108754aa437_0
+2026-04-07 02:58:34,897 [INFO] rag_pipeline: [dos_rag/qasper] Running 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-07 02:58:34,897 [INFO] official_methods: Building DOS-RAG index for document d9b6c61fc6d29ad399d27b931b6cb7b1117b314a_0
+2026-04-07 02:58:37,364 [INFO] rag_pipeline: [dos_rag/qasper] Running 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-07 02:58:37,364 [INFO] official_methods: Building DOS-RAG index for document d27438b11bc70e706431dda0af2b1c0b0d209f96_0
+2026-04-07 02:58:38,192 [INFO] rag_pipeline: [dos_rag/qasper] Running 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-07 02:58:38,192 [INFO] official_methods: Building DOS-RAG index for document 8d4ac4afbf5b14f412171729ceb5e822afcfa3f4_0
+2026-04-07 02:58:39,003 [INFO] rag_pipeline: [dos_rag/qasper] Running 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-07 02:58:39,003 [INFO] official_methods: Building DOS-RAG index for document 3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f_0
+2026-04-07 02:58:39,663 [INFO] rag_pipeline: [dos_rag/qasper] Running 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-07 02:58:39,663 [INFO] official_methods: Building DOS-RAG index for document 07d15501a599bae7eb4a9ead63e9df3d55b3dc35_0
+2026-04-07 02:58:41,460 [INFO] rag_pipeline: [dos_rag/qasper] Running 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-07 02:58:41,460 [INFO] official_methods: Building DOS-RAG index for document 99e78c390932594bd833be0f5c890af5c605d808_0
+2026-04-07 02:58:45,042 [INFO] rag_pipeline: [dos_rag/qasper] Running 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-07 02:58:45,042 [INFO] official_methods: Building DOS-RAG index for document 861187338c5ad445b9acddba8f2c7688785667b1_0
+2026-04-07 02:58:46,370 [INFO] rag_pipeline: [dos_rag/qasper] {'f1': 54.4233, 'num_predicted': 50, 'mean_prediction_length_characters': 66.92, 'scrolls_score': 54.4233, 'display_keys': ['f1'], 'display': [54.4233]}  (95.4s)
+2026-04-07 02:58:46,372 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=narrative_qa
+============================================================
+2026-04-07 02:58:46,372 [INFO] data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-07 02:59:07,626 [INFO] data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-07 02:59:07,629 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-07 02:59:07,629 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0_0
+2026-04-07 02:59:12,647 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-07 02:59:12,647 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1_0
+2026-04-07 02:59:17,632 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-07 02:59:17,633 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2_0
+2026-04-07 02:59:27,035 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-07 02:59:27,035 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3_0
+2026-04-07 02:59:32,235 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-07 02:59:32,235 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4_0
+2026-04-07 02:59:37,668 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-07 02:59:37,668 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5_0
+2026-04-07 02:59:42,523 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-07 02:59:42,524 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6_0
+2026-04-07 02:59:47,567 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-07 02:59:47,568 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7_0
+2026-04-07 02:59:52,521 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-07 02:59:52,521 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8_0
+2026-04-07 02:59:59,606 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-07 02:59:59,606 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9_0
+2026-04-07 03:00:05,895 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-07 03:00:05,895 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10_0
+2026-04-07 03:00:10,806 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-07 03:00:10,806 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11_0
+2026-04-07 03:00:15,585 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-07 03:00:15,586 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12_0
+2026-04-07 03:00:20,328 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-07 03:00:20,328 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13_0
+2026-04-07 03:00:25,033 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-07 03:00:25,033 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14_0
+2026-04-07 03:00:29,800 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-07 03:00:29,800 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15_0
+2026-04-07 03:00:36,342 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-07 03:00:36,342 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16_0
+2026-04-07 03:00:41,311 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-07 03:00:41,311 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17_0
+2026-04-07 03:00:46,276 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-07 03:00:46,276 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18_0
+2026-04-07 03:00:51,315 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-07 03:00:51,316 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19_0
+2026-04-07 03:00:55,997 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-07 03:00:55,998 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20_0
+2026-04-07 03:01:01,106 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-07 03:01:01,106 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21_0
+2026-04-07 03:01:05,956 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-07 03:01:05,956 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22_0
+2026-04-07 03:01:12,102 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-07 03:01:12,102 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23_0
+2026-04-07 03:01:17,010 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-07 03:01:17,010 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24_0
+2026-04-07 03:01:21,894 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-07 03:01:21,894 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25_0
+2026-04-07 03:01:26,778 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-07 03:01:26,778 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26_0
+2026-04-07 03:01:31,705 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-07 03:01:31,705 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27_0
+2026-04-07 03:01:38,135 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-07 03:01:38,135 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28_0
+2026-04-07 03:01:44,054 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-07 03:01:44,054 [INFO] official_methods: Building DOS-RAG index for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29_0
+2026-04-07 03:01:48,950 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-07 03:01:48,950 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0_0
+2026-04-07 03:02:37,131 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-07 03:02:37,131 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1_0
+2026-04-07 03:03:27,205 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-07 03:03:27,205 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2_0
+2026-04-07 03:04:15,206 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-07 03:04:15,206 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3_0
+2026-04-07 03:05:02,802 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-07 03:05:02,802 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4_0
+2026-04-07 03:05:50,481 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-07 03:05:50,481 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5_0
+2026-04-07 03:06:38,581 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-07 03:06:38,581 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6_0
+2026-04-07 03:07:26,524 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-07 03:07:26,524 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7_0
+2026-04-07 03:08:13,591 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-07 03:08:13,591 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8_0
+2026-04-07 03:09:01,263 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-07 03:09:01,264 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9_0
+2026-04-07 03:09:48,831 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-07 03:09:48,831 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10_0
+2026-04-07 03:10:37,159 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-07 03:10:37,159 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11_0
+2026-04-07 03:11:25,034 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-07 03:11:25,034 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12_0
+2026-04-07 03:12:12,951 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-07 03:12:12,952 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13_0
+2026-04-07 03:13:03,115 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-07 03:13:03,115 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14_0
+2026-04-07 03:13:51,241 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-07 03:13:51,241 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15_0
+2026-04-07 03:14:40,979 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-07 03:14:40,979 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16_0
+2026-04-07 03:15:28,802 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-07 03:15:28,802 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17_0
+2026-04-07 03:16:16,755 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-07 03:16:16,755 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18_0
+2026-04-07 03:17:04,570 [INFO] rag_pipeline: [dos_rag/narrative_qa] Running 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-07 03:17:04,570 [INFO] official_methods: Building DOS-RAG index for document b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19_0
+2026-04-07 03:17:52,653 [INFO] rag_pipeline: [dos_rag/narrative_qa] {'f1': 21.6398, 'num_predicted': 50, 'mean_prediction_length_characters': 46.94, 'scrolls_score': 21.6398, 'display_keys': ['f1'], 'display': [21.6398]}  (1125.0s)
+2026-04-07 03:17:52,659 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=quality
+============================================================
+2026-04-07 03:17:52,659 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-07 03:17:53,167 [INFO] data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-07 03:17:53,170 [INFO] rag_pipeline: [dos_rag/quality] Running 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-07 03:17:53,170 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_1_0
+2026-04-07 03:17:55,892 [INFO] rag_pipeline: [dos_rag/quality] Running 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-07 03:17:55,892 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_2_0
+2026-04-07 03:17:58,078 [INFO] rag_pipeline: [dos_rag/quality] Running 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-07 03:17:58,078 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_3_0
+2026-04-07 03:18:00,425 [INFO] rag_pipeline: [dos_rag/quality] Running 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-07 03:18:00,425 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_4_0
+2026-04-07 03:18:02,187 [INFO] rag_pipeline: [dos_rag/quality] Running 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-07 03:18:02,187 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_5_0
+2026-04-07 03:18:03,301 [INFO] rag_pipeline: [dos_rag/quality] Running 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-07 03:18:03,301 [INFO] official_methods: Building DOS-RAG index for document 52845_75VB1ISR_6_0
+2026-04-07 03:18:05,275 [INFO] rag_pipeline: [dos_rag/quality] Running 7 / 50  (id=30029_F5N22U40_1)
+2026-04-07 03:18:05,276 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_1_0
+2026-04-07 03:18:09,408 [INFO] rag_pipeline: [dos_rag/quality] Running 8 / 50  (id=30029_F5N22U40_2)
+2026-04-07 03:18:09,408 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_2_0
+2026-04-07 03:18:11,191 [INFO] rag_pipeline: [dos_rag/quality] Running 9 / 50  (id=30029_F5N22U40_3)
+2026-04-07 03:18:11,191 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_3_0
+2026-04-07 03:18:13,098 [INFO] rag_pipeline: [dos_rag/quality] Running 10 / 50  (id=30029_F5N22U40_4)
+2026-04-07 03:18:13,098 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_4_0
+2026-04-07 03:18:15,361 [INFO] rag_pipeline: [dos_rag/quality] Running 11 / 50  (id=30029_F5N22U40_5)
+2026-04-07 03:18:15,361 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_5_0
+2026-04-07 03:18:17,201 [INFO] rag_pipeline: [dos_rag/quality] Running 12 / 50  (id=30029_F5N22U40_6)
+2026-04-07 03:18:17,202 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_6_0
+2026-04-07 03:18:18,295 [INFO] rag_pipeline: [dos_rag/quality] Running 13 / 50  (id=30029_F5N22U40_7)
+2026-04-07 03:18:18,295 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_7_0
+2026-04-07 03:18:19,930 [INFO] rag_pipeline: [dos_rag/quality] Running 14 / 50  (id=30029_F5N22U40_8)
+2026-04-07 03:18:19,930 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_8_0
+2026-04-07 03:18:21,106 [INFO] rag_pipeline: [dos_rag/quality] Running 15 / 50  (id=30029_F5N22U40_9)
+2026-04-07 03:18:21,107 [INFO] official_methods: Building DOS-RAG index for document 30029_F5N22U40_9_0
+2026-04-07 03:18:22,709 [INFO] rag_pipeline: [dos_rag/quality] Running 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-07 03:18:22,709 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_1_0
+2026-04-07 03:18:25,533 [INFO] rag_pipeline: [dos_rag/quality] Running 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-07 03:18:25,534 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_2_0
+2026-04-07 03:18:27,340 [INFO] rag_pipeline: [dos_rag/quality] Running 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-07 03:18:27,341 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_3_0
+2026-04-07 03:18:28,496 [INFO] rag_pipeline: [dos_rag/quality] Running 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-07 03:18:28,497 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_4_0
+2026-04-07 03:18:30,324 [INFO] rag_pipeline: [dos_rag/quality] Running 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-07 03:18:30,325 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_5_0
+2026-04-07 03:18:31,892 [INFO] rag_pipeline: [dos_rag/quality] Running 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-07 03:18:31,893 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_6_0
+2026-04-07 03:18:33,493 [INFO] rag_pipeline: [dos_rag/quality] Running 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-07 03:18:33,493 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_7_0
+2026-04-07 03:18:35,311 [INFO] rag_pipeline: [dos_rag/quality] Running 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-07 03:18:35,311 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_8_0
+2026-04-07 03:18:36,192 [INFO] rag_pipeline: [dos_rag/quality] Running 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-07 03:18:36,192 [INFO] official_methods: Building DOS-RAG index for document 62139_J05FWZR6_9_0
+2026-04-07 03:18:37,740 [INFO] rag_pipeline: [dos_rag/quality] Running 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-07 03:18:37,740 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_1_0
+2026-04-07 03:18:40,442 [INFO] rag_pipeline: [dos_rag/quality] Running 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-07 03:18:40,442 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_2_0
+2026-04-07 03:18:41,487 [INFO] rag_pipeline: [dos_rag/quality] Running 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-07 03:18:41,487 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_3_0
+2026-04-07 03:18:42,635 [INFO] rag_pipeline: [dos_rag/quality] Running 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-07 03:18:42,635 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_4_0
+2026-04-07 03:18:44,357 [INFO] rag_pipeline: [dos_rag/quality] Running 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-07 03:18:44,357 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_5_0
+2026-04-07 03:18:45,565 [INFO] rag_pipeline: [dos_rag/quality] Running 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-07 03:18:45,565 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_6_0
+2026-04-07 03:18:46,610 [INFO] rag_pipeline: [dos_rag/quality] Running 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-07 03:18:46,610 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_7_0
+2026-04-07 03:18:48,260 [INFO] rag_pipeline: [dos_rag/quality] Running 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-07 03:18:48,261 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_8_0
+2026-04-07 03:18:49,356 [INFO] rag_pipeline: [dos_rag/quality] Running 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-07 03:18:49,356 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_9_0
+2026-04-07 03:18:50,577 [INFO] rag_pipeline: [dos_rag/quality] Running 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-07 03:18:50,578 [INFO] official_methods: Building DOS-RAG index for document 63523_STSHLFEA_10_0
+2026-04-07 03:18:52,000 [INFO] rag_pipeline: [dos_rag/quality] Running 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-07 03:18:52,000 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_1_0
+2026-04-07 03:18:54,762 [INFO] rag_pipeline: [dos_rag/quality] Running 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-07 03:18:54,763 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_2_0
+2026-04-07 03:18:56,703 [INFO] rag_pipeline: [dos_rag/quality] Running 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-07 03:18:56,703 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_3_0
+2026-04-07 03:18:58,250 [INFO] rag_pipeline: [dos_rag/quality] Running 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-07 03:18:58,251 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_4_0
+2026-04-07 03:18:58,997 [INFO] rag_pipeline: [dos_rag/quality] Running 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-07 03:18:58,997 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_5_0
+2026-04-07 03:19:00,648 [INFO] rag_pipeline: [dos_rag/quality] Running 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-07 03:19:00,648 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_6_0
+2026-04-07 03:19:02,090 [INFO] rag_pipeline: [dos_rag/quality] Running 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-07 03:19:02,091 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_7_0
+2026-04-07 03:19:04,302 [INFO] rag_pipeline: [dos_rag/quality] Running 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-07 03:19:04,302 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_8_0
+2026-04-07 03:19:05,584 [INFO] rag_pipeline: [dos_rag/quality] Running 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-07 03:19:05,585 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_9_0
+2026-04-07 03:19:07,418 [INFO] rag_pipeline: [dos_rag/quality] Running 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-07 03:19:07,418 [INFO] official_methods: Building DOS-RAG index for document 63401_ZCP5ZDGL_10_0
+2026-04-07 03:19:09,736 [INFO] rag_pipeline: [dos_rag/quality] Running 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-07 03:19:09,737 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_1_0
+2026-04-07 03:19:13,342 [INFO] rag_pipeline: [dos_rag/quality] Running 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-07 03:19:13,342 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_2_0
+2026-04-07 03:19:15,026 [INFO] rag_pipeline: [dos_rag/quality] Running 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-07 03:19:15,026 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_3_0
+2026-04-07 03:19:15,990 [INFO] rag_pipeline: [dos_rag/quality] Running 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-07 03:19:15,990 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_4_0
+2026-04-07 03:19:17,599 [INFO] rag_pipeline: [dos_rag/quality] Running 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-07 03:19:17,599 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_5_0
+2026-04-07 03:19:19,580 [INFO] rag_pipeline: [dos_rag/quality] Running 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-07 03:19:19,581 [INFO] official_methods: Building DOS-RAG index for document 62476_Z8GFDCIZ_6_0
+2026-04-07 03:19:20,899 [INFO] rag_pipeline: [dos_rag/quality] {'exact_match': 78.0, 'num_predicted': 50, 'mean_prediction_length_characters': 72.6, 'scrolls_score': 78.0, 'display_keys': ['exact_match'], 'display': [78.0]}  (87.7s)
+2026-04-07 03:19:20,900 [INFO] rag_pipeline: 
+============================================================
+  Running method=dos_rag task=contract_nli
+============================================================
+2026-04-07 03:19:20,901 [INFO] data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-07 03:19:20,996 [INFO] data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-07 03:19:20,999 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 1 / 50  (id=3_nda-11)
+2026-04-07 03:19:20,999 [INFO] official_methods: Building DOS-RAG index for document 3_nda-11_0
+2026-04-07 03:19:22,021 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 2 / 50  (id=3_nda-16)
+2026-04-07 03:19:22,021 [INFO] official_methods: Building DOS-RAG index for document 3_nda-16_0
+2026-04-07 03:19:22,524 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 3 / 50  (id=3_nda-15)
+2026-04-07 03:19:22,525 [INFO] official_methods: Building DOS-RAG index for document 3_nda-15_0
+2026-04-07 03:19:23,021 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 4 / 50  (id=3_nda-10)
+2026-04-07 03:19:23,021 [INFO] official_methods: Building DOS-RAG index for document 3_nda-10_0
+2026-04-07 03:19:23,519 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 5 / 50  (id=3_nda-2)
+2026-04-07 03:19:23,519 [INFO] official_methods: Building DOS-RAG index for document 3_nda-2_0
+2026-04-07 03:19:24,018 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 6 / 50  (id=3_nda-1)
+2026-04-07 03:19:24,018 [INFO] official_methods: Building DOS-RAG index for document 3_nda-1_0
+2026-04-07 03:19:24,462 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 7 / 50  (id=3_nda-19)
+2026-04-07 03:19:24,463 [INFO] official_methods: Building DOS-RAG index for document 3_nda-19_0
+2026-04-07 03:19:24,959 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 8 / 50  (id=3_nda-12)
+2026-04-07 03:19:24,959 [INFO] official_methods: Building DOS-RAG index for document 3_nda-12_0
+2026-04-07 03:19:25,404 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 9 / 50  (id=3_nda-20)
+2026-04-07 03:19:25,404 [INFO] official_methods: Building DOS-RAG index for document 3_nda-20_0
+2026-04-07 03:19:25,851 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 10 / 50  (id=3_nda-3)
+2026-04-07 03:19:25,851 [INFO] official_methods: Building DOS-RAG index for document 3_nda-3_0
+2026-04-07 03:19:26,348 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 11 / 50  (id=3_nda-18)
+2026-04-07 03:19:26,348 [INFO] official_methods: Building DOS-RAG index for document 3_nda-18_0
+2026-04-07 03:19:26,795 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 12 / 50  (id=3_nda-7)
+2026-04-07 03:19:26,795 [INFO] official_methods: Building DOS-RAG index for document 3_nda-7_0
+2026-04-07 03:19:27,293 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 13 / 50  (id=3_nda-17)
+2026-04-07 03:19:27,293 [INFO] official_methods: Building DOS-RAG index for document 3_nda-17_0
+2026-04-07 03:19:27,803 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 14 / 50  (id=3_nda-8)
+2026-04-07 03:19:27,803 [INFO] official_methods: Building DOS-RAG index for document 3_nda-8_0
+2026-04-07 03:19:28,300 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 15 / 50  (id=3_nda-13)
+2026-04-07 03:19:28,300 [INFO] official_methods: Building DOS-RAG index for document 3_nda-13_0
+2026-04-07 03:19:28,797 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 16 / 50  (id=3_nda-5)
+2026-04-07 03:19:28,797 [INFO] official_methods: Building DOS-RAG index for document 3_nda-5_0
+2026-04-07 03:19:29,374 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 17 / 50  (id=3_nda-4)
+2026-04-07 03:19:29,374 [INFO] official_methods: Building DOS-RAG index for document 3_nda-4_0
+2026-04-07 03:19:29,861 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 18 / 50  (id=7_nda-11)
+2026-04-07 03:19:29,861 [INFO] official_methods: Building DOS-RAG index for document 7_nda-11_0
+2026-04-07 03:19:32,343 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 19 / 50  (id=7_nda-16)
+2026-04-07 03:19:32,343 [INFO] official_methods: Building DOS-RAG index for document 7_nda-16_0
+2026-04-07 03:19:33,267 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 20 / 50  (id=7_nda-15)
+2026-04-07 03:19:33,267 [INFO] official_methods: Building DOS-RAG index for document 7_nda-15_0
+2026-04-07 03:19:34,197 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 21 / 50  (id=7_nda-10)
+2026-04-07 03:19:34,198 [INFO] official_methods: Building DOS-RAG index for document 7_nda-10_0
+2026-04-07 03:19:35,122 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 22 / 50  (id=7_nda-2)
+2026-04-07 03:19:35,122 [INFO] official_methods: Building DOS-RAG index for document 7_nda-2_0
+2026-04-07 03:19:36,064 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 23 / 50  (id=7_nda-1)
+2026-04-07 03:19:36,064 [INFO] official_methods: Building DOS-RAG index for document 7_nda-1_0
+2026-04-07 03:19:36,937 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 24 / 50  (id=7_nda-19)
+2026-04-07 03:19:36,937 [INFO] official_methods: Building DOS-RAG index for document 7_nda-19_0
+2026-04-07 03:19:37,861 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 25 / 50  (id=7_nda-12)
+2026-04-07 03:19:37,861 [INFO] official_methods: Building DOS-RAG index for document 7_nda-12_0
+2026-04-07 03:19:38,727 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 26 / 50  (id=7_nda-20)
+2026-04-07 03:19:38,727 [INFO] official_methods: Building DOS-RAG index for document 7_nda-20_0
+2026-04-07 03:19:39,599 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 27 / 50  (id=7_nda-3)
+2026-04-07 03:19:39,599 [INFO] official_methods: Building DOS-RAG index for document 7_nda-3_0
+2026-04-07 03:19:40,522 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 28 / 50  (id=7_nda-18)
+2026-04-07 03:19:40,522 [INFO] official_methods: Building DOS-RAG index for document 7_nda-18_0
+2026-04-07 03:19:41,393 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 29 / 50  (id=7_nda-7)
+2026-04-07 03:19:41,393 [INFO] official_methods: Building DOS-RAG index for document 7_nda-7_0
+2026-04-07 03:19:42,321 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 30 / 50  (id=7_nda-17)
+2026-04-07 03:19:42,321 [INFO] official_methods: Building DOS-RAG index for document 7_nda-17_0
+2026-04-07 03:19:43,238 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 31 / 50  (id=7_nda-8)
+2026-04-07 03:19:43,239 [INFO] official_methods: Building DOS-RAG index for document 7_nda-8_0
+2026-04-07 03:19:44,164 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 32 / 50  (id=7_nda-13)
+2026-04-07 03:19:44,164 [INFO] official_methods: Building DOS-RAG index for document 7_nda-13_0
+2026-04-07 03:19:45,044 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 33 / 50  (id=7_nda-5)
+2026-04-07 03:19:45,044 [INFO] official_methods: Building DOS-RAG index for document 7_nda-5_0
+2026-04-07 03:19:45,966 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 34 / 50  (id=7_nda-4)
+2026-04-07 03:19:45,966 [INFO] official_methods: Building DOS-RAG index for document 7_nda-4_0
+2026-04-07 03:19:46,892 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 35 / 50  (id=9_nda-11)
+2026-04-07 03:19:46,892 [INFO] official_methods: Building DOS-RAG index for document 9_nda-11_0
+2026-04-07 03:19:48,312 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 36 / 50  (id=9_nda-16)
+2026-04-07 03:19:48,312 [INFO] official_methods: Building DOS-RAG index for document 9_nda-16_0
+2026-04-07 03:19:48,933 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 37 / 50  (id=9_nda-15)
+2026-04-07 03:19:48,933 [INFO] official_methods: Building DOS-RAG index for document 9_nda-15_0
+2026-04-07 03:19:49,558 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 38 / 50  (id=9_nda-10)
+2026-04-07 03:19:49,559 [INFO] official_methods: Building DOS-RAG index for document 9_nda-10_0
+2026-04-07 03:19:50,122 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 39 / 50  (id=9_nda-2)
+2026-04-07 03:19:50,122 [INFO] official_methods: Building DOS-RAG index for document 9_nda-2_0
+2026-04-07 03:19:50,743 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 40 / 50  (id=9_nda-1)
+2026-04-07 03:19:50,743 [INFO] official_methods: Building DOS-RAG index for document 9_nda-1_0
+2026-04-07 03:19:51,308 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 41 / 50  (id=9_nda-19)
+2026-04-07 03:19:51,308 [INFO] official_methods: Building DOS-RAG index for document 9_nda-19_0
+2026-04-07 03:19:51,935 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 42 / 50  (id=9_nda-12)
+2026-04-07 03:19:51,936 [INFO] official_methods: Building DOS-RAG index for document 9_nda-12_0
+2026-04-07 03:19:52,512 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 43 / 50  (id=9_nda-20)
+2026-04-07 03:19:52,512 [INFO] official_methods: Building DOS-RAG index for document 9_nda-20_0
+2026-04-07 03:19:53,131 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 44 / 50  (id=9_nda-3)
+2026-04-07 03:19:53,131 [INFO] official_methods: Building DOS-RAG index for document 9_nda-3_0
+2026-04-07 03:19:53,697 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 45 / 50  (id=9_nda-18)
+2026-04-07 03:19:53,697 [INFO] official_methods: Building DOS-RAG index for document 9_nda-18_0
+2026-04-07 03:19:54,265 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 46 / 50  (id=9_nda-7)
+2026-04-07 03:19:54,265 [INFO] official_methods: Building DOS-RAG index for document 9_nda-7_0
+2026-04-07 03:19:54,883 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 47 / 50  (id=9_nda-17)
+2026-04-07 03:19:54,883 [INFO] official_methods: Building DOS-RAG index for document 9_nda-17_0
+2026-04-07 03:19:55,482 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 48 / 50  (id=9_nda-8)
+2026-04-07 03:19:55,482 [INFO] official_methods: Building DOS-RAG index for document 9_nda-8_0
+2026-04-07 03:19:56,096 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 49 / 50  (id=9_nda-13)
+2026-04-07 03:19:56,097 [INFO] official_methods: Building DOS-RAG index for document 9_nda-13_0
+2026-04-07 03:19:56,665 [INFO] rag_pipeline: [dos_rag/contract_nli] Running 50 / 50  (id=9_nda-5)
+2026-04-07 03:19:56,665 [INFO] official_methods: Building DOS-RAG index for document 9_nda-5_0
+2026-04-07 03:19:57,327 [INFO] rag_pipeline: [dos_rag/contract_nli] {'exact_match': 66.0, 'num_predicted': 50, 'mean_prediction_length_characters': 11.68, 'scrolls_score': 66.0, 'display_keys': ['exact_match'], 'display': [66.0]}  (36.3s)
+2026-04-07 03:19:57,409 [INFO] absl: Using default tokenizer.
+2026-04-07 03:19:59,683 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:02,616 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:05,639 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:08,611 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:11,616 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:14,576 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:17,551 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:20,487 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:23,409 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:26,301 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:29,259 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:32,147 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:35,128 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:38,130 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:40,996 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:44,049 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:46,954 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:49,979 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:52,861 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:55,860 [INFO] absl: Using default tokenizer.
+2026-04-07 03:20:58,858 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:01,611 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:04,634 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:07,614 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:10,532 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:13,439 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:16,047 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:18,962 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:21,862 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:24,861 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:27,930 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:30,897 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:33,835 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:36,732 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:39,711 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:42,617 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:45,507 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:48,267 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:51,269 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:54,199 [INFO] absl: Using default tokenizer.
+2026-04-07 03:21:57,066 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:00,097 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:02,967 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:05,863 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:08,821 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:11,771 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:14,727 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:17,636 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:20,502 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:23,429 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:26,412 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:29,401 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:32,370 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:35,371 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:38,173 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:41,020 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:44,022 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:46,907 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:49,864 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:52,776 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:55,689 [INFO] absl: Using default tokenizer.
+2026-04-07 03:22:58,781 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:01,773 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:04,657 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:07,495 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:10,336 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:13,179 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:16,128 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:19,060 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:21,931 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:24,786 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:27,491 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:30,522 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:33,501 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:36,404 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:39,428 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:42,237 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:45,185 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:48,124 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:51,187 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:54,291 [INFO] absl: Using default tokenizer.
+2026-04-07 03:23:57,305 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:00,319 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:03,420 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:06,390 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:09,366 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:12,271 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:15,219 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:18,087 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:21,103 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:24,137 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:27,078 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:30,059 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:33,034 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:36,032 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:39,118 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:42,164 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:45,225 [INFO] absl: Using default tokenizer.
+2026-04-07 03:24:48,172 [INFO] absl: Using default tokenizer.
