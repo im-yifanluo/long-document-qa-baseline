@@ -40,10 +40,10 @@ from config import (
     TASK_TYPE,
     USER_PROMPT_TEMPLATES,
 )
-from data_loader import load_scrolls_task
+from data_loader import load_scrolls_task, scrolls_dataset_provenance
 from embedder import Embedder
 from generator import Generator
-from metrics import compute_metrics, normalize_answer
+from metrics import compute_metrics, normalize_answer, official_metric_provenance
 from official_methods import OfficialMethodRunner
 from retriever import Retriever
 
@@ -112,13 +112,41 @@ class BenchmarkPipeline:
         context: str,
         query: str,
         context_label: str = "Context",
-    ) -> str:
+        ) -> str:
         """Render the task-specific user prompt from a context/query pair."""
         return USER_PROMPT_TEMPLATES[task_type].format(
             context=context,
             query=query,
             context_label=context_label,
         )
+
+    def _result_provenance(
+        self,
+        method: str,
+        method_info: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Attach benchmark provenance to every per-example result row."""
+        if method_info is None:
+            method_info = {
+                "official_source_repo": None,
+                "official_artifact": None,
+                "paper": None,
+                "adapter_type": "repo_baseline",
+                "used_unchanged": [],
+                "adapter_notes": [
+                    "This is the repo's controlled baseline, not an official released method implementation.",
+                    "It uses official SCROLLS loading/evaluation with repo-owned retrieval and prompting code.",
+                ],
+            }
+        return {
+            "scrolls_dataset": scrolls_dataset_provenance(),
+            "scrolls_metric": official_metric_provenance(),
+            "method": method_info,
+            "shared_benchmark_components": {
+                "reader_model": self.generator.active_model,
+                "embedding_model": self.config.embedding_model,
+            },
+        }
 
     def _reference_position(self, document: str, references: List[str]) -> Tuple[Optional[float], str]:
         """Estimate where the answer appears inside the document.
@@ -162,202 +190,24 @@ class BenchmarkPipeline:
             return "middle"
         return "end"
 
-    @staticmethod
-    def _find_sublist(tokens: List[str], sub_tokens: List[str]) -> Optional[int]:
-        """Return the start index of ``sub_tokens`` inside ``tokens`` if present."""
-        if not tokens or not sub_tokens or len(sub_tokens) > len(tokens):
-            return None
-        limit = len(tokens) - len(sub_tokens) + 1
-        for idx in range(limit):
-            if tokens[idx : idx + len(sub_tokens)] == sub_tokens:
-                return idx
-        return None
-
-    def _canonicalize_quality_prediction(self, text: str, query: str) -> str:
-        """Map multiple-choice style outputs back to the official option text."""
-        text = (text or "").strip()
-        if not text:
-            return text
-
-        option_matches = list(
-            re.finditer(
-                r"\(\s*([A-D])\s*\)\s*(.*?)(?=(?:\n\s*\([A-D]\)\s)|$)",
-                query or "",
-                flags=re.S,
-            )
-        )
-        if not option_matches:
-            return text
-
-        options: Dict[str, str] = {}
-        ordered_options: List[str] = []
-        for match in option_matches:
-            label = match.group(1).upper()
-            option_text = " ".join(match.group(2).strip().split())
-            if option_text:
-                options[label] = option_text
-                ordered_options.append(option_text)
-
-        label_match = re.match(
-            r"^(?:answer\s*[:\-]\s*)?\(?\s*([A-D])\s*\)?(?:[\s\.\:\-]|$)",
-            text,
-            flags=re.I,
-        )
-        if label_match:
-            mapped = options.get(label_match.group(1).upper())
-            if mapped is not None:
-                return mapped
-
-        norm_text = normalize_answer(text)
-        for option_text in ordered_options:
-            if normalize_answer(option_text) == norm_text:
-                return option_text
-
-        containing = [
-            option_text
-            for option_text in ordered_options
-            if normalize_answer(option_text) in norm_text
-        ]
-        if len(containing) == 1:
-            return containing[0]
-
-        return text
-
-    @staticmethod
-    def _canonicalize_nli_prediction(text: str) -> str:
-        """Extract the predicted class label from label-plus-explanation outputs."""
-        text = (text or "").strip()
-        if not text:
-            return text
-
-        label_map = {
-            "entailment": "Entailment",
-            "contradiction": "Contradiction",
-            "not mentioned": "Not mentioned",
-            "notmentioned": "Not mentioned",
-        }
-
-        leading = re.match(
-            r"^\s*(?:answer\s*[:\-]\s*)?"
-            r"(entailment|contradiction|not\s*mentioned|notmentioned)\b",
-            text,
-            flags=re.I,
-        )
-        if leading:
-            key = " ".join(leading.group(1).lower().split())
-            return label_map.get(key, label_map.get(key.replace(" ", ""), text))
-
-        normalized = normalize_answer(text)
-        return label_map.get(normalized, text)
-
-    def _canonicalize_short_answer_prediction(
-        self,
-        text: str,
-        query: str,
-        references: List[str],
-    ) -> str:
-        """Reduce sentence-wrapped short answers to the exact answer span.
-
-        This is intentionally conservative. It only fires when:
-        - the task has a single gold reference
-        - that exact normalized reference appears contiguously in the prediction
-        - every extra token outside that span is query boilerplate / scaffolding
-
-        This fixes cases like:
-        - "Miss Miranda Hope comes from Bangor, Maine."
-        - "The answer is Miranda Hope."
-
-        while avoiding credit for outputs that introduce extra candidate answers
-        or unsupported content.
-        """
-        text = (text or "").strip()
-        if not text or len(references) != 1:
-            return text
-
-        ref = (references[0] or "").strip()
-        if not ref:
-            return text
-
-        pred_tokens = normalize_answer(text).split()
-        ref_tokens = normalize_answer(ref).split()
-        if not pred_tokens or not ref_tokens or len(pred_tokens) <= len(ref_tokens):
-            return text
-
-        match_idx = self._find_sublist(pred_tokens, ref_tokens)
-        if match_idx is None:
-            return text
-
-        extra_tokens = pred_tokens[:match_idx] + pred_tokens[match_idx + len(ref_tokens) :]
-        if not extra_tokens:
-            return ref
-
-        allowed_tokens = set(normalize_answer(query or "").split())
-        allowed_tokens.update(
-            {
-                "answer",
-                "is",
-                "it",
-                "its",
-                "this",
-                "that",
-                "correct",
-                "option",
-                "choice",
-                "person",
-                "character",
-                "name",
-                "who",
-                "what",
-                "where",
-                "which",
-                "comes",
-                "from",
-                "came",
-                "mr",
-                "mrs",
-                "ms",
-                "miss",
-                "dr",
-                "doctor",
-                "professor",
-            }
-        )
-        if all(token in allowed_tokens for token in extra_tokens):
-            return ref
-        return text
-
-    def _prediction_for_scoring(
-        self,
-        task: str,
-        prediction: str,
-        query: str,
-        references: Optional[List[str]] = None,
-    ) -> str:
-        del task, query, references
-        return (prediction or "").strip()
-
-    def _references_for_scoring(self, task: str, references: List[str]) -> List[str]:
-        del task
-        return references
-
     def _apply_scoring_fields(self, task: str, row: Dict[str, Any]) -> Dict[str, Any]:
-        """Populate the scoring-normalized fields used by metrics and reports."""
-        prediction = row.get("prediction", "")
-        query = row.get("query", "")
-        references = row.get("references", [""])
+        """Populate legacy analysis fields without changing benchmark scoring.
 
-        scoring_prediction = self._prediction_for_scoring(
-            task,
-            prediction,
-            query,
-            references,
-        )
-        scoring_references = self._references_for_scoring(task, references)
+        The benchmark path is intentionally simple and faithful:
+        raw prediction -> official SCROLLS metric.
+
+        We still materialize ``scoring_prediction`` / ``scoring_references`` so
+        older analysis code and saved outputs keep a stable schema, but those
+        fields are now exact aliases of the raw prediction/reference values.
+        """
+        prediction = row.get("prediction", "")
+        references = row.get("references", [""])
+        del task
 
         row["normalized_prediction"] = normalize_answer(prediction)
-        row["scoring_prediction"] = scoring_prediction
-        row["normalized_scoring_prediction"] = normalize_answer(scoring_prediction)
-        row["scoring_references"] = scoring_references
+        row["scoring_prediction"] = prediction
+        row["normalized_scoring_prediction"] = normalize_answer(prediction)
+        row["scoring_references"] = references
         return row
 
     def _prepare_retrieval_example(self, example: Dict, method: str) -> Dict[str, Any]:
@@ -453,6 +303,7 @@ class BenchmarkPipeline:
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "provenance": self._result_provenance(method),
         }
 
     def _prepare_long_context_example(self, example: Dict) -> Dict[str, Any]:
@@ -516,6 +367,19 @@ class BenchmarkPipeline:
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "provenance": self._result_provenance(
+                "long_context",
+                {
+                    "official_source_repo": None,
+                    "official_artifact": None,
+                    "paper": None,
+                    "adapter_type": "repo_experimental_scaffold",
+                    "used_unchanged": [],
+                    "adapter_notes": [
+                        "Long-context is an experimental scaffold in this repo, not an active official benchmark method.",
+                    ],
+                },
+            ),
         }
 
     def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
@@ -565,6 +429,7 @@ class BenchmarkPipeline:
             "user_prompt": "",
             "prediction": "",
             "method_error": message,
+            "provenance": self._result_provenance(method),
         }
 
     def _run_stateful_task(
@@ -991,24 +856,14 @@ class BenchmarkPipeline:
                     base_rows[ex_id].get("normalized_scoring_prediction")
                     or normalize_answer(
                         base_rows[ex_id].get("scoring_prediction")
-                        or self._prediction_for_scoring(
-                            task,
-                            base_rows[ex_id].get("prediction", ""),
-                            base_rows[ex_id].get("query", ""),
-                            base_rows[ex_id].get("references", [""]),
-                        )
+                        or base_rows[ex_id].get("prediction", "")
                     )
                 )
                 right = (
                     compare_rows[ex_id].get("normalized_scoring_prediction")
                     or normalize_answer(
                         compare_rows[ex_id].get("scoring_prediction")
-                        or self._prediction_for_scoring(
-                            task,
-                            compare_rows[ex_id].get("prediction", ""),
-                            compare_rows[ex_id].get("query", ""),
-                            compare_rows[ex_id].get("references", [""]),
-                        )
+                        or compare_rows[ex_id].get("prediction", "")
                     )
                 )
                 if left == right:
@@ -1030,18 +885,16 @@ class BenchmarkPipeline:
         }
 
     def _row_scoring_prediction(self, task: str, row: Dict[str, Any]) -> str:
-        return self._prediction_for_scoring(
-            task,
-            row.get("prediction", ""),
-            row.get("query", ""),
-            row.get("references", [""]),
-        )
+        del task
+        if row.get("results_format_version", 0) >= 4:
+            return row.get("prediction", "")
+        return row.get("scoring_prediction") or row.get("prediction", "")
 
     def _row_scoring_references(self, task: str, row: Dict[str, Any]) -> List[str]:
-        return row.get("scoring_references") or self._references_for_scoring(
-            task,
-            row.get("references", [""]),
-        )
+        del task
+        if row.get("results_format_version", 0) >= 4:
+            return row.get("references", [])
+        return row.get("scoring_references") or row.get("references", [])
 
     def _row_primary_score(self, task: str, row: Dict[str, Any]) -> float:
         metric_type = TASK_METRIC_TYPE[task]
@@ -1293,6 +1146,10 @@ class BenchmarkPipeline:
                     "split": self.config.split,
                     "run_tier": self.config.run_tier,
                 },
+                "provenance": {
+                    "scrolls_dataset": scrolls_dataset_provenance(),
+                    "scrolls_metric": official_metric_provenance(),
+                },
                 "per_task_scores": scores,
                 "average_score": average,
                 "detailed_metrics": details,
@@ -1340,6 +1197,10 @@ class BenchmarkPipeline:
                 "chunk_size": self.config.chunk_size,
                 "chunking_strategy": self.config.chunking_strategy,
                 "enable_thinking": self.config.enable_thinking,
+            },
+            "provenance": {
+                "scrolls_dataset": scrolls_dataset_provenance(),
+                "scrolls_metric": official_metric_provenance(),
             },
             "artifacts": artifact_paths,
             "methods": method_reports,
