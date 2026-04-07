@@ -60,16 +60,30 @@ def load_jsonl(path: str) -> List[Dict]:
     return rows
 
 
-def primary_score(metric_type: str, prediction: str, references: List[str]) -> float:
-    metrics = compute_metrics([prediction], [references], metric_type=metric_type)
+def primary_score(
+    metric_type: str,
+    prediction: str,
+    references: List[str],
+    task_name: Optional[str] = None,
+) -> float:
+    metrics = compute_metrics(
+        [prediction],
+        [references],
+        metric_type=metric_type,
+        task_name=task_name,
+    )
     return metrics.get("scrolls_score") or 0.0
 
 
 def scoring_prediction(row: Dict) -> str:
+    if row.get("results_format_version", 0) >= 4:
+        return row.get("prediction", "")
     return row.get("scoring_prediction") or row.get("prediction", "")
 
 
 def scoring_references(row: Dict) -> List[str]:
+    if row.get("results_format_version", 0) >= 4:
+        return row.get("references", [])
     return row.get("scoring_references") or row.get("references", [])
 
 
@@ -363,7 +377,12 @@ def make_rag_rank_analysis(
         for row in method_rows.get(retrieval_method, {}).get(task, {}).values():
             rank = first_supporting_rank(row.get("retrieved_chunks", []), row.get("references", []))
             bucket = rank_bucket(rank)
-            score = primary_score(metric_type, scoring_prediction(row), scoring_references(row))
+            score = primary_score(
+                metric_type,
+                scoring_prediction(row),
+                scoring_references(row),
+                task_name=task,
+            )
             bucket_scores.setdefault(bucket, []).append(score)
             rows.append(
                 {

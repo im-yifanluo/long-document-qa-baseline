@@ -1,65 +1,156 @@
 # SCROLLS Retrieval Benchmark
 
-This repo benchmarks retrieval-oriented long-document QA systems on SCROLLS.
+This repo benchmarks long-document QA and query-conditioned summarization methods on
+SCROLLS.
 
-Currently integrated methods:
+The benchmark is intentionally hybrid:
 
-- `vanilla_rag`: retrieve relevant passages and prompt the reader in retrieval-rank order
-- `dos_rag`: official DOS-RAG adapter from the authors' released code
-- `raptor`: official RAPTOR tree builder / tree retriever adapter
-- `read_agent_parallel`: ReadAgent parallel look-up adapter from the released notebook prompts
-- `read_agent_sequential`: ReadAgent sequential look-up adapter from the released notebook prompts
+- SCROLLS data loading and evaluation follow the official benchmark assets.
+- DOS-RAG, RAPTOR, and ReadAgent are integrated from their official released
+  repos or prompts where available.
+- Any method-to-SCROLLS glue code in this repo is treated as adapter logic and
+  documented as such.
 
-The implementation follows the official released method code or prompts where available:
+The current comparison surface is:
 
-- short sentence-aware passages with a `100` token target
-- dense retrieval with `Snowflake/snowflake-arctic-embed-m-v1.5`
-- DOS-RAG chunking/retrieve-then-read behavior from `dos-rag-eval`
-- RAPTOR tree construction / retrieval from `parthsarthi03/raptor`
-- ReadAgent pagination / gisting / lookup prompts from `read-agent.github.io/assets/read_agent_demo.ipynb`
+- `vanilla_rag`: repo-owned baseline
+- `dos_rag`: SCROLLS adapter around the official DOS-RAG retrieval core
+- `raptor`: SCROLLS adapter around the official RAPTOR tree builder/retriever
+- `read_agent_parallel`: SCROLLS adapter around the official ReadAgent parallel prompt flow
+- `read_agent_sequential`: SCROLLS adapter around the official ReadAgent sequential prompt flow
 
-Long-context scaffolding is still present in the codebase, but it is intentionally not part of the active benchmark defaults because the current target hardware is a single A40 48GB system.
+`long_context` code still exists as an experimental scaffold, but it is not part
+of the active benchmark defaults.
 
-## Benchmark Fidelity
+## Fidelity Contract
 
-The repo now follows the official SCROLLS benchmark assets and evaluation path:
+This repo makes three separate claims, and keeps them separate in both code and
+documentation.
 
-- data is loaded from the official `tau/scrolls` task archives on Hugging Face
-- duplicate validation ids are collapsed exactly as in the official evaluator, so one example id can carry multiple gold outputs
-- benchmark scoring follows the official `tau/scrolls/metrics/*.py` implementation and reports the official `scrolls_score`
-- raw model predictions are scored directly; the benchmark no longer canonicalizes answers before scoring
+### 1. Official SCROLLS benchmark behavior
 
-One thing remains repo-specific by necessity:
+Official here means:
 
-- SCROLLS provides a packed `input` string, not separate `document` and `query` fields
-- for retrieval experiments, this repo derives `document` and `query` from the official packed input
-- that split is an experimental preprocessing step for RAG, not part of the official SCROLLS benchmark definition
+- data comes from the released `tau/scrolls` task archives
+- validation duplicate ids are collapsed exactly into one prediction vs many
+  references, matching the official evaluator behavior
+- scoring calls the released `tau/scrolls/metrics/*.py` files directly
+- raw model predictions are scored without benchmark-side answer rewriting
+
+### 2. Official method behavior
+
+Official here means:
+
+- DOS-RAG uses the released `dos-rag-eval` chunking and retrieval core
+- RAPTOR uses the released `parthsarthi03/raptor` tree builder and retriever
+- ReadAgent uses the released prompt workflow from
+  `read-agent.github.io/assets/read_agent_demo.ipynb`
+
+### 3. Repo-specific adapter behavior
+
+Adapter logic here means:
+
+- splitting SCROLLS packed `input` into `document` and `query` for retrieval
+- handing method-produced context to one shared local reader model
+- converting method traces into a common report format
+- discovering cloned official repos on disk
+
+This repo does **not** claim that DOS-RAG, RAPTOR, or ReadAgent were released by
+their authors as native SCROLLS runners. They were not. This repo adapts those
+official method implementations onto SCROLLS.
+
+## Method Provenance
+
+| Method | Official source | Used unchanged | Adapter/shared parts in this repo |
+|---|---|---|---|
+| `vanilla_rag` | none | none | repo-owned chunking, retrieval, prompting, shared reader |
+| `dos_rag` | `alex-laitenberger/dos-rag-eval` | DOS chunking, dense retrieval, retrieve-then-restore-document-order behavior | SCROLLS loader, shared local reader, report schema |
+| `raptor` | `parthsarthi03/raptor` | RAPTOR tree construction and tree retrieval | SCROLLS loader, shared local reader, pinned summarizer/embedder for controlled comparison |
+| `read_agent_parallel` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, page look-up prompt flow | SCROLLS input adaptation, shared local reader |
+| `read_agent_sequential` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, sequential page look-up prompt flow | SCROLLS input adaptation, shared local reader |
+
+## How SCROLLS Is Implemented Here
+
+### Official loading
+
+SCROLLS is loaded from the official Hugging Face dataset repository:
+
+- source repo: `tau/scrolls`
+- artifacts used here: the released task zip files such as `qmsum.zip` and
+  `qasper.zip`
+- loader reference: the released `scrolls.py` dataset script
+
+Why archives instead of `load_dataset("tau/scrolls")`?
+
+- modern `datasets` versions deprecated the old script-loader path used by
+  SCROLLS
+- this repo therefore reads the same released archive files directly
+- duplicate-id handling is preserved explicitly in `data_loader.py`
+
+### Official evaluation
+
+SCROLLS scoring is delegated to the released official metric files:
+
+- `metrics/scrolls.py`
+- `metrics/rouge.py`
+- `metrics/f1.py`
+- `metrics/exact_match.py`
+
+The only local wrapper logic is:
+
+- locating those files in the local Hugging Face cache or downloading them
+- loading them as an importable module
+- providing a tiny compatibility shim because newer `datasets` releases removed
+  the legacy `datasets.Metric` base class the official script subclasses
+
+The scoring math itself is the official SCROLLS implementation.
+
+### Adapter preprocessing: `input -> document/query`
+
+SCROLLS itself defines examples as packed `input` strings plus gold `output`
+strings. Retrieval methods need a structured `document` and `query`, so this
+repo derives them in `data_loader.py`.
+
+That split is **not** official SCROLLS behavior. It is explicit adapter logic
+for running retrieval methods on SCROLLS.
+
+## Parser Audit
+
+The following task-specific split rules were checked directly against locally
+cached official validation examples.
+
+| Task | Adapter rule | Verified against local official cache? |
+|---|---|---|
+| `qmsum` | first blank-line split: query first, transcript second | yes |
+| `qasper` | first blank-line split: question first, paper second | yes |
+| `quality` | question plus `(A)-(D)` options first, article second | yes |
+| `contract_nli` | hypothesis first, contract second | yes |
+
+Other tasks still use explicit parser rules in `data_loader.py`, but the local
+cache audit above was only completed for the four tasks listed here.
 
 ## Current Defaults
 
 | Parameter | Value |
 |---|---|
-| Methods | `vanilla_rag`, `dos_rag` by default; `raptor` and `read_agent_*` available by CLI |
+| Default methods | `vanilla_rag`, `dos_rag` |
+| Additional methods | `raptor`, `read_agent_parallel`, `read_agent_sequential` |
 | Reader | `Qwen/Qwen2.5-14B-Instruct` |
 | Fallback reader | `Qwen/Qwen2.5-7B-Instruct` |
-| Retriever | `Snowflake/snowflake-arctic-embed-m-v1.5` |
+| Retriever embedding | `Snowflake/snowflake-arctic-embed-m-v1.5` |
 | Chunking | sentence-aware |
 | Chunk size | `100` tokens |
 | Chunk overlap | `0` |
-| Top-k cap | derived from budget, `200` at `10000` tokens |
 | Retrieval context budget | `10000` tokens |
-| Thinking mode | disabled by default |
+| `top_k` default | derived as `ceil(context_budget / 50)` |
+| Thinking mode | off |
 
-## Why These Defaults
+These defaults reflect the current benchmark focus: retrieval-based methods on a
+single local GPU system rather than 1M-token long-context inference.
 
-- `Qwen/Qwen2.5-14B-Instruct` is a strong local reader that is realistic on a single A40 once the benchmark is focused on retrieval rather than extreme long-context inference.
-- `Snowflake/snowflake-arctic-embed-m-v1.5` and `100`-token passages match the DOS-RAG paper setup.
-- `top_k` is derived from the context budget with the paper-style heuristic `top_k ~= budget / 50`. At the default `10000`-token budget that yields `top_k=200`.
-- `vanilla_rag` and `dos_rag` remain the default methods because RAPTOR and ReadAgent are materially more expensive per example.
+## Supported Tasks
 
-## Task Scope
-
-The official SCROLLS benchmark contains 7 tasks:
+Official SCROLLS tasks:
 
 - `gov_report`
 - `summ_screen_fd`
@@ -69,7 +160,8 @@ The official SCROLLS benchmark contains 7 tasks:
 - `quality`
 - `contract_nli`
 
-The default tiers focus on the QA-style or query-conditioned subset:
+Default benchmark tiers currently focus on the QA-style and query-conditioned
+subset:
 
 - `qmsum`
 - `qasper`
@@ -77,12 +169,47 @@ The default tiers focus on the QA-style or query-conditioned subset:
 - `quality`
 - `contract_nli`
 
-Pure summarization tasks are still available through manual task overrides, but they are not part of the default benchmark tiers because the current repo focus is long-document QA.
+ReadAgent support is narrower, because the released prompts in the official
+notebook target task families closest to:
 
-ReadAgent has narrower official task coverage in this repo:
+- supported here: `quality`, `qmsum`, `narrative_qa`
+- not supported here: `gov_report`, `summ_screen_fd`, `qasper`, `contract_nli`
 
-- supported: `quality`, `qmsum`, `narrative_qa`
-- unsupported: `gov_report`, `summ_screen_fd`, `qasper`, `contract_nli`
+Unsupported task/method combinations are reported explicitly rather than being
+silently scored as zero.
+
+## External Official Repos
+
+This repo expects the official method clones to exist locally.
+
+Current default layout:
+
+```text
+long-document-qa-baseline/
+  dos-rag-eval/
+  raptor/
+  read-agent.github.io/
+```
+
+Repo discovery order for each official method is:
+
+1. CLI flag
+2. environment variable
+3. clone inside this repo
+4. sibling directory next to this repo
+5. clone under `$HOME`
+
+Flags:
+
+- `--dos-rag-repo-dir`
+- `--raptor-repo-dir`
+- `--read-agent-repo-dir`
+
+Environment variables:
+
+- `DOS_RAG_REPO_DIR`
+- `RAPTOR_REPO_DIR`
+- `READ_AGENT_REPO_DIR`
 
 ## Setup
 
@@ -91,84 +218,12 @@ bash setup.sh
 source venv/bin/activate
 ```
 
-## Server Runbook
-
-On shared servers, do not assume the system `python3` module is usable for this
-repo. Before creating the project `venv`, verify the base Python can import
-both `ctypes` and `sqlite3`:
-
-```bash
-python3 -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
-```
-
-If that fails, the clean fix is to use a user-space Miniforge or conda Python
-and then build the repo `venv` on top of that environment.
-
-### Recommended Path For Shared Servers
-
-If Miniforge is already installed in your home directory:
-
-```bash
-module purge
-eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
-conda activate longdocqa
-python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
-cd ~/long-document-qa-baseline
-mv venv venv_old_cluster 2>/dev/null || true
-bash setup.sh
-source venv/bin/activate
-python --version
-```
-
-If the `longdocqa` environment does not exist yet:
-
-```bash
-module purge
-eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
-conda create -n longdocqa python=3.11 -y
-conda activate longdocqa
-python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
-cd ~/long-document-qa-baseline
-mv venv venv_old_cluster 2>/dev/null || true
-bash setup.sh
-source venv/bin/activate
-python --version
-```
-
-If Miniforge is not installed yet:
-
-```bash
-module purge
-cd ~
-curl -fsSLo Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
-bash Miniforge3.sh -b -p "$HOME/miniforge3"
-eval "$("$HOME/miniforge3/bin/conda" shell.bash hook)"
-conda create -n longdocqa python=3.11 -y
-conda activate longdocqa
-python -c "import ctypes, sqlite3; print('ctypes+sqlite ok', sqlite3.sqlite_version)"
-cd ~/long-document-qa-baseline
-mv venv venv_old_cluster 2>/dev/null || true
-bash setup.sh
-source venv/bin/activate
-python --version
-```
-
-### Why This Is Necessary
-
-On some research-group servers, the module-provided Python 3.10-3.12 builds are
-present but unusable for ML workloads because they fail imports like:
-
-```bash
-python3 -c "import ctypes"
-python3 -c "import sqlite3"
-```
-
-If either of those fails, `torch` and `vllm` will also fail. In that case, use
-the Miniforge path above instead of the cluster Python modules.
+The benchmark requires the local `venv` because the reader, retrieval stack,
+and official method adapters have nontrivial dependencies.
 
 ## Quick Start
 
-Verify the reader loads:
+Verify that the reader loads:
 
 ```bash
 python test_generator.py \
@@ -176,40 +231,16 @@ python test_generator.py \
   --prompt "What is the capital of France?"
 ```
 
-Run a smoke test:
+Run the official-benchmark smoke tier:
 
 ```bash
-python smoke_test.py --overwrite-existing
+python run_benchmark.py --run-tier smoke --overwrite-existing
 ```
 
-Run a one-example-per-dataset preflight pass:
-
-```bash
-python run_benchmark.py --run-tier preflight --overwrite-existing
-```
-
-Or use the smoke entrypoint for a one-example-per-dataset sanity run:
-
-```bash
-python smoke_test.py --all-datasets --overwrite-existing
-```
-
-Run the subset benchmark:
+Run the QA subset:
 
 ```bash
 python run_benchmark.py --run-tier subset --overwrite-existing
-```
-
-Run the paper-style long-QA context-budget sweep:
-
-```bash
-python run_benchmark.py --run-tier subset --context-budget-preset paper_long_qa
-```
-
-Run a custom budget sweep:
-
-```bash
-python run_benchmark.py --run-tier subset --context-budgets 1500 5000 10000 20000
 ```
 
 Run one method only:
@@ -218,37 +249,47 @@ Run one method only:
 python run_benchmark.py --run-tier subset --methods dos_rag
 ```
 
-Run RAPTOR on the QA subset:
+Run RAPTOR only:
 
 ```bash
 python run_benchmark.py --run-tier subset --methods raptor
 ```
 
-Run ReadAgent on the overlapping official tasks only:
+Run ReadAgent on the overlapping supported tasks only:
 
 ```bash
-python run_benchmark.py --run-tier subset --methods read_agent_parallel --tasks qmsum narrative_qa quality
+python run_benchmark.py \
+  --run-tier subset \
+  --methods read_agent_parallel \
+  --tasks qmsum narrative_qa quality
 ```
 
 ## Analysis
 
-Generate post-hoc analysis artifacts from saved outputs:
+Generate post-hoc artifacts from saved outputs:
 
 ```bash
 python analyze_outputs.py --run-tier subset
 ```
 
-The analysis package includes:
+Analysis artifacts include:
 
-- score tables
+- task score tables
 - score-vs-token-cost plots
-- agreement between the first two methods
-- qualitative sample exports
-- retrieval evidence-rank analysis
+- agreement tables between methods
+- qualitative case exports
+- retrieval evidence-rank summaries
 
-`run_lost_in_middle.py` is retained as an experimental scaffold for future long-context work. It is not part of the active benchmark workflow right now.
+## Output Structure
 
-## Output Layout
+Each result row and each report now records provenance so you can tell:
+
+- which official SCROLLS dataset artifacts were used
+- which official SCROLLS metric files were used
+- which method source repo or notebook the adapter came from
+- which shared benchmark components were held constant across methods
+
+Typical layout:
 
 ```text
 outputs/
@@ -258,48 +299,34 @@ outputs/
     comparison_examples.jsonl
     benchmark.log
     vanilla_rag/
-      benchmark_report.json
-      <task>/
+      qasper/
         results.jsonl
         summary.json
+      benchmark_report.json
     dos_rag/
-      benchmark_report.json
-      <task>/
-        results.jsonl
-        summary.json
-    analysis/
-      ... generated by analyze_outputs.py ...
+      ...
 ```
 
-`comparison_report.json` now includes per-task example previews, and
-`comparison_examples.jsonl` contains the full per-example comparison dump with:
+## File Guide
 
-- raw model predictions
-- scoring-normalized predictions
-- references
-- per-method example scores
-- prompt ordering
-- selected chunk indices
-- top retrieved evidence previews
-
-## Main Files
-
-| File | Purpose |
+| File | Role |
 |---|---|
-| `run_benchmark.py` | main benchmark CLI |
-| `rag_pipeline.py` | method execution, generation, evaluation, reporting |
-| `chunker.py` | sentence-aware passage chunking |
-| `embedder.py` | dense retrieval embedding wrapper |
-| `retriever.py` | FAISS retrieval |
-| `generator.py` | vLLM reader wrapper |
-| `analyze_outputs.py` | analysis artifacts |
-| `smoke_test.py` | end-to-end validation |
-| `run_lost_in_middle.py` | reserved long-context probe scaffold |
+| `data_loader.py` | official SCROLLS archive loading plus explicit `input -> document/query` adapter logic |
+| `metrics.py` | thin wrapper around the official SCROLLS metric files |
+| `official_methods.py` | DOS-RAG, RAPTOR, and ReadAgent adapters plus provenance |
+| `rag_pipeline.py` | shared execution, official scoring calls, reporting |
+| `run_benchmark.py` | benchmark CLI |
+| `analyze_outputs.py` | post-hoc analysis |
+| `ARCHITECTURE.md` | deeper execution walkthrough |
 
 ## References
 
-- Paper: https://aclanthology.org/2025.emnlp-main.1656/
-- Overview repo: https://github.com/alex-laitenberger/stronger-baselines-rag
-- Vanilla RAG reference code: https://github.com/alex-laitenberger/vanilla-rag-eval
-- DOS RAG reference code: https://github.com/alex-laitenberger/dos-rag-eval
-- Qwen2.5-14B-Instruct model card: https://huggingface.co/Qwen/Qwen2.5-14B-Instruct
+- SCROLLS website: https://www.scrolls-benchmark.com/
+- SCROLLS repo: https://github.com/tau-nlp/scrolls
+- SCROLLS dataset: https://huggingface.co/datasets/tau/scrolls
+- DOS-RAG repo: https://github.com/alex-laitenberger/dos-rag-eval
+- DOS-RAG paper: https://aclanthology.org/2025.emnlp-main.1656/
+- RAPTOR repo: https://github.com/parthsarthi03/raptor
+- RAPTOR paper: https://arxiv.org/abs/2401.18059
+- ReadAgent site/repo: https://github.com/read-agent/read-agent.github.io
+- ReadAgent paper: https://arxiv.org/abs/2402.09727
