@@ -1,0 +1,165 @@
+{
+  "method": "dos_rag",
+  "config": {
+    "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "active_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "chunk_size": 100,
+    "chunk_overlap": 0,
+    "chunking_strategy": "sentence",
+    "top_k": 200,
+    "context_budget": 10000,
+    "lc_context_budget": 131072,
+    "split": "validation",
+    "run_tier": "subset"
+  },
+  "provenance": {
+    "scrolls_dataset": {
+      "source": "tau/scrolls",
+      "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+      "loading_strategy": "official_task_archives",
+      "duplicate_id_handling": "collapsed_to_multi_reference_example",
+      "input_adapter": "packed_input_to_document_query_for_retrieval",
+      "parser_audit": {
+        "gov_report": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "summ_screen_fd": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "qmsum": {
+          "rule": "split on the first blank-line boundary: query first, transcript second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qmsum.zip."
+        },
+        "qasper": {
+          "rule": "split on the first blank-line boundary: question first, paper second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qasper.zip."
+        },
+        "narrative_qa": {
+          "rule": "split on the first blank-line boundary: question first, story/script second",
+          "local_cache_verified": false,
+          "notes": "Rule follows the official packed-input convention but was not re-verified from local cache in this workspace."
+        },
+        "quality": {
+          "rule": "question + (A-D) options first, article second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/quality.zip."
+        },
+        "contract_nli": {
+          "rule": "hypothesis first, contract second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/contract_nli.zip."
+        }
+      }
+    },
+    "scrolls_metric": {
+      "source": "tau/scrolls",
+      "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+      "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+      "official_metric_files": [
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+      ],
+      "datasets_version": "3.6.0",
+      "compatibility_shim": "datasets.Metric"
+    }
+  },
+  "per_task_scores": {
+    "qmsum": 18.2178,
+    "qasper": 54.4233,
+    "narrative_qa": 21.6398,
+    "quality": 78.0,
+    "contract_nli": 66.0
+  },
+  "average_score": 47.65618,
+  "detailed_metrics": {
+    "qmsum": {
+      "rouge/rouge1": 33.2265,
+      "rouge/rouge2": 9.022,
+      "rouge/rougeL": 20.1699,
+      "rouge/rougeLsum": 28.6422,
+      "rouge/geometric_mean": 18.2178,
+      "num_predicted": 50,
+      "mean_prediction_length_characters": 876.22,
+      "scrolls_score": 18.2178,
+      "display_keys": [
+        "rouge/rouge1",
+        "rouge/rouge2",
+        "rouge/rougeL"
+      ],
+      "display": [
+        33.2265,
+        9.022,
+        20.1699
+      ],
+      "rouge_geo_mean": 18.2178,
+      "rouge1": 33.2265,
+      "rouge2": 9.022,
+      "rougeL": 20.1699,
+      "rougeLsum": 28.6422
+    },
+    "qasper": {
+      "f1": 54.4233,
+      "num_predicted": 50,
+      "mean_prediction_length_characters": 66.92,
+      "scrolls_score": 54.4233,
+      "display_keys": [
+        "f1"
+      ],
+      "display": [
+        54.4233
+      ]
+    },
+    "narrative_qa": {
+      "f1": 21.6398,
+      "num_predicted": 50,
+      "mean_prediction_length_characters": 46.94,
+      "scrolls_score": 21.6398,
+      "display_keys": [
+        "f1"
+      ],
+      "display": [
+        21.6398
+      ]
+    },
+    "quality": {
+      "exact_match": 78.0,
+      "num_predicted": 50,
+      "mean_prediction_length_characters": 72.6,
+      "scrolls_score": 78.0,
+      "display_keys": [
+        "exact_match"
+      ],
+      "display": [
+        78.0
+      ]
+    },
+    "contract_nli": {
+      "exact_match": 66.0,
+      "num_predicted": 50,
+      "mean_prediction_length_characters": 11.68,
+      "scrolls_score": 66.0,
+      "display_keys": [
+        "exact_match"
+      ],
+      "display": [
+        66.0
+      ]
+    }
+  },
+  "token_cost_summary": {
+    "avg_input_tokens": 6895.852000000001,
+    "avg_context_tokens": 6777.9360000000015,
+    "avg_generation_tokens": 40.48799999999999,
+    "total_input_tokens": 1723963
+  }
+}

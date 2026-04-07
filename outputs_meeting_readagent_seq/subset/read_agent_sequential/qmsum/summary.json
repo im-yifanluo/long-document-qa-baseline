@@ -1,0 +1,40 @@
+{
+  "task": "qmsum",
+  "method": "read_agent_sequential",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 31.06,
+    "rouge/rouge2": 8.6307,
+    "rouge/rougeL": 18.6336,
+    "rouge/rougeLsum": 27.0449,
+    "rouge/geometric_mean": 17.0942,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 1045.32,
+    "scrolls_score": 17.0942,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      31.06,
+      8.6307,
+      18.6336
+    ],
+    "rouge_geo_mean": 17.0942,
+    "rouge1": 31.06,
+    "rouge2": 8.6307,
+    "rougeL": 18.6336,
+    "rougeLsum": 27.0449
+  },
+  "elapsed_seconds": 11465.21,
+  "token_stats": {
+    "avg_input_tokens": 2880.92,
+    "avg_context_tokens": 2824.62,
+    "avg_generation_tokens": 190.5,
+    "total_input_tokens": 144046
+  },
+  "results_file": "outputs_meeting_readagent_seq/subset/read_agent_sequential/qmsum/results.jsonl"
+}
