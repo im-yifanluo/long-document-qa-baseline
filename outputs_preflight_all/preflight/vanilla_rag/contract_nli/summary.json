@@ -2,7 +2,7 @@
   "task": "contract_nli",
   "method": "vanilla_rag",
   "num_examples": 1,
-  "num_generated": 1,
+  "num_generated": 0,
   "metric_type": "exact_match",
   "metrics": {
     "exact_match": 100.0,
@@ -17,6 +17,7 @@
     ]
   },
   "elapsed_seconds": 0.89,
+  "results_refreshed_from_cache": true,
   "token_stats": {
     "avg_input_tokens": 2253.0,
     "avg_context_tokens": 2142.0,

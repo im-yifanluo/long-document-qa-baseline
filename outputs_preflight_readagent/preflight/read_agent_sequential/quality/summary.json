@@ -2,7 +2,7 @@
   "task": "quality",
   "method": "read_agent_sequential",
   "num_examples": 1,
-  "num_generated": 1,
+  "num_generated": 0,
   "metric_type": "exact_match",
   "metrics": {
     "exact_match": 100.0,
@@ -17,6 +17,7 @@
     ]
   },
   "elapsed_seconds": 1.52,
+  "results_refreshed_from_cache": true,
   "token_stats": {
     "avg_input_tokens": 1758.0,
     "avg_context_tokens": 1624.0,

@@ -10,6 +10,13 @@ Run tier: `preflight`
 | narrative_qa | f1 | 40.0000 | 40.0000 | +0.0000 |
 | quality | exact_match | 100.0000 | 100.0000 | +0.0000 |
 
+## Runtime Summary
+
+| Method | Total seconds | Total minutes | Seconds / example | Examples / second |
+| --- | --- | --- | --- | --- |
+| read_agent_parallel | 1088.65 | 18.14 | 362.8833 | 0.0028 |
+| read_agent_sequential | 17.44 | 0.29 | 5.8133 | 0.1720 |
+
 ## Example Previews
 
 ### qmsum

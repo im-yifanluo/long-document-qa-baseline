@@ -2,7 +2,7 @@
   "task": "qasper",
   "method": "raptor",
   "num_examples": 1,
-  "num_generated": 1,
+  "num_generated": 0,
   "metric_type": "f1",
   "metrics": {
     "f1": 46.1538,
@@ -17,6 +17,7 @@
     ]
   },
   "elapsed_seconds": 153.8,
+  "results_refreshed_from_cache": true,
   "token_stats": {
     "avg_input_tokens": 8121.0,
     "avg_context_tokens": 7994.0,

@@ -1037,3 +1037,120 @@
 2026-04-07 01:44:31,776 [INFO] absl: Using default tokenizer.
 2026-04-07 01:44:34,914 [INFO] absl: Using default tokenizer.
 2026-04-07 01:44:38,143 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:06,845 [INFO] __main__: Refreshing cached benchmark reports with context_budget=10000 and top_k=200
+2026-04-07 02:23:06,845 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 02:23:06,845 [INFO] rag_pipeline: Benchmark pipeline ready in cache-refresh mode.
+2026-04-07 02:23:06,845 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=gov_report
+2026-04-07 02:23:07,062 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:07,291 [INFO] rag_pipeline: [vanilla_rag/gov_report] refreshed metrics: {'rouge/rouge1': 29.4627, 'rouge/rouge2': 6.6087, 'rouge/rougeL': 15.2513, 'rouge/rougeLsum': 27.7296, 'rouge/geometric_mean': 14.3736, 'num_predicted': 1, 'mean_prediction_length_characters': 1229.0, 'scrolls_score': 14.3736, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [29.4627, 6.6087, 15.2513], 'rouge_geo_mean': 14.3736, 'rouge1': 29.4627, 'rouge2': 6.6087, 'rougeL': 15.2513, 'rougeLsum': 27.7296}
+2026-04-07 02:23:07,291 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=summ_screen_fd
+2026-04-07 02:23:07,292 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:07,536 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 31.0433, 'rouge/rouge2': 7.6726, 'rouge/rougeL': 13.7405, 'rouge/rougeLsum': 27.9898, 'rouge/geometric_mean': 14.847, 'num_predicted': 1, 'mean_prediction_length_characters': 1736.0, 'scrolls_score': 14.847, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.0433, 7.6726, 13.7405], 'rouge_geo_mean': 14.847, 'rouge1': 31.0433, 'rouge2': 7.6726, 'rougeL': 13.7405, 'rougeLsum': 27.9898}
+2026-04-07 02:23:07,536 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=qmsum
+2026-04-07 02:23:07,537 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:07,719 [INFO] rag_pipeline: [vanilla_rag/qmsum] refreshed metrics: {'rouge/rouge1': 20.9677, 'rouge/rouge2': 0.0, 'rouge/rougeL': 12.9032, 'rouge/rougeLsum': 17.7419, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 506.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [20.9677, 0.0, 12.9032], 'rouge_geo_mean': 0.0, 'rouge1': 20.9677, 'rouge2': 0.0, 'rougeL': 12.9032, 'rougeLsum': 17.7419}
+2026-04-07 02:23:07,719 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=qasper
+2026-04-07 02:23:07,720 [INFO] rag_pipeline: [vanilla_rag/qasper] refreshed metrics: {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}
+2026-04-07 02:23:07,720 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=narrative_qa
+2026-04-07 02:23:07,721 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] refreshed metrics: {'f1': 80.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 80.0, 'display_keys': ['f1'], 'display': [80.0]}
+2026-04-07 02:23:07,721 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=quality
+2026-04-07 02:23:07,722 [INFO] rag_pipeline: [vanilla_rag/quality] refreshed metrics: {'exact_match': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}
+2026-04-07 02:23:07,722 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=contract_nli
+2026-04-07 02:23:07,722 [INFO] rag_pipeline: [vanilla_rag/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:07,722 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=gov_report
+2026-04-07 02:23:07,723 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:07,963 [INFO] rag_pipeline: [dos_rag/gov_report] refreshed metrics: {'rouge/rouge1': 45.1149, 'rouge/rouge2': 13.5447, 'rouge/rougeL': 20.4023, 'rouge/rougeLsum': 43.1034, 'rouge/geometric_mean': 23.1876, 'num_predicted': 1, 'mean_prediction_length_characters': 2115.0, 'scrolls_score': 23.1876, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.1149, 13.5447, 20.4023], 'rouge_geo_mean': 23.1876, 'rouge1': 45.1149, 'rouge2': 13.5447, 'rougeL': 20.4023, 'rougeLsum': 43.1034}
+2026-04-07 02:23:07,963 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=summ_screen_fd
+2026-04-07 02:23:07,964 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:08,180 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 33.0623, 'rouge/rouge2': 8.1744, 'rouge/rougeL': 16.2602, 'rouge/rougeLsum': 28.7263, 'rouge/geometric_mean': 16.3796, 'num_predicted': 1, 'mean_prediction_length_characters': 1512.0, 'scrolls_score': 16.3796, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [33.0623, 8.1744, 16.2602], 'rouge_geo_mean': 16.3796, 'rouge1': 33.0623, 'rouge2': 8.1744, 'rougeL': 16.2602, 'rougeLsum': 28.7263}
+2026-04-07 02:23:08,180 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=qmsum
+2026-04-07 02:23:08,181 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:08,308 [INFO] rag_pipeline: [dos_rag/qmsum] refreshed metrics: {'rouge/rouge1': 14.9254, 'rouge/rouge2': 1.005, 'rouge/rougeL': 11.9403, 'rouge/rougeLsum': 12.9353, 'rouge/geometric_mean': 5.6369, 'num_predicted': 1, 'mean_prediction_length_characters': 926.0, 'scrolls_score': 5.6369, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [14.9254, 1.005, 11.9403], 'rouge_geo_mean': 5.6369, 'rouge1': 14.9254, 'rouge2': 1.005, 'rougeL': 11.9403, 'rougeLsum': 12.9353}
+2026-04-07 02:23:08,308 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=qasper
+2026-04-07 02:23:08,309 [INFO] rag_pipeline: [dos_rag/qasper] refreshed metrics: {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}
+2026-04-07 02:23:08,309 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=narrative_qa
+2026-04-07 02:23:08,310 [INFO] rag_pipeline: [dos_rag/narrative_qa] refreshed metrics: {'f1': 40.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 40.0, 'display_keys': ['f1'], 'display': [40.0]}
+2026-04-07 02:23:08,310 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=quality
+2026-04-07 02:23:08,311 [INFO] rag_pipeline: [dos_rag/quality] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:08,311 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=contract_nli
+2026-04-07 02:23:08,312 [INFO] rag_pipeline: [dos_rag/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:08,312 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=gov_report
+2026-04-07 02:23:08,314 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:08,505 [INFO] rag_pipeline: [raptor/gov_report] refreshed metrics: {'rouge/rouge1': 45.4642, 'rouge/rouge2': 12.8342, 'rouge/rougeL': 19.8506, 'rouge/rougeLsum': 42.9029, 'rouge/geometric_mean': 22.6258, 'num_predicted': 1, 'mean_prediction_length_characters': 3697.0, 'scrolls_score': 22.6258, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.4642, 12.8342, 19.8506], 'rouge_geo_mean': 22.6258, 'rouge1': 45.4642, 'rouge2': 12.8342, 'rougeL': 19.8506, 'rougeLsum': 42.9029}
+2026-04-07 02:23:08,505 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=summ_screen_fd
+2026-04-07 02:23:08,506 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:08,658 [INFO] rag_pipeline: [raptor/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 36.0825, 'rouge/rouge2': 11.399, 'rouge/rougeL': 17.5258, 'rouge/rougeLsum': 33.5052, 'rouge/geometric_mean': 19.3173, 'num_predicted': 1, 'mean_prediction_length_characters': 1688.0, 'scrolls_score': 19.3173, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [36.0825, 11.399, 17.5258], 'rouge_geo_mean': 19.3173, 'rouge1': 36.0825, 'rouge2': 11.399, 'rougeL': 17.5258, 'rougeLsum': 33.5052}
+2026-04-07 02:23:08,658 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=qmsum
+2026-04-07 02:23:08,659 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:08,803 [INFO] rag_pipeline: [raptor/qmsum] refreshed metrics: {'rouge/rouge1': 16.4384, 'rouge/rouge2': 0.0, 'rouge/rougeL': 10.0457, 'rouge/rougeLsum': 13.6986, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 1102.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [16.4384, 0.0, 10.0457], 'rouge_geo_mean': 0.0, 'rouge1': 16.4384, 'rouge2': 0.0, 'rougeL': 10.0457, 'rougeLsum': 13.6986}
+2026-04-07 02:23:08,803 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=qasper
+2026-04-07 02:23:08,804 [INFO] rag_pipeline: [raptor/qasper] refreshed metrics: {'f1': 46.1538, 'num_predicted': 1, 'mean_prediction_length_characters': 81.0, 'scrolls_score': 46.1538, 'display_keys': ['f1'], 'display': [46.1538]}
+2026-04-07 02:23:08,804 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=narrative_qa
+2026-04-07 02:23:08,805 [INFO] rag_pipeline: [raptor/narrative_qa] refreshed metrics: {'f1': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 69.0, 'scrolls_score': 0.0, 'display_keys': ['f1'], 'display': [0.0]}
+2026-04-07 02:23:08,805 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=quality
+2026-04-07 02:23:08,805 [INFO] rag_pipeline: [raptor/quality] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:08,805 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=contract_nli
+2026-04-07 02:23:08,805 [INFO] rag_pipeline: [raptor/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:23,594 [INFO] __main__: Refreshing cached benchmark reports with context_budget=10000 and top_k=200
+2026-04-07 02:23:23,594 [INFO] rag_pipeline: Initialising benchmark pipeline ...
+2026-04-07 02:23:23,594 [INFO] rag_pipeline: Benchmark pipeline ready in cache-refresh mode.
+2026-04-07 02:23:23,594 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=gov_report
+2026-04-07 02:23:23,809 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:24,010 [INFO] rag_pipeline: [vanilla_rag/gov_report] refreshed metrics: {'rouge/rouge1': 29.4627, 'rouge/rouge2': 6.6087, 'rouge/rougeL': 15.2513, 'rouge/rougeLsum': 27.7296, 'rouge/geometric_mean': 14.3736, 'num_predicted': 1, 'mean_prediction_length_characters': 1229.0, 'scrolls_score': 14.3736, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [29.4627, 6.6087, 15.2513], 'rouge_geo_mean': 14.3736, 'rouge1': 29.4627, 'rouge2': 6.6087, 'rougeL': 15.2513, 'rougeLsum': 27.7296}
+2026-04-07 02:23:24,010 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=summ_screen_fd
+2026-04-07 02:23:24,011 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:24,208 [INFO] rag_pipeline: [vanilla_rag/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 31.0433, 'rouge/rouge2': 7.6726, 'rouge/rougeL': 13.7405, 'rouge/rougeLsum': 27.9898, 'rouge/geometric_mean': 14.847, 'num_predicted': 1, 'mean_prediction_length_characters': 1736.0, 'scrolls_score': 14.847, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.0433, 7.6726, 13.7405], 'rouge_geo_mean': 14.847, 'rouge1': 31.0433, 'rouge2': 7.6726, 'rougeL': 13.7405, 'rougeLsum': 27.9898}
+2026-04-07 02:23:24,208 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=qmsum
+2026-04-07 02:23:24,210 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:24,468 [INFO] rag_pipeline: [vanilla_rag/qmsum] refreshed metrics: {'rouge/rouge1': 20.9677, 'rouge/rouge2': 0.0, 'rouge/rougeL': 12.9032, 'rouge/rougeLsum': 17.7419, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 506.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [20.9677, 0.0, 12.9032], 'rouge_geo_mean': 0.0, 'rouge1': 20.9677, 'rouge2': 0.0, 'rougeL': 12.9032, 'rougeLsum': 17.7419}
+2026-04-07 02:23:24,468 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=qasper
+2026-04-07 02:23:24,469 [INFO] rag_pipeline: [vanilla_rag/qasper] refreshed metrics: {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}
+2026-04-07 02:23:24,469 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=narrative_qa
+2026-04-07 02:23:24,470 [INFO] rag_pipeline: [vanilla_rag/narrative_qa] refreshed metrics: {'f1': 80.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 80.0, 'display_keys': ['f1'], 'display': [80.0]}
+2026-04-07 02:23:24,470 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=quality
+2026-04-07 02:23:24,471 [INFO] rag_pipeline: [vanilla_rag/quality] refreshed metrics: {'exact_match': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}
+2026-04-07 02:23:24,471 [INFO] rag_pipeline: Refreshing cached scores for method=vanilla_rag task=contract_nli
+2026-04-07 02:23:24,471 [INFO] rag_pipeline: [vanilla_rag/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:24,471 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=gov_report
+2026-04-07 02:23:24,472 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:24,729 [INFO] rag_pipeline: [dos_rag/gov_report] refreshed metrics: {'rouge/rouge1': 45.1149, 'rouge/rouge2': 13.5447, 'rouge/rougeL': 20.4023, 'rouge/rougeLsum': 43.1034, 'rouge/geometric_mean': 23.1876, 'num_predicted': 1, 'mean_prediction_length_characters': 2115.0, 'scrolls_score': 23.1876, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.1149, 13.5447, 20.4023], 'rouge_geo_mean': 23.1876, 'rouge1': 45.1149, 'rouge2': 13.5447, 'rougeL': 20.4023, 'rougeLsum': 43.1034}
+2026-04-07 02:23:24,729 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=summ_screen_fd
+2026-04-07 02:23:24,730 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:24,944 [INFO] rag_pipeline: [dos_rag/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 33.0623, 'rouge/rouge2': 8.1744, 'rouge/rougeL': 16.2602, 'rouge/rougeLsum': 28.7263, 'rouge/geometric_mean': 16.3796, 'num_predicted': 1, 'mean_prediction_length_characters': 1512.0, 'scrolls_score': 16.3796, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [33.0623, 8.1744, 16.2602], 'rouge_geo_mean': 16.3796, 'rouge1': 33.0623, 'rouge2': 8.1744, 'rougeL': 16.2602, 'rougeLsum': 28.7263}
+2026-04-07 02:23:24,944 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=qmsum
+2026-04-07 02:23:24,945 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,096 [INFO] rag_pipeline: [dos_rag/qmsum] refreshed metrics: {'rouge/rouge1': 14.9254, 'rouge/rouge2': 1.005, 'rouge/rougeL': 11.9403, 'rouge/rougeLsum': 12.9353, 'rouge/geometric_mean': 5.6369, 'num_predicted': 1, 'mean_prediction_length_characters': 926.0, 'scrolls_score': 5.6369, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [14.9254, 1.005, 11.9403], 'rouge_geo_mean': 5.6369, 'rouge1': 14.9254, 'rouge2': 1.005, 'rougeL': 11.9403, 'rougeLsum': 12.9353}
+2026-04-07 02:23:25,096 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=qasper
+2026-04-07 02:23:25,097 [INFO] rag_pipeline: [dos_rag/qasper] refreshed metrics: {'f1': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 32.0, 'scrolls_score': 100.0, 'display_keys': ['f1'], 'display': [100.0]}
+2026-04-07 02:23:25,097 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=narrative_qa
+2026-04-07 02:23:25,098 [INFO] rag_pipeline: [dos_rag/narrative_qa] refreshed metrics: {'f1': 40.0, 'num_predicted': 1, 'mean_prediction_length_characters': 17.0, 'scrolls_score': 40.0, 'display_keys': ['f1'], 'display': [40.0]}
+2026-04-07 02:23:25,098 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=quality
+2026-04-07 02:23:25,098 [INFO] rag_pipeline: [dos_rag/quality] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:25,098 [INFO] rag_pipeline: Refreshing cached scores for method=dos_rag task=contract_nli
+2026-04-07 02:23:25,099 [INFO] rag_pipeline: [dos_rag/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:25,099 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=gov_report
+2026-04-07 02:23:25,100 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,314 [INFO] rag_pipeline: [raptor/gov_report] refreshed metrics: {'rouge/rouge1': 45.4642, 'rouge/rouge2': 12.8342, 'rouge/rougeL': 19.8506, 'rouge/rougeLsum': 42.9029, 'rouge/geometric_mean': 22.6258, 'num_predicted': 1, 'mean_prediction_length_characters': 3697.0, 'scrolls_score': 22.6258, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [45.4642, 12.8342, 19.8506], 'rouge_geo_mean': 22.6258, 'rouge1': 45.4642, 'rouge2': 12.8342, 'rougeL': 19.8506, 'rougeLsum': 42.9029}
+2026-04-07 02:23:25,314 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=summ_screen_fd
+2026-04-07 02:23:25,315 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,479 [INFO] rag_pipeline: [raptor/summ_screen_fd] refreshed metrics: {'rouge/rouge1': 36.0825, 'rouge/rouge2': 11.399, 'rouge/rougeL': 17.5258, 'rouge/rougeLsum': 33.5052, 'rouge/geometric_mean': 19.3173, 'num_predicted': 1, 'mean_prediction_length_characters': 1688.0, 'scrolls_score': 19.3173, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [36.0825, 11.399, 17.5258], 'rouge_geo_mean': 19.3173, 'rouge1': 36.0825, 'rouge2': 11.399, 'rougeL': 17.5258, 'rougeLsum': 33.5052}
+2026-04-07 02:23:25,479 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=qmsum
+2026-04-07 02:23:25,479 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,615 [INFO] rag_pipeline: [raptor/qmsum] refreshed metrics: {'rouge/rouge1': 16.4384, 'rouge/rouge2': 0.0, 'rouge/rougeL': 10.0457, 'rouge/rougeLsum': 13.6986, 'rouge/geometric_mean': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 1102.0, 'scrolls_score': 0.0, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [16.4384, 0.0, 10.0457], 'rouge_geo_mean': 0.0, 'rouge1': 16.4384, 'rouge2': 0.0, 'rougeL': 10.0457, 'rougeLsum': 13.6986}
+2026-04-07 02:23:25,615 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=qasper
+2026-04-07 02:23:25,615 [INFO] rag_pipeline: [raptor/qasper] refreshed metrics: {'f1': 46.1538, 'num_predicted': 1, 'mean_prediction_length_characters': 81.0, 'scrolls_score': 46.1538, 'display_keys': ['f1'], 'display': [46.1538]}
+2026-04-07 02:23:25,615 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=narrative_qa
+2026-04-07 02:23:25,616 [INFO] rag_pipeline: [raptor/narrative_qa] refreshed metrics: {'f1': 0.0, 'num_predicted': 1, 'mean_prediction_length_characters': 69.0, 'scrolls_score': 0.0, 'display_keys': ['f1'], 'display': [0.0]}
+2026-04-07 02:23:25,616 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=quality
+2026-04-07 02:23:25,616 [INFO] rag_pipeline: [raptor/quality] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 8.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:25,617 [INFO] rag_pipeline: Refreshing cached scores for method=raptor task=contract_nli
+2026-04-07 02:23:25,617 [INFO] rag_pipeline: [raptor/contract_nli] refreshed metrics: {'exact_match': 100.0, 'num_predicted': 1, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}
+2026-04-07 02:23:25,619 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,766 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:25,944 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,102 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,221 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,372 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,497 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,611 [INFO] absl: Using default tokenizer.
+2026-04-07 02:23:26,735 [INFO] absl: Using default tokenizer.

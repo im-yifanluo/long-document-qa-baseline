@@ -17,7 +17,7 @@
   "provenance": {
     "scrolls_dataset": {
       "source": "tau/scrolls",
-      "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+      "dataset_script": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
       "loading_strategy": "official_task_archives",
       "duplicate_id_handling": "collapsed_to_multi_reference_example",
       "input_adapter": "packed_input_to_document_query_for_retrieval",
@@ -61,15 +61,15 @@
     },
     "scrolls_metric": {
       "source": "tau/scrolls",
-      "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
-      "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+      "metric_dir": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+      "entrypoint": "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
       "official_metric_files": [
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
-        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+        "/home/yifan/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
       ],
-      "datasets_version": "3.6.0",
+      "datasets_version": "4.7.0",
       "compatibility_shim": "datasets.Metric"
     }
   },
@@ -135,5 +135,29 @@
     "avg_context_tokens": 4798.333333333333,
     "avg_generation_tokens": 96.0,
     "total_input_tokens": 14708
+  },
+  "runtime_summary": {
+    "per_task_elapsed_seconds": {
+      "qmsum": 517.67,
+      "narrative_qa": 452.45,
+      "quality": 118.53
+    },
+    "per_task_seconds_per_example": {
+      "qmsum": 517.67,
+      "narrative_qa": 452.45,
+      "quality": 118.53
+    },
+    "per_task_examples_per_second": {
+      "qmsum": 0.0019,
+      "narrative_qa": 0.0022,
+      "quality": 0.0084
+    },
+    "total_elapsed_seconds": 1088.65,
+    "total_elapsed_minutes": 18.14,
+    "total_elapsed_hours": 0.302,
+    "total_examples": 3,
+    "total_generated_examples": 0,
+    "avg_seconds_per_example": 362.8833,
+    "avg_examples_per_second": 0.0028
   }
 }

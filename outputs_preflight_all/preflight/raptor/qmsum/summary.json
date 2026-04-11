@@ -2,7 +2,7 @@
   "task": "qmsum",
   "method": "raptor",
   "num_examples": 1,
-  "num_generated": 1,
+  "num_generated": 0,
   "metric_type": "rouge",
   "metrics": {
     "rouge/rouge1": 16.4384,
@@ -30,6 +30,7 @@
     "rougeLsum": 13.6986
   },
   "elapsed_seconds": 607.15,
+  "results_refreshed_from_cache": true,
   "token_stats": {
     "avg_input_tokens": 10063.0,
     "avg_context_tokens": 10011.0,

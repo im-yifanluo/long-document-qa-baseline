@@ -785,6 +785,15 @@ class BenchmarkPipeline:
                 input_tokens = [row.get("input_tokens", 0) for row in rows]
                 context_tokens = [row.get("context_tokens", 0) for row in rows]
                 generation_tokens = [row.get("generation_tokens", 0) for row in rows]
+                previous_elapsed = 0.0
+                summary_path = self._task_summary_file(method, task)
+                if os.path.exists(summary_path):
+                    try:
+                        with open(summary_path, "r") as fh:
+                            previous_summary = json.load(fh)
+                        previous_elapsed = float(previous_summary.get("elapsed_seconds", 0.0) or 0.0)
+                    except Exception:
+                        previous_elapsed = 0.0
 
                 summary = {
                     "task": task,
@@ -793,7 +802,7 @@ class BenchmarkPipeline:
                     "num_generated": 0,
                     "metric_type": metric_type,
                     "metrics": metrics,
-                    "elapsed_seconds": 0.0,
+                    "elapsed_seconds": round(previous_elapsed, 2),
                     "results_refreshed_from_cache": True,
                     "token_stats": {
                         "avg_input_tokens": (sum(input_tokens) / len(input_tokens)) if input_tokens else 0.0,
@@ -1042,6 +1051,32 @@ class BenchmarkPipeline:
                 row.append("n/a" if delta is None else f"{delta:+.4f}")
             lines.append("| " + " | ".join(row) + " |")
         lines.append("")
+        lines.append("## Runtime Summary")
+        lines.append("")
+        runtime_header = [
+            "Method",
+            "Total seconds",
+            "Total minutes",
+            "Seconds / example",
+            "Examples / second",
+        ]
+        lines.append("| " + " | ".join(runtime_header) + " |")
+        lines.append("| " + " | ".join(["---"] * len(runtime_header)) + " |")
+        for method in methods:
+            runtime = method_reports.get(method, {}).get("runtime_summary", {})
+            total_seconds = runtime.get("total_elapsed_seconds")
+            total_minutes = runtime.get("total_elapsed_minutes")
+            seconds_per_example = runtime.get("avg_seconds_per_example")
+            examples_per_second = runtime.get("avg_examples_per_second")
+            row = [
+                method,
+                "n/a" if total_seconds is None else f"{total_seconds:.2f}",
+                "n/a" if total_minutes is None else f"{total_minutes:.2f}",
+                "n/a" if seconds_per_example is None else f"{seconds_per_example:.4f}",
+                "n/a" if examples_per_second is None else f"{examples_per_second:.4f}",
+            ]
+            lines.append("| " + " | ".join(row) + " |")
+        lines.append("")
         lines.append("## Example Previews")
         lines.append("")
         for task in self.config.tasks:
@@ -1096,6 +1131,58 @@ class BenchmarkPipeline:
             "comparison_report_markdown": markdown_path,
         }
 
+    @staticmethod
+    def _runtime_summary(task_results: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+        """Aggregate wall-clock and throughput stats across one method's tasks."""
+        per_task_elapsed_seconds: Dict[str, float] = {}
+        per_task_seconds_per_example: Dict[str, Optional[float]] = {}
+        per_task_examples_per_second: Dict[str, Optional[float]] = {}
+        total_elapsed_seconds = 0.0
+        total_examples = 0
+        total_generated_examples = 0
+
+        for task, result in task_results.items():
+            if "error" in result:
+                continue
+
+            elapsed = float(result.get("elapsed_seconds", 0.0) or 0.0)
+            num_examples = int(result.get("num_examples", 0) or 0)
+            num_generated = int(result.get("num_generated", 0) or 0)
+
+            per_task_elapsed_seconds[task] = round(elapsed, 2)
+            per_task_seconds_per_example[task] = (
+                round(elapsed / num_examples, 4) if num_examples > 0 else None
+            )
+            per_task_examples_per_second[task] = (
+                round(num_examples / elapsed, 4) if elapsed > 0 and num_examples > 0 else None
+            )
+
+            total_elapsed_seconds += elapsed
+            total_examples += num_examples
+            total_generated_examples += num_generated
+
+        avg_seconds_per_example = (
+            round(total_elapsed_seconds / total_examples, 4) if total_examples > 0 else None
+        )
+        avg_examples_per_second = (
+            round(total_examples / total_elapsed_seconds, 4)
+            if total_elapsed_seconds > 0 and total_examples > 0
+            else None
+        )
+
+        return {
+            "per_task_elapsed_seconds": per_task_elapsed_seconds,
+            "per_task_seconds_per_example": per_task_seconds_per_example,
+            "per_task_examples_per_second": per_task_examples_per_second,
+            "total_elapsed_seconds": round(total_elapsed_seconds, 2),
+            "total_elapsed_minutes": round(total_elapsed_seconds / 60.0, 2),
+            "total_elapsed_hours": round(total_elapsed_seconds / 3600.0, 3),
+            "total_examples": total_examples,
+            "total_generated_examples": total_generated_examples,
+            "avg_seconds_per_example": avg_seconds_per_example,
+            "avg_examples_per_second": avg_examples_per_second,
+        }
+
     def _report(self, all_results: Dict[str, Dict[str, Dict[str, Any]]]) -> None:
         """Write per-method reports plus one combined comparison report."""
         methods = list(all_results.keys())
@@ -1130,12 +1217,15 @@ class BenchmarkPipeline:
                 token_costs["avg_generation_tokens"] /= valid_count
 
             average = (sum(scores.values()) / len(scores)) if scores else 0.0
+            runtime_summary = self._runtime_summary(task_results)
             report = {
                 "method": method,
                 "config": {
                     "embedding_model": self.config.embedding_model,
                     "llm_model": self.config.llm_model,
-                    "active_model": self.generator.active_model,
+                    "active_model": (
+                        self.generator.active_model if self.generator is not None else self.config.llm_model
+                    ),
                     "fallback_llm_model": self.config.fallback_llm_model,
                     "chunk_size": self.config.chunk_size,
                     "chunk_overlap": self.config.chunk_overlap,
@@ -1154,6 +1244,7 @@ class BenchmarkPipeline:
                 "average_score": average,
                 "detailed_metrics": details,
                 "token_cost_summary": token_costs,
+                "runtime_summary": runtime_summary,
             }
             method_reports[method] = report
 
@@ -1164,9 +1255,12 @@ class BenchmarkPipeline:
 
         deltas: Dict[str, Optional[float]] = {}
         delta_label: Optional[str] = None
+        runtime_deltas: Dict[str, Optional[float]] = {}
+        runtime_delta_label: Optional[str] = None
         if len(methods) >= 2:
             left, right = methods[:2]
             delta_label = f"{right}_minus_{left}"
+            runtime_delta_label = f"{right}_minus_{left}"
             for task in self.config.tasks:
                 left_score = method_reports.get(left, {}).get("per_task_scores", {}).get(task)
                 right_score = method_reports.get(right, {}).get("per_task_scores", {}).get(task)
@@ -1174,6 +1268,23 @@ class BenchmarkPipeline:
                     deltas[task] = None
                 else:
                     deltas[task] = right_score - left_score
+
+                left_runtime = (
+                    method_reports.get(left, {})
+                    .get("runtime_summary", {})
+                    .get("per_task_elapsed_seconds", {})
+                    .get(task)
+                )
+                right_runtime = (
+                    method_reports.get(right, {})
+                    .get("runtime_summary", {})
+                    .get("per_task_elapsed_seconds", {})
+                    .get(task)
+                )
+                if left_runtime is None or right_runtime is None:
+                    runtime_deltas[task] = None
+                else:
+                    runtime_deltas[task] = round(right_runtime - left_runtime, 2)
 
         all_examples, per_task_examples = self._build_example_artifacts(methods)
         artifact_paths = self._write_example_artifacts(
@@ -1207,6 +1318,22 @@ class BenchmarkPipeline:
             "comparison": {
                 "pairwise_delta_label": delta_label,
                 "pairwise_delta": deltas,
+                "runtime": {
+                    "pairwise_delta_label": runtime_delta_label,
+                    "pairwise_delta_elapsed_seconds": runtime_deltas,
+                    "per_method_total_elapsed_seconds": {
+                        method: report.get("runtime_summary", {}).get("total_elapsed_seconds", 0.0)
+                        for method, report in method_reports.items()
+                    },
+                    "per_method_avg_seconds_per_example": {
+                        method: report.get("runtime_summary", {}).get("avg_seconds_per_example")
+                        for method, report in method_reports.items()
+                    },
+                    "per_method_avg_examples_per_second": {
+                        method: report.get("runtime_summary", {}).get("avg_examples_per_second")
+                        for method, report in method_reports.items()
+                    },
+                },
                 "agreement": self._compute_agreement(methods),
                 "per_task_examples": per_task_examples,
             },
