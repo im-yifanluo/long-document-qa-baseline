@@ -1,0 +1,27 @@
+{
+  "task": "qasper",
+  "method": "raptor",
+  "num_examples": 15,
+  "num_generated": 15,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 56.2477,
+    "num_predicted": 15,
+    "mean_prediction_length_characters": 63.2,
+    "scrolls_score": 56.2477,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      56.2477
+    ]
+  },
+  "elapsed_seconds": 1935.38,
+  "token_stats": {
+    "avg_input_tokens": 6954.2,
+    "avg_context_tokens": 6827.2,
+    "avg_generation_tokens": 16.933333333333334,
+    "total_input_tokens": 104313
+  },
+  "results_file": "outputs_meeting_raptor15/subset/raptor/qasper/results.jsonl"
+}

@@ -165,3 +165,1375 @@
 2026-04-07 09:14:55,910 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21_0
 2026-04-07 09:22:26,829 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
 2026-04-07 09:22:26,830 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22_0
+2026-04-07 09:29:58,022 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-07 09:29:58,023 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23_0
+2026-04-07 09:37:28,791 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-07 09:37:28,792 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24_0
+2026-04-07 09:45:01,230 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-07 09:45:01,231 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25_0
+2026-04-07 09:52:32,043 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-07 09:52:32,044 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26_0
+2026-04-07 10:00:03,043 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-07 10:00:03,044 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27_0
+2026-04-07 10:07:34,775 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-07 10:07:34,775 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28_0
+2026-04-07 10:15:06,641 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-07 10:15:06,641 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29_0
+2026-04-07 10:22:37,912 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-07 10:22:37,912 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0_0
+2026-04-07 14:39:42,814 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-07 14:39:44,120 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-07 14:39:44,122 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1_0
+2026-04-07 18:56:49,315 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-07 18:56:50,615 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-07 18:56:50,616 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2_0
+2026-04-07 23:13:55,845 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-07 23:13:57,139 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-07 23:13:57,140 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3_0
+2026-04-08 03:31:01,170 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-08 03:31:02,443 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-08 03:31:02,443 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4_0
+2026-04-08 07:48:06,581 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-08 07:48:07,902 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-08 07:48:07,903 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5_0
+2026-04-08 12:05:12,692 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-08 12:05:13,955 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-08 12:05:13,956 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6_0
+2026-04-08 16:22:18,794 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-08 16:22:20,034 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-08 16:22:20,036 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7_0
+2026-04-08 20:39:26,921 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-08 20:39:28,233 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-08 20:39:28,234 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8_0
+2026-04-09 00:56:34,815 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 00:56:36,056 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-09 00:56:36,056 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9_0
+2026-04-09 05:13:42,626 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 05:13:43,876 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-09 05:13:43,877 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10_0
+2026-04-09 09:30:50,550 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 09:30:51,831 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-09 09:30:51,832 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11_0
+2026-04-09 13:47:58,471 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 13:47:59,722 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-09 13:47:59,723 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12_0
+2026-04-09 18:05:04,698 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 18:05:05,994 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-09 18:05:05,996 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13_0
+2026-04-09 22:22:10,043 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-09 22:22:11,338 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-09 22:22:11,340 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14_0
+2026-04-10 02:39:16,675 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-10 02:39:18,007 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-10 02:39:18,010 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15_0
+2026-04-10 06:56:22,639 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-10 06:56:23,949 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-10 06:56:23,951 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16_0
+2026-04-10 11:13:31,415 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-10 11:13:32,813 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-10 11:13:32,815 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17_0
+2026-04-10 15:30:37,911 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-10 15:30:39,287 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-10 15:30:39,288 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18_0
+2026-04-10 19:47:45,167 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-10 19:47:46,481 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] Running 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-10 19:47:46,482 [INFO] official_methods: Building ReadAgent pages/gists for document narrative_qa:b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19_0
+2026-04-11 00:04:52,364 [ERROR] rag_pipeline: [read_agent_sequential/narrative_qa] Example b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19 failed: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+Traceback (most recent call last):
+  File "/home/yifan65/long-document-qa-baseline/rag_pipeline.py", line 473, in _run_stateful_task
+    meta = self.official_methods.run_example(method, ex)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 396, in run_example
+    return self._run_read_agent(example, sequential=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/official_methods.py", line 1065, in _run_read_agent
+    response = self.generator.generate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/generator.py", line 273, in generate
+    outputs = self.llm.generate([prompt], sampling_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 492, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1818, in _run_completion
+    self._add_completion_requests(
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1791, in _add_completion_requests
+    return self._render_and_add_requests(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1931, in _render_and_add_requests
+    raise e
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1917, in _render_and_add_requests
+    for i, prompt in enumerate(prompts):
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 1793, in <genexpr>
+    self._preprocess_cmpl_one(prompt, tokenization_kwargs)
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 867, in _preprocess_cmpl_one
+    (engine_prompt,) = self._preprocess_cmpl([prompt], tokenization_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 860, in _preprocess_cmpl
+    return renderer.render_cmpl(parsed_prompts, tok_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 738, in render_cmpl
+    tok_prompts = self.tokenize_prompts(dict_prompts, tok_params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in tokenize_prompts
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 493, in <listcomp>
+    return [self.tokenize_prompt(prompt, params) for prompt in prompts]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 486, in tokenize_prompt
+    return self._tokenize_singleton_prompt(prompt, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/base.py", line 405, in _tokenize_singleton_prompt
+    return params.apply_post_tokenization(self.tokenizer, prompt)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 455, in apply_post_tokenization
+    prompt["prompt_token_ids"] = self._validate_tokens(  # type: ignore[typeddict-unknown-key]
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 439, in _validate_tokens
+    tokens = validator(tokenizer, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yifan65/long-document-qa-baseline/venv/lib/python3.11/site-packages/vllm/renderers/params.py", line 418, in _token_len_check
+    raise VLLMValidationError(
+vllm.exceptions.VLLMValidationError: This model's maximum context length is 13072 tokens. However, you requested 0 output tokens and your prompt contains at least 13073 input tokens, for a total of at least 13073 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (parameter=input_tokens, value=13073)
+2026-04-11 00:04:53,760 [INFO] rag_pipeline: [read_agent_sequential/narrative_qa] {'f1': 12.8219, 'num_predicted': 50, 'mean_prediction_length_characters': 26.08, 'scrolls_score': 12.8219, 'display_keys': ['f1'], 'display': [12.8219]}  (322071.2s)
+2026-04-11 00:04:53,770 [INFO] rag_pipeline: 
+============================================================
+  Running method=read_agent_sequential task=quality
+============================================================
+2026-04-11 00:04:53,771 [INFO] data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-11 00:04:54,599 [INFO] data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-11 00:04:54,605 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-11 00:04:54,606 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_1_0
+2026-04-11 00:06:52,203 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-11 00:06:52,204 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_2_0
+2026-04-11 00:08:42,479 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-11 00:08:42,480 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_3_0
+2026-04-11 00:10:31,279 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-11 00:10:31,280 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_4_0
+2026-04-11 00:12:20,474 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-11 00:12:20,475 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_5_0
+2026-04-11 00:14:09,396 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-11 00:14:09,397 [INFO] official_methods: Building ReadAgent pages/gists for document quality:52845_75VB1ISR_6_0
+2026-04-11 00:15:58,542 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 7 / 50  (id=30029_F5N22U40_1)
+2026-04-11 00:15:58,543 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_1_0
+2026-04-11 00:17:57,088 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 8 / 50  (id=30029_F5N22U40_2)
+2026-04-11 00:17:57,088 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_2_0
+2026-04-11 00:19:43,940 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 9 / 50  (id=30029_F5N22U40_3)
+2026-04-11 00:19:43,941 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_3_0
+2026-04-11 00:21:28,926 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 10 / 50  (id=30029_F5N22U40_4)
+2026-04-11 00:21:28,927 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_4_0
+2026-04-11 00:23:13,969 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 11 / 50  (id=30029_F5N22U40_5)
+2026-04-11 00:23:13,974 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_5_0
+2026-04-11 00:24:58,281 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 12 / 50  (id=30029_F5N22U40_6)
+2026-04-11 00:24:58,282 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_6_0
+2026-04-11 00:26:43,369 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 13 / 50  (id=30029_F5N22U40_7)
+2026-04-11 00:26:43,370 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_7_0
+2026-04-11 00:28:27,112 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 14 / 50  (id=30029_F5N22U40_8)
+2026-04-11 00:28:27,113 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_8_0
+2026-04-11 00:30:11,408 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 15 / 50  (id=30029_F5N22U40_9)
+2026-04-11 00:30:11,408 [INFO] official_methods: Building ReadAgent pages/gists for document quality:30029_F5N22U40_9_0
+2026-04-11 00:31:55,766 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-11 00:31:55,767 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_1_0
+2026-04-11 00:34:03,800 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-11 00:34:03,801 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_2_0
+2026-04-11 00:36:08,908 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-11 00:36:08,909 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_3_0
+2026-04-11 00:38:13,120 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-11 00:38:13,121 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_4_0
+2026-04-11 00:40:17,904 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-11 00:40:17,905 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_5_0
+2026-04-11 00:42:21,830 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-11 00:42:21,831 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_6_0
+2026-04-11 00:44:26,382 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-11 00:44:26,383 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_7_0
+2026-04-11 00:46:31,038 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-11 00:46:31,039 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_8_0
+2026-04-11 00:48:34,860 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-11 00:48:34,862 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62139_J05FWZR6_9_0
+2026-04-11 00:50:39,989 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-11 00:50:39,990 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_1_0
+2026-04-11 00:52:40,272 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-11 00:52:40,273 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_2_0
+2026-04-11 00:54:40,699 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-11 00:54:40,700 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_3_0
+2026-04-11 00:56:40,767 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-11 00:56:40,767 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_4_0
+2026-04-11 00:58:41,405 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-11 00:58:41,405 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_5_0
+2026-04-11 01:00:41,513 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-11 01:00:41,514 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_6_0
+2026-04-11 01:02:41,092 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-11 01:02:41,093 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_7_0
+2026-04-11 01:04:41,565 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-11 01:04:41,566 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_8_0
+2026-04-11 01:06:41,556 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-11 01:06:41,557 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_9_0
+2026-04-11 01:08:41,337 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-11 01:08:41,338 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63523_STSHLFEA_10_0
+2026-04-11 01:10:42,168 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-11 01:10:42,168 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_1_0
+2026-04-11 01:12:39,756 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-11 01:12:39,757 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_2_0
+2026-04-11 01:14:26,566 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-11 01:14:26,567 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_3_0
+2026-04-11 01:16:18,160 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-11 01:16:18,161 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_4_0
+2026-04-11 01:18:08,436 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-11 01:18:08,437 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_5_0
+2026-04-11 01:19:59,471 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-11 01:19:59,472 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_6_0
+2026-04-11 01:21:50,190 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-11 01:21:50,191 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_7_0
+2026-04-11 01:23:41,965 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-11 01:23:41,966 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_8_0
+2026-04-11 01:25:32,323 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-11 01:25:32,325 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_9_0
+2026-04-11 01:27:23,247 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-11 01:27:23,248 [INFO] official_methods: Building ReadAgent pages/gists for document quality:63401_ZCP5ZDGL_10_0
+2026-04-11 01:29:14,629 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-11 01:29:14,630 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_1_0
+2026-04-11 01:31:21,857 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-11 01:31:21,858 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_2_0
+2026-04-11 01:33:24,825 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-11 01:33:24,825 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_3_0
+2026-04-11 01:35:26,575 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-11 01:35:26,576 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_4_0
+2026-04-11 01:37:28,415 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-11 01:37:28,416 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_5_0
+2026-04-11 01:39:30,513 [INFO] rag_pipeline: [read_agent_sequential/quality] Running 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-11 01:39:30,514 [INFO] official_methods: Building ReadAgent pages/gists for document quality:62476_Z8GFDCIZ_6_0
+2026-04-11 01:41:32,204 [INFO] rag_pipeline: [read_agent_sequential/quality] {'exact_match': 70.0, 'num_predicted': 50, 'mean_prediction_length_characters': 73.34, 'scrolls_score': 70.0, 'display_keys': ['exact_match'], 'display': [70.0]}  (5797.6s)
+2026-04-11 01:41:32,260 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:36,117 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:39,353 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:42,795 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:46,165 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:49,652 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:52,982 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:56,248 [INFO] absl: Using default tokenizer.
+2026-04-11 01:41:59,682 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:03,073 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:06,650 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:10,069 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:13,505 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:16,981 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:20,345 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:23,885 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:27,297 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:30,621 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:34,285 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:37,449 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:40,901 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:44,338 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:47,851 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:51,401 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:54,800 [INFO] absl: Using default tokenizer.
+2026-04-11 01:42:58,275 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:01,626 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:05,086 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:08,520 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:11,967 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:15,610 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:19,418 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:23,207 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:26,949 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:30,694 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:34,471 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:38,244 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:42,009 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:45,650 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:49,359 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:53,115 [INFO] absl: Using default tokenizer.
+2026-04-11 01:43:56,944 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:00,728 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:04,495 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:08,283 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:12,066 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:15,903 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:19,657 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:23,436 [INFO] absl: Using default tokenizer.
+2026-04-11 01:44:27,155 [INFO] absl: Using default tokenizer.

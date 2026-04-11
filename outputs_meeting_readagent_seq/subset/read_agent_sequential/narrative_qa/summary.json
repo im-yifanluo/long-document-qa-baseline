@@ -1,0 +1,27 @@
+{
+  "task": "narrative_qa",
+  "method": "read_agent_sequential",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 12.8219,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 26.08,
+    "scrolls_score": 12.8219,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      12.8219
+    ]
+  },
+  "elapsed_seconds": 322071.23,
+  "token_stats": {
+    "avg_input_tokens": 2974.28,
+    "avg_context_tokens": 2898.06,
+    "avg_generation_tokens": 5.5,
+    "total_input_tokens": 148714
+  },
+  "results_file": "outputs_meeting_readagent_seq/subset/read_agent_sequential/narrative_qa/results.jsonl"
+}
