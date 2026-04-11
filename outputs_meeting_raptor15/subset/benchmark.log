@@ -2640,3 +2640,108 @@
 2026-04-11 03:08:52,962 [INFO] root: Node Texts Length: 866, Summarized Text Length: 146
 2026-04-11 03:09:03,044 [INFO] root: Node Texts Length: 846, Summarized Text Length: 192
 2026-04-11 03:09:13,076 [INFO] root: Node Texts Length: 785, Summarized Text Length: 192
+2026-04-11 03:09:23,217 [INFO] root: Node Texts Length: 1128, Summarized Text Length: 192
+2026-04-11 03:09:33,259 [INFO] root: Node Texts Length: 842, Summarized Text Length: 192
+2026-04-11 03:09:33,270 [INFO] root: Constructing Layer 2
+2026-04-11 03:09:33,270 [INFO] root: Stopping Layer construction: Cannot Create More Layers. Total Layers in tree: 2
+2026-04-11 03:09:33,272 [INFO] root: Successfully initialized TreeRetriever with Config 
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f1903f029d0>
+            Num Layers: None
+            Start Layer: None
+        
+2026-04-11 03:09:33,273 [INFO] root: Using collapsed_tree
+2026-04-11 03:09:36,725 [INFO] rag_pipeline: [raptor/narrative_qa] Running 9 / 15  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-11 03:09:36,725 [INFO] official_methods: Building RAPTOR tree for document 8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8_0
+2026-04-11 03:09:36,726 [INFO] root: Successfully initialized TreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f1903fad090>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f1748173550>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-11 03:09:36,727 [INFO] root: Successfully initialized ClusterTreeBuilder with Config 
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f1903fad090>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f1748173550>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+2026-04-11 03:09:36,728 [INFO] root: Successfully initialized RetrievalAugmentation with Config 
+        RetrievalAugmentationConfig:
+            
+        TreeBuilderConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Max Tokens: 100
+            Num Layers: 5
+            Threshold: 0.5
+            Top K: 5
+            Selection Mode: top_k
+            Summarization Length: 192
+            Summarization Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorSummarizationModel object at 0x7f1903fad090>
+            Embedding Models: {'EMB': <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f1748173550>}
+            Cluster Embedding Model: EMB
+        
+        Reduction Dimension: 10
+        Clustering Algorithm: RAPTOR_Clustering
+        Clustering Parameters: {}
+        
+            
+            
+        TreeRetrieverConfig:
+            Tokenizer: <Encoding 'cl100k_base'>
+            Threshold: 0.5
+            Top K: 20
+            Selection Mode: top_k
+            Context Embedding Model: EMB
+            Embedding Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.LocalRaptorEmbeddingModel object at 0x7f1748173550>
+            Num Layers: None
+            Start Layer: None
+        
+            
+            QA Model: <official_methods.OfficialMethodRunner._build_raptor_tree.<locals>.DummyRaptorQAModel object at 0x7f19053e68d0>
+            Tree Builder Type: cluster
+        
+2026-04-11 03:09:36,745 [INFO] root: Creating Leaf Nodes
+2026-04-11 03:09:38,234 [INFO] root: Created 183 Leaf Embeddings
+2026-04-11 03:09:38,234 [INFO] root: Building All Nodes
+2026-04-11 03:09:38,238 [INFO] root: Using Cluster TreeBuilder
+2026-04-11 03:09:38,238 [INFO] root: Constructing Layer 0
+2026-04-11 03:10:36,789 [INFO] root: Summarization Length: 192
+2026-04-11 03:10:44,942 [INFO] root: Node Texts Length: 1067, Summarized Text Length: 154
+2026-04-11 03:10:50,550 [INFO] root: Node Texts Length: 392, Summarized Text Length: 106
+2026-04-11 03:10:57,356 [INFO] root: Node Texts Length: 291, Summarized Text Length: 128
+2026-04-11 03:11:02,725 [INFO] root: Node Texts Length: 281, Summarized Text Length: 102
+2026-04-11 03:11:09,783 [INFO] root: Node Texts Length: 389, Summarized Text Length: 135
+2026-04-11 03:11:17,548 [INFO] root: Node Texts Length: 782, Summarized Text Length: 146
+2026-04-11 03:11:24,286 [INFO] root: Node Texts Length: 473, Summarized Text Length: 128
+2026-04-11 03:11:29,810 [INFO] root: Node Texts Length: 361, Summarized Text Length: 103
+2026-04-11 03:11:35,330 [INFO] root: Node Texts Length: 276, Summarized Text Length: 105
+2026-04-11 03:11:43,774 [INFO] root: Node Texts Length: 489, Summarized Text Length: 162
+2026-04-11 03:11:52,363 [INFO] root: Node Texts Length: 645, Summarized Text Length: 164
+2026-04-11 03:12:02,381 [INFO] root: Node Texts Length: 756, Summarized Text Length: 192
