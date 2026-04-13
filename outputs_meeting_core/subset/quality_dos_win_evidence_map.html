@@ -1,0 +1,159 @@
+<!doctype html><html><head><meta charset="utf-8"><title>QuALITY Evidence Positions</title>
+<style>body{font-family:ui-sans-serif,system-ui,sans-serif;margin:24px;line-height:1.4;color:#111} h1,h2{margin:0 0 12px} .card{border:1px solid #ddd;border-radius:12px;padding:16px;margin:16px 0} .meta{color:#555;font-size:14px;margin:6px 0 12px} .barwrap{margin:10px 0 14px} .label{font-weight:600;margin-bottom:6px} .bar{position:relative;height:18px;background:#f1f3f5;border-radius:999px;overflow:hidden;border:1px solid #ddd} .marker{position:absolute;top:-4px;width:10px;height:26px;border-radius:4px;opacity:.95} .gold{background:#2f9e44} .dist{background:#e03131} .legend{display:flex;gap:16px;font-size:14px;margin:10px 0 16px} .legend span{display:inline-flex;align-items:center;gap:6px} .sw{width:12px;height:12px;display:inline-block;border-radius:3px} .goldbg{background:#2f9e44}.distbg{background:#e03131} .small{font-size:13px;color:#444} code{background:#f8f9fa;padding:2px 4px;border-radius:4px} ul{margin:6px 0 0 20px} li{margin:4px 0} .pred{font-size:14px;margin:4px 0} .section{margin-top:22px}</style></head><body>
+<h1>QuALITY DOS-Win Evidence Position Map</h1>
+<p>This visualization covers the 6 QuALITY subset examples where <code>dos_rag</code> beat <code>vanilla_rag</code>. Markers show positions in the <strong>actual prompt order</strong>, not retrieval rank. Green = gold-supporting evidence. Red = explicit distractor-supporting evidence when a clear passage-level distractor exists.</p>
+<div class="legend"><span><i class="sw goldbg"></i>Gold evidence</span><span><i class="sw distbg"></i>Explicit distractor evidence</span></div>
+<div class="card"><h2>52845_75VB1ISR_1: 10 hours vs 12 years</h2>
+<div class="small"><strong>Question</strong><br>How much time has passed between Blake's night with Eldoria and his search for Sabrina York in his mind-world?<br><br> (A) 7 years<br> (B) 10 hours<br> (C) 12 years<br> (D) 1 hour</div>
+<div class="pred"><strong>Vanilla</strong>: 12 years</div>
+<div class="pred"><strong>DOS</strong>: 10 hours</div>
+<div class="pred"><strong>Gold</strong>: 10 hours</div>
+<div class="meta">Explicit gold and explicit distractor phrase both appear in the story.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (76 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 42" style="left:calc(54.666666666666664% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 1" style="left:calc(0.0% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [42] | Distractor positions: [1]</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (76 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 22" style="left:calc(28.000000000000004% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 23" style="left:calc(29.333333333333332% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [22] | Distractor positions: [23]</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>Ever since he had first set foot into his mind, some ten hours ago, they had been on his trail, but for some reason he had been unable to bring himself to go back and find out who they were and what they wanted. Hence he</li>
+</ul></div>
+<div class="section small"><strong>Distractor snippets</strong><ul>
+<li>It was a remarkably detailed materialization, and his quarry's footprints stood out clearly in the duplicated sand. Sabrina York did not even know the rudiments of the art of throwing off a mind-tracker. It would have do</li>
+</ul></div>
+</div>
+<div class="card"><h2>52845_75VB1ISR_3: Deirdre / shame / child-in-the-room inference</h2>
+<div class="small"><strong>Question</strong><br>Why does shame flame in Blake's cheeks when Deirdre goes to prepare Eldoria's dias?<br><br> (A) He is embarrassed at the thought that Deirdre might enter the room while he is sleeping with Eldoria. <br> (B) He feels that prostitution is morally reprehensible. <br> (C) He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on. <br> (D) He feels guilty about wishing Deirdre was older so he could sleep with her instead.</div>
+<div class="pred"><strong>Vanilla</strong>: He feels that prostitution is morally reprehensible.</div>
+<div class="pred"><strong>DOS</strong>: He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on.</div>
+<div class="pred"><strong>Gold</strong>: He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on.</div>
+<div class="meta">Gold evidence is distributed across multiple nearby chunks; no explicit textual support for the vanilla distractor option.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (76 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 2" style="left:calc(1.3333333333333335% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 3" style="left:calc(2.666666666666667% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 1" style="left:calc(0.0% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 4" style="left:calc(4.0% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [2, 3, 1, 4] | Distractor positions: none</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (76 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 9" style="left:calc(10.666666666666668% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 13" style="left:calc(16.0% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 14" style="left:calc(17.333333333333336% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 17" style="left:calc(21.333333333333336% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [9, 13, 14, 17] | Distractor positions: none</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>After closing the door, he sat down opposite her on the guest mat. Behind her, a gaudy arras hid the hut's other room. "You are here to wait for Eldoria?" she asked. Blake nodded. "And you?" She laughed. "I am here becau</li>
+<li>When I grow up I shall be a most well-educated person." "I'm sure you will be," Blake said, looking at the arras. "My name is Deirdre." "Nathan," Blake said. "Nathan Blake." "Eldoria will be arriving soon. I must go and </li>
+<li>Shame flamed in Blake's cheeks, and for a moment he considered leaving; then he remembered Eldoria's dance, and he went right on sitting where he was. Presently the girl returned, and not long afterward the cloying scent</li>
+<li>Nervously he watched Eldoria slip out of her white street robe, his eyes moving back and forth from her smooth dark skin to the arras. The incense thickened around him. She noticed the back-and-forth movement of his eyes</li>
+</ul></div>
+</div>
+<div class="card"><h2>62139_J05FWZR6_8: Meaning of "lady-logic"</h2>
+<div class="small"><strong>Question</strong><br>What does the Skipper mean by "lady-logic"?<br><br> (A) Weak logic<br> (B) Sly logic<br> (C) Condescending logic<br> (D) Intelligent logic</div>
+<div class="pred"><strong>Vanilla</strong>: Condescending logic</div>
+<div class="pred"><strong>DOS</strong>: Weak logic</div>
+<div class="pred"><strong>Gold</strong>: Weak logic</div>
+<div class="meta">Key evidence is the usage context of the phrase; no explicit distractor phrase found in the passage.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (75 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 27" style="left:calc(35.13513513513514% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [27] | Distractor positions: none</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (77 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 63" style="left:calc(81.57894736842105% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [63] | Distractor positions: none</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>"Of course, I'm sure. I told you days ago that I was born and raised in the Belt, Captain." "I know. But why didn't you tell me about Vesta before? I mean about the ekalastron deposits?" "Why—why, because—" said Slops. "</li>
+</ul></div>
+</div>
+<div class="card"><h2>62139_J05FWZR6_9: Would have set course for Iris earlier</h2>
+<div class="small"><strong>Question</strong><br>What would've happened if the new cook had told the Skipper about the ekalastron deposits earlier?<br><br> (A) The text doesn't indicate how the Skipper would've acted in a different scenario. <br> (B) The Skipper still would've ignored the new cook's advice. <br> (C) The Skipper would have mulled over the information for a few days before deciding to switch their course from Vesta to Iris. <br> (D) The Skipper's would have set course for Iris from the beginning.</div>
+<div class="pred"><strong>Vanilla</strong>: The text doesn't indicate how the Skipper would've acted in a different scenario.</div>
+<div class="pred"><strong>DOS</strong>: The Skipper's would have set course for Iris from the beginning.</div>
+<div class="pred"><strong>Gold</strong>: The Skipper's would have set course for Iris from the beginning.</div>
+<div class="meta">Gold answer depends on multiple dispersed chunks; vanilla distractor is an ambiguity/default answer rather than a quoted phrase.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (75 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 3" style="left:calc(2.7027027027027026% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 21" style="left:calc(27.027027027027028% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 40" style="left:calc(52.702702702702695% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 16" style="left:calc(20.27027027027027% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 20" style="left:calc(25.675675675675674% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [3, 21, 40, 16, 20] | Distractor positions: none</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (77 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 20" style="left:calc(25.0% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 24" style="left:calc(30.263157894736842% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 56" style="left:calc(72.36842105263158% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 62" style="left:calc(80.26315789473685% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 63" style="left:calc(81.57894736842105% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 76" style="left:calc(98.68421052631578% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [20, 24, 56, 62, 63, 76] | Distractor positions: none</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>At the skipper's roar he glanced up at us eagerly. "Vesta!" he piped in that curiously high-pitched and mellow voice. "Loft trajectory for Vesta! Then we're trying to run the Alliance blockade, Captain?" "None of your bu</li>
+<li>"The Old Man's one of the smartest space navigators who ever lifted gravs. He doesn't need the advice or suggestions of a cook." "But I was raised in the Belt," said the little chap plaintively. "I know the Bog like a bo</li>
+<li>More than once during the next nine days he forced on the skipper the same gratuitous advice which before had enraged the Old Man. By sheer perseverance he earned the title I had tagged him with: "Captain Slops." I was w</li>
+<li>Why should there be?" "Well, for one thing," wrangled our pint-sized cook, "because rich ekalastron deposits were recently discovered on Vesta. For another, because Vesta's orbit is now going into aphelion stage, which w</li>
+<li>"Of course, I'm sure. I told you days ago that I was born and raised in the Belt, Captain." "I know. But why didn't you tell me about Vesta before? I mean about the ekalastron deposits?" "Why—why, because—" said Slops. "</li>
+<li>He had been right about the danger of the Vesta route, as we had learned to our cost; now he was right on this other score. The skipper got it, too. His jaw dropped. He said, "Heaven help us, it's the truth! To reach Jup</li>
+</ul></div>
+</div>
+<div class="card"><h2>63401_ZCP5ZDGL_7: Autopilot + asleep in bunk</h2>
+<div class="small"><strong>Question</strong><br>What is the most likely reason that Johnathan's ship crashed?<br><br> (A) Because it was on autopilot and it must've encountered complications that he wasn't able to attend to since he was asleep in his bunk. <br> (B) Because he was so exhausted from flying nonstop, with only a few hours of sleep on autopilot, that he fell asleep at the controls. <br> (C) Because the asteroid unexpectedly swung into the spaceway and the ship was going so fast that he wasn't able to avoid the crash even though he slowed the craft down. <br> (D) Because his jealous co-pilot tampered with the autopilot settings and then feigned spacesick in hopes that Johnathan would crash while on autopilot.</div>
+<div class="pred"><strong>Vanilla</strong>: Because he was so exhausted from flying nonstop, with only a few hours of sleep on autopilot, that he fell asleep at the controls.</div>
+<div class="pred"><strong>DOS</strong>: Because it was on autopilot and it must've encountered complications that he wasn't able to attend to since he was asleep in his bunk.</div>
+<div class="pred"><strong>Gold</strong>: Because it was on autopilot and it must've encountered complications that he wasn't able to attend to since he was asleep in his bunk.</div>
+<div class="meta">Gold evidence is explicit and early; vanilla distractor appears to be an overgeneralization from exhaustion rather than an exact passage phrase.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (67 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 5" style="left:calc(6.0606060606060606% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 6" style="left:calc(7.575757575757576% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [5, 6] | Distractor positions: none</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (66 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 5" style="left:calc(6.153846153846154% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 6" style="left:calc(7.6923076923076925% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [5, 6] | Distractor positions: none</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>"I left him on Mars. He had an attack of space sickness. I was all by myself; that was the trouble. I'd stay at the controls as long as I could, then lock her on her course and snatch a couple of hours' sleep. I can reme</li>
+<li>"I guess the automatic deflectors slowed me up or I would have been a cinder by this time," he said. The girl didn't reply. She continued to watch him, a faint enigmatic smile on her lips. Jonathan glanced away in embarr</li>
+</ul></div>
+</div>
+<div class="card"><h2>63523_STSHLFEA_3: Fire weapons vs eyes cut the night</h2>
+<div class="small"><strong>Question</strong><br>What is the Oans' unusual advantage? <br><br> (A) They have the human's fire weapons. <br> (B) They emit flames. <br> (C) The strength of their arms. <br> (D) Their eyes cut the night.</div>
+<div class="pred"><strong>Vanilla</strong>: Their eyes cut the night.</div>
+<div class="pred"><strong>DOS</strong>: They have the human's fire weapons.</div>
+<div class="pred"><strong>Gold</strong>: They have the human's fire weapons.</div>
+<div class="meta">Explicit gold evidence and explicit distractor phrase both appear in the story.</div>
+<div class="barwrap"><div class="label">Vanilla prompt order (70 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 5" style="left:calc(5.797101449275362% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 1" style="left:calc(0.0% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 2" style="left:calc(1.4492753623188406% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 4" style="left:calc(4.3478260869565215% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 6" style="left:calc(7.246376811594203% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [5, 1, 2] | Distractor positions: [4, 6]</div></div>
+<div class="barwrap"><div class="label">DOS prompt order (70 chunks)</div><div class="bar">
+<div class="marker gold" title="gold chunk at prompt position 19" style="left:calc(26.08695652173913% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 22" style="left:calc(30.434782608695656% - 5px)"></div>
+<div class="marker gold" title="gold chunk at prompt position 54" style="left:calc(76.81159420289855% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 29" style="left:calc(40.57971014492754% - 5px)"></div>
+<div class="marker dist" title="distractor chunk at prompt position 30" style="left:calc(42.028985507246375% - 5px)"></div>
+</div>
+<div class="small">Gold positions: [19, 22, 54] | Distractor positions: [29, 30]</div></div>
+<div class="section small"><strong>Gold evidence snippets</strong><ul>
+<li>The darkness passed swiftly and silently, and with the dawn we left our caves to rejoin our new friends. But everywhere a red man showed himself, he cried out and died by the flame from the white men's weapons. "I looked</li>
+<li>"And the white ones, as well. They probably keep them alive to repair the weapons if they become useless. But when I have slain a few Oan, I will set the white ones free. They will help me to make more weapons. Together </li>
+<li>When they had finished breakfast, they sat around the floor of the cave and spoke. It was Carlson who asked, "How do you expect the six of us to attack the rat men?" "The Oan are cowards," Ro answered. "They are brave on</li>
+</ul></div>
+<div class="section small"><strong>Distractor snippets</strong><ul>
+<li>Ahead of him, he saw a clearing. That would be his destination. On the far side he would find the white ones. He took the stone from his armpit and moved on. Suddenly he halted. A dim figure approached. It was one of the</li>
+<li>She had spoken those words when he was a child, to keep him from straying too far. The Oan was only a few feet away now, but his eyes were not cutting the night. Ro could see his large ears, hear his twitching tail. In a</li>
+</ul></div>
+</div>
+</body></html>

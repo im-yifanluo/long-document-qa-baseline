@@ -1,0 +1,88 @@
+{
+  "dos_better": {
+    "52845_75VB1ISR_1": {
+      "title": "10 hours vs 12 years",
+      "gold": [
+        21
+      ],
+      "distractor": [
+        22
+      ],
+      "note": "Explicit gold and explicit distractor phrase both appear in the story."
+    },
+    "52845_75VB1ISR_3": {
+      "title": "Deirdre / shame / child-in-the-room inference",
+      "gold": [
+        8,
+        12,
+        13,
+        16
+      ],
+      "distractor": [],
+      "note": "Gold evidence is distributed across multiple nearby chunks."
+    },
+    "62139_J05FWZR6_8": {
+      "title": "Meaning of lady-logic",
+      "gold": [
+        62
+      ],
+      "distractor": [],
+      "note": "Gold evidence is the local usage context of the phrase."
+    },
+    "62139_J05FWZR6_9": {
+      "title": "Would have set course for Iris earlier",
+      "gold": [
+        19,
+        23,
+        55,
+        61,
+        62,
+        75
+      ],
+      "distractor": [],
+      "note": "Gold answer depends on multiple dispersed chunks."
+    },
+    "63401_ZCP5ZDGL_7": {
+      "title": "Autopilot + asleep in bunk",
+      "gold": [
+        4,
+        5
+      ],
+      "distractor": [],
+      "note": "Gold evidence is explicit and early in both prompts."
+    },
+    "63523_STSHLFEA_3": {
+      "title": "Fire weapons vs eyes cut the night",
+      "gold": [
+        18,
+        21,
+        53
+      ],
+      "distractor": [
+        28,
+        29
+      ],
+      "note": "Explicit gold and explicit distractor phrase both appear in the story."
+    }
+  },
+  "vanilla_better": {
+    "30029_F5N22U40_3": {
+      "title": "Lie detector wording",
+      "gold": [],
+      "distractor": [],
+      "note": "Vanilla win is output-formatting only: DOS prepended option label `B` to the otherwise matching answer.",
+      "formatting_only": true
+    },
+    "62476_Z8GFDCIZ_4": {
+      "title": "Fighting during course change",
+      "gold": [
+        4,
+        8,
+        10
+      ],
+      "distractor": [],
+      "note": "Explicit gold evidence: ignored warning, did not hear/heed announcement.",
+      "formatting_only": false
+    }
+  }
+}
