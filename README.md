@@ -3,6 +3,12 @@
 This repo benchmarks long-document QA and query-conditioned summarization methods on
 SCROLLS.
 
+The code is now split by purpose:
+
+- `benchmarking/`: benchmark execution, adapters, retrieval pipeline, and CLIs
+- `analysis/`: post-hoc result analysis and phenomenon probes
+- root-level `*.py` entrypoints: thin compatibility wrappers so existing server commands still work
+
 The benchmark is intentionally hybrid:
 
 - SCROLLS data loading and evaluation follow the official benchmark assets.
@@ -14,6 +20,7 @@ The benchmark is intentionally hybrid:
 The current comparison surface is:
 
 - `vanilla_rag`: repo-owned baseline
+- `reorder_only_rag`: repo-owned ablation that reuses vanilla retrieval and only restores selected chunks to document order
 - `dos_rag`: SCROLLS adapter around the official DOS-RAG retrieval core
 - `raptor`: SCROLLS adapter around the official RAPTOR tree builder/retriever
 - `read_agent_parallel`: SCROLLS adapter around the official ReadAgent parallel prompt flow
@@ -64,6 +71,7 @@ official method implementations onto SCROLLS.
 | Method | Official source | Used unchanged | Adapter/shared parts in this repo |
 |---|---|---|---|
 | `vanilla_rag` | none | none | repo-owned chunking, retrieval, prompting, shared reader |
+| `reorder_only_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to document order |
 | `dos_rag` | `alex-laitenberger/dos-rag-eval` | DOS chunking, dense retrieval, retrieve-then-restore-document-order behavior | SCROLLS loader, shared local reader, report schema |
 | `raptor` | `parthsarthi03/raptor` | RAPTOR tree construction and tree retrieval | SCROLLS loader, shared local reader, pinned summarizer/embedder for controlled comparison |
 | `read_agent_parallel` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, page look-up prompt flow | SCROLLS input adaptation, shared local reader |
@@ -85,7 +93,7 @@ Why archives instead of `load_dataset("tau/scrolls")`?
 - modern `datasets` versions deprecated the old script-loader path used by
   SCROLLS
 - this repo therefore reads the same released archive files directly
-- duplicate-id handling is preserved explicitly in `data_loader.py`
+- duplicate-id handling is preserved explicitly in `benchmarking/data_loader.py`
 
 ### Official evaluation
 
@@ -109,7 +117,7 @@ The scoring math itself is the official SCROLLS implementation.
 
 SCROLLS itself defines examples as packed `input` strings plus gold `output`
 strings. Retrieval methods need a structured `document` and `query`, so this
-repo derives them in `data_loader.py`.
+repo derives them in `benchmarking/data_loader.py`.
 
 That split is **not** official SCROLLS behavior. It is explicit adapter logic
 for running retrieval methods on SCROLLS.
@@ -126,7 +134,7 @@ cached official validation examples.
 | `quality` | question plus `(A)-(D)` options first, article second | yes |
 | `contract_nli` | hypothesis first, contract second | yes |
 
-Other tasks still use explicit parser rules in `data_loader.py`, but the local
+Other tasks still use explicit parser rules in `benchmarking/data_loader.py`, but the local
 cache audit above was only completed for the four tasks listed here.
 
 ## Current Defaults
@@ -134,7 +142,7 @@ cache audit above was only completed for the four tasks listed here.
 | Parameter | Value |
 |---|---|
 | Default methods | `vanilla_rag`, `dos_rag` |
-| Additional methods | `raptor`, `read_agent_parallel`, `read_agent_sequential` |
+| Additional methods | `reorder_only_rag`, `raptor`, `read_agent_parallel`, `read_agent_sequential` |
 | Reader | `Qwen/Qwen2.5-14B-Instruct` |
 | Fallback reader | `Qwen/Qwen2.5-7B-Instruct` |
 | Retriever embedding | `Snowflake/snowflake-arctic-embed-m-v1.5` |
@@ -186,18 +194,21 @@ Current default layout:
 
 ```text
 long-document-qa-baseline/
-  dos-rag-eval/
-  raptor/
-  read-agent.github.io/
+  third_party/
+    dos-rag-eval/
+    raptor/
+    read-agent.github.io/
 ```
 
 Repo discovery order for each official method is:
 
 1. CLI flag
 2. environment variable
-3. clone inside this repo
-4. sibling directory next to this repo
-5. clone under `$HOME`
+3. clone under `third_party/` inside this repo
+4. legacy clone at the repo root
+5. sibling `third_party/` directory next to this repo
+6. sibling directory next to this repo
+7. clone under `$HOME`
 
 Flags:
 
@@ -237,32 +248,116 @@ Run the official-benchmark smoke tier:
 python run_benchmark.py --run-tier smoke --overwrite-existing
 ```
 
-Run the QA subset:
+Run the full QA subset at the default `10000`-token context budget:
 
 ```bash
 python run_benchmark.py --run-tier subset --overwrite-existing
 ```
 
-Run one method only:
+## Machine Commands
+
+The following commands are intended to be copy-pasted on the target machine
+after setup:
 
 ```bash
-python run_benchmark.py --run-tier subset --methods dos_rag
+source venv/bin/activate
 ```
 
-Run RAPTOR only:
+### Single method on the SCROLLS QA subset
+
+Run `vanilla_rag` on the SCROLLS subset at `10000` context tokens:
 
 ```bash
-python run_benchmark.py --run-tier subset --methods raptor
+python run_benchmark.py \
+  --run-tier subset \
+  --methods vanilla_rag \
+  --context-budget 10000 \
+  --output-dir outputs_subset_vanilla_10k \
+  --overwrite-existing
 ```
 
-Run ReadAgent on the overlapping supported tasks only:
+Run `reorder_only_rag` on the SCROLLS subset at `10000` context tokens:
+
+```bash
+python run_benchmark.py \
+  --run-tier subset \
+  --methods reorder_only_rag \
+  --context-budget 10000 \
+  --output-dir outputs_subset_reorder_10k \
+  --overwrite-existing
+```
+
+Run `dos_rag` on the SCROLLS subset at `10000` context tokens:
+
+```bash
+python run_benchmark.py \
+  --run-tier subset \
+  --methods dos_rag \
+  --context-budget 10000 \
+  --output-dir outputs_subset_dos_10k \
+  --overwrite-existing
+```
+
+Run `raptor` on the SCROLLS subset at `10000` context tokens:
+
+```bash
+python run_benchmark.py \
+  --run-tier subset \
+  --methods raptor \
+  --context-budget 10000 \
+  --output-dir outputs_subset_raptor_10k \
+  --overwrite-existing
+```
+
+Run `read_agent_parallel` on its supported subset tasks:
 
 ```bash
 python run_benchmark.py \
   --run-tier subset \
   --methods read_agent_parallel \
-  --tasks qmsum narrative_qa quality
+  --tasks qmsum narrative_qa quality \
+  --context-budget 10000 \
+  --output-dir outputs_subset_readagent_parallel_10k \
+  --overwrite-existing
 ```
+
+Run `read_agent_sequential` on its supported subset tasks:
+
+```bash
+python run_benchmark.py \
+  --run-tier subset \
+  --methods read_agent_sequential \
+  --tasks qmsum narrative_qa quality \
+  --context-budget 10000 \
+  --output-dir outputs_subset_readagent_sequential_10k \
+  --overwrite-existing
+```
+
+### Budget sweeps
+
+Run `vanilla_rag` and `reorder_only_rag` on the full SCROLLS QA subset at
+`1500`, `5000`, and `10000` context tokens:
+
+```bash
+bash scripts/run_vanilla_reorder_subset_budget_sweep.sh \
+  outputs_vanilla_reorder_subset_budget_sweep \
+  --overwrite-existing
+```
+
+Run `vanilla_rag`, `reorder_only_rag`, and `dos_rag` on the focused
+`quality` / `contract_nli` subset at `1500`, `5000`, and `10000` context
+tokens:
+
+```bash
+bash scripts/run_ordering_budget_sweep.sh \
+  outputs_ordering_budget_sweep \
+  --overwrite-existing
+```
+
+The two sweep scripts are:
+
+- `scripts/run_vanilla_reorder_subset_budget_sweep.sh`
+- `scripts/run_ordering_budget_sweep.sh`
 
 ## Analysis
 
@@ -270,6 +365,29 @@ Generate post-hoc artifacts from saved outputs:
 
 ```bash
 python analyze_outputs.py --run-tier subset
+```
+
+Analyze the three-budget `vanilla_rag` / `reorder_only_rag` subset sweep:
+
+```bash
+for b in 1500 5000 10000; do
+  python analyze_outputs.py \
+    --output-dir outputs_vanilla_reorder_subset_budget_sweep/context_$b \
+    --run-tier subset \
+    --methods vanilla_rag reorder_only_rag
+done
+```
+
+Analyze the focused `quality` / `contract_nli` ordering sweep:
+
+```bash
+for b in 1500 5000 10000; do
+  python analyze_outputs.py \
+    --output-dir outputs_ordering_budget_sweep/context_$b \
+    --run-tier subset \
+    --methods vanilla_rag reorder_only_rag dos_rag \
+    --tasks quality contract_nli
+done
 ```
 
 Analysis artifacts include:
@@ -307,17 +425,36 @@ outputs/
       ...
 ```
 
+Named historical run roots are also kept at the repo root, for example:
+
+- `outputs_meeting_core/`
+- `outputs_meeting_readagent_seq/`
+- `outputs_meeting_raptor15/`
+
+These are preserved in place so older notes and analysis links do not break.
+
+New analysis exports are written under the run root at:
+
+```text
+<output_dir>/<run_tier>/analysis/
+```
+
 ## File Guide
 
-| File | Role |
+| Path | Role |
 |---|---|
-| `data_loader.py` | official SCROLLS archive loading plus explicit `input -> document/query` adapter logic |
-| `metrics.py` | thin wrapper around the official SCROLLS metric files |
-| `official_methods.py` | DOS-RAG, RAPTOR, and ReadAgent adapters plus provenance |
-| `rag_pipeline.py` | shared execution, official scoring calls, reporting |
-| `run_benchmark.py` | benchmark CLI |
-| `analyze_outputs.py` | post-hoc analysis |
-| `ARCHITECTURE.md` | deeper execution walkthrough |
+| `benchmarking/data_loader.py` | official SCROLLS archive loading plus explicit `input -> document/query` adapter logic |
+| `benchmarking/metrics.py` | thin wrapper around the official SCROLLS metric files |
+| `benchmarking/official_methods.py` | DOS-RAG, RAPTOR, and ReadAgent adapters plus provenance |
+| `benchmarking/rag_pipeline.py` | shared execution, official scoring calls, reporting |
+| `benchmarking/run_benchmark.py` | benchmark CLI implementation |
+| `analysis/analyze_outputs.py` | post-hoc analysis implementation |
+| `run_benchmark.py` | stable root wrapper for benchmark runs |
+| `analyze_outputs.py` | stable root wrapper for analysis |
+| `docs/ARCHITECTURE.md` | deeper execution walkthrough |
+| `docs/REPO_LAYOUT.md` | current directory structure and third-party repo layout |
+| `docs/RUN_OUTPUTS.md` | exact benchmark and analysis artifact layout on disk |
+| `docs/LAST_WEEK_RESULTS.md` | careful interpretation of the latest meeting-ready benchmark results |
 
 ## References
 

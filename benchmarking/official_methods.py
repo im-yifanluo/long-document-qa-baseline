@@ -36,10 +36,10 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from chunker import TokenChunker
-from config import SYSTEM_PROMPTS, TASK_TYPE, USER_PROMPT_TEMPLATES
-from data_loader import scrolls_dataset_provenance
-from metrics import official_metric_provenance
+from benchmarking.chunker import TokenChunker
+from benchmarking.config import SYSTEM_PROMPTS, TASK_TYPE, USER_PROMPT_TEMPLATES
+from benchmarking.data_loader import scrolls_dataset_provenance
+from benchmarking.metrics import official_metric_provenance
 
 logger = logging.getLogger(__name__)
 
@@ -335,13 +335,18 @@ class OfficialMethodRunner:
 
     def _candidate_repo_paths(self, repo_name: str, config_value: Optional[str], env_var: str) -> List[str]:
         """Return plausible clone locations for an official method repository."""
-        base_dir = os.path.dirname(__file__)
+        package_dir = os.path.dirname(__file__)
+        repo_root = os.path.dirname(package_dir)
         home_dir = os.path.expanduser("~")
         candidates = [
             config_value,
             os.environ.get(env_var),
-            os.path.join(base_dir, repo_name),
-            os.path.join(os.path.dirname(base_dir), repo_name),
+            os.path.join(repo_root, "third_party", repo_name),
+            os.path.join(repo_root, repo_name),
+            os.path.join(os.path.dirname(repo_root), "third_party", repo_name),
+            os.path.join(os.path.dirname(repo_root), repo_name),
+            os.path.join(package_dir, "third_party", repo_name),
+            os.path.join(package_dir, repo_name),
             os.path.join(home_dir, repo_name),
         ]
         resolved = []

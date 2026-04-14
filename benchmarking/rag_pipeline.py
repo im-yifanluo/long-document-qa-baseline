@@ -8,6 +8,8 @@ Conceptually, the pipeline has three layers:
 
 2. method-specific prompt construction / execution
    - vanilla_rag: repo baseline retrieve-then-read
+   - reorder_only_rag: repo ablation that reuses vanilla retrieval then restores
+     the selected chunks to document order
    - dos_rag: official DOS-RAG adapter
    - raptor: official RAPTOR adapter
    - read_agent_parallel / read_agent_sequential: official ReadAgent-style
@@ -30,8 +32,8 @@ import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
-from chunker import TokenChunker
-from config import (
+from benchmarking.chunker import TokenChunker
+from benchmarking.config import (
     BenchmarkConfig,
     DEFAULT_METHODS,
     RESULTS_FORMAT_VERSION,
@@ -40,12 +42,12 @@ from config import (
     TASK_TYPE,
     USER_PROMPT_TEMPLATES,
 )
-from data_loader import load_scrolls_task, scrolls_dataset_provenance
-from embedder import Embedder
-from generator import Generator
-from metrics import compute_metrics, normalize_answer, official_metric_provenance
-from official_methods import OfficialMethodRunner
-from retriever import Retriever
+from benchmarking.data_loader import load_scrolls_task, scrolls_dataset_provenance
+from benchmarking.embedder import Embedder
+from benchmarking.generator import Generator
+from benchmarking.metrics import compute_metrics, normalize_answer, official_metric_provenance
+from benchmarking.official_methods import OfficialMethodRunner
+from benchmarking.retriever import Retriever
 
 logger = logging.getLogger(__name__)
 
@@ -223,7 +225,7 @@ class BenchmarkPipeline:
         The returned dict is not just a prompt container. It also stores the
         retrieval trace needed for error analysis and qualitative inspection.
         """
-        if method not in {"vanilla_rag", "dos_rag"}:
+        if method not in {"vanilla_rag", "reorder_only_rag", "dos_rag"}:
             raise ValueError(f"Unsupported retrieval method: {method!r}")
 
         task_type = TASK_TYPE[example["task"]]
@@ -255,9 +257,12 @@ class BenchmarkPipeline:
             selected.append(record)
             budget_used += tok_len
 
-        if method == "dos_rag":
+        if method in {"reorder_only_rag", "dos_rag"}:
             selected_for_prompt = sorted(selected, key=lambda x: x["index"])
-            prompt_ordering = "document_order"
+            if method == "reorder_only_rag":
+                prompt_ordering = "document_order_from_vanilla_retrieval"
+            else:
+                prompt_ordering = "document_order"
         else:
             selected_for_prompt = list(selected)
             prompt_ordering = "retrieval_rank"
@@ -270,6 +275,22 @@ class BenchmarkPipeline:
         ref_ratio, ref_bucket = self._reference_position(
             example["document"], example["references"]
         )
+
+        method_info = None
+        if method == "reorder_only_rag":
+            method_info = {
+                "official_source_repo": None,
+                "official_artifact": None,
+                "paper": None,
+                "adapter_type": "repo_ablation",
+                "used_unchanged": [
+                    "repo-owned chunking, embedding, and vanilla retrieval candidate set",
+                ],
+                "adapter_notes": [
+                    "This method reuses the exact retrieved chunk set from the repo's vanilla_rag baseline.",
+                    "Only the prompt ordering changes: selected chunks are restored to document order before reading.",
+                ],
+            }
 
         return {
             "id": example["id"],
@@ -303,7 +324,7 @@ class BenchmarkPipeline:
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
-            "provenance": self._result_provenance(method),
+            "provenance": self._result_provenance(method, method_info),
         }
 
     def _prepare_long_context_example(self, example: Dict) -> Dict[str, Any]:
@@ -384,7 +405,7 @@ class BenchmarkPipeline:
 
     def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Dispatch one example to its method-specific prompt builder."""
-        if method == "vanilla_rag":
+        if method in {"vanilla_rag", "reorder_only_rag"}:
             return self._prepare_retrieval_example(example, method)
         if method == "long_context":
             return self._prepare_long_context_example(example)

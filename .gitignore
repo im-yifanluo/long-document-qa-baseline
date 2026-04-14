@@ -11,6 +11,8 @@ __pycache__/
 nltk_data/
 
 # Outputs (generated at runtime)
+runs/
+logs/
 
 # OS
 .DS_Store

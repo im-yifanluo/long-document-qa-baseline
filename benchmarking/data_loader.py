@@ -38,7 +38,7 @@ from typing import Dict, Iterable, List
 
 from huggingface_hub import hf_hub_download
 
-from config import SCROLLS_TASKS
+from benchmarking.config import SCROLLS_TASKS
 
 logger = logging.getLogger(__name__)
 

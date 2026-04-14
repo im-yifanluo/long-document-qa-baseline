@@ -19,10 +19,14 @@ from pathlib import Path
 
 import nltk
 
-from config import BenchmarkConfig
-from data_loader import _collapse_duplicate_outputs, _iter_official_rows, load_scrolls_task
-from metrics import _load_official_metric_module, compute_metrics, official_metric_provenance
-from official_methods import OfficialMethodRunner
+from benchmarking.config import BenchmarkConfig
+from benchmarking.data_loader import _collapse_duplicate_outputs, _iter_official_rows, load_scrolls_task
+from benchmarking.metrics import (
+    _load_official_metric_module,
+    compute_metrics,
+    official_metric_provenance,
+)
+from benchmarking.official_methods import OfficialMethodRunner
 
 
 REPO_ROOT = Path(__file__).resolve().parent

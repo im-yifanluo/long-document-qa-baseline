@@ -4,8 +4,8 @@ Central configuration for the SCROLLS long-document QA benchmark.
 This module is the single source of truth for:
 
 - which SCROLLS tasks exist and how they are scored
-- which benchmark methods are supported (`vanilla_rag`, `dos_rag`, `raptor`,
-  and ReadAgent variants)
+- which benchmark methods are supported (`vanilla_rag`, `reorder_only_rag`,
+  `dos_rag`, `raptor`, and ReadAgent variants)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
 - run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`, `full`)
@@ -72,6 +72,7 @@ RESULTS_FORMAT_VERSION = 4
 
 SUPPORTED_METHODS: List[str] = [
     "vanilla_rag",
+    "reorder_only_rag",
     "dos_rag",
     "raptor",
     "read_agent_parallel",

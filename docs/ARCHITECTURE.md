@@ -16,6 +16,7 @@ The active comparison is between retrieval/read-process methods for long
 documents on one shared SCROLLS surface:
 
 - `vanilla_rag`
+- `reorder_only_rag`
 - `dos_rag`
 - `raptor`
 - `read_agent_parallel`
@@ -41,8 +42,8 @@ There are three layers in the codebase.
 
 Implemented in:
 
-- `data_loader.py`
-- `metrics.py`
+- `benchmarking/data_loader.py`
+- `benchmarking/metrics.py`
 
 This layer is responsible for:
 
@@ -54,8 +55,8 @@ This layer is responsible for:
 
 Implemented in:
 
-- `official_methods.py`
-- parts of `rag_pipeline.py`
+- `benchmarking/official_methods.py`
+- parts of `benchmarking/rag_pipeline.py`
 
 This layer is responsible for:
 
@@ -67,15 +68,16 @@ This layer is responsible for:
 
 Implemented in:
 
-- `chunker.py`
-- `embedder.py`
-- `retriever.py`
-- `generator.py`
-- parts of `rag_pipeline.py`
+- `benchmarking/chunker.py`
+- `benchmarking/embedder.py`
+- `benchmarking/retriever.py`
+- `benchmarking/generator.py`
+- parts of `benchmarking/rag_pipeline.py`
 
 This layer is responsible for:
 
 - the repo-owned `vanilla_rag` baseline
+- the repo-owned `reorder_only_rag` ordering ablation
 - the shared local reader model
 - report generation and downstream analysis
 
@@ -133,7 +135,7 @@ SCROLLS validation can contain multiple rows with the same example id and
 multiple gold outputs. The official evaluator expects one prediction per id and
 scores it against all references.
 
-`data_loader.py` mirrors that behavior exactly by collapsing duplicate ids into:
+`benchmarking/data_loader.py` mirrors that behavior exactly by collapsing duplicate ids into:
 
 - one `id`
 - one packed `input`
@@ -158,7 +160,7 @@ The currently audited parser rules are:
 
 ## 5. Official SCROLLS Evaluation
 
-`metrics.py` is a loader, not a new evaluator.
+`benchmarking/metrics.py` is a loader, not a new evaluator.
 
 Its job is to:
 
@@ -194,16 +196,30 @@ This is the repo-owned baseline.
 
 Flow:
 
-1. sentence-aware chunking via `chunker.py`
-2. dense embedding via `embedder.py`
-3. FAISS retrieval via `retriever.py`
+1. sentence-aware chunking via `benchmarking/chunker.py`
+2. dense embedding via `benchmarking/embedder.py`
+3. FAISS retrieval via `benchmarking/retriever.py`
 4. prompt assembly in retrieval-rank order
 5. shared reader answers from the retrieved context
 
 This method is intentionally not labeled as an official implementation of an
 external paper.
 
-### 6.2 `dos_rag`
+### 6.2 `reorder_only_rag`
+
+This is the repo-owned ordering ablation.
+
+Flow:
+
+1. run the exact same chunking, embedding, and retrieval path as `vanilla_rag`
+2. keep the exact same selected chunk set
+3. restore only that selected set to document order
+4. answer with the same shared reader
+
+This method exists to isolate the ordering hypothesis more cleanly than the
+original vanilla-vs-DOS comparison.
+
+### 6.3 `dos_rag`
 
 Official source:
 
@@ -230,7 +246,7 @@ What happens if we apply the released DOS retrieval core to SCROLLS and hold the
 
 It does not claim to reproduce the original paper environment end to end.
 
-### 6.3 `raptor`
+### 6.4 `raptor`
 
 Official source:
 
@@ -251,7 +267,7 @@ What is adapted here:
 RAPTOR is therefore used here as an official retrieval/tree component inside a
 shared benchmark harness.
 
-### 6.4 `read_agent_parallel` / `read_agent_sequential`
+### 6.5 `read_agent_parallel` / `read_agent_sequential`
 
 Official source:
 
@@ -308,7 +324,7 @@ layout.
 ## 8. Shared Reader Layer
 
 All active methods currently feed their final context into the same local reader
-wrapper in `generator.py`.
+wrapper in `benchmarking/generator.py`.
 
 Current default reader choice:
 
@@ -338,10 +354,10 @@ clear which parts are official source behavior and which parts are adapter glue.
 If you are orienting yourself in the codebase, read in this order:
 
 1. `config.py`
-2. `data_loader.py`
-3. `metrics.py`
-4. `official_methods.py`
-5. `rag_pipeline.py`
+2. `benchmarking/data_loader.py`
+3. `benchmarking/metrics.py`
+4. `benchmarking/official_methods.py`
+5. `benchmarking/rag_pipeline.py`
 
 That order mirrors the benchmark stack:
 
