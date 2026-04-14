@@ -1,0 +1,1 @@
+task,id,query,reference,vanilla_rag_prediction,vanilla_rag_scored_as,dos_rag_prediction,dos_rag_scored_as,supporting_rank,answer_position_bucket,manual_answer_correct,manual_context_sufficient,manual_generation_notes

@@ -1,0 +1,6 @@
+task,matched_examples,agreement_rate
+qmsum,50,0.000000
+qasper,50,0.340000
+narrative_qa,50,0.320000
+quality,50,0.760000
+contract_nli,50,0.840000

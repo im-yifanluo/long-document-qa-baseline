@@ -1,0 +1,5 @@
+method,task,metric_type,primary_score,avg_input_tokens,avg_context_tokens,avg_generation_tokens
+raptor,qasper,f1,56.247700,6954.20,6827.20,16.93
+raptor,narrative_qa,f1,11.462000,10180.33,10053.93,13.80
+raptor,quality,exact_match,66.666700,8156.47,7969.53,19.53
+raptor,contract_nli,exact_match,80.000000,2982.93,2876.93,2.87

@@ -1,0 +1,10 @@
+{
+  "miss": {
+    "count": 144,
+    "avg_primary_score": 31.827472916666668
+  },
+  "1": {
+    "count": 6,
+    "avg_primary_score": 66.66666666666667
+  }
+}

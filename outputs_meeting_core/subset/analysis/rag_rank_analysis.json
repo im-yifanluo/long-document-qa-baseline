@@ -1,0 +1,26 @@
+{
+  "miss": {
+    "count": 190,
+    "avg_primary_score": 47.207817368421054
+  },
+  "2-3": {
+    "count": 11,
+    "avg_primary_score": 39.720127272727275
+  },
+  "4-5": {
+    "count": 9,
+    "avg_primary_score": 53.469944444444444
+  },
+  "1": {
+    "count": 20,
+    "avg_primary_score": 68.37879
+  },
+  "6-10": {
+    "count": 4,
+    "avg_primary_score": 79.166675
+  },
+  "11+": {
+    "count": 16,
+    "avg_primary_score": 19.7837125
+  }
+}

@@ -1,0 +1,4 @@
+method,task,metric_type,primary_score,avg_input_tokens,avg_context_tokens,avg_generation_tokens
+read_agent_sequential,qmsum,rouge,17.094200,2880.92,2824.62,190.50
+read_agent_sequential,narrative_qa,f1,12.821900,2974.28,2898.06,5.50
+read_agent_sequential,quality,exact_match,70.000000,2088.36,1917.36,15.02

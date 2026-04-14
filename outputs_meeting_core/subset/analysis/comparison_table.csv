@@ -1,0 +1,11 @@
+method,task,metric_type,primary_score,avg_input_tokens,avg_context_tokens,avg_generation_tokens
+vanilla_rag,qmsum,rouge,16.650500,9105.50,9049.06,151.22
+vanilla_rag,qasper,f1,51.448600,4987.66,4858.78,17.46
+vanilla_rag,narrative_qa,f1,19.530000,10084.12,9953.22,10.90
+vanilla_rag,quality,exact_match,70.000000,6484.34,6310.76,15.18
+vanilla_rag,contract_nli,exact_match,72.000000,3950.00,3842.04,2.70
+dos_rag,qmsum,rouge,18.217800,9159.66,9103.36,157.74
+dos_rag,qasper,f1,54.423300,5029.38,4901.36,15.70
+dos_rag,narrative_qa,f1,21.639800,9713.14,9585.54,11.38
+dos_rag,quality,exact_match,78.000000,6599.58,6428.58,14.98
+dos_rag,contract_nli,exact_match,66.000000,3977.50,3870.84,2.64
