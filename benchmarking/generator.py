@@ -121,12 +121,24 @@ class Generator:
         return "qwen" in normalized and "1m" in normalized
 
     def _prepare_runtime_env(self, model_name: str) -> None:
-        """Set runtime flags required by Qwen 1M models before importing vLLM.
+        """Set runtime flags required before importing vLLM.
 
         Official Qwen long-context instructions use Dual Chunk Flash Attention
         and eager execution for 1M-context deployments. Recent Qwen/vLLM docs
         also use the legacy vLLM engine path for this setup.
         """
+        conda_prefix = os.environ.get("CONDA_PREFIX")
+        if conda_prefix:
+            conda_lib = os.path.join(conda_prefix, "lib")
+            current_ld = os.environ.get("LD_LIBRARY_PATH", "")
+            ld_parts = [part for part in current_ld.split(":") if part]
+            if os.path.isdir(conda_lib) and conda_lib not in ld_parts:
+                os.environ["LD_LIBRARY_PATH"] = ":".join([conda_lib, *ld_parts])
+                logger.info(
+                    "Prepended %s to LD_LIBRARY_PATH for vLLM child processes",
+                    conda_lib,
+                )
+
         if not self._is_qwen_1m_model(model_name):
             return
 

@@ -359,6 +359,16 @@ The two sweep scripts are:
 - `scripts/run_vanilla_reorder_subset_budget_sweep.sh`
 - `scripts/run_ordering_budget_sweep.sh`
 
+Both scripts run each context budget in a separate Python process and
+automatically prepend `$CONDA_PREFIX/lib` to `LD_LIBRARY_PATH` when available.
+This avoids common shared-server vLLM reinitialization issues during multi-budget
+sweeps.
+
+By default, the sweep scripts also use `Qwen/Qwen2.5-7B-Instruct` at
+`--gpu-memory-utilization 0.80` for better stability on shared A40 machines.
+You can override that with environment variables such as
+`LLM_MODEL=Qwen/Qwen2.5-14B-Instruct` if the GPU is sufficiently free.
+
 ## Analysis
 
 Generate post-hoc artifacts from saved outputs:
