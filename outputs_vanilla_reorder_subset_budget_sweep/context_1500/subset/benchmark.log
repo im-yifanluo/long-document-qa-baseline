@@ -1,0 +1,1418 @@
+2026-04-14 07:08:05,905 [INFO] benchmarking.run_benchmark: Running benchmark with context_budget=1500 and top_k=30
+2026-04-14 07:08:05,905 [INFO] benchmarking.rag_pipeline: Initialising benchmark pipeline ...
+2026-04-14 07:08:08,493 [INFO] benchmarking.generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=4572) ...
+2026-04-14 07:08:41,034 [INFO] benchmarking.generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-14 07:08:41,519 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-14 07:08:42,709 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-14 07:08:42,710 [INFO] benchmarking.rag_pipeline: Benchmark pipeline ready.
+2026-04-14 07:08:42,710 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qmsum
+============================================================
+2026-04-14 07:08:42,710 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-14 07:08:43,040 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-14 07:08:43,042 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 1 / 50  (id=va-sq-1)
+2026-04-14 07:08:44,139 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 2 / 50  (id=va-sq-2)
+2026-04-14 07:08:45,016 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 3 / 50  (id=va-sq-3)
+2026-04-14 07:08:45,906 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 4 / 50  (id=va-sq-4)
+2026-04-14 07:08:46,767 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 5 / 50  (id=va-gq-5)
+2026-04-14 07:08:47,648 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 6 / 50  (id=va-sq-6)
+2026-04-14 07:08:48,004 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 7 / 50  (id=va-sq-7)
+2026-04-14 07:08:48,348 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 8 / 50  (id=va-sq-8)
+2026-04-14 07:08:48,697 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 9 / 50  (id=va-sq-9)
+2026-04-14 07:08:49,045 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 10 / 50  (id=va-sq-10)
+2026-04-14 07:08:49,386 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 11 / 50  (id=va-sq-11)
+2026-04-14 07:08:49,732 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 12 / 50  (id=va-gq-12)
+2026-04-14 07:08:50,074 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 13 / 50  (id=va-sq-13)
+2026-04-14 07:08:50,379 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 14 / 50  (id=va-sq-14)
+2026-04-14 07:08:50,678 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 15 / 50  (id=va-sq-15)
+2026-04-14 07:08:50,979 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 16 / 50  (id=va-sq-16)
+2026-04-14 07:08:51,279 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 17 / 50  (id=va-sq-17)
+2026-04-14 07:08:51,579 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 18 / 50  (id=va-sq-18)
+2026-04-14 07:08:51,878 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 19 / 50  (id=va-gq-19)
+2026-04-14 07:08:52,183 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 20 / 50  (id=va-sq-20)
+2026-04-14 07:08:52,440 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 21 / 50  (id=va-sq-21)
+2026-04-14 07:08:52,670 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 22 / 50  (id=va-sq-22)
+2026-04-14 07:08:52,906 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 23 / 50  (id=va-sq-23)
+2026-04-14 07:08:53,136 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 24 / 50  (id=va-sq-24)
+2026-04-14 07:08:53,367 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 25 / 50  (id=va-sq-25)
+2026-04-14 07:08:53,597 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 26 / 50  (id=va-sq-26)
+2026-04-14 07:08:53,823 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 27 / 50  (id=va-gq-27)
+2026-04-14 07:08:54,049 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 28 / 50  (id=va-sq-28)
+2026-04-14 07:08:54,418 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 29 / 50  (id=va-sq-29)
+2026-04-14 07:08:54,792 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 30 / 50  (id=va-sq-30)
+2026-04-14 07:08:55,155 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 31 / 50  (id=va-sq-31)
+2026-04-14 07:08:55,520 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 32 / 50  (id=va-sq-32)
+2026-04-14 07:08:55,882 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 33 / 50  (id=va-sq-33)
+2026-04-14 07:08:56,243 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 34 / 50  (id=va-gq-34)
+2026-04-14 07:08:56,603 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 35 / 50  (id=va-sq-35)
+2026-04-14 07:08:56,942 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 36 / 50  (id=va-sq-36)
+2026-04-14 07:08:57,277 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 37 / 50  (id=va-sq-37)
+2026-04-14 07:08:57,617 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 38 / 50  (id=va-sq-38)
+2026-04-14 07:08:57,953 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 39 / 50  (id=va-sq-39)
+2026-04-14 07:08:58,291 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 40 / 50  (id=va-sq-40)
+2026-04-14 07:08:58,628 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 41 / 50  (id=va-sq-41)
+2026-04-14 07:08:58,969 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 42 / 50  (id=va-sq-42)
+2026-04-14 07:08:59,312 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 43 / 50  (id=va-sq-43)
+2026-04-14 07:08:59,650 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 44 / 50  (id=va-gq-44)
+2026-04-14 07:08:59,987 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 45 / 50  (id=va-sq-45)
+2026-04-14 07:09:00,532 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 46 / 50  (id=va-sq-46)
+2026-04-14 07:09:01,061 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 47 / 50  (id=va-sq-47)
+2026-04-14 07:09:01,590 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 48 / 50  (id=va-sq-48)
+2026-04-14 07:09:02,121 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 49 / 50  (id=va-gq-49)
+2026-04-14 07:09:02,657 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 50 / 50  (id=va-sq-50)
+2026-04-14 07:09:03,016 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Prompt preparation done for 50 new examples in 20.0s
+2026-04-14 07:09:03,016 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Generating 50 answers ...
+2026-04-14 07:09:47,876 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Generation done in 44.9s
+2026-04-14 07:09:48,241 [INFO] absl: Using default tokenizer.
+2026-04-14 07:09:49,908 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] {'rouge/rouge1': 31.4263, 'rouge/rouge2': 7.7375, 'rouge/rougeL': 18.5574, 'rouge/rougeLsum': 27.107, 'rouge/geometric_mean': 16.5248, 'num_predicted': 50, 'mean_prediction_length_characters': 791.5, 'scrolls_score': 16.5248, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.4263, 7.7375, 18.5574], 'rouge_geo_mean': 16.5248, 'rouge1': 31.4263, 'rouge2': 7.7375, 'rougeL': 18.5574, 'rougeLsum': 27.107}  (66.9s)
+2026-04-14 07:09:49,909 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-14 07:09:49,909 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-14 07:09:50,371 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-14 07:09:50,373 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-14 07:09:50,590 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-14 07:09:50,794 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-14 07:09:51,005 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-14 07:09:51,213 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-14 07:09:51,365 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-14 07:09:51,516 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-14 07:09:51,658 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-14 07:09:51,859 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-14 07:09:52,052 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-14 07:09:52,379 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-14 07:09:52,702 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-14 07:09:52,816 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-14 07:09:52,927 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-14 07:09:53,038 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-14 07:09:53,181 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-14 07:09:53,322 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-14 07:09:53,576 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-14 07:09:53,828 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-14 07:09:54,079 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-14 07:09:54,331 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-14 07:09:54,550 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-14 07:09:54,767 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-14 07:09:54,986 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-14 07:09:55,198 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-14 07:09:55,416 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-14 07:09:55,630 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-14 07:09:55,788 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-14 07:09:55,948 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-14 07:09:56,102 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-14 07:09:56,256 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-14 07:09:56,443 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-14 07:09:56,627 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-14 07:09:56,811 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-14 07:09:56,991 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-14 07:09:57,170 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-14 07:09:57,348 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-14 07:09:57,518 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-14 07:09:57,634 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-14 07:09:57,750 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-14 07:09:57,864 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-14 07:09:57,978 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-14 07:09:58,199 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-14 07:09:58,422 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-14 07:09:58,647 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-14 07:09:58,731 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-14 07:09:58,815 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-14 07:09:58,898 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-14 07:09:58,976 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-14 07:09:59,216 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-14 07:09:59,451 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 50 new examples in 9.1s
+2026-04-14 07:09:59,452 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Generating 50 answers ...
+2026-04-14 07:10:26,051 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Generation done in 26.6s
+2026-04-14 07:10:26,094 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] {'f1': 49.2758, 'num_predicted': 50, 'mean_prediction_length_characters': 77.2, 'scrolls_score': 49.2758, 'display_keys': ['f1'], 'display': [49.2758]}  (35.7s)
+2026-04-14 07:10:26,095 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-04-14 07:10:26,095 [INFO] benchmarking.data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-14 07:10:50,419 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-14 07:10:50,421 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-14 07:10:51,064 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-14 07:10:51,674 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-14 07:10:52,277 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-14 07:10:52,894 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-14 07:10:53,508 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-14 07:10:54,115 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-14 07:10:54,722 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-14 07:10:55,329 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-14 07:10:55,939 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-14 07:10:56,538 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-14 07:10:57,137 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-14 07:10:57,735 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-14 07:10:58,334 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-14 07:10:58,940 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-14 07:10:59,545 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-14 07:11:00,145 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-14 07:11:00,740 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-14 07:11:01,356 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-14 07:11:01,976 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-14 07:11:02,598 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-14 07:11:03,230 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-14 07:11:03,849 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-14 07:11:04,467 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-14 07:11:05,072 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-14 07:11:05,676 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-14 07:11:06,285 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-14 07:11:06,890 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-14 07:11:07,495 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-14 07:11:08,102 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-14 07:11:08,704 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-14 07:11:23,239 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-14 07:11:37,302 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-14 07:11:51,791 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-14 07:12:06,137 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-14 07:12:20,520 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-14 07:12:34,939 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-14 07:12:49,296 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-14 07:13:03,595 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-14 07:13:18,113 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-14 07:13:32,871 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-14 07:13:47,165 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-14 07:14:01,601 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-14 07:14:16,012 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-14 07:14:30,204 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-14 07:14:44,564 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-14 07:14:59,022 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-14 07:15:13,402 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-14 07:15:27,435 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-14 07:15:41,762 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-14 07:15:56,135 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 50 new examples in 305.7s
+2026-04-14 07:15:56,135 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Generating 50 answers ...
+2026-04-14 07:16:19,129 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 23.0s
+2026-04-14 07:16:19,167 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 16.0495, 'num_predicted': 50, 'mean_prediction_length_characters': 43.18, 'scrolls_score': 16.0495, 'display_keys': ['f1'], 'display': [16.0495]}  (328.7s)
+2026-04-14 07:16:19,168 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-14 07:16:19,168 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 07:16:19,694 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-14 07:16:19,696 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-14 07:16:19,966 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-14 07:16:20,226 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-14 07:16:20,481 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-14 07:16:20,735 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-14 07:16:20,985 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-14 07:16:21,237 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 7 / 50  (id=30029_F5N22U40_1)
+2026-04-14 07:16:21,483 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 8 / 50  (id=30029_F5N22U40_2)
+2026-04-14 07:16:21,728 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 9 / 50  (id=30029_F5N22U40_3)
+2026-04-14 07:16:21,973 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 10 / 50  (id=30029_F5N22U40_4)
+2026-04-14 07:16:22,222 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 11 / 50  (id=30029_F5N22U40_5)
+2026-04-14 07:16:22,466 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 12 / 50  (id=30029_F5N22U40_6)
+2026-04-14 07:16:22,712 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 13 / 50  (id=30029_F5N22U40_7)
+2026-04-14 07:16:22,956 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 14 / 50  (id=30029_F5N22U40_8)
+2026-04-14 07:16:23,207 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 15 / 50  (id=30029_F5N22U40_9)
+2026-04-14 07:16:23,462 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-14 07:16:23,731 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-14 07:16:23,997 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-14 07:16:24,260 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-14 07:16:24,524 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-14 07:16:24,790 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-14 07:16:25,054 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-14 07:16:25,318 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-14 07:16:25,581 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-14 07:16:25,845 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-14 07:16:26,111 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-14 07:16:26,375 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-14 07:16:26,639 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-14 07:16:26,902 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-14 07:16:27,168 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-14 07:16:27,439 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-14 07:16:27,702 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-14 07:16:27,962 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-14 07:16:28,224 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-14 07:16:28,487 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-14 07:16:28,745 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-14 07:16:29,003 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-14 07:16:29,261 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-14 07:16:29,519 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-14 07:16:29,776 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-14 07:16:30,033 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-14 07:16:30,291 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-14 07:16:30,557 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-14 07:16:30,822 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-14 07:16:31,079 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-14 07:16:31,348 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-14 07:16:31,617 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-14 07:16:31,885 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-14 07:16:32,150 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-14 07:16:32,419 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-14 07:16:32,688 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 50 new examples in 13.0s
+2026-04-14 07:16:32,688 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generating 50 answers ...
+2026-04-14 07:16:55,401 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generation done in 22.7s
+2026-04-14 07:16:55,470 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] {'exact_match': 64.0, 'num_predicted': 50, 'mean_prediction_length_characters': 73.7, 'scrolls_score': 64.0, 'display_keys': ['exact_match'], 'display': [64.0]}  (35.8s)
+2026-04-14 07:16:55,479 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-04-14 07:16:55,479 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 07:16:55,583 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-14 07:16:55,585 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 50  (id=3_nda-11)
+2026-04-14 07:16:55,713 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 2 / 50  (id=3_nda-16)
+2026-04-14 07:16:55,838 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 3 / 50  (id=3_nda-15)
+2026-04-14 07:16:55,961 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 4 / 50  (id=3_nda-10)
+2026-04-14 07:16:56,084 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 5 / 50  (id=3_nda-2)
+2026-04-14 07:16:56,207 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 6 / 50  (id=3_nda-1)
+2026-04-14 07:16:56,329 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 7 / 50  (id=3_nda-19)
+2026-04-14 07:16:56,452 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 8 / 50  (id=3_nda-12)
+2026-04-14 07:16:56,575 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 9 / 50  (id=3_nda-20)
+2026-04-14 07:16:56,697 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 10 / 50  (id=3_nda-3)
+2026-04-14 07:16:56,820 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 11 / 50  (id=3_nda-18)
+2026-04-14 07:16:56,942 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 12 / 50  (id=3_nda-7)
+2026-04-14 07:16:57,069 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 13 / 50  (id=3_nda-17)
+2026-04-14 07:16:57,194 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 14 / 50  (id=3_nda-8)
+2026-04-14 07:16:57,317 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 15 / 50  (id=3_nda-13)
+2026-04-14 07:16:57,440 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 16 / 50  (id=3_nda-5)
+2026-04-14 07:16:57,565 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 17 / 50  (id=3_nda-4)
+2026-04-14 07:16:57,688 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 18 / 50  (id=7_nda-11)
+2026-04-14 07:16:58,017 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 19 / 50  (id=7_nda-16)
+2026-04-14 07:16:58,340 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 20 / 50  (id=7_nda-15)
+2026-04-14 07:16:58,662 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 21 / 50  (id=7_nda-10)
+2026-04-14 07:16:58,986 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 22 / 50  (id=7_nda-2)
+2026-04-14 07:16:59,324 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 23 / 50  (id=7_nda-1)
+2026-04-14 07:16:59,654 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 24 / 50  (id=7_nda-19)
+2026-04-14 07:16:59,982 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 25 / 50  (id=7_nda-12)
+2026-04-14 07:17:00,308 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 26 / 50  (id=7_nda-20)
+2026-04-14 07:17:00,631 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 27 / 50  (id=7_nda-3)
+2026-04-14 07:17:00,962 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 28 / 50  (id=7_nda-18)
+2026-04-14 07:17:01,296 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 29 / 50  (id=7_nda-7)
+2026-04-14 07:17:01,628 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 30 / 50  (id=7_nda-17)
+2026-04-14 07:17:01,957 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 31 / 50  (id=7_nda-8)
+2026-04-14 07:17:02,278 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 32 / 50  (id=7_nda-13)
+2026-04-14 07:17:02,599 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 33 / 50  (id=7_nda-5)
+2026-04-14 07:17:02,920 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 34 / 50  (id=7_nda-4)
+2026-04-14 07:17:03,240 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 35 / 50  (id=9_nda-11)
+2026-04-14 07:17:03,523 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 36 / 50  (id=9_nda-16)
+2026-04-14 07:17:03,805 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 37 / 50  (id=9_nda-15)
+2026-04-14 07:17:04,092 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 38 / 50  (id=9_nda-10)
+2026-04-14 07:17:04,377 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 39 / 50  (id=9_nda-2)
+2026-04-14 07:17:04,658 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 40 / 50  (id=9_nda-1)
+2026-04-14 07:17:04,937 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 41 / 50  (id=9_nda-19)
+2026-04-14 07:17:05,224 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 42 / 50  (id=9_nda-12)
+2026-04-14 07:17:05,503 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 43 / 50  (id=9_nda-20)
+2026-04-14 07:17:05,782 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 44 / 50  (id=9_nda-3)
+2026-04-14 07:17:06,060 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 45 / 50  (id=9_nda-18)
+2026-04-14 07:17:06,338 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 46 / 50  (id=9_nda-7)
+2026-04-14 07:17:06,618 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 47 / 50  (id=9_nda-17)
+2026-04-14 07:17:06,897 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 48 / 50  (id=9_nda-8)
+2026-04-14 07:17:07,175 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 49 / 50  (id=9_nda-13)
+2026-04-14 07:17:07,453 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 50 / 50  (id=9_nda-5)
+2026-04-14 07:17:07,731 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 50 new examples in 12.1s
+2026-04-14 07:17:07,731 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generating 50 answers ...
+2026-04-14 07:17:26,605 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generation done in 18.9s
+2026-04-14 07:17:26,638 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 76.0, 'num_predicted': 50, 'mean_prediction_length_characters': 11.26, 'scrolls_score': 76.0, 'display_keys': ['exact_match'], 'display': [76.0]}  (31.1s)
+2026-04-14 07:17:26,639 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=qmsum
+============================================================
+2026-04-14 07:17:26,639 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-14 07:17:26,807 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-14 07:17:26,809 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 1 / 50  (id=va-sq-1)
+2026-04-14 07:17:27,683 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 2 / 50  (id=va-sq-2)
+2026-04-14 07:17:28,560 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 3 / 50  (id=va-sq-3)
+2026-04-14 07:17:29,436 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 4 / 50  (id=va-sq-4)
+2026-04-14 07:17:30,308 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 5 / 50  (id=va-gq-5)
+2026-04-14 07:17:31,182 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 6 / 50  (id=va-sq-6)
+2026-04-14 07:17:31,533 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 7 / 50  (id=va-sq-7)
+2026-04-14 07:17:31,881 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 8 / 50  (id=va-sq-8)
+2026-04-14 07:17:32,244 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 9 / 50  (id=va-sq-9)
+2026-04-14 07:17:32,598 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 10 / 50  (id=va-sq-10)
+2026-04-14 07:17:32,952 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 11 / 50  (id=va-sq-11)
+2026-04-14 07:17:33,300 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 12 / 50  (id=va-gq-12)
+2026-04-14 07:17:33,654 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 13 / 50  (id=va-sq-13)
+2026-04-14 07:17:33,963 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 14 / 50  (id=va-sq-14)
+2026-04-14 07:17:34,281 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 15 / 50  (id=va-sq-15)
+2026-04-14 07:17:34,595 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 16 / 50  (id=va-sq-16)
+2026-04-14 07:17:34,908 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 17 / 50  (id=va-sq-17)
+2026-04-14 07:17:35,217 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 18 / 50  (id=va-sq-18)
+2026-04-14 07:17:35,527 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 19 / 50  (id=va-gq-19)
+2026-04-14 07:17:35,837 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 20 / 50  (id=va-sq-20)
+2026-04-14 07:17:36,073 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 21 / 50  (id=va-sq-21)
+2026-04-14 07:17:36,308 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 22 / 50  (id=va-sq-22)
+2026-04-14 07:17:36,543 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 23 / 50  (id=va-sq-23)
+2026-04-14 07:17:36,778 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 24 / 50  (id=va-sq-24)
+2026-04-14 07:17:37,019 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 25 / 50  (id=va-sq-25)
+2026-04-14 07:17:37,255 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 26 / 50  (id=va-sq-26)
+2026-04-14 07:17:37,488 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 27 / 50  (id=va-gq-27)
+2026-04-14 07:17:37,722 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 28 / 50  (id=va-sq-28)
+2026-04-14 07:17:38,110 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 29 / 50  (id=va-sq-29)
+2026-04-14 07:17:38,486 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 30 / 50  (id=va-sq-30)
+2026-04-14 07:17:38,861 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 31 / 50  (id=va-sq-31)
+2026-04-14 07:17:39,234 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 32 / 50  (id=va-sq-32)
+2026-04-14 07:17:39,606 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 33 / 50  (id=va-sq-33)
+2026-04-14 07:17:39,976 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 34 / 50  (id=va-gq-34)
+2026-04-14 07:17:40,346 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 35 / 50  (id=va-sq-35)
+2026-04-14 07:17:40,688 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 36 / 50  (id=va-sq-36)
+2026-04-14 07:17:41,030 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 37 / 50  (id=va-sq-37)
+2026-04-14 07:17:41,376 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 38 / 50  (id=va-sq-38)
+2026-04-14 07:17:41,725 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 39 / 50  (id=va-sq-39)
+2026-04-14 07:17:42,069 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 40 / 50  (id=va-sq-40)
+2026-04-14 07:17:42,422 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 41 / 50  (id=va-sq-41)
+2026-04-14 07:17:42,771 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 42 / 50  (id=va-sq-42)
+2026-04-14 07:17:43,114 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 43 / 50  (id=va-sq-43)
+2026-04-14 07:17:43,455 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 44 / 50  (id=va-gq-44)
+2026-04-14 07:17:43,802 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 45 / 50  (id=va-sq-45)
+2026-04-14 07:17:44,347 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 46 / 50  (id=va-sq-46)
+2026-04-14 07:17:44,890 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 47 / 50  (id=va-sq-47)
+2026-04-14 07:17:45,435 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 48 / 50  (id=va-sq-48)
+2026-04-14 07:17:45,978 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 49 / 50  (id=va-gq-49)
+2026-04-14 07:17:46,519 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 50 / 50  (id=va-sq-50)
+2026-04-14 07:17:46,875 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Prompt preparation done for 50 new examples in 20.1s
+2026-04-14 07:17:46,875 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Generating 50 answers ...
+2026-04-14 07:18:31,322 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Generation done in 44.4s
+2026-04-14 07:18:31,388 [INFO] absl: Using default tokenizer.
+2026-04-14 07:18:33,558 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] {'rouge/rouge1': 32.1302, 'rouge/rouge2': 8.3453, 'rouge/rougeL': 19.5069, 'rouge/rougeLsum': 27.9094, 'rouge/geometric_mean': 17.3586, 'num_predicted': 50, 'mean_prediction_length_characters': 710.44, 'scrolls_score': 17.3586, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [32.1302, 8.3453, 19.5069], 'rouge_geo_mean': 17.3586, 'rouge1': 32.1302, 'rouge2': 8.3453, 'rougeL': 19.5069, 'rougeLsum': 27.9094}  (66.7s)
+2026-04-14 07:18:33,559 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=qasper
+============================================================
+2026-04-14 07:18:33,560 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-14 07:18:33,884 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-14 07:18:33,885 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-14 07:18:34,097 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-14 07:18:34,304 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-14 07:18:34,511 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-14 07:18:34,720 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-14 07:18:34,868 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-14 07:18:35,014 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-14 07:18:35,160 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-14 07:18:35,368 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-14 07:18:35,574 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-14 07:18:35,925 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-14 07:18:36,260 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-14 07:18:36,380 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-14 07:18:36,498 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-14 07:18:36,614 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-14 07:18:36,761 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-14 07:18:36,905 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-14 07:18:37,164 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-14 07:18:37,418 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-14 07:18:37,675 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-14 07:18:37,930 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-14 07:18:38,150 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-14 07:18:38,369 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-14 07:18:38,587 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-14 07:18:38,805 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-14 07:18:39,026 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-14 07:18:39,247 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-14 07:18:39,404 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-14 07:18:39,563 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-14 07:18:39,720 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-14 07:18:39,876 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-14 07:18:40,059 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-14 07:18:40,246 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-14 07:18:40,436 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-14 07:18:40,621 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-14 07:18:40,802 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-14 07:18:40,975 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-14 07:18:41,147 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-14 07:18:41,271 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-14 07:18:41,391 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-14 07:18:41,505 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-14 07:18:41,622 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-14 07:18:41,847 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-14 07:18:42,069 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-14 07:18:42,291 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-14 07:18:42,375 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-14 07:18:42,455 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-14 07:18:42,534 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-14 07:18:42,613 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-14 07:18:42,845 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-14 07:18:43,077 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Prompt preparation done for 50 new examples in 9.2s
+2026-04-14 07:18:43,078 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Generating 50 answers ...
+2026-04-14 07:19:05,500 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Generation done in 22.4s
+2026-04-14 07:19:05,564 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] {'f1': 52.9745, 'num_predicted': 50, 'mean_prediction_length_characters': 65.02, 'scrolls_score': 52.9745, 'display_keys': ['f1'], 'display': [52.9745]}  (31.7s)
+2026-04-14 07:19:05,565 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=narrative_qa
+============================================================
+2026-04-14 07:19:05,565 [INFO] benchmarking.data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-14 07:19:27,118 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-14 07:19:27,120 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-14 07:19:27,747 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-14 07:19:28,352 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-14 07:19:28,966 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-14 07:19:29,593 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-14 07:19:30,213 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-14 07:19:30,823 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-14 07:19:31,430 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-14 07:19:32,036 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-14 07:19:32,642 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-14 07:19:33,252 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-14 07:19:33,862 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-14 07:19:34,472 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-14 07:19:35,075 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-14 07:19:35,678 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-14 07:19:36,281 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-14 07:19:36,882 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-14 07:19:37,493 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-14 07:19:38,102 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-14 07:19:38,713 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-14 07:19:39,317 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-14 07:19:39,925 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-14 07:19:40,549 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-14 07:19:41,172 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-14 07:19:41,780 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-14 07:19:42,393 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-14 07:19:42,996 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-14 07:19:43,596 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-14 07:19:44,202 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-14 07:19:44,810 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-14 07:19:45,419 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-14 07:19:59,862 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-14 07:20:14,228 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-14 07:20:28,624 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-14 07:20:43,110 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-14 07:20:57,499 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-14 07:21:11,986 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-14 07:21:26,427 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-14 07:21:40,780 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-14 07:21:55,198 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-14 07:22:09,603 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-14 07:22:23,952 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-14 07:22:38,126 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-14 07:22:52,849 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-14 07:23:07,247 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-14 07:23:21,555 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-14 07:23:35,882 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-14 07:23:50,304 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-14 07:24:04,425 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-14 07:24:18,799 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-14 07:24:33,298 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Prompt preparation done for 50 new examples in 306.2s
+2026-04-14 07:24:33,298 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Generating 50 answers ...
+2026-04-14 07:24:56,127 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Generation done in 22.8s
+2026-04-14 07:24:56,162 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] {'f1': 17.4196, 'num_predicted': 50, 'mean_prediction_length_characters': 39.34, 'scrolls_score': 17.4196, 'display_keys': ['f1'], 'display': [17.4196]}  (329.0s)
+2026-04-14 07:24:56,168 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=quality
+============================================================
+2026-04-14 07:24:56,168 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 07:24:56,697 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-14 07:24:56,700 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-14 07:24:56,963 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-14 07:24:57,218 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-14 07:24:57,472 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-14 07:24:57,724 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-14 07:24:57,977 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-14 07:24:58,229 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 7 / 50  (id=30029_F5N22U40_1)
+2026-04-14 07:24:58,477 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 8 / 50  (id=30029_F5N22U40_2)
+2026-04-14 07:24:58,726 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 9 / 50  (id=30029_F5N22U40_3)
+2026-04-14 07:24:58,983 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 10 / 50  (id=30029_F5N22U40_4)
+2026-04-14 07:24:59,230 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 11 / 50  (id=30029_F5N22U40_5)
+2026-04-14 07:24:59,481 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 12 / 50  (id=30029_F5N22U40_6)
+2026-04-14 07:24:59,730 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 13 / 50  (id=30029_F5N22U40_7)
+2026-04-14 07:24:59,976 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 14 / 50  (id=30029_F5N22U40_8)
+2026-04-14 07:25:00,222 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 15 / 50  (id=30029_F5N22U40_9)
+2026-04-14 07:25:00,468 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-14 07:25:00,734 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-14 07:25:00,998 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-14 07:25:01,263 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-14 07:25:01,527 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-14 07:25:01,794 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-14 07:25:02,061 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-14 07:25:02,326 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-14 07:25:02,593 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-14 07:25:02,858 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-14 07:25:03,132 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-14 07:25:03,403 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-14 07:25:03,670 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-14 07:25:03,938 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-14 07:25:04,206 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-14 07:25:04,475 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-14 07:25:04,743 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-14 07:25:05,013 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-14 07:25:05,280 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-14 07:25:05,546 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-14 07:25:05,808 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-14 07:25:06,067 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-14 07:25:06,328 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-14 07:25:06,585 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-14 07:25:06,842 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-14 07:25:07,100 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-14 07:25:07,358 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-14 07:25:07,633 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-14 07:25:07,898 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-14 07:25:08,159 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-14 07:25:08,433 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-14 07:25:08,708 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-14 07:25:08,982 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-14 07:25:09,256 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-14 07:25:09,527 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-14 07:25:09,795 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Prompt preparation done for 50 new examples in 13.1s
+2026-04-14 07:25:09,796 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generating 50 answers ...
+2026-04-14 07:25:31,576 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generation done in 21.8s
+2026-04-14 07:25:31,646 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] {'exact_match': 74.0, 'num_predicted': 50, 'mean_prediction_length_characters': 72.92, 'scrolls_score': 74.0, 'display_keys': ['exact_match'], 'display': [74.0]}  (34.9s)
+2026-04-14 07:25:31,654 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=contract_nli
+============================================================
+2026-04-14 07:25:31,655 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 07:25:31,765 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-14 07:25:31,767 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 1 / 50  (id=3_nda-11)
+2026-04-14 07:25:31,899 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 2 / 50  (id=3_nda-16)
+2026-04-14 07:25:32,027 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 3 / 50  (id=3_nda-15)
+2026-04-14 07:25:32,157 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 4 / 50  (id=3_nda-10)
+2026-04-14 07:25:32,292 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 5 / 50  (id=3_nda-2)
+2026-04-14 07:25:32,420 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 6 / 50  (id=3_nda-1)
+2026-04-14 07:25:32,546 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 7 / 50  (id=3_nda-19)
+2026-04-14 07:25:32,672 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 8 / 50  (id=3_nda-12)
+2026-04-14 07:25:32,797 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 9 / 50  (id=3_nda-20)
+2026-04-14 07:25:32,923 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 10 / 50  (id=3_nda-3)
+2026-04-14 07:25:33,047 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 11 / 50  (id=3_nda-18)
+2026-04-14 07:25:33,171 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 12 / 50  (id=3_nda-7)
+2026-04-14 07:25:33,295 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 13 / 50  (id=3_nda-17)
+2026-04-14 07:25:33,419 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 14 / 50  (id=3_nda-8)
+2026-04-14 07:25:33,543 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 15 / 50  (id=3_nda-13)
+2026-04-14 07:25:33,666 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 16 / 50  (id=3_nda-5)
+2026-04-14 07:25:33,790 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 17 / 50  (id=3_nda-4)
+2026-04-14 07:25:33,913 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 18 / 50  (id=7_nda-11)
+2026-04-14 07:25:34,236 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 19 / 50  (id=7_nda-16)
+2026-04-14 07:25:34,557 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 20 / 50  (id=7_nda-15)
+2026-04-14 07:25:34,878 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 21 / 50  (id=7_nda-10)
+2026-04-14 07:25:35,199 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 22 / 50  (id=7_nda-2)
+2026-04-14 07:25:35,523 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 23 / 50  (id=7_nda-1)
+2026-04-14 07:25:35,845 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 24 / 50  (id=7_nda-19)
+2026-04-14 07:25:36,168 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 25 / 50  (id=7_nda-12)
+2026-04-14 07:25:36,491 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 26 / 50  (id=7_nda-20)
+2026-04-14 07:25:36,811 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 27 / 50  (id=7_nda-3)
+2026-04-14 07:25:37,133 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 28 / 50  (id=7_nda-18)
+2026-04-14 07:25:37,454 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 29 / 50  (id=7_nda-7)
+2026-04-14 07:25:37,775 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 30 / 50  (id=7_nda-17)
+2026-04-14 07:25:38,103 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 31 / 50  (id=7_nda-8)
+2026-04-14 07:25:38,425 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 32 / 50  (id=7_nda-13)
+2026-04-14 07:25:38,747 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 33 / 50  (id=7_nda-5)
+2026-04-14 07:25:39,066 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 34 / 50  (id=7_nda-4)
+2026-04-14 07:25:39,387 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 35 / 50  (id=9_nda-11)
+2026-04-14 07:25:39,668 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 36 / 50  (id=9_nda-16)
+2026-04-14 07:25:39,951 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 37 / 50  (id=9_nda-15)
+2026-04-14 07:25:40,235 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 38 / 50  (id=9_nda-10)
+2026-04-14 07:25:40,515 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 39 / 50  (id=9_nda-2)
+2026-04-14 07:25:40,794 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 40 / 50  (id=9_nda-1)
+2026-04-14 07:25:41,073 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 41 / 50  (id=9_nda-19)
+2026-04-14 07:25:41,353 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 42 / 50  (id=9_nda-12)
+2026-04-14 07:25:41,631 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 43 / 50  (id=9_nda-20)
+2026-04-14 07:25:41,909 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 44 / 50  (id=9_nda-3)
+2026-04-14 07:25:42,188 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 45 / 50  (id=9_nda-18)
+2026-04-14 07:25:42,466 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 46 / 50  (id=9_nda-7)
+2026-04-14 07:25:42,746 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 47 / 50  (id=9_nda-17)
+2026-04-14 07:25:43,026 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 48 / 50  (id=9_nda-8)
+2026-04-14 07:25:43,305 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 49 / 50  (id=9_nda-13)
+2026-04-14 07:25:43,583 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 50 / 50  (id=9_nda-5)
+2026-04-14 07:25:43,862 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Prompt preparation done for 50 new examples in 12.1s
+2026-04-14 07:25:43,862 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generating 50 answers ...
+2026-04-14 07:25:58,019 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generation done in 14.2s
+2026-04-14 07:25:58,053 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] {'exact_match': 74.0, 'num_predicted': 50, 'mean_prediction_length_characters': 11.62, 'scrolls_score': 74.0, 'display_keys': ['exact_match'], 'display': [74.0]}  (26.3s)
+2026-04-14 07:25:58,094 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:00,258 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:02,683 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:05,166 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:07,594 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:10,079 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:12,482 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:14,987 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:17,349 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:19,779 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:22,175 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:24,597 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:27,009 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:29,429 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:31,856 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:34,248 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:36,654 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:39,062 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:41,497 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:43,875 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:46,303 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:48,738 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:51,190 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:53,589 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:56,047 [INFO] absl: Using default tokenizer.
+2026-04-14 07:26:58,372 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:00,797 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:03,184 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:05,636 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:07,994 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:10,430 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:12,819 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:15,214 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:17,591 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:20,004 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:22,394 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:24,814 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:27,223 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:29,626 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:32,031 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:34,421 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:36,760 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:39,173 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:41,623 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:44,026 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:46,448 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:48,868 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:51,302 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:53,751 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:56,143 [INFO] absl: Using default tokenizer.
+2026-04-14 07:27:58,503 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:00,961 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:03,600 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:06,223 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:08,848 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:11,518 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:14,185 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:16,859 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:19,492 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:22,103 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:24,682 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:27,298 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:29,926 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:32,530 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:34,989 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:37,416 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:39,864 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:42,386 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:44,976 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:47,652 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:50,306 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:52,992 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:55,619 [INFO] absl: Using default tokenizer.
+2026-04-14 07:28:58,261 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:00,822 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:03,287 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:05,789 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:08,399 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:11,064 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:13,734 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:16,352 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:18,972 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:21,517 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:24,155 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:26,781 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:29,394 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:32,037 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:34,589 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:37,118 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:39,608 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:42,116 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:44,773 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:47,433 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:50,082 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:52,672 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:55,184 [INFO] absl: Using default tokenizer.
+2026-04-14 07:29:57,607 [INFO] absl: Using default tokenizer.
+2026-04-14 07:30:00,063 [INFO] absl: Using default tokenizer.
+2026-04-14 07:30:02,437 [INFO] absl: Using default tokenizer.
+2026-04-14 07:30:04,860 [INFO] absl: Using default tokenizer.
+2026-04-14 08:22:01,737 [INFO] benchmarking.run_benchmark: Running benchmark with context_budget=1500 and top_k=30
+2026-04-14 08:22:01,738 [INFO] benchmarking.rag_pipeline: Initialising benchmark pipeline ...
+2026-04-14 08:22:04,287 [INFO] benchmarking.generator: Loading vLLM model Qwen/Qwen2.5-7B-Instruct  (tp=1, gpu_mem=0.80, max_model_len=4572) ...
+2026-04-14 08:24:51,779 [INFO] benchmarking.generator: vLLM model loaded: Qwen/Qwen2.5-7B-Instruct
+2026-04-14 08:24:52,242 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-14 08:24:53,348 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-14 08:24:53,349 [INFO] benchmarking.rag_pipeline: Benchmark pipeline ready.
+2026-04-14 08:24:53,350 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qmsum
+============================================================
+2026-04-14 08:24:53,350 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-14 08:24:53,516 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-14 08:24:53,520 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 1 / 50  (id=va-sq-1)
+2026-04-14 08:24:54,602 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 2 / 50  (id=va-sq-2)
+2026-04-14 08:24:55,481 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 3 / 50  (id=va-sq-3)
+2026-04-14 08:24:56,357 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 4 / 50  (id=va-sq-4)
+2026-04-14 08:24:57,220 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 5 / 50  (id=va-gq-5)
+2026-04-14 08:24:58,084 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 6 / 50  (id=va-sq-6)
+2026-04-14 08:24:58,437 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 7 / 50  (id=va-sq-7)
+2026-04-14 08:24:58,784 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 8 / 50  (id=va-sq-8)
+2026-04-14 08:24:59,129 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 9 / 50  (id=va-sq-9)
+2026-04-14 08:24:59,474 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 10 / 50  (id=va-sq-10)
+2026-04-14 08:24:59,816 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 11 / 50  (id=va-sq-11)
+2026-04-14 08:25:00,156 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 12 / 50  (id=va-gq-12)
+2026-04-14 08:25:00,508 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 13 / 50  (id=va-sq-13)
+2026-04-14 08:25:00,815 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 14 / 50  (id=va-sq-14)
+2026-04-14 08:25:01,117 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 15 / 50  (id=va-sq-15)
+2026-04-14 08:25:01,423 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 16 / 50  (id=va-sq-16)
+2026-04-14 08:25:01,727 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 17 / 50  (id=va-sq-17)
+2026-04-14 08:25:02,037 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 18 / 50  (id=va-sq-18)
+2026-04-14 08:25:02,342 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 19 / 50  (id=va-gq-19)
+2026-04-14 08:25:02,643 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 20 / 50  (id=va-sq-20)
+2026-04-14 08:25:02,875 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 21 / 50  (id=va-sq-21)
+2026-04-14 08:25:03,106 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 22 / 50  (id=va-sq-22)
+2026-04-14 08:25:03,335 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 23 / 50  (id=va-sq-23)
+2026-04-14 08:25:03,563 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 24 / 50  (id=va-sq-24)
+2026-04-14 08:25:03,792 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 25 / 50  (id=va-sq-25)
+2026-04-14 08:25:04,024 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 26 / 50  (id=va-sq-26)
+2026-04-14 08:25:04,253 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 27 / 50  (id=va-gq-27)
+2026-04-14 08:25:04,486 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 28 / 50  (id=va-sq-28)
+2026-04-14 08:25:04,860 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 29 / 50  (id=va-sq-29)
+2026-04-14 08:25:05,231 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 30 / 50  (id=va-sq-30)
+2026-04-14 08:25:05,598 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 31 / 50  (id=va-sq-31)
+2026-04-14 08:25:05,969 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 32 / 50  (id=va-sq-32)
+2026-04-14 08:25:06,334 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 33 / 50  (id=va-sq-33)
+2026-04-14 08:25:06,698 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 34 / 50  (id=va-gq-34)
+2026-04-14 08:25:07,067 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 35 / 50  (id=va-sq-35)
+2026-04-14 08:25:07,413 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 36 / 50  (id=va-sq-36)
+2026-04-14 08:25:07,753 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 37 / 50  (id=va-sq-37)
+2026-04-14 08:25:08,098 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 38 / 50  (id=va-sq-38)
+2026-04-14 08:25:08,440 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 39 / 50  (id=va-sq-39)
+2026-04-14 08:25:08,786 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 40 / 50  (id=va-sq-40)
+2026-04-14 08:25:09,129 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 41 / 50  (id=va-sq-41)
+2026-04-14 08:25:09,469 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 42 / 50  (id=va-sq-42)
+2026-04-14 08:25:09,806 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 43 / 50  (id=va-sq-43)
+2026-04-14 08:25:10,150 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 44 / 50  (id=va-gq-44)
+2026-04-14 08:25:10,488 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 45 / 50  (id=va-sq-45)
+2026-04-14 08:25:11,033 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 46 / 50  (id=va-sq-46)
+2026-04-14 08:25:11,573 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 47 / 50  (id=va-sq-47)
+2026-04-14 08:25:12,108 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 48 / 50  (id=va-sq-48)
+2026-04-14 08:25:12,638 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 49 / 50  (id=va-gq-49)
+2026-04-14 08:25:13,175 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Preparing 50 / 50  (id=va-sq-50)
+2026-04-14 08:25:13,530 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Prompt preparation done for 50 new examples in 20.0s
+2026-04-14 08:25:13,530 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Generating 50 answers ...
+2026-04-14 08:25:32,816 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] Generation done in 19.3s
+2026-04-14 08:25:33,262 [INFO] absl: Using default tokenizer.
+2026-04-14 08:25:35,015 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qmsum] {'rouge/rouge1': 31.7252, 'rouge/rouge2': 8.1555, 'rouge/rougeL': 18.6477, 'rouge/rougeLsum': 26.8597, 'rouge/geometric_mean': 16.8977, 'num_predicted': 50, 'mean_prediction_length_characters': 700.34, 'scrolls_score': 16.8977, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.7252, 8.1555, 18.6477], 'rouge_geo_mean': 16.8977, 'rouge1': 31.7252, 'rouge2': 8.1555, 'rougeL': 18.6477, 'rougeLsum': 26.8597}  (41.5s)
+2026-04-14 08:25:35,015 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=qasper
+============================================================
+2026-04-14 08:25:35,015 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-14 08:25:35,340 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-14 08:25:35,344 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-14 08:25:35,564 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-14 08:25:35,770 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-14 08:25:35,977 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-14 08:25:36,182 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-14 08:25:36,346 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-14 08:25:36,492 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-14 08:25:36,635 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-14 08:25:36,838 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-14 08:25:37,033 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-14 08:25:37,361 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-14 08:25:37,683 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-14 08:25:37,803 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-14 08:25:37,914 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-14 08:25:38,024 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-14 08:25:38,167 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-14 08:25:38,306 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-14 08:25:38,557 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-14 08:25:38,812 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-14 08:25:39,062 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-14 08:25:39,322 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-14 08:25:39,542 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-14 08:25:39,755 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-14 08:25:39,974 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-14 08:25:40,184 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-14 08:25:40,396 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-14 08:25:40,607 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-14 08:25:40,764 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-14 08:25:40,915 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-14 08:25:41,069 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-14 08:25:41,223 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-14 08:25:41,408 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-14 08:25:41,588 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-14 08:25:41,768 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-14 08:25:41,946 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-14 08:25:42,123 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-14 08:25:42,305 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-14 08:25:42,474 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-14 08:25:42,588 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-14 08:25:42,698 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-14 08:25:42,808 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-14 08:25:42,918 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-14 08:25:43,135 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-14 08:25:43,350 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-14 08:25:43,570 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-14 08:25:43,651 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-14 08:25:43,729 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-14 08:25:43,806 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-14 08:25:43,882 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-14 08:25:44,111 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Preparing 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-14 08:25:44,337 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Prompt preparation done for 50 new examples in 9.0s
+2026-04-14 08:25:44,337 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Generating 50 answers ...
+2026-04-14 08:25:56,931 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] Generation done in 12.6s
+2026-04-14 08:25:56,972 [INFO] benchmarking.rag_pipeline: [vanilla_rag/qasper] {'f1': 38.0419, 'num_predicted': 50, 'mean_prediction_length_characters': 117.94, 'scrolls_score': 38.0419, 'display_keys': ['f1'], 'display': [38.0419]}  (21.6s)
+2026-04-14 08:25:56,973 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=narrative_qa
+============================================================
+2026-04-14 08:25:56,973 [INFO] benchmarking.data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-14 08:26:17,995 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-14 08:26:17,999 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-14 08:26:18,634 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-14 08:26:19,243 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-14 08:26:19,843 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-14 08:26:20,444 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-14 08:26:21,046 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-14 08:26:21,660 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-14 08:26:22,271 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-14 08:26:22,887 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-14 08:26:23,489 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-14 08:26:24,099 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-14 08:26:24,704 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-14 08:26:25,304 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-14 08:26:25,908 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-14 08:26:26,505 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-14 08:26:27,105 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-14 08:26:27,701 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-14 08:26:28,302 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-14 08:26:28,903 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-14 08:26:29,504 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-14 08:26:30,099 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-14 08:26:30,710 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-14 08:26:31,316 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-14 08:26:31,935 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-14 08:26:32,541 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-14 08:26:33,139 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-14 08:26:33,752 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-14 08:26:34,362 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-14 08:26:34,968 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-14 08:26:35,560 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-14 08:26:36,155 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-14 08:26:50,196 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-14 08:27:04,667 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-14 08:27:18,727 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-14 08:27:33,254 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-14 08:27:47,398 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-14 08:28:01,449 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-14 08:28:15,566 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-14 08:28:29,596 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-14 08:28:43,792 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-14 08:28:58,328 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-14 08:29:12,266 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-14 08:29:26,392 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-14 08:29:40,485 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-14 08:29:54,631 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-14 08:30:08,728 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-14 08:30:22,849 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-14 08:30:36,947 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-14 08:30:51,043 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-14 08:31:05,111 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Preparing 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-14 08:31:19,022 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Prompt preparation done for 50 new examples in 301.0s
+2026-04-14 08:31:19,022 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Generating 50 answers ...
+2026-04-14 08:31:30,554 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] Generation done in 11.5s
+2026-04-14 08:31:30,591 [INFO] benchmarking.rag_pipeline: [vanilla_rag/narrative_qa] {'f1': 12.553, 'num_predicted': 50, 'mean_prediction_length_characters': 66.52, 'scrolls_score': 12.553, 'display_keys': ['f1'], 'display': [12.553]}  (312.6s)
+2026-04-14 08:31:30,592 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-14 08:31:30,592 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 08:31:31,103 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-14 08:31:31,105 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-14 08:31:31,361 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-14 08:31:31,615 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-14 08:31:31,864 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-14 08:31:32,119 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-14 08:31:32,370 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-14 08:31:32,618 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 7 / 50  (id=30029_F5N22U40_1)
+2026-04-14 08:31:32,870 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 8 / 50  (id=30029_F5N22U40_2)
+2026-04-14 08:31:33,122 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 9 / 50  (id=30029_F5N22U40_3)
+2026-04-14 08:31:33,365 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 10 / 50  (id=30029_F5N22U40_4)
+2026-04-14 08:31:33,610 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 11 / 50  (id=30029_F5N22U40_5)
+2026-04-14 08:31:33,856 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 12 / 50  (id=30029_F5N22U40_6)
+2026-04-14 08:31:34,099 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 13 / 50  (id=30029_F5N22U40_7)
+2026-04-14 08:31:34,348 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 14 / 50  (id=30029_F5N22U40_8)
+2026-04-14 08:31:34,593 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 15 / 50  (id=30029_F5N22U40_9)
+2026-04-14 08:31:34,837 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-14 08:31:35,104 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-14 08:31:35,368 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-14 08:31:35,630 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-14 08:31:35,894 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-14 08:31:36,158 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-14 08:31:36,420 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-14 08:31:36,682 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-14 08:31:36,947 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-14 08:31:37,211 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-14 08:31:37,477 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-14 08:31:37,742 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-14 08:31:38,008 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-14 08:31:38,273 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-14 08:31:38,537 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-14 08:31:38,801 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-14 08:31:39,066 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-14 08:31:39,329 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-14 08:31:39,593 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-14 08:31:39,858 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-14 08:31:40,117 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-14 08:31:40,372 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-14 08:31:40,630 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-14 08:31:40,887 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-14 08:31:41,149 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-14 08:31:41,408 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-14 08:31:41,680 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-14 08:31:41,945 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-14 08:31:42,210 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-14 08:31:42,465 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-14 08:31:42,732 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-14 08:31:42,999 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-14 08:31:43,267 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-14 08:31:43,534 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-14 08:31:43,801 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-14 08:31:44,066 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 50 new examples in 13.0s
+2026-04-14 08:31:44,067 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generating 50 answers ...
+2026-04-14 08:31:54,957 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generation done in 10.9s
+2026-04-14 08:31:54,993 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] {'exact_match': 44.0, 'num_predicted': 50, 'mean_prediction_length_characters': 54.08, 'scrolls_score': 44.0, 'display_keys': ['exact_match'], 'display': [44.0]}  (23.9s)
+2026-04-14 08:31:54,994 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-04-14 08:31:54,994 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 08:31:55,094 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-14 08:31:55,096 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 50  (id=3_nda-11)
+2026-04-14 08:31:55,227 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 2 / 50  (id=3_nda-16)
+2026-04-14 08:31:55,351 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 3 / 50  (id=3_nda-15)
+2026-04-14 08:31:55,482 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 4 / 50  (id=3_nda-10)
+2026-04-14 08:31:55,607 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 5 / 50  (id=3_nda-2)
+2026-04-14 08:31:55,731 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 6 / 50  (id=3_nda-1)
+2026-04-14 08:31:55,857 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 7 / 50  (id=3_nda-19)
+2026-04-14 08:31:55,981 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 8 / 50  (id=3_nda-12)
+2026-04-14 08:31:56,106 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 9 / 50  (id=3_nda-20)
+2026-04-14 08:31:56,230 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 10 / 50  (id=3_nda-3)
+2026-04-14 08:31:56,354 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 11 / 50  (id=3_nda-18)
+2026-04-14 08:31:56,482 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 12 / 50  (id=3_nda-7)
+2026-04-14 08:31:56,608 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 13 / 50  (id=3_nda-17)
+2026-04-14 08:31:56,736 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 14 / 50  (id=3_nda-8)
+2026-04-14 08:31:56,861 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 15 / 50  (id=3_nda-13)
+2026-04-14 08:31:56,988 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 16 / 50  (id=3_nda-5)
+2026-04-14 08:31:57,113 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 17 / 50  (id=3_nda-4)
+2026-04-14 08:31:57,237 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 18 / 50  (id=7_nda-11)
+2026-04-14 08:31:57,562 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 19 / 50  (id=7_nda-16)
+2026-04-14 08:31:57,891 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 20 / 50  (id=7_nda-15)
+2026-04-14 08:31:58,224 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 21 / 50  (id=7_nda-10)
+2026-04-14 08:31:58,553 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 22 / 50  (id=7_nda-2)
+2026-04-14 08:31:58,883 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 23 / 50  (id=7_nda-1)
+2026-04-14 08:31:59,206 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 24 / 50  (id=7_nda-19)
+2026-04-14 08:31:59,534 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 25 / 50  (id=7_nda-12)
+2026-04-14 08:31:59,855 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 26 / 50  (id=7_nda-20)
+2026-04-14 08:32:00,177 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 27 / 50  (id=7_nda-3)
+2026-04-14 08:32:00,497 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 28 / 50  (id=7_nda-18)
+2026-04-14 08:32:00,819 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 29 / 50  (id=7_nda-7)
+2026-04-14 08:32:01,139 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 30 / 50  (id=7_nda-17)
+2026-04-14 08:32:01,470 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 31 / 50  (id=7_nda-8)
+2026-04-14 08:32:01,793 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 32 / 50  (id=7_nda-13)
+2026-04-14 08:32:02,124 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 33 / 50  (id=7_nda-5)
+2026-04-14 08:32:02,449 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 34 / 50  (id=7_nda-4)
+2026-04-14 08:32:02,782 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 35 / 50  (id=9_nda-11)
+2026-04-14 08:32:03,063 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 36 / 50  (id=9_nda-16)
+2026-04-14 08:32:03,342 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 37 / 50  (id=9_nda-15)
+2026-04-14 08:32:03,627 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 38 / 50  (id=9_nda-10)
+2026-04-14 08:32:03,905 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 39 / 50  (id=9_nda-2)
+2026-04-14 08:32:04,184 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 40 / 50  (id=9_nda-1)
+2026-04-14 08:32:04,462 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 41 / 50  (id=9_nda-19)
+2026-04-14 08:32:04,740 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 42 / 50  (id=9_nda-12)
+2026-04-14 08:32:05,023 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 43 / 50  (id=9_nda-20)
+2026-04-14 08:32:05,306 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 44 / 50  (id=9_nda-3)
+2026-04-14 08:32:05,584 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 45 / 50  (id=9_nda-18)
+2026-04-14 08:32:05,862 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 46 / 50  (id=9_nda-7)
+2026-04-14 08:32:06,145 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 47 / 50  (id=9_nda-17)
+2026-04-14 08:32:06,426 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 48 / 50  (id=9_nda-8)
+2026-04-14 08:32:06,712 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 49 / 50  (id=9_nda-13)
+2026-04-14 08:32:06,994 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 50 / 50  (id=9_nda-5)
+2026-04-14 08:32:07,272 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 50 new examples in 12.2s
+2026-04-14 08:32:07,272 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generating 50 answers ...
+2026-04-14 08:32:16,608 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generation done in 9.3s
+2026-04-14 08:32:16,642 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 66.0, 'num_predicted': 50, 'mean_prediction_length_characters': 11.92, 'scrolls_score': 66.0, 'display_keys': ['exact_match'], 'display': [66.0]}  (21.5s)
+2026-04-14 08:32:16,643 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=qmsum
+============================================================
+2026-04-14 08:32:16,643 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qmsum split=validation ...
+2026-04-14 08:32:16,808 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qmsum
+2026-04-14 08:32:16,812 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 1 / 50  (id=va-sq-1)
+2026-04-14 08:32:17,689 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 2 / 50  (id=va-sq-2)
+2026-04-14 08:32:18,563 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 3 / 50  (id=va-sq-3)
+2026-04-14 08:32:19,429 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 4 / 50  (id=va-sq-4)
+2026-04-14 08:32:20,328 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 5 / 50  (id=va-gq-5)
+2026-04-14 08:32:21,205 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 6 / 50  (id=va-sq-6)
+2026-04-14 08:32:21,562 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 7 / 50  (id=va-sq-7)
+2026-04-14 08:32:21,916 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 8 / 50  (id=va-sq-8)
+2026-04-14 08:32:22,266 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 9 / 50  (id=va-sq-9)
+2026-04-14 08:32:22,615 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 10 / 50  (id=va-sq-10)
+2026-04-14 08:32:22,968 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 11 / 50  (id=va-sq-11)
+2026-04-14 08:32:23,330 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 12 / 50  (id=va-gq-12)
+2026-04-14 08:32:23,684 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 13 / 50  (id=va-sq-13)
+2026-04-14 08:32:23,989 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 14 / 50  (id=va-sq-14)
+2026-04-14 08:32:24,292 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 15 / 50  (id=va-sq-15)
+2026-04-14 08:32:24,601 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 16 / 50  (id=va-sq-16)
+2026-04-14 08:32:24,906 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 17 / 50  (id=va-sq-17)
+2026-04-14 08:32:25,212 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 18 / 50  (id=va-sq-18)
+2026-04-14 08:32:25,521 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 19 / 50  (id=va-gq-19)
+2026-04-14 08:32:25,830 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 20 / 50  (id=va-sq-20)
+2026-04-14 08:32:26,068 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 21 / 50  (id=va-sq-21)
+2026-04-14 08:32:26,308 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 22 / 50  (id=va-sq-22)
+2026-04-14 08:32:26,546 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 23 / 50  (id=va-sq-23)
+2026-04-14 08:32:26,776 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 24 / 50  (id=va-sq-24)
+2026-04-14 08:32:27,008 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 25 / 50  (id=va-sq-25)
+2026-04-14 08:32:27,238 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 26 / 50  (id=va-sq-26)
+2026-04-14 08:32:27,468 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 27 / 50  (id=va-gq-27)
+2026-04-14 08:32:27,698 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 28 / 50  (id=va-sq-28)
+2026-04-14 08:32:28,069 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 29 / 50  (id=va-sq-29)
+2026-04-14 08:32:28,437 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 30 / 50  (id=va-sq-30)
+2026-04-14 08:32:28,804 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 31 / 50  (id=va-sq-31)
+2026-04-14 08:32:29,171 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 32 / 50  (id=va-sq-32)
+2026-04-14 08:32:29,539 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 33 / 50  (id=va-sq-33)
+2026-04-14 08:32:29,910 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 34 / 50  (id=va-gq-34)
+2026-04-14 08:32:30,286 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 35 / 50  (id=va-sq-35)
+2026-04-14 08:32:30,632 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 36 / 50  (id=va-sq-36)
+2026-04-14 08:32:30,982 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 37 / 50  (id=va-sq-37)
+2026-04-14 08:32:31,327 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 38 / 50  (id=va-sq-38)
+2026-04-14 08:32:31,668 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 39 / 50  (id=va-sq-39)
+2026-04-14 08:32:32,007 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 40 / 50  (id=va-sq-40)
+2026-04-14 08:32:32,347 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 41 / 50  (id=va-sq-41)
+2026-04-14 08:32:32,687 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 42 / 50  (id=va-sq-42)
+2026-04-14 08:32:33,036 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 43 / 50  (id=va-sq-43)
+2026-04-14 08:32:33,387 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 44 / 50  (id=va-gq-44)
+2026-04-14 08:32:33,727 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 45 / 50  (id=va-sq-45)
+2026-04-14 08:32:34,278 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 46 / 50  (id=va-sq-46)
+2026-04-14 08:32:34,831 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 47 / 50  (id=va-sq-47)
+2026-04-14 08:32:35,381 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 48 / 50  (id=va-sq-48)
+2026-04-14 08:32:35,929 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 49 / 50  (id=va-gq-49)
+2026-04-14 08:32:36,478 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Preparing 50 / 50  (id=va-sq-50)
+2026-04-14 08:32:36,835 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Prompt preparation done for 50 new examples in 20.0s
+2026-04-14 08:32:36,836 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Generating 50 answers ...
+2026-04-14 08:32:55,551 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] Generation done in 18.7s
+2026-04-14 08:32:55,641 [INFO] absl: Using default tokenizer.
+2026-04-14 08:32:57,591 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qmsum] {'rouge/rouge1': 31.8245, 'rouge/rouge2': 8.4431, 'rouge/rougeL': 19.5733, 'rouge/rougeLsum': 28.0993, 'rouge/geometric_mean': 17.3904, 'num_predicted': 50, 'mean_prediction_length_characters': 724.94, 'scrolls_score': 17.3904, 'display_keys': ['rouge/rouge1', 'rouge/rouge2', 'rouge/rougeL'], 'display': [31.8245, 8.4431, 19.5733], 'rouge_geo_mean': 17.3904, 'rouge1': 31.8245, 'rouge2': 8.4431, 'rougeL': 19.5733, 'rougeLsum': 28.0993}  (40.8s)
+2026-04-14 08:32:57,593 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=qasper
+============================================================
+2026-04-14 08:32:57,593 [INFO] benchmarking.data_loader: Loading official SCROLLS task=qasper split=validation ...
+2026-04-14 08:32:57,922 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for qasper
+2026-04-14 08:32:57,927 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 1 / 50  (id=b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54)
+2026-04-14 08:32:58,142 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 2 / 50  (id=f5e6f43454332e0521a778db0b769481e23e7682)
+2026-04-14 08:32:58,350 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 3 / 50  (id=9a05a5f4351db75da371f7ac12eb0b03607c4b87)
+2026-04-14 08:32:58,556 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 4 / 50  (id=5eda469a8a77f028d0c5f1acd296111085614537)
+2026-04-14 08:32:58,768 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 5 / 50  (id=18c5d366b1da8447b5404eab71f4cc658ba12e6f)
+2026-04-14 08:32:58,916 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 6 / 50  (id=b5e4866f0685299f1d7af267bbcc4afe2aab806f)
+2026-04-14 08:32:59,063 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 7 / 50  (id=1f085b9bb7bfd0d6c8cba1a9d73f08fcf2da7590)
+2026-04-14 08:32:59,209 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 8 / 50  (id=b6ae8e10c6a0d34c834f18f66ab730b670fb528c)
+2026-04-14 08:32:59,408 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 9 / 50  (id=a87a009c242d57c51fc94fe312af5e02070f898b)
+2026-04-14 08:32:59,605 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 10 / 50  (id=ef4dba073d24042f24886580ae77add5326f2130)
+2026-04-14 08:32:59,935 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 11 / 50  (id=2df4a045a9cd7b44874340b6fdf9308d3c55327a)
+2026-04-14 08:33:00,269 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 12 / 50  (id=a313e98994fc039a82aa2447c411dda92c65a470)
+2026-04-14 08:33:00,383 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 13 / 50  (id=37861be6aecd9242c4fdccdfcd06e48f3f1f8f81)
+2026-04-14 08:33:00,496 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 14 / 50  (id=7e62a53823aba08bc26b2812db016f5ce6159565)
+2026-04-14 08:33:00,609 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 15 / 50  (id=9eabb54c2408dac24f00f92cf1061258c7ea2e1a)
+2026-04-14 08:33:00,752 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 16 / 50  (id=3d013f15796ae7fed5272183a166c45f16e24e39)
+2026-04-14 08:33:00,895 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 17 / 50  (id=9ee07edc371e014df686ced4fb0c3a7b9ce3d5dc)
+2026-04-14 08:33:01,147 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 18 / 50  (id=d3aa0449708cc861a51551b128d73e11d62207d2)
+2026-04-14 08:33:01,401 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 19 / 50  (id=cfbec1ef032ac968560a7c76dec70faf1269b27c)
+2026-04-14 08:33:01,662 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 20 / 50  (id=c0e341c4d2253eb42c8840381b082aae274eddad)
+2026-04-14 08:33:01,921 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 21 / 50  (id=1ec152119cf756b16191b236c85522afeed11f59)
+2026-04-14 08:33:02,140 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 22 / 50  (id=891c2001d6baaaf0da4e65b647402acac621a7d2)
+2026-04-14 08:33:02,365 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 23 / 50  (id=66c96c297c2cffdf5013bab5e95b59101cb38655)
+2026-04-14 08:33:02,580 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 24 / 50  (id=6b53e1f46ae4ba9b75117fc6e593abded89366be)
+2026-04-14 08:33:02,799 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 25 / 50  (id=c0bee6539eb6956a7347daa9d2419b367bd02064)
+2026-04-14 08:33:03,017 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 26 / 50  (id=3de0487276bb5961586acc6e9f82934ef8cb668c)
+2026-04-14 08:33:03,234 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 27 / 50  (id=113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab)
+2026-04-14 08:33:03,390 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 28 / 50  (id=0752d71a0a1f73b3482a888313622ce9e9870d6e)
+2026-04-14 08:33:03,550 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 29 / 50  (id=55c8f7acbfd4f5cde634aaecd775b3bb32e9ffa3)
+2026-04-14 08:33:03,705 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 30 / 50  (id=4eaf9787f51cd7cdc45eb85cf223d752328c6ee4)
+2026-04-14 08:33:03,859 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 31 / 50  (id=fb2b536dc8e442dffab408db992b971e86548158)
+2026-04-14 08:33:04,040 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 32 / 50  (id=31735ec3d83c40b79d11df5c34154849aeb3fb47)
+2026-04-14 08:33:04,222 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 33 / 50  (id=10d450960907091f13e0be55f40bcb96f44dd074)
+2026-04-14 08:33:04,402 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 34 / 50  (id=b5608076d91450b0d295ad14c3e3a90d7e168d0e)
+2026-04-14 08:33:04,582 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 35 / 50  (id=c21b87c97d1afac85ece2450ee76d01c946de668)
+2026-04-14 08:33:04,762 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 36 / 50  (id=d087539e6a38c42f0a521ff2173ef42c0733878e)
+2026-04-14 08:33:04,934 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 37 / 50  (id=efe9bad55107a6be7704ed97ecce948a8ca7b1d2)
+2026-04-14 08:33:05,105 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 38 / 50  (id=71e4ba4e87e6596aeca187127c0d088df6570c57)
+2026-04-14 08:33:05,217 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 39 / 50  (id=7561a968470a8936d10e1ba722d2f38b5a9a4d38)
+2026-04-14 08:33:05,329 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 40 / 50  (id=6d4400f45bd97b812e946b8a682b018826e841f1)
+2026-04-14 08:33:05,445 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 41 / 50  (id=26c2e1eb12143d985e4fb50543cf0d1eb4395e67)
+2026-04-14 08:33:05,558 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 42 / 50  (id=f17ca24b135f9fe6bb25dc5084b13e1637ec7744)
+2026-04-14 08:33:05,784 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 43 / 50  (id=bd5bd1765362c2d972a762ca12675108754aa437)
+2026-04-14 08:33:06,003 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 44 / 50  (id=d9b6c61fc6d29ad399d27b931b6cb7b1117b314a)
+2026-04-14 08:33:06,222 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 45 / 50  (id=d27438b11bc70e706431dda0af2b1c0b0d209f96)
+2026-04-14 08:33:06,304 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 46 / 50  (id=8d4ac4afbf5b14f412171729ceb5e822afcfa3f4)
+2026-04-14 08:33:06,383 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 47 / 50  (id=3c93894c4baf49deacc6ed2a14ef5e0f13b7d96f)
+2026-04-14 08:33:06,460 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 48 / 50  (id=07d15501a599bae7eb4a9ead63e9df3d55b3dc35)
+2026-04-14 08:33:06,538 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 49 / 50  (id=99e78c390932594bd833be0f5c890af5c605d808)
+2026-04-14 08:33:06,768 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Preparing 50 / 50  (id=861187338c5ad445b9acddba8f2c7688785667b1)
+2026-04-14 08:33:06,999 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Prompt preparation done for 50 new examples in 9.1s
+2026-04-14 08:33:06,999 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Generating 50 answers ...
+2026-04-14 08:33:45,607 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] Generation done in 38.6s
+2026-04-14 08:33:45,673 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/qasper] {'f1': 37.3698, 'num_predicted': 50, 'mean_prediction_length_characters': 293.34, 'scrolls_score': 37.3698, 'display_keys': ['f1'], 'display': [37.3698]}  (47.7s)
+2026-04-14 08:33:45,673 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=narrative_qa
+============================================================
+2026-04-14 08:33:45,674 [INFO] benchmarking.data_loader: Loading official SCROLLS task=narrative_qa split=validation ...
+2026-04-14 08:34:06,444 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for narrative_qa
+2026-04-14 08:34:06,447 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 1 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_0)
+2026-04-14 08:34:07,072 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 2 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1)
+2026-04-14 08:34:07,688 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 3 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2)
+2026-04-14 08:34:08,298 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 4 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_3)
+2026-04-14 08:34:08,908 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 5 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_4)
+2026-04-14 08:34:09,517 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 6 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_5)
+2026-04-14 08:34:10,128 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 7 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_6)
+2026-04-14 08:34:10,739 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 8 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_7)
+2026-04-14 08:34:11,342 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 9 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_8)
+2026-04-14 08:34:11,944 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 10 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_9)
+2026-04-14 08:34:12,547 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 11 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_10)
+2026-04-14 08:34:13,154 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 12 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_11)
+2026-04-14 08:34:13,760 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 13 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_12)
+2026-04-14 08:34:14,373 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 14 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13)
+2026-04-14 08:34:14,981 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 15 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_14)
+2026-04-14 08:34:15,591 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 16 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_15)
+2026-04-14 08:34:16,199 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 17 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16)
+2026-04-14 08:34:16,810 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 18 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17)
+2026-04-14 08:34:17,434 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 19 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18)
+2026-04-14 08:34:18,051 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 20 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19)
+2026-04-14 08:34:18,673 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 21 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20)
+2026-04-14 08:34:19,288 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 22 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_21)
+2026-04-14 08:34:19,893 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 23 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_22)
+2026-04-14 08:34:20,494 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 24 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_23)
+2026-04-14 08:34:21,108 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 25 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24)
+2026-04-14 08:34:21,721 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 26 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25)
+2026-04-14 08:34:22,323 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 27 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_26)
+2026-04-14 08:34:22,925 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 28 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_27)
+2026-04-14 08:34:23,539 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 29 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_28)
+2026-04-14 08:34:24,147 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 30 / 50  (id=8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_29)
+2026-04-14 08:34:24,758 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 31 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_0)
+2026-04-14 08:34:38,791 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 32 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_1)
+2026-04-14 08:34:53,194 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 33 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_2)
+2026-04-14 08:35:07,599 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 34 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_3)
+2026-04-14 08:35:21,947 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 35 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_4)
+2026-04-14 08:35:36,241 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 36 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_5)
+2026-04-14 08:35:50,685 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 37 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_6)
+2026-04-14 08:36:05,121 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 38 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_7)
+2026-04-14 08:36:19,549 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 39 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_8)
+2026-04-14 08:36:33,975 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 40 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_9)
+2026-04-14 08:36:48,253 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 41 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_10)
+2026-04-14 08:37:02,661 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 42 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_11)
+2026-04-14 08:37:16,946 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 43 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_12)
+2026-04-14 08:37:31,639 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 44 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_13)
+2026-04-14 08:37:45,710 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 45 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_14)
+2026-04-14 08:38:00,014 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 46 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_15)
+2026-04-14 08:38:14,405 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 47 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_16)
+2026-04-14 08:38:28,661 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 48 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_17)
+2026-04-14 08:38:42,888 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 49 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_18)
+2026-04-14 08:38:57,190 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Preparing 50 / 50  (id=b7ea3185c6be5ea8d603fe5c4c54268c8b42605a_19)
+2026-04-14 08:39:11,501 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Prompt preparation done for 50 new examples in 305.1s
+2026-04-14 08:39:11,502 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Generating 50 answers ...
+2026-04-14 08:39:22,966 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] Generation done in 11.5s
+2026-04-14 08:39:23,009 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/narrative_qa] {'f1': 10.4185, 'num_predicted': 50, 'mean_prediction_length_characters': 81.5, 'scrolls_score': 10.4185, 'display_keys': ['f1'], 'display': [10.4185]}  (316.6s)
+2026-04-14 08:39:23,013 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=quality
+============================================================
+2026-04-14 08:39:23,013 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 08:39:23,530 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for quality
+2026-04-14 08:39:23,547 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 1 / 50  (id=52845_75VB1ISR_1)
+2026-04-14 08:39:23,810 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 2 / 50  (id=52845_75VB1ISR_2)
+2026-04-14 08:39:24,068 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 3 / 50  (id=52845_75VB1ISR_3)
+2026-04-14 08:39:24,328 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 4 / 50  (id=52845_75VB1ISR_4)
+2026-04-14 08:39:24,578 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 5 / 50  (id=52845_75VB1ISR_5)
+2026-04-14 08:39:24,828 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 6 / 50  (id=52845_75VB1ISR_6)
+2026-04-14 08:39:25,076 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 7 / 50  (id=30029_F5N22U40_1)
+2026-04-14 08:39:25,320 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 8 / 50  (id=30029_F5N22U40_2)
+2026-04-14 08:39:25,565 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 9 / 50  (id=30029_F5N22U40_3)
+2026-04-14 08:39:25,812 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 10 / 50  (id=30029_F5N22U40_4)
+2026-04-14 08:39:26,056 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 11 / 50  (id=30029_F5N22U40_5)
+2026-04-14 08:39:26,299 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 12 / 50  (id=30029_F5N22U40_6)
+2026-04-14 08:39:26,541 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 13 / 50  (id=30029_F5N22U40_7)
+2026-04-14 08:39:26,786 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 14 / 50  (id=30029_F5N22U40_8)
+2026-04-14 08:39:27,027 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 15 / 50  (id=30029_F5N22U40_9)
+2026-04-14 08:39:27,270 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 16 / 50  (id=62139_J05FWZR6_1)
+2026-04-14 08:39:27,540 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 17 / 50  (id=62139_J05FWZR6_2)
+2026-04-14 08:39:27,801 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 18 / 50  (id=62139_J05FWZR6_3)
+2026-04-14 08:39:28,063 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 19 / 50  (id=62139_J05FWZR6_4)
+2026-04-14 08:39:28,324 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 20 / 50  (id=62139_J05FWZR6_5)
+2026-04-14 08:39:28,585 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 21 / 50  (id=62139_J05FWZR6_6)
+2026-04-14 08:39:28,847 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 22 / 50  (id=62139_J05FWZR6_7)
+2026-04-14 08:39:29,113 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 23 / 50  (id=62139_J05FWZR6_8)
+2026-04-14 08:39:29,376 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 24 / 50  (id=62139_J05FWZR6_9)
+2026-04-14 08:39:29,642 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 25 / 50  (id=63523_STSHLFEA_1)
+2026-04-14 08:39:29,908 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 26 / 50  (id=63523_STSHLFEA_2)
+2026-04-14 08:39:30,173 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 27 / 50  (id=63523_STSHLFEA_3)
+2026-04-14 08:39:30,439 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 28 / 50  (id=63523_STSHLFEA_4)
+2026-04-14 08:39:30,707 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 29 / 50  (id=63523_STSHLFEA_5)
+2026-04-14 08:39:30,970 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 30 / 50  (id=63523_STSHLFEA_6)
+2026-04-14 08:39:31,239 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 31 / 50  (id=63523_STSHLFEA_7)
+2026-04-14 08:39:31,514 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 32 / 50  (id=63523_STSHLFEA_8)
+2026-04-14 08:39:31,780 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 33 / 50  (id=63523_STSHLFEA_9)
+2026-04-14 08:39:32,045 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 34 / 50  (id=63523_STSHLFEA_10)
+2026-04-14 08:39:32,309 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 35 / 50  (id=63401_ZCP5ZDGL_1)
+2026-04-14 08:39:32,569 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 36 / 50  (id=63401_ZCP5ZDGL_2)
+2026-04-14 08:39:32,828 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 37 / 50  (id=63401_ZCP5ZDGL_3)
+2026-04-14 08:39:33,089 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 38 / 50  (id=63401_ZCP5ZDGL_4)
+2026-04-14 08:39:33,347 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 39 / 50  (id=63401_ZCP5ZDGL_5)
+2026-04-14 08:39:33,611 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 40 / 50  (id=63401_ZCP5ZDGL_6)
+2026-04-14 08:39:33,872 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 41 / 50  (id=63401_ZCP5ZDGL_7)
+2026-04-14 08:39:34,130 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 42 / 50  (id=63401_ZCP5ZDGL_8)
+2026-04-14 08:39:34,389 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 43 / 50  (id=63401_ZCP5ZDGL_9)
+2026-04-14 08:39:34,647 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 44 / 50  (id=63401_ZCP5ZDGL_10)
+2026-04-14 08:39:34,904 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 45 / 50  (id=62476_Z8GFDCIZ_1)
+2026-04-14 08:39:35,176 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 46 / 50  (id=62476_Z8GFDCIZ_2)
+2026-04-14 08:39:35,446 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 47 / 50  (id=62476_Z8GFDCIZ_3)
+2026-04-14 08:39:35,713 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 48 / 50  (id=62476_Z8GFDCIZ_4)
+2026-04-14 08:39:35,981 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 49 / 50  (id=62476_Z8GFDCIZ_5)
+2026-04-14 08:39:36,249 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 50 / 50  (id=62476_Z8GFDCIZ_6)
+2026-04-14 08:39:36,520 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Prompt preparation done for 50 new examples in 13.0s
+2026-04-14 08:39:36,520 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generating 50 answers ...
+2026-04-14 08:39:47,019 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generation done in 10.5s
+2026-04-14 08:39:47,056 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] {'exact_match': 52.0, 'num_predicted': 50, 'mean_prediction_length_characters': 63.6, 'scrolls_score': 52.0, 'display_keys': ['exact_match'], 'display': [52.0]}  (23.5s)
+2026-04-14 08:39:47,057 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=contract_nli
+============================================================
+2026-04-14 08:39:47,057 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 08:39:47,161 [INFO] benchmarking.data_loader: Loaded 50 official SCROLLS examples for contract_nli
+2026-04-14 08:39:47,164 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 1 / 50  (id=3_nda-11)
+2026-04-14 08:39:47,309 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 2 / 50  (id=3_nda-16)
+2026-04-14 08:39:47,434 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 3 / 50  (id=3_nda-15)
+2026-04-14 08:39:47,559 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 4 / 50  (id=3_nda-10)
+2026-04-14 08:39:47,688 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 5 / 50  (id=3_nda-2)
+2026-04-14 08:39:47,828 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 6 / 50  (id=3_nda-1)
+2026-04-14 08:39:47,957 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 7 / 50  (id=3_nda-19)
+2026-04-14 08:39:48,083 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 8 / 50  (id=3_nda-12)
+2026-04-14 08:39:48,208 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 9 / 50  (id=3_nda-20)
+2026-04-14 08:39:48,332 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 10 / 50  (id=3_nda-3)
+2026-04-14 08:39:48,456 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 11 / 50  (id=3_nda-18)
+2026-04-14 08:39:48,579 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 12 / 50  (id=3_nda-7)
+2026-04-14 08:39:48,703 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 13 / 50  (id=3_nda-17)
+2026-04-14 08:39:48,827 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 14 / 50  (id=3_nda-8)
+2026-04-14 08:39:48,951 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 15 / 50  (id=3_nda-13)
+2026-04-14 08:39:49,074 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 16 / 50  (id=3_nda-5)
+2026-04-14 08:39:49,197 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 17 / 50  (id=3_nda-4)
+2026-04-14 08:39:49,321 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 18 / 50  (id=7_nda-11)
+2026-04-14 08:39:49,666 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 19 / 50  (id=7_nda-16)
+2026-04-14 08:39:49,991 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 20 / 50  (id=7_nda-15)
+2026-04-14 08:39:50,324 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 21 / 50  (id=7_nda-10)
+2026-04-14 08:39:50,648 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 22 / 50  (id=7_nda-2)
+2026-04-14 08:39:50,972 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 23 / 50  (id=7_nda-1)
+2026-04-14 08:39:51,295 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 24 / 50  (id=7_nda-19)
+2026-04-14 08:39:51,618 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 25 / 50  (id=7_nda-12)
+2026-04-14 08:39:51,939 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 26 / 50  (id=7_nda-20)
+2026-04-14 08:39:52,258 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 27 / 50  (id=7_nda-3)
+2026-04-14 08:39:52,577 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 28 / 50  (id=7_nda-18)
+2026-04-14 08:39:52,896 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 29 / 50  (id=7_nda-7)
+2026-04-14 08:39:53,223 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 30 / 50  (id=7_nda-17)
+2026-04-14 08:39:53,543 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 31 / 50  (id=7_nda-8)
+2026-04-14 08:39:53,863 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 32 / 50  (id=7_nda-13)
+2026-04-14 08:39:54,184 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 33 / 50  (id=7_nda-5)
+2026-04-14 08:39:54,502 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 34 / 50  (id=7_nda-4)
+2026-04-14 08:39:54,820 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 35 / 50  (id=9_nda-11)
+2026-04-14 08:39:55,100 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 36 / 50  (id=9_nda-16)
+2026-04-14 08:39:55,377 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 37 / 50  (id=9_nda-15)
+2026-04-14 08:39:55,654 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 38 / 50  (id=9_nda-10)
+2026-04-14 08:39:55,931 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 39 / 50  (id=9_nda-2)
+2026-04-14 08:39:56,207 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 40 / 50  (id=9_nda-1)
+2026-04-14 08:39:56,485 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 41 / 50  (id=9_nda-19)
+2026-04-14 08:39:56,763 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 42 / 50  (id=9_nda-12)
+2026-04-14 08:39:57,040 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 43 / 50  (id=9_nda-20)
+2026-04-14 08:39:57,315 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 44 / 50  (id=9_nda-3)
+2026-04-14 08:39:57,595 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 45 / 50  (id=9_nda-18)
+2026-04-14 08:39:57,874 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 46 / 50  (id=9_nda-7)
+2026-04-14 08:39:58,151 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 47 / 50  (id=9_nda-17)
+2026-04-14 08:39:58,429 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 48 / 50  (id=9_nda-8)
+2026-04-14 08:39:58,707 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 49 / 50  (id=9_nda-13)
+2026-04-14 08:39:58,984 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 50 / 50  (id=9_nda-5)
+2026-04-14 08:39:59,258 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Prompt preparation done for 50 new examples in 12.1s
+2026-04-14 08:39:59,259 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generating 50 answers ...
+2026-04-14 08:40:06,232 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generation done in 7.0s
+2026-04-14 08:40:06,265 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] {'exact_match': 58.0, 'num_predicted': 50, 'mean_prediction_length_characters': 12.16, 'scrolls_score': 58.0, 'display_keys': ['exact_match'], 'display': [58.0]}  (19.1s)
+2026-04-14 08:40:06,305 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:08,253 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:10,568 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:12,890 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:15,233 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:17,574 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:19,883 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:22,271 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:24,621 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:26,981 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:29,343 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:31,676 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:34,024 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:36,385 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:38,760 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:41,100 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:43,473 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:45,842 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:48,203 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:50,537 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:52,870 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:55,221 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:57,600 [INFO] absl: Using default tokenizer.
+2026-04-14 08:40:59,973 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:02,305 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:04,611 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:06,918 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:09,245 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:11,554 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:13,837 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:16,155 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:18,489 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:20,820 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:23,137 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:25,398 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:27,681 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:29,981 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:32,365 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:34,755 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:37,144 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:39,507 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:41,902 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:44,308 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:46,728 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:49,125 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:51,496 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:53,871 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:56,302 [INFO] absl: Using default tokenizer.
+2026-04-14 08:41:58,665 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:01,034 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:03,408 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:05,759 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:08,131 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:10,439 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:12,760 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:15,096 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:17,487 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:19,875 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:22,239 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:24,586 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:26,962 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:29,294 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:31,656 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:33,998 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:36,386 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:38,756 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:41,115 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:43,468 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:45,794 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:48,105 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:50,442 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:52,727 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:55,017 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:57,340 [INFO] absl: Using default tokenizer.
+2026-04-14 08:42:59,707 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:01,966 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:04,265 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:06,555 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:08,835 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:11,113 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:13,389 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:15,661 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:17,906 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:20,191 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:22,457 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:24,728 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:27,036 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:29,289 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:31,564 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:33,813 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:36,108 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:38,383 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:40,657 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:42,906 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:45,172 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:47,435 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:49,661 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:51,932 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:54,191 [INFO] absl: Using default tokenizer.
+2026-04-14 08:43:56,482 [INFO] absl: Using default tokenizer.

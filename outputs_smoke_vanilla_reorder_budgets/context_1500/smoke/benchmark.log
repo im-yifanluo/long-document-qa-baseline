@@ -1,0 +1,55 @@
+2026-04-14 06:29:03,847 [INFO] benchmarking.run_benchmark: Running benchmark with context_budget=1500 and top_k=30
+2026-04-14 06:29:03,848 [INFO] benchmarking.rag_pipeline: Initialising benchmark pipeline ...
+2026-04-14 06:29:14,512 [INFO] benchmarking.generator: Loading vLLM model Qwen/Qwen2.5-14B-Instruct  (tp=1, gpu_mem=0.90, max_model_len=4572) ...
+2026-04-14 06:34:30,048 [INFO] benchmarking.generator: vLLM model loaded: Qwen/Qwen2.5-14B-Instruct
+2026-04-14 06:34:30,539 [INFO] sentence_transformers.SentenceTransformer: Load pretrained SentenceTransformer: Snowflake/snowflake-arctic-embed-m-v1.5
+2026-04-14 06:34:37,884 [INFO] sentence_transformers.SentenceTransformer: 1 prompt is loaded, with the key: query
+2026-04-14 06:34:37,885 [INFO] benchmarking.rag_pipeline: Benchmark pipeline ready.
+2026-04-14 06:34:37,885 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=quality
+============================================================
+2026-04-14 06:34:37,886 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 06:34:38,490 [INFO] benchmarking.data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-14 06:34:38,492 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-14 06:34:40,506 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-14 06:34:40,739 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Prompt preparation done for 2 new examples in 2.2s
+2026-04-14 06:34:40,739 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generating 2 answers ...
+2026-04-14 06:34:43,262 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] Generation done in 2.5s
+2026-04-14 06:34:45,777 [INFO] benchmarking.rag_pipeline: [vanilla_rag/quality] {'exact_match': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 63.5, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (7.3s)
+2026-04-14 06:34:45,778 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=vanilla_rag task=contract_nli
+============================================================
+2026-04-14 06:34:45,778 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 06:34:45,954 [INFO] benchmarking.data_loader: Loaded 2 official SCROLLS examples for contract_nli
+2026-04-14 06:34:45,955 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 1 / 2  (id=3_nda-11)
+2026-04-14 06:34:46,076 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Preparing 2 / 2  (id=3_nda-16)
+2026-04-14 06:34:46,188 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Prompt preparation done for 2 new examples in 0.2s
+2026-04-14 06:34:46,188 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generating 2 answers ...
+2026-04-14 06:34:47,168 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] Generation done in 1.0s
+2026-04-14 06:34:47,172 [INFO] benchmarking.rag_pipeline: [vanilla_rag/contract_nli] {'exact_match': 100.0, 'num_predicted': 2, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (1.2s)
+2026-04-14 06:34:47,172 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=quality
+============================================================
+2026-04-14 06:34:47,172 [INFO] benchmarking.data_loader: Loading official SCROLLS task=quality split=validation ...
+2026-04-14 06:34:47,679 [INFO] benchmarking.data_loader: Loaded 2 official SCROLLS examples for quality
+2026-04-14 06:34:47,681 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 1 / 2  (id=52845_75VB1ISR_1)
+2026-04-14 06:34:47,915 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Preparing 2 / 2  (id=52845_75VB1ISR_2)
+2026-04-14 06:34:48,144 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Prompt preparation done for 2 new examples in 0.5s
+2026-04-14 06:34:48,144 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generating 2 answers ...
+2026-04-14 06:34:50,318 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] Generation done in 2.2s
+2026-04-14 06:34:50,322 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/quality] {'exact_match': 0.0, 'num_predicted': 2, 'mean_prediction_length_characters': 63.5, 'scrolls_score': 0.0, 'display_keys': ['exact_match'], 'display': [0.0]}  (2.6s)
+2026-04-14 06:34:50,322 [INFO] benchmarking.rag_pipeline: 
+============================================================
+  Running method=reorder_only_rag task=contract_nli
+============================================================
+2026-04-14 06:34:50,323 [INFO] benchmarking.data_loader: Loading official SCROLLS task=contract_nli split=validation ...
+2026-04-14 06:34:50,414 [INFO] benchmarking.data_loader: Loaded 2 official SCROLLS examples for contract_nli
+2026-04-14 06:34:50,416 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 1 / 2  (id=3_nda-11)
+2026-04-14 06:34:50,532 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Preparing 2 / 2  (id=3_nda-16)
+2026-04-14 06:34:50,645 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Prompt preparation done for 2 new examples in 0.2s
+2026-04-14 06:34:50,645 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generating 2 answers ...
+2026-04-14 06:34:51,626 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] Generation done in 1.0s
+2026-04-14 06:34:51,630 [INFO] benchmarking.rag_pipeline: [reorder_only_rag/contract_nli] {'exact_match': 100.0, 'num_predicted': 2, 'mean_prediction_length_characters': 10.0, 'scrolls_score': 100.0, 'display_keys': ['exact_match'], 'display': [100.0]}  (1.2s)

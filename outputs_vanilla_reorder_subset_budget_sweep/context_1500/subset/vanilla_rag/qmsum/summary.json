@@ -1,0 +1,40 @@
+{
+  "task": "qmsum",
+  "method": "vanilla_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 31.7252,
+    "rouge/rouge2": 8.1555,
+    "rouge/rougeL": 18.6477,
+    "rouge/rougeLsum": 26.8597,
+    "rouge/geometric_mean": 16.8977,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 700.34,
+    "scrolls_score": 16.8977,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      31.7252,
+      8.1555,
+      18.6477
+    ],
+    "rouge_geo_mean": 16.8977,
+    "rouge1": 31.7252,
+    "rouge2": 8.1555,
+    "rougeL": 18.6477,
+    "rougeLsum": 26.8597
+  },
+  "elapsed_seconds": 41.49,
+  "token_stats": {
+    "avg_input_tokens": 1516.26,
+    "avg_context_tokens": 1459.94,
+    "avg_generation_tokens": 124.46,
+    "total_input_tokens": 75813
+  },
+  "results_file": "outputs_vanilla_reorder_subset_budget_sweep/context_1500/subset/vanilla_rag/qmsum/results.jsonl"
+}
