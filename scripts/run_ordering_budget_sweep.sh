@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-OUTPUT_DIR="${OUTPUT_DIR:-outputs_ordering_budget_sweep}"
+OUTPUT_DIR="${OUTPUT_DIR:-outputs/experiments/ordering_budget_sweep}"
 LLM_MODEL="${LLM_MODEL:-Qwen/Qwen2.5-7B-Instruct}"
 FALLBACK_LLM_MODEL="${FALLBACK_LLM_MODEL:-Qwen/Qwen2.5-7B-Instruct}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.80}"

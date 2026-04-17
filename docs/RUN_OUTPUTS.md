@@ -28,8 +28,8 @@ The path is defined in `benchmarking/config.py` by `BenchmarkConfig.run_output_d
 Examples:
 
 - `outputs/subset/dos_rag/quality/results.jsonl`
-- `outputs_meeting_core/subset/comparison_report.md`
-- `outputs_meeting_core/subset/vanilla_rag/qasper/summary.json`
+- `outputs/subset/meeting_core/subset/comparison_report.md`
+- `outputs/subset/meeting_core/subset/vanilla_rag/qasper/summary.json`
 
 ## Analysis Outputs
 
@@ -49,6 +49,13 @@ Common files include:
 
 ## Historical Runs
 
-Named historical run roots such as `outputs_meeting_core/` stay at the repo
-root. That keeps old notes, plots, and professor-facing links stable while new
-runs still follow the same internal structure.
+Named historical runs now sit under the matching run tier:
+
+- `outputs/smoke/official_smoke/`
+- `outputs/preflight/preflight_all/`
+- `outputs/preflight/preflight_readagent/`
+- `outputs/subset/meeting_core/`
+- `outputs/subset/meeting_raptor15/`
+- `outputs/subset/meeting_readagent_seq/`
+
+`outputs/experiments/` is reserved for ad-hoc sweeps and side experiments.

@@ -1,0 +1,16 @@
+{
+  "run_root": "outputs/experiments/meeting_readagent_seq/subset",
+  "tasks": [
+    "qmsum",
+    "narrative_qa",
+    "quality"
+  ],
+  "methods": [
+    "vanilla_rag",
+    "dos_rag",
+    "raptor",
+    "read_agent_parallel",
+    "read_agent_sequential"
+  ],
+  "analysis_dir": "outputs/experiments/meeting_readagent_seq/subset/analysis"
+}

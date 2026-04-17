@@ -1,0 +1,41 @@
+{
+  "task": "gov_report",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 0,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 29.4627,
+    "rouge/rouge2": 6.6087,
+    "rouge/rougeL": 15.2513,
+    "rouge/rougeLsum": 27.7296,
+    "rouge/geometric_mean": 14.3736,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 1229.0,
+    "scrolls_score": 14.3736,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      29.4627,
+      6.6087,
+      15.2513
+    ],
+    "rouge_geo_mean": 14.3736,
+    "rouge1": 29.4627,
+    "rouge2": 6.6087,
+    "rougeL": 15.2513,
+    "rougeLsum": 27.7296
+  },
+  "elapsed_seconds": 16.76,
+  "results_refreshed_from_cache": true,
+  "token_stats": {
+    "avg_input_tokens": 5766.0,
+    "avg_context_tokens": 5712.0,
+    "avg_generation_tokens": 244.0,
+    "total_input_tokens": 5766
+  },
+  "results_file": "outputs/experiments/preflight_all/preflight/vanilla_rag/gov_report/results.jsonl"
+}

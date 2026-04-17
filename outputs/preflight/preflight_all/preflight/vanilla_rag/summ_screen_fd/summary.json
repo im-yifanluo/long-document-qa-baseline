@@ -1,0 +1,41 @@
+{
+  "task": "summ_screen_fd",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 0,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 31.0433,
+    "rouge/rouge2": 7.6726,
+    "rouge/rougeL": 13.7405,
+    "rouge/rougeLsum": 27.9898,
+    "rouge/geometric_mean": 14.847,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 1736.0,
+    "scrolls_score": 14.847,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      31.0433,
+      7.6726,
+      13.7405
+    ],
+    "rouge_geo_mean": 14.847,
+    "rouge1": 31.0433,
+    "rouge2": 7.6726,
+    "rougeL": 13.7405,
+    "rougeLsum": 27.9898
+  },
+  "elapsed_seconds": 24.03,
+  "results_refreshed_from_cache": true,
+  "token_stats": {
+    "avg_input_tokens": 5494.0,
+    "avg_context_tokens": 5446.0,
+    "avg_generation_tokens": 391.0,
+    "total_input_tokens": 5494
+  },
+  "results_file": "outputs/experiments/preflight_all/preflight/vanilla_rag/summ_screen_fd/results.jsonl"
+}

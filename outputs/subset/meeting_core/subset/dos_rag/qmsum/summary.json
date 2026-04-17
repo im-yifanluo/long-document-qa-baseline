@@ -1,0 +1,40 @@
+{
+  "task": "qmsum",
+  "method": "dos_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 33.2265,
+    "rouge/rouge2": 9.022,
+    "rouge/rougeL": 20.1699,
+    "rouge/rougeLsum": 28.6422,
+    "rouge/geometric_mean": 18.2178,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 876.22,
+    "scrolls_score": 18.2178,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      33.2265,
+      9.022,
+      20.1699
+    ],
+    "rouge_geo_mean": 18.2178,
+    "rouge1": 33.2265,
+    "rouge2": 9.022,
+    "rougeL": 20.1699,
+    "rougeLsum": 28.6422
+  },
+  "elapsed_seconds": 565.36,
+  "token_stats": {
+    "avg_input_tokens": 9159.66,
+    "avg_context_tokens": 9103.36,
+    "avg_generation_tokens": 157.74,
+    "total_input_tokens": 457983
+  },
+  "results_file": "outputs/experiments/meeting_core/subset/dos_rag/qmsum/results.jsonl"
+}

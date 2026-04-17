@@ -1,0 +1,27 @@
+{
+  "task": "narrative_qa",
+  "method": "vanilla_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 19.53,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 45.72,
+    "scrolls_score": 19.53,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      19.53
+    ]
+  },
+  "elapsed_seconds": 461.07,
+  "token_stats": {
+    "avg_input_tokens": 10084.12,
+    "avg_context_tokens": 9953.22,
+    "avg_generation_tokens": 10.9,
+    "total_input_tokens": 504206
+  },
+  "results_file": "outputs/experiments/meeting_core/subset/vanilla_rag/narrative_qa/results.jsonl"
+}

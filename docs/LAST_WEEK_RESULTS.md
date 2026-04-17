@@ -36,7 +36,7 @@ So the critical benchmark difference is not "retrieval vs no retrieval." It is:
 
 ## What last week's subset results actually show
 
-From `outputs_meeting_core/subset`:
+From `outputs/subset/meeting_core/subset`:
 
 | Task | vanilla_rag | dos_rag | delta |
 |---|---:|---:|---:|

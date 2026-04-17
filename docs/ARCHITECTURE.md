@@ -328,8 +328,8 @@ wrapper in `benchmarking/generator.py`.
 
 Current default reader choice:
 
-- primary: `Qwen/Qwen2.5-14B-Instruct`
-- fallback: `Qwen/Qwen2.5-7B-Instruct`
+- primary: `Qwen/Qwen2.5-7B-Instruct`
+- fallback: none by default
 
 This is a controlled-comparison decision, not a claim that the original method
 papers used this exact downstream reader.

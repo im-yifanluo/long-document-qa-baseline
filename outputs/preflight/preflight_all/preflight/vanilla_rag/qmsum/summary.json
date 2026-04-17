@@ -1,0 +1,41 @@
+{
+  "task": "qmsum",
+  "method": "vanilla_rag",
+  "num_examples": 1,
+  "num_generated": 0,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 20.9677,
+    "rouge/rouge2": 0.0,
+    "rouge/rougeL": 12.9032,
+    "rouge/rougeLsum": 17.7419,
+    "rouge/geometric_mean": 0.0,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 506.0,
+    "scrolls_score": 0.0,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      20.9677,
+      0.0,
+      12.9032
+    ],
+    "rouge_geo_mean": 0.0,
+    "rouge1": 20.9677,
+    "rouge2": 0.0,
+    "rougeL": 12.9032,
+    "rougeLsum": 17.7419
+  },
+  "elapsed_seconds": 10.6,
+  "results_refreshed_from_cache": true,
+  "token_stats": {
+    "avg_input_tokens": 10032.0,
+    "avg_context_tokens": 9980.0,
+    "avg_generation_tokens": 93.0,
+    "total_input_tokens": 10032
+  },
+  "results_file": "outputs/experiments/preflight_all/preflight/vanilla_rag/qmsum/results.jsonl"
+}

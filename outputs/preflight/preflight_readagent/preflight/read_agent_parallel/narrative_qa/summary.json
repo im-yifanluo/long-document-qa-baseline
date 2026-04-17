@@ -1,0 +1,28 @@
+{
+  "task": "narrative_qa",
+  "method": "read_agent_parallel",
+  "num_examples": 1,
+  "num_generated": 0,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 40.0,
+    "num_predicted": 1,
+    "mean_prediction_length_characters": 17.0,
+    "scrolls_score": 40.0,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      40.0
+    ]
+  },
+  "elapsed_seconds": 452.45,
+  "results_refreshed_from_cache": true,
+  "token_stats": {
+    "avg_input_tokens": 5628.0,
+    "avg_context_tokens": 5501.0,
+    "avg_generation_tokens": 4.0,
+    "total_input_tokens": 5628
+  },
+  "results_file": "outputs/experiments/preflight_readagent/preflight/read_agent_parallel/narrative_qa/results.jsonl"
+}

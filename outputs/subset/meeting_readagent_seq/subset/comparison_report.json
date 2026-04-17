@@ -1,0 +1,1508 @@
+{
+  "config": {
+    "methods": [
+      "read_agent_sequential"
+    ],
+    "run_tier": "subset",
+    "tasks": [
+      "qmsum",
+      "narrative_qa",
+      "quality"
+    ],
+    "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+    "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+    "top_k": 200,
+    "context_budget": 10000,
+    "chunk_size": 100,
+    "chunking_strategy": "sentence",
+    "enable_thinking": false
+  },
+  "provenance": {
+    "scrolls_dataset": {
+      "source": "tau/scrolls",
+      "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+      "loading_strategy": "official_task_archives",
+      "duplicate_id_handling": "collapsed_to_multi_reference_example",
+      "input_adapter": "packed_input_to_document_query_for_retrieval",
+      "parser_audit": {
+        "gov_report": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "summ_screen_fd": {
+          "rule": "document_only",
+          "local_cache_verified": false,
+          "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+        },
+        "qmsum": {
+          "rule": "split on the first blank-line boundary: query first, transcript second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qmsum.zip."
+        },
+        "qasper": {
+          "rule": "split on the first blank-line boundary: question first, paper second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/qasper.zip."
+        },
+        "narrative_qa": {
+          "rule": "split on the first blank-line boundary: question first, story/script second",
+          "local_cache_verified": false,
+          "notes": "Rule follows the official packed-input convention but was not re-verified from local cache in this workspace."
+        },
+        "quality": {
+          "rule": "question + (A-D) options first, article second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/quality.zip."
+        },
+        "contract_nli": {
+          "rule": "hypothesis first, contract second",
+          "local_cache_verified": true,
+          "notes": "Verified against cached official validation rows from tau/scrolls/contract_nli.zip."
+        }
+      }
+    },
+    "scrolls_metric": {
+      "source": "tau/scrolls",
+      "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+      "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+      "official_metric_files": [
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+        "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+      ],
+      "datasets_version": "3.6.0",
+      "compatibility_shim": "datasets.Metric"
+    }
+  },
+  "artifacts": {
+    "comparison_examples_jsonl": "outputs/experiments/meeting_readagent_seq/subset/comparison_examples.jsonl",
+    "comparison_report_markdown": "outputs/experiments/meeting_readagent_seq/subset/comparison_report.md"
+  },
+  "methods": {
+    "read_agent_sequential": {
+      "method": "read_agent_sequential",
+      "config": {
+        "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+        "llm_model": "Qwen/Qwen2.5-14B-Instruct",
+        "active_model": "Qwen/Qwen2.5-14B-Instruct",
+        "fallback_llm_model": "Qwen/Qwen2.5-7B-Instruct",
+        "chunk_size": 100,
+        "chunk_overlap": 0,
+        "chunking_strategy": "sentence",
+        "top_k": 200,
+        "context_budget": 10000,
+        "lc_context_budget": 131072,
+        "split": "validation",
+        "run_tier": "subset"
+      },
+      "provenance": {
+        "scrolls_dataset": {
+          "source": "tau/scrolls",
+          "dataset_script": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/scrolls.py",
+          "loading_strategy": "official_task_archives",
+          "duplicate_id_handling": "collapsed_to_multi_reference_example",
+          "input_adapter": "packed_input_to_document_query_for_retrieval",
+          "parser_audit": {
+            "gov_report": {
+              "rule": "document_only",
+              "local_cache_verified": false,
+              "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+            },
+            "summ_screen_fd": {
+              "rule": "document_only",
+              "local_cache_verified": false,
+              "notes": "SCROLLS defines pure summarization; adapter supplies a synthetic query string."
+            },
+            "qmsum": {
+              "rule": "split on the first blank-line boundary: query first, transcript second",
+              "local_cache_verified": true,
+              "notes": "Verified against cached official validation rows from tau/scrolls/qmsum.zip."
+            },
+            "qasper": {
+              "rule": "split on the first blank-line boundary: question first, paper second",
+              "local_cache_verified": true,
+              "notes": "Verified against cached official validation rows from tau/scrolls/qasper.zip."
+            },
+            "narrative_qa": {
+              "rule": "split on the first blank-line boundary: question first, story/script second",
+              "local_cache_verified": false,
+              "notes": "Rule follows the official packed-input convention but was not re-verified from local cache in this workspace."
+            },
+            "quality": {
+              "rule": "question + (A-D) options first, article second",
+              "local_cache_verified": true,
+              "notes": "Verified against cached official validation rows from tau/scrolls/quality.zip."
+            },
+            "contract_nli": {
+              "rule": "hypothesis first, contract second",
+              "local_cache_verified": true,
+              "notes": "Verified against cached official validation rows from tau/scrolls/contract_nli.zip."
+            }
+          }
+        },
+        "scrolls_metric": {
+          "source": "tau/scrolls",
+          "metric_dir": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics",
+          "entrypoint": "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+          "official_metric_files": [
+            "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/scrolls.py",
+            "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/rouge.py",
+            "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/f1.py",
+            "/home/yifan65/.cache/huggingface/hub/datasets--tau--scrolls/snapshots/927b875150ac8f02262ddd3b078d33a9debc935b/metrics/exact_match.py"
+          ],
+          "datasets_version": "3.6.0",
+          "compatibility_shim": "datasets.Metric"
+        }
+      },
+      "per_task_scores": {
+        "qmsum": 17.0942,
+        "narrative_qa": 12.8219,
+        "quality": 70.0
+      },
+      "average_score": 33.305366666666664,
+      "detailed_metrics": {
+        "qmsum": {
+          "rouge/rouge1": 31.06,
+          "rouge/rouge2": 8.6307,
+          "rouge/rougeL": 18.6336,
+          "rouge/rougeLsum": 27.0449,
+          "rouge/geometric_mean": 17.0942,
+          "num_predicted": 50,
+          "mean_prediction_length_characters": 1045.32,
+          "scrolls_score": 17.0942,
+          "display_keys": [
+            "rouge/rouge1",
+            "rouge/rouge2",
+            "rouge/rougeL"
+          ],
+          "display": [
+            31.06,
+            8.6307,
+            18.6336
+          ],
+          "rouge_geo_mean": 17.0942,
+          "rouge1": 31.06,
+          "rouge2": 8.6307,
+          "rougeL": 18.6336,
+          "rougeLsum": 27.0449
+        },
+        "narrative_qa": {
+          "f1": 12.8219,
+          "num_predicted": 50,
+          "mean_prediction_length_characters": 26.08,
+          "scrolls_score": 12.8219,
+          "display_keys": [
+            "f1"
+          ],
+          "display": [
+            12.8219
+          ]
+        },
+        "quality": {
+          "exact_match": 70.0,
+          "num_predicted": 50,
+          "mean_prediction_length_characters": 73.34,
+          "scrolls_score": 70.0,
+          "display_keys": [
+            "exact_match"
+          ],
+          "display": [
+            70.0
+          ]
+        }
+      },
+      "token_cost_summary": {
+        "avg_input_tokens": 2647.853333333334,
+        "avg_context_tokens": 2546.68,
+        "avg_generation_tokens": 70.34,
+        "total_input_tokens": 397178
+      }
+    }
+  },
+  "comparison": {
+    "pairwise_delta_label": null,
+    "pairwise_delta": {},
+    "agreement": {
+      "overall_agreement_rate": null,
+      "per_task": {}
+    },
+    "per_task_examples": {
+      "qmsum": {
+        "num_examples": 50,
+        "num_disagreements": 0,
+        "num_any_positive": 50,
+        "preview_examples": [
+          {
+            "task": "qmsum",
+            "id": "va-sq-4",
+            "query": "What was the future of data collection?",
+            "references": [
+              "The group aims to collect over 100 hours of Meeting Recorder data in total. Speaker consent forms are being revised. It was suggested that subjects should sign a new consent form after 10 recording sessions."
+            ],
+            "scoring_references": [
+              "The group aims to collect over 100 hours of Meeting Recorder data in total. Speaker consent forms are being revised. It was suggested that subjects should sign a new consent form after 10 recording sessions."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The future of data collection involved several strategies:\n\n1. **Expanding Recording Sessions**: The team planned to continue recording meetings at their institution, aiming to gather more data. They expected to collect three to four hours of recordings per week, with the goal of reaching a hundred hours over a few months.\n\n2. **Exploring Additional Data Sources**: They considered recording meetings from other groups within the institution, such as the natural language group and network services and applications group, which had agreed to start recording their meetings.\n\n3. **Collaboration with Broadcast Media**: Professor E suggested reaching out to acquaintances in local broadcast media to record multi-channel data. This could provide a different style of data collection, potentially with lapel microphones and a distant microphone setup, similar to their current setup but with more diverse content.\n\n4. **Recording Informal Meetings**: There was a suggestion to record more informal meetings, even if they did not involve the digit transcription tasks, to gather more natural conversation data.\n\n5. **Leveraging Found Data**: The team was interested in leveraging existing recordings from radio stations, where discussions are already recorded, to supplement their data collection efforts.\n\n6. **Potential for More Diverse Data**: The team discussed the possibility of recording meetings with different dynamics, such as those with conflict or strong differences of opinion, to enrich the dataset.\n\n7. **Data Collection Without Headsets**: There was a suggestion to add a data collection level without headsets, though this was met with some resistance due to concerns about data usability.\n\n8. **Transcription Challenges**: The team acknowledged the bottleneck of transcription and discussed ways to speed up the process, such as using close-talking microphones to infer speech on-off points and using scripts to help with digit transcription.\n\nOverall, the team aimed to expand their data collection efforts by diversifying the types of meetings recorded, exploring new sources of data, and improving the efficiency of their current methods.",
+                "scoring_prediction": "The future of data collection involved several strategies:\n\n1. **Expanding Recording Sessions**: The team planned to continue recording meetings at their institution, aiming to gather more data. They expected to collect three to four hours of recordings per week, with the goal of reaching a hundred hours over a few months.\n\n2. **Exploring Additional Data Sources**: They considered recording meetings from other groups within the institution, such as the natural language group and network services and applications group, which had agreed to start recording their meetings.\n\n3. **Collaboration with Broadcast Media**: Professor E suggested reaching out to acquaintances in local broadcast media to record multi-channel data. This could provide a different style of data collection, potentially with lapel microphones and a distant microphone setup, similar to their current setup but with more diverse content.\n\n4. **Recording Informal Meetings**: There was a suggestion to record more informal meetings, even if they did not involve the digit transcription tasks, to gather more natural conversation data.\n\n5. **Leveraging Found Data**: The team was interested in leveraging existing recordings from radio stations, where discussions are already recorded, to supplement their data collection efforts.\n\n6. **Potential for More Diverse Data**: The team discussed the possibility of recording meetings with different dynamics, such as those with conflict or strong differences of opinion, to enrich the dataset.\n\n7. **Data Collection Without Headsets**: There was a suggestion to add a data collection level without headsets, though this was met with some resistance due to concerns about data usability.\n\n8. **Transcription Challenges**: The team acknowledged the bottleneck of transcription and discussed ways to speed up the process, such as using close-talking microphones to infer speech on-off points and using scripts to help with digit transcription.\n\nOverall, the team aimed to expand their data collection efforts by diversifying the types of meetings recorded, exploring new sources of data, and improving the efficiency of their current methods.",
+                "normalized_scoring_prediction": "future of data collection involved several strategies 1 expanding recording sessions team planned to continue recording meetings at their institution aiming to gather more data they expected to collect three to four hours of recordings per week with goal of reaching hundred hours over few months 2 exploring additional data sources they considered recording meetings from other groups within institution such as natural language group and network services and applications group which had agreed to start recording their meetings 3 collaboration with broadcast media professor e suggested reaching out to acquaintances in local broadcast media to record multichannel data this could provide different style of data collection potentially with lapel microphones and distant microphone setup similar to their current setup but with more diverse content 4 recording informal meetings there was suggestion to record more informal meetings even if they did not involve digit transcription tasks to gather more natural conversation data 5 leveraging found data team was interested in leveraging existing recordings from radio stations where discussions are already recorded to supplement their data collection efforts 6 potential for more diverse data team discussed possibility of recording meetings with different dynamics such as those with conflict or strong differences of opinion to enrich dataset 7 data collection without headsets there was suggestion to add data collection level without headsets though this was met with some resistance due to concerns about data usability 8 transcription challenges team acknowledged bottleneck of transcription and discussed ways to speed up process such as using closetalking microphones to infer speech onoff points and using scripts to help with digit transcription overall team aimed to expand their data collection efforts by diversifying types of meetings recorded exploring new sources of data and improving efficiency of their current methods",
+                "primary_score": 4.575,
+                "context_tokens": 5670,
+                "generation_tokens": 389,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  59
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 59,
+                    "score": null,
+                    "chunk_preview": "Grad G: and , they sort of hummed and hawed and said \" well maybe we could have meetings down here \" , but then I got email from them that said \" no , we decided we 're not really interested and we don't wanna come down and hold meetings .\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 4.575,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-46",
+            "query": "What were the problems encountered with SmartKom system?",
+            "references": [
+              "The translation of SmartKom to english is in its final stages. The synthesis module will be the last one to do, after the english syntax trees are completed. The system is still buggy and unstable, but it will soon be ready for a demonstration."
+            ],
+            "scoring_references": [
+              "The translation of SmartKom to english is in its final stages. The synthesis module will be the last one to do, after the english syntax trees are completed. The system is still buggy and unstable, but it will soon be ready for a demonstration."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The SmartKom system encountered several issues as described in the text:\n\n1. **Synthesis Module Issues**: There was a problem with the synthesis module, which was fixable by exchanging a few files since they were using the concept-to-speech approach. The phrase \"Roman numeral one, am Smarticus\" was mentioned as an example of an issue with the German synthesis module for English sentences.\n\n2. **Brittleness and Setup Complexity**: The system was described as brittle, requiring numerous changes across multiple modules before it could function properly. It needed a specific setup involving a dummy center set-up program and adjustments for gestural recognition on a Siemens virtual touch screen, which they did not have.\n\n3. **Structure Limitations**: The system was designed to work with a specific structure, and sticking to that structure meant the synthesis module didn't need to be changed. However, this implied that the fancy Texas speech version, which was simpler, was not going to be completed in time (by October), which was too late for their needs.\n\n4. **Language and Parsing Challenges**: The system required different syntactic structures for English and German due to differences in how languages handle gerunds and word orders. This meant that the parsing and generation components were language-dependent.\n\n5. **Belief-Net Integration**: There were challenges in integrating the belief-net into the system, including technical (coding and running) and semantic (considerations and relations) aspects. They were working on a running belief-net for a subdomain but faced issues with finding suitable software or tools to support this, such as JavaBayes not supporting their needs and the need to potentially hack the code.\n\n6. **Visualization and Interface**: There were difficulties in visualizing the belief-net, with suggestions to use a paper version of nodes and connections and to explore tools like Hugin for free academic use.\n\n7. **Tool and Setup Limitations**: The system was designed to work with a specific setup involving a Siemens virtual touch screen for gestural recognition, which they did not have, leading them to use a mouse instead. This workaround was noted as a significant engineering effort with no scientific basis.\n\nThese issues highlight the complexity and challenges in developing and integrating the SmartKom system, particularly in terms of language-specific requirements, technical setup, and the need for robust and flexible software tools.",
+                "scoring_prediction": "The SmartKom system encountered several issues as described in the text:\n\n1. **Synthesis Module Issues**: There was a problem with the synthesis module, which was fixable by exchanging a few files since they were using the concept-to-speech approach. The phrase \"Roman numeral one, am Smarticus\" was mentioned as an example of an issue with the German synthesis module for English sentences.\n\n2. **Brittleness and Setup Complexity**: The system was described as brittle, requiring numerous changes across multiple modules before it could function properly. It needed a specific setup involving a dummy center set-up program and adjustments for gestural recognition on a Siemens virtual touch screen, which they did not have.\n\n3. **Structure Limitations**: The system was designed to work with a specific structure, and sticking to that structure meant the synthesis module didn't need to be changed. However, this implied that the fancy Texas speech version, which was simpler, was not going to be completed in time (by October), which was too late for their needs.\n\n4. **Language and Parsing Challenges**: The system required different syntactic structures for English and German due to differences in how languages handle gerunds and word orders. This meant that the parsing and generation components were language-dependent.\n\n5. **Belief-Net Integration**: There were challenges in integrating the belief-net into the system, including technical (coding and running) and semantic (considerations and relations) aspects. They were working on a running belief-net for a subdomain but faced issues with finding suitable software or tools to support this, such as JavaBayes not supporting their needs and the need to potentially hack the code.\n\n6. **Visualization and Interface**: There were difficulties in visualizing the belief-net, with suggestions to use a paper version of nodes and connections and to explore tools like Hugin for free academic use.\n\n7. **Tool and Setup Limitations**: The system was designed to work with a specific setup involving a Siemens virtual touch screen for gestural recognition, which they did not have, leading them to use a mouse instead. This workaround was noted as a significant engineering effort with no scientific basis.\n\nThese issues highlight the complexity and challenges in developing and integrating the SmartKom system, particularly in terms of language-specific requirements, technical setup, and the need for robust and flexible software tools.",
+                "normalized_scoring_prediction": "smartkom system encountered several issues as described in text 1 synthesis module issues there was problem with synthesis module which was fixable by exchanging few files since they were using concepttospeech approach phrase roman numeral one am smarticus was mentioned as example of issue with german synthesis module for english sentences 2 brittleness and setup complexity system was described as brittle requiring numerous changes across multiple modules before it could function properly it needed specific setup involving dummy center setup program and adjustments for gestural recognition on siemens virtual touch screen which they did not have 3 structure limitations system was designed to work with specific structure and sticking to that structure meant synthesis module didnt need to be changed however this implied that fancy texas speech version which was simpler was not going to be completed in time by october which was too late for their needs 4 language and parsing challenges system required different syntactic structures for english and german due to differences in how languages handle gerunds and word orders this meant that parsing and generation components were languagedependent 5 beliefnet integration there were challenges in integrating beliefnet into system including technical coding and running and semantic considerations and relations aspects they were working on running beliefnet for subdomain but faced issues with finding suitable software or tools to support this such as javabayes not supporting their needs and need to potentially hack code 6 visualization and interface there were difficulties in visualizing beliefnet with suggestions to use paper version of nodes and connections and to explore tools like hugin for free academic use 7 tool and setup limitations system was designed to work with specific setup involving siemens virtual touch screen for gestural recognition which they did not have leading them to use mouse instead this workaround was noted as significant engineering effort with no scientific basis these issues highlight complexity and challenges in developing and integrating smartkom system particularly in terms of languagespecific requirements technical setup and need for robust and flexible software tools",
+                "primary_score": 5.6031,
+                "context_tokens": 3553,
+                "generation_tokens": 467,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  3
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 3,
+                    "score": null,
+                    "chunk_preview": "Grad E: And because we 're sticking to that structure , the synthesis module doesn't need to be changed . So all that f fancy stuff , and the Texas speech version of it , which is actually the simpler version , is gonna be done in October\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 5.6031,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-2",
+            "query": "What was said on speech overlap?",
+            "references": [
+              "Efforts by speaker mn005 are in progress to detect overlapping speech. For a single transcribed meeting, speaker mn005 reported approximately 300 cases of overlap. Future work will involve manually deriving time marks from sections of overlapping speech for the same meeting, and then experimenting with different measures, e.g. energy increase, to determine a set of acoustically salient features for identifying speaker overlap."
+            ],
+            "scoring_references": [
+              "Efforts by speaker mn005 are in progress to detect overlapping speech. For a single transcribed meeting, speaker mn005 reported approximately 300 cases of overlap. Future work will involve manually deriving time marks from sections of overlapping speech for the same meeting, and then experimenting with different measures, e.g. energy increase, to determine a set of acoustically salient features for identifying speaker overlap."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The context discusses several points related to speech overlap:\n\n1. PhD D found almost three hundred speech overlaps in a forty-five-minute session.\n2. The group discussed how to define an overlap event. PhD D considers an overlap event as any moment where there is more than one voice, including background noise, without distinguishing between the number of speakers.\n3. There was a discussion on the difficulty of distinguishing between speech overlaps and nonspeech sounds, and the challenge of transcribing overlapping speech accurately.\n4. The group talked about using different methods to detect speech overlaps, such as energy levels in LPC residuals, and the possibility of using close-talking microphones to infer speech on-off points.\n5. Professor E suggested having Jose mark speaker overlaps for 45 minutes to provide 300 examples for comparison with Adam's automatic method.\n6. The group also discussed the idea of using echo cancellation to address far-field effects, but acknowledged its limitations in noisy or reverberant environments.",
+                "scoring_prediction": "The context discusses several points related to speech overlap:\n\n1. PhD D found almost three hundred speech overlaps in a forty-five-minute session.\n2. The group discussed how to define an overlap event. PhD D considers an overlap event as any moment where there is more than one voice, including background noise, without distinguishing between the number of speakers.\n3. There was a discussion on the difficulty of distinguishing between speech overlaps and nonspeech sounds, and the challenge of transcribing overlapping speech accurately.\n4. The group talked about using different methods to detect speech overlaps, such as energy levels in LPC residuals, and the possibility of using close-talking microphones to infer speech on-off points.\n5. Professor E suggested having Jose mark speaker overlaps for 45 minutes to provide 300 examples for comparison with Adam's automatic method.\n6. The group also discussed the idea of using echo cancellation to address far-field effects, but acknowledged its limitations in noisy or reverberant environments.",
+                "normalized_scoring_prediction": "context discusses several points related to speech overlap 1 phd d found almost three hundred speech overlaps in fortyfiveminute session 2 group discussed how to define overlap event phd d considers overlap event as any moment where there is more than one voice including background noise without distinguishing between number of speakers 3 there was discussion on difficulty of distinguishing between speech overlaps and nonspeech sounds and challenge of transcribing overlapping speech accurately 4 group talked about using different methods to detect speech overlaps such as energy levels in lpc residuals and possibility of using closetalking microphones to infer speech onoff points 5 professor e suggested having jose mark speaker overlaps for 45 minutes to provide 300 examples for comparison with adams automatic method 6 group also discussed idea of using echo cancellation to address farfield effects but acknowledged its limitations in noisy or reverberant environments",
+                "primary_score": 7.32,
+                "context_tokens": 5439,
+                "generation_tokens": 196,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  14
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 14,
+                    "score": null,
+                    "chunk_preview": "Postdoc B: For Grad G: So let 's say me and Jane are talking at the same time , and then Liz starts talking also over all of us . How many events would that be ? PhD D: So - I don't understand . Grad G: So , two people are talking , {comme\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 7.32,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-47",
+            "query": "What demos would the system be involved in?",
+            "references": [
+              "The final english SmartKom demo will be presented to the whole institute once the system is de-bugged and stabilised."
+            ],
+            "scoring_references": [
+              "The final english SmartKom demo will be presented to the whole institute once the system is de-bugged and stabilised."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The system would be involved in internal demos where team members can showcase their work and progress, potentially explaining SmartKom to others within the institute. There's also a suggestion to set up a demo as an institute-wide event where the team can present a demo version of the project to a broader audience. Additionally, the group is thinking about future demos over the next six months, focusing on basic issues during the summer. The goal is to formalize notation and work on constructions in English and German without worrying about parsing or fitting them into SmartKom for the time being.",
+                "scoring_prediction": "The system would be involved in internal demos where team members can showcase their work and progress, potentially explaining SmartKom to others within the institute. There's also a suggestion to set up a demo as an institute-wide event where the team can present a demo version of the project to a broader audience. Additionally, the group is thinking about future demos over the next six months, focusing on basic issues during the summer. The goal is to formalize notation and work on constructions in English and German without worrying about parsing or fitting them into SmartKom for the time being.",
+                "normalized_scoring_prediction": "system would be involved in internal demos where team members can showcase their work and progress potentially explaining smartkom to others within institute theres also suggestion to set up demo as institutewide event where team can present demo version of project to broader audience additionally group is thinking about future demos over next six months focusing on basic issues during summer goal is to formalize notation and work on constructions in english and german without worrying about parsing or fitting them into smartkom for time being",
+                "primary_score": 7.5478,
+                "context_tokens": 3533,
+                "generation_tokens": 112,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  9
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 9,
+                    "score": null,
+                    "chunk_preview": "Professor C: So , c sh we could set that up as actually an institute wide thing ? Just give a talk in the big room , and {disfmarker} and so peo people know what 's going on ? when you 're ready ? Grad E: Absolutely . Professor C: Yeah I m\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 7.5478,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-gq-5",
+            "query": "What were the main discussion points of the meeting?",
+            "references": [
+              "The group discussed topics including a potential collaboration with another ICSI member regarding the analysis of inference structures, efforts by speaker mn005 to detect speaker overlap, the current status of recordings and transcriptions, and future efforts to collect meeting data. In addition to weekly meetings by the BMR group, efforts are in progress to record meetings by other ICSI research groups, as well as routine discussions by non-ICSI members."
+            ],
+            "scoring_references": [
+              "The group discussed topics including a potential collaboration with another ICSI member regarding the analysis of inference structures, efforts by speaker mn005 to detect speaker overlap, the current status of recordings and transcriptions, and future efforts to collect meeting data. In addition to weekly meetings by the BMR group, efforts are in progress to record meetings by other ICSI research groups, as well as routine discussions by non-ICSI members."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The main discussion points of the meeting were:\n\n1. **Technical Issues and Solutions**: The group discussed a technical issue with a system that was crashing when started and stopped repeatedly. They also talked about the initialization process and how to avoid causing crashes.\n\n2. **Data Collection and Transcription**: There was a discussion about the process of collecting and transcribing data, including the use of digit forms and the importance of not extracting names from audio and text to avoid potential issues.\n\n3. **Research Focus and Collaboration**: The group talked about aligning their research interests with potential collaborators, specifically mentioning discussions with Lokendra about inference structures in language and the possibility of collaboration.\n\n4. **Overlap and Acoustic Events in Speech Recordings**: PhD D presented findings on overlapping speech zones and acoustic events in speech recordings, noting the high frequency of overlaps and the challenges in transcribing these events.\n\n5. **Data Collection Methods and Equipment**: The group discussed different methods of data collection, including the use of close-talking and far-field microphones, and the challenges of capturing nonspeech sounds and interruptions.\n\n6. **Echo Cancellation and Signal Processing**: There was a discussion about the use of echo cancellation to address far-field effects in recordings, and the limitations and potential benefits of this approach.\n\n7. **Future Data Collection Plans**: The group talked about plans to collect more data, including recording additional meetings and possibly collaborating with local broadcast media to get multi-channel recordings.\n\n8. **Meeting Structure and Agenda**: Professor E suggested restructuring the meeting agenda to prioritize research discussions over procedural matters.\n\n9. **Transcription and Data Analysis**: The group discussed the challenges of manual transcription and the potential for using automatic methods to identify speech on-off points and overlaps in recordings.",
+                "scoring_prediction": "The main discussion points of the meeting were:\n\n1. **Technical Issues and Solutions**: The group discussed a technical issue with a system that was crashing when started and stopped repeatedly. They also talked about the initialization process and how to avoid causing crashes.\n\n2. **Data Collection and Transcription**: There was a discussion about the process of collecting and transcribing data, including the use of digit forms and the importance of not extracting names from audio and text to avoid potential issues.\n\n3. **Research Focus and Collaboration**: The group talked about aligning their research interests with potential collaborators, specifically mentioning discussions with Lokendra about inference structures in language and the possibility of collaboration.\n\n4. **Overlap and Acoustic Events in Speech Recordings**: PhD D presented findings on overlapping speech zones and acoustic events in speech recordings, noting the high frequency of overlaps and the challenges in transcribing these events.\n\n5. **Data Collection Methods and Equipment**: The group discussed different methods of data collection, including the use of close-talking and far-field microphones, and the challenges of capturing nonspeech sounds and interruptions.\n\n6. **Echo Cancellation and Signal Processing**: There was a discussion about the use of echo cancellation to address far-field effects in recordings, and the limitations and potential benefits of this approach.\n\n7. **Future Data Collection Plans**: The group talked about plans to collect more data, including recording additional meetings and possibly collaborating with local broadcast media to get multi-channel recordings.\n\n8. **Meeting Structure and Agenda**: Professor E suggested restructuring the meeting agenda to prioritize research discussions over procedural matters.\n\n9. **Transcription and Data Analysis**: The group discussed the challenges of manual transcription and the potential for using automatic methods to identify speech on-off points and overlaps in recordings.",
+                "normalized_scoring_prediction": "main discussion points of meeting were 1 technical issues and solutions group discussed technical issue with system that was crashing when started and stopped repeatedly they also talked about initialization process and how to avoid causing crashes 2 data collection and transcription there was discussion about process of collecting and transcribing data including use of digit forms and importance of not extracting names from audio and text to avoid potential issues 3 research focus and collaboration group talked about aligning their research interests with potential collaborators specifically mentioning discussions with lokendra about inference structures in language and possibility of collaboration 4 overlap and acoustic events in speech recordings phd d presented findings on overlapping speech zones and acoustic events in speech recordings noting high frequency of overlaps and challenges in transcribing these events 5 data collection methods and equipment group discussed different methods of data collection including use of closetalking and farfield microphones and challenges of capturing nonspeech sounds and interruptions 6 echo cancellation and signal processing there was discussion about use of echo cancellation to address farfield effects in recordings and limitations and potential benefits of this approach 7 future data collection plans group talked about plans to collect more data including recording additional meetings and possibly collaborating with local broadcast media to get multichannel recordings 8 meeting structure and agenda professor e suggested restructuring meeting agenda to prioritize research discussions over procedural matters 9 transcription and data analysis group discussed challenges of manual transcription and potential for using automatic methods to identify speech onoff points and overlaps in recordings",
+                "primary_score": 8.8691,
+                "context_tokens": 5839,
+                "generation_tokens": 348,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  0
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 0,
+                    "score": null,
+                    "chunk_preview": "Professor E: So . OK . Doesn't look like it crashed . That 's great . Grad G: So I think maybe what 's causing it to crash is I keep starting it and then stopping it to see if it 's working . And so I think starting it and then stopping it\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 8.8691,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-26",
+            "query": "What did the team say about the new product requirements?",
+            "references": [
+              "Project Manager decided that the remote control should only be used on television and targeted at the biggest size of group. Corporate colour and slogan must be used on the cover. They agreed that a power button, channel switches from zero to nine, volume control, mute should be contained and a small-size menu included."
+            ],
+            "scoring_references": [
+              "Project Manager decided that the remote control should only be used on television and targeted at the biggest size of group. Corporate colour and slogan must be used on the cover. They agreed that a power button, channel switches from zero to nine, volume control, mute should be contained and a small-size menu included."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The team discussed several new product requirements for the remote control:\n\n1. **Functionality**: The remote should have basic operations like on/off, channel switching, and volume control. There was a suggestion to include a menu button for newer TVs, but it was decided to focus on a basic remote with a menu button for newer televisions and compatibility with older ones.\n\n2. **Design**: The remote should be small, use one long-lasting battery, and be made of plastic for cost-effectiveness. It should have minimal buttons and include a bleep signal for low battery and to find the remote if lost. The design should be aesthetically pleasing and easy to use, targeting users aged 36-45 and younger users who are interested in new features like LCD screens.\n\n3. **Target Market**: The team aimed to target two age groups: 16-45 (60% of the market) and 46-65 (40%). The younger group is more interested in new features but is critical of spending, while the older group is less interested in new features but more willing to spend. The team decided to focus on ease of use and design, noting that a good-looking, easy-to-use remote could appeal to both groups.\n\n4. **Features**: The team decided to include an LCD screen on the remote, as it was cheaper than speech recognition and could appeal to younger users. They also decided to remove teletext since it is less relevant with internet access.\n\n5. **Controls**: The team agreed on the following controls: power button, channel buttons (0-9), volume control, and a menu button. The menu button would allow users to navigate through the TV menu using the same buttons, with the menu displayed on the LCD screen of the remote control.\n\n6. **Cost**: The team acknowledged that adding an LCD screen would increase costs but believed that a well-designed, easy-to-use remote with an LCD screen could still be profitable, especially if it appealed to younger users who are more willing to spend on new features.",
+                "scoring_prediction": "The team discussed several new product requirements for the remote control:\n\n1. **Functionality**: The remote should have basic operations like on/off, channel switching, and volume control. There was a suggestion to include a menu button for newer TVs, but it was decided to focus on a basic remote with a menu button for newer televisions and compatibility with older ones.\n\n2. **Design**: The remote should be small, use one long-lasting battery, and be made of plastic for cost-effectiveness. It should have minimal buttons and include a bleep signal for low battery and to find the remote if lost. The design should be aesthetically pleasing and easy to use, targeting users aged 36-45 and younger users who are interested in new features like LCD screens.\n\n3. **Target Market**: The team aimed to target two age groups: 16-45 (60% of the market) and 46-65 (40%). The younger group is more interested in new features but is critical of spending, while the older group is less interested in new features but more willing to spend. The team decided to focus on ease of use and design, noting that a good-looking, easy-to-use remote could appeal to both groups.\n\n4. **Features**: The team decided to include an LCD screen on the remote, as it was cheaper than speech recognition and could appeal to younger users. They also decided to remove teletext since it is less relevant with internet access.\n\n5. **Controls**: The team agreed on the following controls: power button, channel buttons (0-9), volume control, and a menu button. The menu button would allow users to navigate through the TV menu using the same buttons, with the menu displayed on the LCD screen of the remote control.\n\n6. **Cost**: The team acknowledged that adding an LCD screen would increase costs but believed that a well-designed, easy-to-use remote with an LCD screen could still be profitable, especially if it appealed to younger users who are more willing to spend on new features.",
+                "normalized_scoring_prediction": "team discussed several new product requirements for remote control 1 functionality remote should have basic operations like onoff channel switching and volume control there was suggestion to include menu button for newer tvs but it was decided to focus on basic remote with menu button for newer televisions and compatibility with older ones 2 design remote should be small use one longlasting battery and be made of plastic for costeffectiveness it should have minimal buttons and include bleep signal for low battery and to find remote if lost design should be aesthetically pleasing and easy to use targeting users aged 3645 and younger users who are interested in new features like lcd screens 3 target market team aimed to target two age groups 1645 60 of market and 4665 40 younger group is more interested in new features but is critical of spending while older group is less interested in new features but more willing to spend team decided to focus on ease of use and design noting that goodlooking easytouse remote could appeal to both groups 4 features team decided to include lcd screen on remote as it was cheaper than speech recognition and could appeal to younger users they also decided to remove teletext since it is less relevant with internet access 5 controls team agreed on following controls power button channel buttons 09 volume control and menu button menu button would allow users to navigate through tv menu using same buttons with menu displayed on lcd screen of remote control 6 cost team acknowledged that adding lcd screen would increase costs but believed that welldesigned easytouse remote with lcd screen could still be profitable especially if it appealed to younger users who are more willing to spend on new features",
+                "primary_score": 9.409,
+                "context_tokens": 1944,
+                "generation_tokens": 417,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  12
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 12,
+                    "score": null,
+                    "chunk_preview": "Project Manager: So what controls do we need ? Who first ? User Interface: Well a power button ? Marketing: {vocalsound} Project Manager: Okay . Uh power . User Interface: Uh the well um I think separate channels . So {disfmarker} Project\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 9.409,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-3",
+            "query": "What\u2019s the current status of recordings and transcriptions?",
+            "references": [
+              "Approximately 12-13 hours of Meeting Recorder data have been collected, roughly 45 minutes of which have been transcribed. Additional meetings by other ICSI research groups will be recorded. A suggestion was made that multi-channel data also be collected in cooperation with local media broadcasters, and that such events might be recorded live from ICSI."
+            ],
+            "scoring_references": [
+              "Approximately 12-13 hours of Meeting Recorder data have been collected, roughly 45 minutes of which have been transcribed. Additional meetings by other ICSI research groups will be recorded. A suggestion was made that multi-channel data also be collected in cooperation with local media broadcasters, and that such events might be recorded live from ICSI."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The current status of recordings and transcriptions is as follows:\n\n- There is an hour of transcribed data.\n- There are twelve hours of recorded data that have not been transcribed yet.\n- They are recording three to four hours of data per week.\n- Jane transcribed a forty-five-minute piece that was sent to IBM for comparison.\n- There is a larger piece of data, around ten hours, that has been recorded and sent to IBM on CD-ROM.\n- They are recording morning meetings on front-end issues and plan to record meetings from a network services and applications group starting the following week.\n- The goal is to record three to four hours of meetings per week, predominantly consisting of meeting recordings.\n- They are considering recording additional meetings, especially those with conflict or emotional aspects, and exploring the possibility of recording shows from local broadcast media.\n- By January, they expect to have around 25-30 hours of data, but the timing for transcription is uncertain.",
+                "scoring_prediction": "The current status of recordings and transcriptions is as follows:\n\n- There is an hour of transcribed data.\n- There are twelve hours of recorded data that have not been transcribed yet.\n- They are recording three to four hours of data per week.\n- Jane transcribed a forty-five-minute piece that was sent to IBM for comparison.\n- There is a larger piece of data, around ten hours, that has been recorded and sent to IBM on CD-ROM.\n- They are recording morning meetings on front-end issues and plan to record meetings from a network services and applications group starting the following week.\n- The goal is to record three to four hours of meetings per week, predominantly consisting of meeting recordings.\n- They are considering recording additional meetings, especially those with conflict or emotional aspects, and exploring the possibility of recording shows from local broadcast media.\n- By January, they expect to have around 25-30 hours of data, but the timing for transcription is uncertain.",
+                "normalized_scoring_prediction": "current status of recordings and transcriptions is as follows there is hour of transcribed data there are twelve hours of recorded data that have not been transcribed yet they are recording three to four hours of data per week jane transcribed fortyfiveminute piece that was sent to ibm for comparison there is larger piece of data around ten hours that has been recorded and sent to ibm on cdrom they are recording morning meetings on frontend issues and plan to record meetings from network services and applications group starting following week goal is to record three to four hours of meetings per week predominantly consisting of meeting recordings they are considering recording additional meetings especially those with conflict or emotional aspects and exploring possibility of recording shows from local broadcast media by january they expect to have around 2530 hours of data but timing for transcription is uncertain",
+                "primary_score": 10.0436,
+                "context_tokens": 5513,
+                "generation_tokens": 196,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  36
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 36,
+                    "score": null,
+                    "chunk_preview": "Professor E: That piece was then uh sent to IBM so they could transcribe so we have some comparison point . Then there 's s a larger piece that 's been recorded and uh put on CD - ROM and sent uh to IBM . Right ? And then we don't know . P\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 10.0436,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-1",
+            "query": "What was agreed upon on sample transcripts?",
+            "references": [
+              "To save time, speaker mn005 will only mark the sample of transcribed data for regions of overlapping speech, as opposed to marking all acoustic events. The digits extraction task will be delegated to whomever is working on acoustics for the Meeting Recorder project."
+            ],
+            "scoring_references": [
+              "To save time, speaker mn005 will only mark the sample of transcribed data for regions of overlapping speech, as opposed to marking all acoustic events. The digits extraction task will be delegated to whomever is working on acoustics for the Meeting Recorder project."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Based on the provided context, the team agreed to use the transcribed data by Jane as a reference but not to focus on the transcribed words. Jane marked talker changes but did not include temporal marks for overlapping speech zones. The team discussed the possibility of PhD D comparing his marks with Jane's to correct errors and improve accuracy, but they also considered that this process could be time-consuming. Professor E suggested that PhD D could mark only speaker overlaps to speed up the process, which PhD D seemed unsure about but agreed to consider. The team also discussed using close-talking mikes to infer speech on-off points as a faster alternative to manual marking of all events.",
+                "scoring_prediction": "Based on the provided context, the team agreed to use the transcribed data by Jane as a reference but not to focus on the transcribed words. Jane marked talker changes but did not include temporal marks for overlapping speech zones. The team discussed the possibility of PhD D comparing his marks with Jane's to correct errors and improve accuracy, but they also considered that this process could be time-consuming. Professor E suggested that PhD D could mark only speaker overlaps to speed up the process, which PhD D seemed unsure about but agreed to consider. The team also discussed using close-talking mikes to infer speech on-off points as a faster alternative to manual marking of all events.",
+                "normalized_scoring_prediction": "based on provided context team agreed to use transcribed data by jane as reference but not to focus on transcribed words jane marked talker changes but did not include temporal marks for overlapping speech zones team discussed possibility of phd d comparing his marks with janes to correct errors and improve accuracy but they also considered that this process could be timeconsuming professor e suggested that phd d could mark only speaker overlaps to speed up process which phd d seemed unsure about but agreed to consider team also discussed using closetalking mikes to infer speech onoff points as faster alternative to manual marking of all events",
+                "primary_score": 10.0448,
+                "context_tokens": 5492,
+                "generation_tokens": 134,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  10
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 10,
+                    "score": null,
+                    "chunk_preview": "Professor E: Yeah , well , there 's that . But I {disfmarker} I mean I think also to some extent it 's just educating the Human Subjects people , in a way , because there 's {disfmarker} If uh {disfmarker} You know , there 's court transcr\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 10.0448,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-18",
+            "query": "Summarize the group's plan of their marketing strategy.",
+            "references": [
+              "For fear that the exorbitant price of 25 euros of the remote control would shock the potential consumers, Project Manager proposed to trade off some functions for a lower price. Additionally, Project Manager mentioned an American computer electronics store to show that shipping products overseas can also make profits and then added this to the whole plan."
+            ],
+            "scoring_references": [
+              "For fear that the exorbitant price of 25 euros of the remote control would shock the potential consumers, Project Manager proposed to trade off some functions for a lower price. Additionally, Project Manager mentioned an American computer electronics store to show that shipping products overseas can also make profits and then added this to the whole plan."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The group's plan for their marketing strategy includes creating a universal remote control that is sleek, user-friendly, and multifunctional, supporting various formats like NTSC, PAL, and DVDs. They aim to avoid making the remote too large or complex, considering a touch screen design as an option. The team also discussed the possibility of adding features like changeable face plates and a locator device to make the remote stand out. They agreed on pricing the remote at 25 Euros and considered balancing features with affordability to avoid making it look like a cheap, bargain store product. Additionally, they acknowledged the importance of understanding their target audience, such as considering the preferences of older users who might be more accustomed to traditional button-based remotes.",
+                "scoring_prediction": "The group's plan for their marketing strategy includes creating a universal remote control that is sleek, user-friendly, and multifunctional, supporting various formats like NTSC, PAL, and DVDs. They aim to avoid making the remote too large or complex, considering a touch screen design as an option. The team also discussed the possibility of adding features like changeable face plates and a locator device to make the remote stand out. They agreed on pricing the remote at 25 Euros and considered balancing features with affordability to avoid making it look like a cheap, bargain store product. Additionally, they acknowledged the importance of understanding their target audience, such as considering the preferences of older users who might be more accustomed to traditional button-based remotes.",
+                "normalized_scoring_prediction": "groups plan for their marketing strategy includes creating universal remote control that is sleek userfriendly and multifunctional supporting various formats like ntsc pal and dvds they aim to avoid making remote too large or complex considering touch screen design as option team also discussed possibility of adding features like changeable face plates and locator device to make remote stand out they agreed on pricing remote at 25 euros and considered balancing features with affordability to avoid making it look like cheap bargain store product additionally they acknowledged importance of understanding their target audience such as considering preferences of older users who might be more accustomed to traditional buttonbased remotes",
+                "primary_score": 10.0609,
+                "context_tokens": 2261,
+                "generation_tokens": 146,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  19
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 19,
+                    "score": null,
+                    "chunk_preview": "Project Manager: We do have the minimum am amount I mean we were talking finances I dunno , selling a a forty Pound remote would h or a forty Dollar remote , twenty five Euro remote would be pretty {disfmarker} you know it's pretty expensi\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 10.0609,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          },
+          {
+            "task": "qmsum",
+            "id": "va-sq-50",
+            "query": "Summarize the discussion about industrial components.",
+            "references": [
+              "The industrial designer provided several options respectively for energy, material and interface. Among these options, the industrial designer preferred traditional battery, titanium and simple push buttons so that they would have enough money for speech recognition. After that, the user interface designer proposed an LCD display only for output, which might be taken into account. The group also talked about how to enable the users to find their controllers."
+            ],
+            "scoring_references": [
+              "The industrial designer provided several options respectively for energy, material and interface. Among these options, the industrial designer preferred traditional battery, titanium and simple push buttons so that they would have enough money for speech recognition. After that, the user interface designer proposed an LCD display only for output, which might be taken into account. The group also talked about how to enable the users to find their controllers."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The discussion about industrial components focused on several key aspects:\n\n1. **Energy Source**: The team decided to use a battery instead of solar cells due to the difficulty in ensuring sufficient energy from solar cells.\n2. **Material Choices**: Titanium was chosen over rubber or plastic for the case due to its durability and manufacturing feasibility. However, the team considered using rubber for certain parts to enhance the feel and reduce costs.\n3. **User Interface**: The team opted for push buttons over LCD displays to reduce costs and complexity. They also planned to incorporate speech recognition for more complex tasks.\n4. **Display**: An LCD display was considered for showing information, but it would be a simple output display without touch sensitivity to keep costs down.\n5. **Battery Options**: The team discussed using light batteries like lithium or small alkaline batteries.\n6. **Design Trends**: Marketing suggested following trends that emphasize a spongy, fruit-like appearance over futuristic designs. However, the team also considered the possibility of creating their own trend.\n7. **Additional Features**: The team explored adding features like a backlight that changes color, a light feature (glow in the dark), and the possibility of making the remote control upgradable for more colors and features.\n8. **Shape and Assembly**: The team considered a double-curved shape, like a banana, and discussed combining titanium panels with a rubber body. They also explored the feasibility of using both materials in the design.\n\nThe team aimed to balance cost, functionality, and design trends while ensuring the remote control was user-friendly and technologically advanced.",
+                "scoring_prediction": "The discussion about industrial components focused on several key aspects:\n\n1. **Energy Source**: The team decided to use a battery instead of solar cells due to the difficulty in ensuring sufficient energy from solar cells.\n2. **Material Choices**: Titanium was chosen over rubber or plastic for the case due to its durability and manufacturing feasibility. However, the team considered using rubber for certain parts to enhance the feel and reduce costs.\n3. **User Interface**: The team opted for push buttons over LCD displays to reduce costs and complexity. They also planned to incorporate speech recognition for more complex tasks.\n4. **Display**: An LCD display was considered for showing information, but it would be a simple output display without touch sensitivity to keep costs down.\n5. **Battery Options**: The team discussed using light batteries like lithium or small alkaline batteries.\n6. **Design Trends**: Marketing suggested following trends that emphasize a spongy, fruit-like appearance over futuristic designs. However, the team also considered the possibility of creating their own trend.\n7. **Additional Features**: The team explored adding features like a backlight that changes color, a light feature (glow in the dark), and the possibility of making the remote control upgradable for more colors and features.\n8. **Shape and Assembly**: The team considered a double-curved shape, like a banana, and discussed combining titanium panels with a rubber body. They also explored the feasibility of using both materials in the design.\n\nThe team aimed to balance cost, functionality, and design trends while ensuring the remote control was user-friendly and technologically advanced.",
+                "normalized_scoring_prediction": "discussion about industrial components focused on several key aspects 1 energy source team decided to use battery instead of solar cells due to difficulty in ensuring sufficient energy from solar cells 2 material choices titanium was chosen over rubber or plastic for case due to its durability and manufacturing feasibility however team considered using rubber for certain parts to enhance feel and reduce costs 3 user interface team opted for push buttons over lcd displays to reduce costs and complexity they also planned to incorporate speech recognition for more complex tasks 4 display lcd display was considered for showing information but it would be simple output display without touch sensitivity to keep costs down 5 battery options team discussed using light batteries like lithium or small alkaline batteries 6 design trends marketing suggested following trends that emphasize spongy fruitlike appearance over futuristic designs however team also considered possibility of creating their own trend 7 additional features team explored adding features like backlight that changes color light feature glow in dark and possibility of making remote control upgradable for more colors and features 8 shape and assembly team considered doublecurved shape like banana and discussed combining titanium panels with rubber body they also explored feasibility of using both materials in design team aimed to balance cost functionality and design trends while ensuring remote control was userfriendly and technologically advanced",
+                "primary_score": 10.4591,
+                "context_tokens": 2753,
+                "generation_tokens": 315,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  1,
+                  18
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 1,
+                    "score": null,
+                    "chunk_preview": "Project Manager: Mm-hmm , okay . Industrial Designer: So uh we discussed an {disfmarker} {vocalsound} Excuse me . So we would like to propose battery instead of solar cells and it would be problematic uh to have enough energy with the sola\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 18,
+                    "score": null,
+                    "chunk_preview": "Industrial Designer: So , can we highlight the specific features of our {gap} {disfmarker} Project Manager: Yeah you're right , you have to {disfmarker} {vocalsound} Industrial Designer: yeah , so so we want the speech recogniser and we wa\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 10.4591,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": true,
+            "all_methods_scored_positive": true,
+            "disagreement": false
+          }
+        ]
+      },
+      "narrative_qa": {
+        "num_examples": 50,
+        "num_disagreements": 0,
+        "num_any_positive": 11,
+        "preview_examples": [
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_1",
+            "query": "Where is the boarding-house located?",
+            "references": [
+              "Paris"
+            ],
+            "scoring_references": [
+              "Paris"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Boulevard Haussman",
+                "scoring_prediction": "Boulevard Haussman",
+                "normalized_scoring_prediction": "boulevard haussman",
+                "primary_score": 0.0,
+                "context_tokens": 4810,
+                "generation_tokens": 6,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  17
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 17,
+                    "score": null,
+                    "chunk_preview": "You know I have always been intensely interested in Balzac, who never shrank from the reality, and whose almost _lurid_ pictures of Parisian life have often haunted me in my wanderings through the old wicked-looking streets on the other si\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_13",
+            "query": "Where is Leon Verdier from?",
+            "references": [
+              "France"
+            ],
+            "scoring_references": [
+              "France"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Paris",
+                "scoring_prediction": "Paris",
+                "normalized_scoring_prediction": "paris",
+                "primary_score": 0.0,
+                "context_tokens": 4955,
+                "generation_tokens": 1,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  37
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 37,
+                    "score": null,
+                    "chunk_preview": "You expected, perhaps, I was going to tell you that I had made my fortune, or that the Uncle Blondeau had at last decided to return into the breast of nature, after having constituted me his universal legatee. But I needn't remind you that\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_16",
+            "query": "What is William Platt's relationship to Miranda Hope?",
+            "references": [
+              "Platt is a Miranda's suitor",
+              "a previous suitor"
+            ],
+            "scoring_references": [
+              "Platt is a Miranda's suitor",
+              "a previous suitor"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "unclear from the context provided",
+                "scoring_prediction": "unclear from the context provided",
+                "normalized_scoring_prediction": "unclear from context provided",
+                "primary_score": 0.0,
+                "context_tokens": 4450,
+                "generation_tokens": 6,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [],
+                "top_retrieved_chunks": []
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_17",
+            "query": "What name does Herr Professor call Leon?",
+            "references": [
+              "Simian"
+            ],
+            "scoring_references": [
+              "Simian"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Herr Professor does not call Leon by any specific name in the given text.",
+                "scoring_prediction": "Herr Professor does not call Leon by any specific name in the given text.",
+                "normalized_scoring_prediction": "herr professor does not call leon by any specific name in given text",
+                "primary_score": 0.0,
+                "context_tokens": 4450,
+                "generation_tokens": 16,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [],
+                "top_retrieved_chunks": []
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_18",
+            "query": "Which traveler finds the other travelers \"sub-human\"?",
+            "references": [
+              "Herr Professor"
+            ],
+            "scoring_references": [
+              "Herr Professor"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Dr. Rudolf Staub",
+                "scoring_prediction": "Dr. Rudolf Staub",
+                "normalized_scoring_prediction": "dr rudolf staub",
+                "primary_score": 0.0,
+                "context_tokens": 4859,
+                "generation_tokens": 6,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  43,
+                  42
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 43,
+                    "score": null,
+                    "chunk_preview": "I mentioned to you before that my expectation of rough usage, in consequence of my German nationality, had proved completely unfounded. No one seems to know or to care what my nationality is, and I am treated, on the contrary, with the civ\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 42,
+                    "score": null,
+                    "chunk_preview": "Unfortunately here, also, I find the individual native in the minority. There are only four French persons in the house--the individuals concerned in its management, three of whom are women, and one a man. This preponderance of the feminin\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_19",
+            "query": "What does Evelyn Vane claim Leverett is always talking about?",
+            "references": [
+              "The color of the sky"
+            ],
+            "scoring_references": [
+              "The color of the sky"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "the French",
+                "scoring_prediction": "the French",
+                "normalized_scoring_prediction": "french",
+                "primary_score": 0.0,
+                "context_tokens": 4626,
+                "generation_tokens": 2,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  25
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 25,
+                    "score": null,
+                    "chunk_preview": "If I had any money to spend I would buy some and take them back, to hang up. Mr. Leverett says it would do them good--not the pictures, but the Bangor folks. He thinks everything of the French, too, and says we don't make nearly enough of\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_2",
+            "query": "Which character does Herr Professor refer to as \"simian\"?",
+            "references": [
+              "The frenchman Leon Verdier.",
+              "Leon"
+            ],
+            "scoring_references": [
+              "The frenchman Leon Verdier.",
+              "Leon"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "the man",
+                "scoring_prediction": "the man",
+                "normalized_scoring_prediction": "man",
+                "primary_score": 0.0,
+                "context_tokens": 4859,
+                "generation_tokens": 2,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  43,
+                  42
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 43,
+                    "score": null,
+                    "chunk_preview": "I mentioned to you before that my expectation of rough usage, in consequence of my German nationality, had proved completely unfounded. No one seems to know or to care what my nationality is, and I am treated, on the contrary, with the civ\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 42,
+                    "score": null,
+                    "chunk_preview": "Unfortunately here, also, I find the individual native in the minority. There are only four French persons in the house--the individuals concerned in its management, three of whom are women, and one a man. This preponderance of the feminin\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_20",
+            "query": "Where is the boarding house located?",
+            "references": [
+              "Paris"
+            ],
+            "scoring_references": [
+              "Paris"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Boulevard Haussman",
+                "scoring_prediction": "Boulevard Haussman",
+                "normalized_scoring_prediction": "boulevard haussman",
+                "primary_score": 0.0,
+                "context_tokens": 4810,
+                "generation_tokens": 6,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  17
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 17,
+                    "score": null,
+                    "chunk_preview": "You know I have always been intensely interested in Balzac, who never shrank from the reality, and whose almost _lurid_ pictures of Parisian life have often haunted me in my wanderings through the old wicked-looking streets on the other si\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_24",
+            "query": "Who does Vane write about in her letter?",
+            "references": [
+              "Louis Leverett",
+              "Louis"
+            ],
+            "scoring_references": [
+              "Louis Leverett",
+              "Louis"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Miss Vane writes about her interactions with a young lady from a noble English family, her brother, and her own observations on the position of women in England.",
+                "scoring_prediction": "Miss Vane writes about her interactions with a young lady from a noble English family, her brother, and her own observations on the position of women in England.",
+                "normalized_scoring_prediction": "miss vane writes about her interactions with young lady from noble english family her brother and her own observations on position of women in england",
+                "primary_score": 0.0,
+                "context_tokens": 4764,
+                "generation_tokens": 32,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  29
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 29,
+                    "score": null,
+                    "chunk_preview": "I feel as if it were right to ask her as often as I can if she doesn't consider every one equal; but she always says she doesn't, and she confesses that she doesn't think she is equal to \"Lady Something-or-other,\" who is the wife of that r\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "narrative_qa",
+            "id": "8cb9a3afd8d542c798c3a34fd1a9afa0a77931c2_25",
+            "query": "How does the German boarder see Louis?",
+            "references": [
+              "as decadent",
+              "likeable and brave"
+            ],
+            "scoring_references": [
+              "as decadent",
+              "likeable and brave"
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "fascinating",
+                "scoring_prediction": "fascinating",
+                "normalized_scoring_prediction": "fascinating",
+                "primary_score": 0.0,
+                "context_tokens": 4604,
+                "generation_tokens": 3,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  40
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 40,
+                    "score": null,
+                    "chunk_preview": "CHAPTER VIII FROM DR. RUDOLF STAUB, IN PARIS, TO DR. JULIUS HIRSCH, AT GOTTINGEN. My dear brother in Science--I resume my hasty notes, of which I sent you the first instalment some weeks ago. I mentioned then that I intended to leave my ho\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          }
+        ]
+      },
+      "quality": {
+        "num_examples": 50,
+        "num_disagreements": 0,
+        "num_any_positive": 35,
+        "preview_examples": [
+          {
+            "task": "quality",
+            "id": "30029_F5N22U40_2",
+            "query": "Why does the text mean when it says that Korvin was \"unconscious\" at the time of his lessons in the local language?\n\n (A) It means that the Tr'en put Korvin under drug hypnosis while they taught him their language. \n (B) It means that he was so bored out of his mind  during the language lessons that he was hardly conscious. \n (C) It means that the Tr'en came into Korvin's cell while he slept in order to use their advanced technology which quickly teaches the unconscious mind. \n (D) It means that the Tr'en knocked him out every night in order to use their advanced technology which quickly teaches the unconscious mind.",
+            "references": [
+              "It means that the Tr'en put Korvin under drug hypnosis while they taught him their language."
+            ],
+            "scoring_references": [
+              "It means that the Tr'en put Korvin under drug hypnosis while they taught him their language."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "It means that the Tr'en came into Korvin's cell while he slept in order to use their advanced technology which quickly teaches the unconscious mind.",
+                "scoring_prediction": "It means that the Tr'en came into Korvin's cell while he slept in order to use their advanced technology which quickly teaches the unconscious mind.",
+                "normalized_scoring_prediction": "it means that tren came into korvins cell while he slept in order to use their advanced technology which quickly teaches unconscious mind",
+                "primary_score": 0.0,
+                "context_tokens": 1955,
+                "generation_tokens": 29,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  0
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 0,
+                    "score": null,
+                    "chunk_preview": "LOST IN TRANSLATION By LARRY M. HARRIS In language translation, you may get a literally accurate word-for-word translation ... but miss the meaning entirely. And in space-type translation ... the effect may be the same! Illustrated by Scho\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "30029_F5N22U40_7",
+            "query": "The text says \"The expert frowned horribly.\" What makes the expert's smile so horrible?\n\n (A) The frown indicates that he's close to detecting Korvin's true motivations. \n (B) The frown indicates that he knows that Korvin switched the wires on the lie detector.  \n (C) The frown is a signal to the Ruler that Korvin is lying. \n (D) The frown is physically horrible because the Tr'en have fifty-eight, pointed teeth.",
+            "references": [
+              "The frown is physically horrible because the Tr'en have fifty-eight, pointed teeth."
+            ],
+            "scoring_references": [
+              "The frown is physically horrible because the Tr'en have fifty-eight, pointed teeth."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The frown indicates that he's close to detecting Korvin's true motivations.",
+                "scoring_prediction": "The frown indicates that he's close to detecting Korvin's true motivations.",
+                "normalized_scoring_prediction": "frown indicates that hes close to detecting korvins true motivations",
+                "primary_score": 0.0,
+                "context_tokens": 1328,
+                "generation_tokens": 16,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [],
+                "top_retrieved_chunks": []
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "30029_F5N22U40_8",
+            "query": "How did the Ruler become the Ruler?\n\n (A) He was adopted by the previous Ruler. \n (B) He overthrew the previous Ruler. \n (C) He is the biological son of the previous Ruler. \n (D) He was elected as Ruler by the Tr'en.",
+            "references": [
+              "He was adopted by the previous Ruler."
+            ],
+            "scoring_references": [
+              "He was adopted by the previous Ruler."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Such is his command.",
+                "scoring_prediction": "Such is his command.",
+                "normalized_scoring_prediction": "such is his command",
+                "primary_score": 0.0,
+                "context_tokens": 2357,
+                "generation_tokens": 5,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  2,
+                  1
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 2,
+                    "score": null,
+                    "chunk_preview": "It wasn't quite \"talk\"; that was a general word in the Tr'en language, and Didyak had used a specific meaning, roughly: \"gain information from, by peaceful and vocal means.\" Korvin filed it away for future reference. \"Why did the Ruler not\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 1,
+                    "score": null,
+                    "chunk_preview": "The Tr'en regarded him narrowly through catlike pupils. \"You are Korvin,\" he said. It was a ritual, Korvin had learned. \"You are of the Tr'en,\" he replied. The green being nodded. \"I am Didyak of the Tr'en,\" he said. Amenities over with, h\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "52845_75VB1ISR_2",
+            "query": "Why does Deirdre get so upset when Blake Past suggests she go to prom with the young man?\n\n (A) Because Blake is trying to guilt Deirdre into going with the young man by telling her that it'll ease her conscience. \n (B) Because Deirdre has fallen in love with Blake, despite his age, and wants him to take her to the prom.  \n (C) Because Blake is acting like he's her father, which is a sensitive topic for Deirdre because she lost her real parents. \n (D) Because the young man gave up his right arm in order to afford tickets to the prom, and this disgusts Deirdre.",
+            "references": [
+              "Because Deirdre has fallen in love with Blake, despite his age, and wants him to take her to the prom."
+            ],
+            "scoring_references": [
+              "Because Deirdre has fallen in love with Blake, despite his age, and wants him to take her to the prom."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Because Blake is acting like he's her father, which is a sensitive topic for Deirdre because she lost her real parents.",
+                "scoring_prediction": "Because Blake is acting like he's her father, which is a sensitive topic for Deirdre because she lost her real parents.",
+                "normalized_scoring_prediction": "because blake is acting like hes her father which is sensitive topic for deirdre because she lost her real parents",
+                "primary_score": 0.0,
+                "context_tokens": 1685,
+                "generation_tokens": 26,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  6
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 6,
+                    "score": null,
+                    "chunk_preview": "Deirdre was speaking. \"Yes,\" she was saying, \"at nine o'clock. And I should very much like for you to come.\" Blake Past shook his head. \"Proms aren't for parents. You know that as well as I do. That young man you were talking with a few mi\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "52845_75VB1ISR_3",
+            "query": "Why does shame flame in Blake's cheeks when Deirdre goes to prepare Eldoria's dias?\n\n (A) He is embarrassed at the thought that Deirdre might enter the room while he is sleeping with Eldoria. \n (B) He feels that prostitution is morally reprehensible. \n (C) He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on. \n (D) He feels guilty about wishing Deirdre was older so he could sleep with her instead.",
+            "references": [
+              "He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on."
+            ],
+            "scoring_references": [
+              "He feels guilty about sleeping with Eldoria when there's a child in the hut, Deirdre, who knows exactly what's going on."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "He feels that prostitution is morally reprehensible.",
+                "scoring_prediction": "He feels that prostitution is morally reprehensible.",
+                "normalized_scoring_prediction": "he feels that prostitution is morally reprehensible",
+                "primary_score": 0.0,
+                "context_tokens": 1591,
+                "generation_tokens": 9,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  1
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 1,
+                    "score": null,
+                    "chunk_preview": "She laughed. \"I am here because I live here,\" she said. He tried to assimilate the information, but could not. Perceiving his difficulty, the girl went on, \"My parents indentured themselves to the Great Starway Cartel and were assigned to\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "52845_75VB1ISR_4",
+            "query": "Why did Blake create the three female super-images of Miss Stoddart, Officer Finch, and Vera Velvetskin?\n\n (A) He feels guilty about having slept with Eldoria which perpetuated the demand for female prostitution. \n (B) Even though he is a psycheye, he feels guilty about hunting down Sabrina York. \n (C) He is still grieving his mother's death and regrets not being a more loving son.\n (D) He feels guilty about hurting Deirdre's feelings after her graduation when he ignored their romantic connection, and instead, played the part of a parent.",
+            "references": [
+              "He feels guilty about hurting Deirdre's feelings after her graduation when he ignored their romantic connection, and instead, played the part of a parent."
+            ],
+            "scoring_references": [
+              "He feels guilty about hurting Deirdre's feelings after her graduation when he ignored their romantic connection, and instead, played the part of a parent."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "He feels guilty about having slept with Eldoria which perpetuated the demand for female prostitution.",
+                "scoring_prediction": "He feels guilty about having slept with Eldoria which perpetuated the demand for female prostitution.",
+                "normalized_scoring_prediction": "he feels guilty about having slept with eldoria which perpetuated demand for female prostitution",
+                "primary_score": 0.0,
+                "context_tokens": 1788,
+                "generation_tokens": 18,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  7
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 7,
+                    "score": null,
+                    "chunk_preview": "Blake Past stood up too. \"No, not yet. I'll walk back to the sorority house with you.\" She tossed her head, but the sadness in her tarn-blue eyes belied her hauteur. \"If you wish,\" she said. Blake Present watched them set out side by side\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "62139_J05FWZR6_2",
+            "query": "Why does the Skipper stop abruptly after he says \"when you're running a blockade\"?\n\n (A) Because he realizes he's triggering trauma for Lieutenant Dugan. \n (B) Because he realizes he's insulting Lieutenant Dugan. \n (C) Because he realizes that he's repeating himself. \n (D) Because he realizes he's sharing news that he he hadn't meant to disclose so soon.",
+            "references": [
+              "Because he realizes he's sharing news that he he hadn't meant to disclose so soon."
+            ],
+            "scoring_references": [
+              "Because he realizes he's sharing news that he he hadn't meant to disclose so soon."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Because he realizes that he's sharing news that he he hadn't meant to disclose so soon.",
+                "scoring_prediction": "Because he realizes that he's sharing news that he he hadn't meant to disclose so soon.",
+                "normalized_scoring_prediction": "because he realizes that hes sharing news that he he hadnt meant to disclose so soon",
+                "primary_score": 0.0,
+                "context_tokens": 1779,
+                "generation_tokens": 19,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  1
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 1,
+                    "score": null,
+                    "chunk_preview": "\"Thanks, Dugan, but that won't do. On this trip the men must be fed regularly and well. Makeshift meals are O.Q. on an ordinary run, but when you're running the blockade\u2014\" He stopped abruptly. But too late; I had caught his slip of the ton\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "62139_J05FWZR6_4",
+            "query": "Why does the Skipper allow the new chef to use the heat-cannon as an incinerator?\n\n (A) Because the new chef just cooked a fine meal and Skipper can't bear to see him so discouraged. \n (B) Because Skipper figures it's a way to thank the new chef for coming on board so last minute. \n (C) Because Skipper thinks it'll get the new chef to stop offering up unsolicited tactical advice. \n (D) Because Skipper wants the new chef to cook marsh-duck and all the fixings.",
+            "references": [
+              "Because Skipper wants the new chef to cook marsh-duck and all the fixings."
+            ],
+            "scoring_references": [
+              "Because Skipper wants the new chef to cook marsh-duck and all the fixings."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "Because Skipper thinks it'll get the new chef to stop offering up unsolicited tactical advice.",
+                "scoring_prediction": "Because Skipper thinks it'll get the new chef to stop offering up unsolicited tactical advice.",
+                "normalized_scoring_prediction": "because skipper thinks itll get new chef to stop offering up unsolicited tactical advice",
+                "primary_score": 0.0,
+                "context_tokens": 1864,
+                "generation_tokens": 19,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  6
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 6,
+                    "score": null,
+                    "chunk_preview": "The skipper's eyes bulged, and he drooled like a pup at a barbeque. He was a bit of a sybarite, was Captain David O'Hara; if there was anything he dearly loved to exercise his molars on it was Venusian marsh-duck topped with a dessert of M\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "62139_J05FWZR6_9",
+            "query": "What would've happened if the new cook had told the Skipper about the ekalastron deposits earlier?\n\n (A) The text doesn't indicate how the Skipper would've acted in a different scenario. \n (B) The Skipper still would've ignored the new cook's advice. \n (C) The Skipper would have mulled over the information for a few days before deciding to switch their course from Vesta to Iris. \n (D) The Skipper's would have set course for Iris from the beginning.",
+            "references": [
+              "The Skipper's would have set course for Iris from the beginning."
+            ],
+            "scoring_references": [
+              "The Skipper's would have set course for Iris from the beginning."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "The text doesn't indicate how the Skipper would've acted in a different scenario.",
+                "scoring_prediction": "The text doesn't indicate how the Skipper would've acted in a different scenario.",
+                "normalized_scoring_prediction": "text doesnt indicate how skipper wouldve acted in different scenario",
+                "primary_score": 0.0,
+                "context_tokens": 2755,
+                "generation_tokens": 17,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  10,
+                  9
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 10,
+                    "score": null,
+                    "chunk_preview": "\"Don't give me lady-logic, you dope!\" roared the Old Man, an enraged lion now, his breakfast completely forgotten. \"Give me a sensible answer! If you'd told me that instead of just yipping and yapping about how via Iris was a nicer route I\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 9,
+                    "score": null,
+                    "chunk_preview": "He was an inveterate prowler. He snooped everywhere and anywhere from ballast-bins to bunk-rooms. He quizzed the Chief about engine-room practices, the gunner's mate on problems of ballistics, even the cabin-boy on matters of supplies and\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          },
+          {
+            "task": "quality",
+            "id": "62476_Z8GFDCIZ_2",
+            "query": "Did Duane actually kill Stevens? How do you know?\n\n (A) No, because even though he was attempting to kill Stevens, he blacked out before he had the chance.  \n (B) No, because the nurse said that Stevens died  of a head injury an hour before Duane woke up. \n (C) Yes, because once Duane woke up with amnesia, Andrias told him that he had killed Stevens. \n (D) Yes, because he shot Stevens with his dis-gun just before he blacked out.",
+            "references": [
+              "No, because even though he was attempting to kill Stevens, he blacked out before he had the chance."
+            ],
+            "scoring_references": [
+              "No, because even though he was attempting to kill Stevens, he blacked out before he had the chance."
+            ],
+            "answer_position_bucket": "unknown",
+            "methods": {
+              "read_agent_sequential": {
+                "prediction": "No, because the nurse said that Stevens died of a head injury an hour before Duane woke up.",
+                "scoring_prediction": "No, because the nurse said that Stevens died of a head injury an hour before Duane woke up.",
+                "normalized_scoring_prediction": "no because nurse said that stevens died of head injury hour before duane woke up",
+                "primary_score": 0.0,
+                "context_tokens": 2585,
+                "generation_tokens": 21,
+                "prompt_ordering": null,
+                "selected_chunk_indices": [
+                  0,
+                  1
+                ],
+                "top_retrieved_chunks": [
+                  {
+                    "rank": 1,
+                    "index": 0,
+                    "score": null,
+                    "chunk_preview": "Conspiracy on Callisto By JAMES MacCREIGH Revolt was flaring on Callisto, and Peter Duane held the secret that would make the uprising a success or failure. Yet he could make no move, could favor no side\u2014his memory was gone\u2014he didn't know\u2026"
+                  },
+                  {
+                    "rank": 2,
+                    "index": 1,
+                    "score": null,
+                    "chunk_preview": "\" Now will you listen to reason?\" Duane panted. But he halted, and the muzzle of his weapon wavered. The floor swooped and surged beneath him as the thrust of the mighty jets was cut off. Suddenly there was no gravity. The two men, locked\u2026"
+                  }
+                ]
+              }
+            },
+            "best_score": 0.0,
+            "best_methods": [
+              "read_agent_sequential"
+            ],
+            "any_method_scored_positive": false,
+            "all_methods_scored_positive": false,
+            "disagreement": false
+          }
+        ]
+      }
+    }
+  }
+}

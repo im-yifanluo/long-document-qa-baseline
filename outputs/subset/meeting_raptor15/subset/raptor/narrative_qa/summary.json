@@ -1,0 +1,27 @@
+{
+  "task": "narrative_qa",
+  "method": "raptor",
+  "num_examples": 15,
+  "num_generated": 15,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 11.462,
+    "num_predicted": 15,
+    "mean_prediction_length_characters": 66.8,
+    "scrolls_score": 11.462,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      11.462
+    ]
+  },
+  "elapsed_seconds": 5315.37,
+  "token_stats": {
+    "avg_input_tokens": 10180.333333333334,
+    "avg_context_tokens": 10053.933333333332,
+    "avg_generation_tokens": 13.8,
+    "total_input_tokens": 152705
+  },
+  "results_file": "outputs/experiments/meeting_raptor15/subset/raptor/narrative_qa/results.jsonl"
+}

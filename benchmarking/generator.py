@@ -98,7 +98,7 @@ class Generator:
         logger.info("vLLM model loaded: %s", self.active_model)
 
     def _init_vllm(self):
-        """Load the primary model and fall back only if initialization fails."""
+        """Load the configured model, with optional fallback only if requested."""
         try:
             self._load_model(self.config.llm_model)
             return

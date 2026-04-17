@@ -8,12 +8,13 @@ artifacts, while the implementation is split by responsibility.
 ```text
 long-document-qa-baseline/
   benchmarking/         benchmark execution code, adapters, retrieval pipeline
-  analysis/             post-hoc analysis code and long-context probes
+  analysis/             post-hoc analysis code and notebooks
   docs/                 benchmark docs, architecture notes, and result notes
   logs/                 large standalone benchmark logs
+  scripts/              user-facing shell helpers for repeated experiments
+  tests/                unit and fidelity tests
   third_party/          cloned official method repos used by adapters
-  outputs/              default smoke/preflight/subset/full runs
-  outputs_*             named historical run roots kept in place for comparison
+  outputs/              all benchmark, experiment, and test artifacts
   *.py                  thin compatibility wrappers for the main commands
   setup.sh              environment setup
   requirements.txt      Python dependencies
@@ -37,12 +38,19 @@ Stable root entrypoints remain:
 
 - `analysis/analyze_outputs.py`: post-hoc analysis over saved runs
 - `analysis/analysis_utils.py`: shared heuristics for evidence and agreement analysis
-- `analysis/run_lost_in_middle.py`: retained long-context probe
-
 Stable root analysis entrypoints remain:
 
 - `analyze_outputs.py`
-- `run_lost_in_middle.py`
+
+## Tests
+
+- `tests/test_reorder_only_rag.py`: ordering-only ablation unit test
+- `tests/test_scrolls_fidelity.py`: SCROLLS loader / metric / adapter fidelity tests
+
+Stable root wrappers remain for backwards compatibility:
+
+- `test_reorder_only_rag.py`
+- `test_scrolls_fidelity.py`
 
 ## Documentation
 
@@ -74,31 +82,33 @@ The benchmark adapter search order is now:
 
 This keeps the root cleaner without breaking older layouts.
 
-## Run Directories
+## Output Directories
 
-Historical runs remain where they were produced so existing notes and open tabs
-do not break.
-
-- `outputs_meeting_core/`: main DOS-vs-vanilla subset results from last week
-- `outputs_meeting_readagent_seq/`: targeted ReadAgent sequential subset run
-- `outputs_meeting_raptor15/`: partial RAPTOR subset run
-- `outputs_preflight_all/`: broad preflight run including RAPTOR
-- `outputs_preflight_readagent/`: broad ReadAgent preflight run
-
-For future runs, keep using explicit, named output roots so each experiment is
-self-describing.
-
-Recommended naming pattern:
+All generated artifacts now live under `outputs/`:
 
 ```text
-outputs_<date>_<goal>/
+outputs/
+  smoke/               default smoke runs
+  preflight/           default preflight runs
+  subset/              default subset runs
+  full/                default full runs
+  experiments/         ad-hoc sweeps and side experiments
+  tests/               test-only scratch outputs
 ```
 
-Examples:
+Tiered named runs now live under the matching top-level run folder, for example:
 
-- `outputs_2026-04-14_core`
-- `outputs_2026-04-14_readagent_fix`
-- `outputs_2026-04-14_contract_order_ablation`
+- `outputs/subset/meeting_core/`
+- `outputs/subset/meeting_readagent_seq/`
+- `outputs/subset/meeting_raptor15/`
+- `outputs/preflight/preflight_all/`
+- `outputs/preflight/preflight_readagent/`
+- `outputs/smoke/official_smoke/`
+
+`outputs/experiments/` is now reserved for ad-hoc sweeps such as:
+
+- `outputs/experiments/vanilla_reorder_subset_budget_sweep/`
+- `outputs/experiments/smoke_vanilla_reorder_budgets/`
 
 Within a run root, the code writes results to:
 

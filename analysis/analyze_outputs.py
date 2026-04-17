@@ -431,16 +431,6 @@ def make_rag_rank_analysis(
         plt.close()
 
 
-def maybe_copy_probe_plot(run_root: str, analysis_dir: str) -> None:
-    probe_dir = os.path.join(run_root, "analysis", "lost_in_middle")
-    source_plot = os.path.join(probe_dir, "lost_in_middle.png")
-    if os.path.exists(source_plot):
-        with open(source_plot, "rb") as src, open(
-            os.path.join(analysis_dir, "lost_in_middle.png"), "wb"
-        ) as dst:
-            dst.write(src.read())
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Generate analysis artifacts from benchmark outputs",
@@ -480,8 +470,6 @@ def main():
     make_qualitative_exports(method_rows, args.methods, args.sample_size, args.seed, analysis_dir)
     if any(method in args.methods for method in ("dos_rag", "reorder_only_rag", "vanilla_rag", "rag")):
         make_rag_rank_analysis(method_rows, args.methods, tasks, analysis_dir)
-    maybe_copy_probe_plot(run_root, analysis_dir)
-
     manifest = {
         "run_root": run_root,
         "tasks": tasks,

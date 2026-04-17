@@ -1,0 +1,18 @@
+{
+  "run_root": "outputs/experiments/meeting_core/subset",
+  "tasks": [
+    "qmsum",
+    "qasper",
+    "narrative_qa",
+    "quality",
+    "contract_nli"
+  ],
+  "methods": [
+    "vanilla_rag",
+    "dos_rag",
+    "raptor",
+    "read_agent_parallel",
+    "read_agent_sequential"
+  ],
+  "analysis_dir": "outputs/experiments/meeting_core/subset/analysis"
+}

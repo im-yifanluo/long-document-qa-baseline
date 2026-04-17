@@ -163,11 +163,10 @@ USER_PROMPT_TEMPLATES: Dict[str, str] = {
 # Defaults
 # ---------------------------------------------------------------------------
 
-# Qwen2.5-14B-Instruct is a strong and stable local reader for a single A40
-# once the benchmark is focused on retrieval-based methods rather than 1M-token
-# long-context runs.
-DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-14B-Instruct"
-DEFAULT_FALLBACK_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct"
+# Use one stable reader everywhere so benchmark runs remain directly comparable
+# across retries, sweeps, and shared-server GPU availability.
+DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct"
+DEFAULT_FALLBACK_LLM_MODEL = None
 
 # The DOS RAG paper uses Snowflake Arctic Embed m v1.5 for dense retrieval.
 DEFAULT_EMBEDDING_MODEL = "Snowflake/snowflake-arctic-embed-m-v1.5"

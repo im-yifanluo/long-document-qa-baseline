@@ -6,7 +6,8 @@ SCROLLS.
 The code is now split by purpose:
 
 - `benchmarking/`: benchmark execution, adapters, retrieval pipeline, and CLIs
-- `analysis/`: post-hoc result analysis and phenomenon probes
+- `analysis/`: post-hoc result analysis and notebooks
+- `scripts/`: user-facing shell helpers for repeated sweeps and server runs
 - root-level `*.py` entrypoints: thin compatibility wrappers so existing server commands still work
 
 The benchmark is intentionally hybrid:
@@ -143,8 +144,8 @@ cache audit above was only completed for the four tasks listed here.
 |---|---|
 | Default methods | `vanilla_rag`, `dos_rag` |
 | Additional methods | `reorder_only_rag`, `raptor`, `read_agent_parallel`, `read_agent_sequential` |
-| Reader | `Qwen/Qwen2.5-14B-Instruct` |
-| Fallback reader | `Qwen/Qwen2.5-7B-Instruct` |
+| Reader | `Qwen/Qwen2.5-7B-Instruct` |
+| Fallback reader | none by default |
 | Retriever embedding | `Snowflake/snowflake-arctic-embed-m-v1.5` |
 | Chunking | sentence-aware |
 | Chunk size | `100` tokens |
@@ -238,7 +239,7 @@ Verify that the reader loads:
 
 ```bash
 python test_generator.py \
-  --llm-model Qwen/Qwen2.5-14B-Instruct \
+  --llm-model Qwen/Qwen2.5-7B-Instruct \
   --prompt "What is the capital of France?"
 ```
 
@@ -272,7 +273,7 @@ python run_benchmark.py \
   --run-tier subset \
   --methods vanilla_rag \
   --context-budget 10000 \
-  --output-dir outputs_subset_vanilla_10k \
+  --output-dir outputs/experiments/subset_vanilla_10k \
   --overwrite-existing
 ```
 
@@ -283,7 +284,7 @@ python run_benchmark.py \
   --run-tier subset \
   --methods reorder_only_rag \
   --context-budget 10000 \
-  --output-dir outputs_subset_reorder_10k \
+  --output-dir outputs/experiments/subset_reorder_10k \
   --overwrite-existing
 ```
 
@@ -294,7 +295,7 @@ python run_benchmark.py \
   --run-tier subset \
   --methods dos_rag \
   --context-budget 10000 \
-  --output-dir outputs_subset_dos_10k \
+  --output-dir outputs/experiments/subset_dos_10k \
   --overwrite-existing
 ```
 
@@ -305,7 +306,7 @@ python run_benchmark.py \
   --run-tier subset \
   --methods raptor \
   --context-budget 10000 \
-  --output-dir outputs_subset_raptor_10k \
+  --output-dir outputs/experiments/subset_raptor_10k \
   --overwrite-existing
 ```
 
@@ -317,7 +318,7 @@ python run_benchmark.py \
   --methods read_agent_parallel \
   --tasks qmsum narrative_qa quality \
   --context-budget 10000 \
-  --output-dir outputs_subset_readagent_parallel_10k \
+  --output-dir outputs/experiments/subset_readagent_parallel_10k \
   --overwrite-existing
 ```
 
@@ -329,7 +330,7 @@ python run_benchmark.py \
   --methods read_agent_sequential \
   --tasks qmsum narrative_qa quality \
   --context-budget 10000 \
-  --output-dir outputs_subset_readagent_sequential_10k \
+  --output-dir outputs/experiments/subset_readagent_sequential_10k \
   --overwrite-existing
 ```
 
@@ -340,7 +341,7 @@ Run `vanilla_rag` and `reorder_only_rag` on the full SCROLLS QA subset at
 
 ```bash
 bash scripts/run_vanilla_reorder_subset_budget_sweep.sh \
-  outputs_vanilla_reorder_subset_budget_sweep \
+  outputs/experiments/vanilla_reorder_subset_budget_sweep \
   --overwrite-existing
 ```
 
@@ -350,7 +351,7 @@ tokens:
 
 ```bash
 bash scripts/run_ordering_budget_sweep.sh \
-  outputs_ordering_budget_sweep \
+  outputs/experiments/ordering_budget_sweep \
   --overwrite-existing
 ```
 
@@ -364,10 +365,8 @@ automatically prepend `$CONDA_PREFIX/lib` to `LD_LIBRARY_PATH` when available.
 This avoids common shared-server vLLM reinitialization issues during multi-budget
 sweeps.
 
-By default, the sweep scripts also use `Qwen/Qwen2.5-7B-Instruct` at
-`--gpu-memory-utilization 0.80` for better stability on shared A40 machines.
-You can override that with environment variables such as
-`LLM_MODEL=Qwen/Qwen2.5-14B-Instruct` if the GPU is sufficiently free.
+The benchmark now standardizes on `Qwen/Qwen2.5-7B-Instruct` for these sweeps
+so results stay comparable across runs on shared A40 machines.
 
 ## Analysis
 
@@ -382,7 +381,7 @@ Analyze the three-budget `vanilla_rag` / `reorder_only_rag` subset sweep:
 ```bash
 for b in 1500 5000 10000; do
   python analyze_outputs.py \
-    --output-dir outputs_vanilla_reorder_subset_budget_sweep/context_$b \
+    --output-dir outputs/experiments/vanilla_reorder_subset_budget_sweep/context_$b \
     --run-tier subset \
     --methods vanilla_rag reorder_only_rag
 done
@@ -393,7 +392,7 @@ Analyze the focused `quality` / `contract_nli` ordering sweep:
 ```bash
 for b in 1500 5000 10000; do
   python analyze_outputs.py \
-    --output-dir outputs_ordering_budget_sweep/context_$b \
+    --output-dir outputs/experiments/ordering_budget_sweep/context_$b \
     --run-tier subset \
     --methods vanilla_rag reorder_only_rag dos_rag \
     --tasks quality contract_nli
@@ -421,6 +420,7 @@ Typical layout:
 
 ```text
 outputs/
+  experiments/
   smoke|preflight|subset|full/
     comparison_report.json
     comparison_report.md
@@ -433,15 +433,22 @@ outputs/
       benchmark_report.json
     dos_rag/
       ...
+  tests/
 ```
 
-Named historical run roots are also kept at the repo root, for example:
+Tiered historical runs now sit under their matching run folders, for example:
 
-- `outputs_meeting_core/`
-- `outputs_meeting_readagent_seq/`
-- `outputs_meeting_raptor15/`
+- `outputs/subset/meeting_core/`
+- `outputs/subset/meeting_readagent_seq/`
+- `outputs/subset/meeting_raptor15/`
+- `outputs/preflight/preflight_all/`
+- `outputs/preflight/preflight_readagent/`
+- `outputs/smoke/official_smoke/`
 
-These are preserved in place so older notes and analysis links do not break.
+Ad-hoc sweeps stay under `outputs/experiments/`, for example:
+
+- `outputs/experiments/vanilla_reorder_subset_budget_sweep/`
+- `outputs/experiments/smoke_vanilla_reorder_budgets/`
 
 New analysis exports are written under the run root at:
 

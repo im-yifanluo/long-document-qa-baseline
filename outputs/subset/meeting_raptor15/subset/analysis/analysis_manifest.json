@@ -1,0 +1,17 @@
+{
+  "run_root": "outputs/experiments/meeting_raptor15/subset",
+  "tasks": [
+    "qasper",
+    "narrative_qa",
+    "quality",
+    "contract_nli"
+  ],
+  "methods": [
+    "vanilla_rag",
+    "dos_rag",
+    "raptor",
+    "read_agent_parallel",
+    "read_agent_sequential"
+  ],
+  "analysis_dir": "outputs/experiments/meeting_raptor15/subset/analysis"
+}
