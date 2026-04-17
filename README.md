@@ -345,6 +345,15 @@ bash scripts/run_vanilla_reorder_subset_budget_sweep.sh \
   --overwrite-existing
 ```
 
+Run the same `vanilla_rag` / `reorder_only_rag` comparison on the full
+validation set for those five QA tasks:
+
+```bash
+bash scripts/run_vanilla_reorder_full_budget_sweep.sh \
+  outputs/experiments/vanilla_reorder_full_budget_sweep \
+  --overwrite-existing
+```
+
 Run `vanilla_rag`, `reorder_only_rag`, and `dos_rag` on the focused
 `quality` / `contract_nli` subset at `1500`, `5000`, and `10000` context
 tokens:
@@ -358,6 +367,7 @@ bash scripts/run_ordering_budget_sweep.sh \
 The two sweep scripts are:
 
 - `scripts/run_vanilla_reorder_subset_budget_sweep.sh`
+- `scripts/run_vanilla_reorder_full_budget_sweep.sh`
 - `scripts/run_ordering_budget_sweep.sh`
 
 Both scripts run each context budget in a separate Python process and
