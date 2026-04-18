@@ -1,0 +1,27 @@
+{
+  "task": "quality",
+  "method": "vanilla_rag",
+  "num_examples": 2086,
+  "num_generated": 2086,
+  "metric_type": "exact_match",
+  "metrics": {
+    "exact_match": 48.2263,
+    "num_predicted": 2086,
+    "mean_prediction_length_characters": 36.0757,
+    "scrolls_score": 48.2263,
+    "display_keys": [
+      "exact_match"
+    ],
+    "display": [
+      48.2263
+    ]
+  },
+  "elapsed_seconds": 1777.72,
+  "token_stats": {
+    "avg_input_tokens": 4545.834132310642,
+    "avg_context_tokens": 4400.496164908916,
+    "avg_generation_tokens": 7.569990412272292,
+    "total_input_tokens": 9482610
+  },
+  "results_file": "outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/vanilla_rag/quality/results.jsonl"
+}

@@ -1,0 +1,27 @@
+{
+  "task": "narrative_qa",
+  "method": "vanilla_rag",
+  "num_examples": 3425,
+  "num_generated": 3425,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 21.0914,
+    "num_predicted": 3425,
+    "mean_prediction_length_characters": 81.6861,
+    "scrolls_score": 21.0914,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      21.0914
+    ]
+  },
+  "elapsed_seconds": 12342.61,
+  "token_stats": {
+    "avg_input_tokens": 5086.554160583942,
+    "avg_context_tokens": 4956.757664233577,
+    "avg_generation_tokens": 19.294598540145984,
+    "total_input_tokens": 17421448
+  },
+  "results_file": "outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/vanilla_rag/narrative_qa/results.jsonl"
+}

@@ -1,0 +1,40 @@
+{
+  "task": "qmsum",
+  "method": "reorder_only_rag",
+  "num_examples": 272,
+  "num_generated": 272,
+  "metric_type": "rouge",
+  "metrics": {
+    "rouge/rouge1": 30.1791,
+    "rouge/rouge2": 8.4347,
+    "rouge/rougeL": 19.1101,
+    "rouge/rougeLsum": 26.6138,
+    "rouge/geometric_mean": 16.9439,
+    "num_predicted": 272,
+    "mean_prediction_length_characters": 984.8897,
+    "scrolls_score": 16.9439,
+    "display_keys": [
+      "rouge/rouge1",
+      "rouge/rouge2",
+      "rouge/rougeL"
+    ],
+    "display": [
+      30.1791,
+      8.4347,
+      19.1101
+    ],
+    "rouge_geo_mean": 16.9439,
+    "rouge1": 30.1791,
+    "rouge2": 8.4347,
+    "rougeL": 19.1101,
+    "rougeLsum": 26.6138
+  },
+  "elapsed_seconds": 405.71,
+  "token_stats": {
+    "avg_input_tokens": 4988.404411764706,
+    "avg_context_tokens": 4930.77205882353,
+    "avg_generation_tokens": 183.06617647058823,
+    "total_input_tokens": 1356846
+  },
+  "results_file": "outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/reorder_only_rag/qmsum/results.jsonl"
+}

@@ -1,0 +1,27 @@
+{
+  "task": "qasper",
+  "method": "vanilla_rag",
+  "num_examples": 984,
+  "num_generated": 984,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 36.1983,
+    "num_predicted": 984,
+    "mean_prediction_length_characters": 119.7114,
+    "scrolls_score": 36.1983,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      36.1983
+    ]
+  },
+  "elapsed_seconds": 414.59,
+  "token_stats": {
+    "avg_input_tokens": 1586.3384146341464,
+    "avg_context_tokens": 1458.4908536585365,
+    "avg_generation_tokens": 25.801829268292682,
+    "total_input_tokens": 1560957
+  },
+  "results_file": "outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_1500/full/vanilla_rag/qasper/results.jsonl"
+}

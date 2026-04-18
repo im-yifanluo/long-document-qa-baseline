@@ -23,3 +23,9 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Large Files
+outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/reorder_only_rag/quality/results.jsonl
+outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/reorder_only_rag/narrative_qa/results.jsonl
+outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/vanilla_rag/quality/results.jsonl
+outputs/experiments/vanilla_reorder_full_budget_sweep_clean_2026-04-17/context_5000/full/vanilla_rag/narrative_qa/results.jsonl
