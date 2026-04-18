@@ -122,6 +122,62 @@ class BenchmarkPipeline:
             context_label=context_label,
         )
 
+    def _format_generator_prompt(self, system_prompt: str, user_prompt: str) -> str:
+        """Return the exact chat-formatted prompt passed to the reader model."""
+        formatter = getattr(self.generator, "format_prompt", None)
+        if callable(formatter):
+            return formatter(system_prompt, user_prompt)
+        return f"{system_prompt}\n\n{user_prompt}"
+
+    def _apply_prompt_trace_fields(self, row: Dict[str, Any]) -> bool:
+        """Backfill prompt-trace fields for cached rows when possible."""
+        changed = False
+        retrieved = row.get("retrieved_chunks") or []
+        retrieved_by_index = {
+            chunk.get("index"): dict(chunk)
+            for chunk in retrieved
+            if isinstance(chunk, dict) and chunk.get("index") is not None
+        }
+
+        if "selected_chunks" not in row:
+            selected_chunks: List[Dict[str, Any]] = []
+            for index in row.get("selected_chunk_indices", []):
+                chunk = retrieved_by_index.get(index)
+                if chunk is not None:
+                    selected_chunks.append(chunk)
+            row["selected_chunks"] = selected_chunks
+            changed = True
+
+        if "selected_chunks_by_retrieval" not in row:
+            selected_chunks_by_retrieval: List[Dict[str, Any]] = []
+            for index in row.get("selected_chunk_indices_by_retrieval", []):
+                chunk = retrieved_by_index.get(index)
+                if chunk is not None:
+                    selected_chunks_by_retrieval.append(chunk)
+            row["selected_chunks_by_retrieval"] = selected_chunks_by_retrieval
+            changed = True
+
+        if "context_text" not in row:
+            selected_chunks = row.get("selected_chunks", [])
+            if selected_chunks:
+                row["context_text"] = "\n\n".join(
+                    chunk.get("chunk", "")
+                    for chunk in selected_chunks
+                    if isinstance(chunk, dict)
+                )
+                changed = True
+
+        if "generator_prompt" not in row and self.generator is not None:
+            system_prompt = row.get("system_prompt", "")
+            user_prompt = row.get("user_prompt", "")
+            row["generator_prompt"] = self._format_generator_prompt(
+                system_prompt,
+                user_prompt,
+            )
+            changed = True
+
+        return changed
+
     def _result_provenance(
         self,
         method: str,
@@ -270,6 +326,7 @@ class BenchmarkPipeline:
 
         system_prompt = SYSTEM_PROMPTS[task_type]
         user_prompt = self._build_user_prompt(task_type, context, example["query"])
+        generator_prompt = self._format_generator_prompt(system_prompt, user_prompt)
         input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
         document_tokens = self.generator.count_tokens(example["document"])
         ref_ratio, ref_bucket = self._reference_position(
@@ -308,6 +365,7 @@ class BenchmarkPipeline:
             "answer_position_ratio": ref_ratio,
             "answer_position_bucket": ref_bucket,
             "prompt_ordering": prompt_ordering,
+            "context_text": context,
             "retrieved_chunks": retrieved,
             "retrieval_scores": [r["score"] for r in retrieved],
             "chunk_offsets": [
@@ -319,11 +377,14 @@ class BenchmarkPipeline:
                 }
                 for r in retrieved
             ],
+            "selected_chunks": [dict(r) for r in selected_for_prompt],
+            "selected_chunks_by_retrieval": [dict(r) for r in selected],
             "selected_chunk_indices": [r["index"] for r in selected_for_prompt],
             "selected_chunk_indices_by_retrieval": [r["index"] for r in selected],
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "generator_prompt": generator_prompt,
             "provenance": self._result_provenance(method, method_info),
         }
 
@@ -360,6 +421,7 @@ class BenchmarkPipeline:
             example["document"], effective_lc_budget
         )
         user_prompt = self._build_user_prompt(task_type, context, example["query"])
+        generator_prompt = self._format_generator_prompt(system_prompt, user_prompt)
         input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
         ref_ratio, ref_bucket = self._reference_position(
             example["document"], example["references"]
@@ -381,13 +443,17 @@ class BenchmarkPipeline:
             "document_truncated": truncated,
             "answer_position_ratio": ref_ratio,
             "answer_position_bucket": ref_bucket,
+            "context_text": context,
             "retrieved_chunks": [],
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "selected_chunks": [],
+            "selected_chunks_by_retrieval": [],
             "selected_chunk_indices": [],
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "generator_prompt": generator_prompt,
             "provenance": self._result_provenance(
                 "long_context",
                 {
@@ -441,13 +507,17 @@ class BenchmarkPipeline:
             "num_retrieved": 0,
             "num_context_chunks": 0,
             "document_truncated": False,
+            "context_text": "",
             "retrieved_chunks": [],
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "selected_chunks": [],
+            "selected_chunks_by_retrieval": [],
             "selected_chunk_indices": [],
             "model_name": self.generator.active_model,
             "system_prompt": "",
             "user_prompt": "",
+            "generator_prompt": "",
             "prediction": "",
             "method_error": message,
             "provenance": self._result_provenance(method),
@@ -606,6 +676,8 @@ class BenchmarkPipeline:
                         "scoring_references": record.get("scoring_references"),
                         "normalized_prediction": record.get("normalized_prediction"),
                     }
+                    if self._apply_prompt_trace_fields(record):
+                        cached_rows_changed = True
                     if current != original:
                         cached_rows_changed = True
                     done[record["id"]] = record

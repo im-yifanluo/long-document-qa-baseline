@@ -471,7 +471,7 @@ class OfficialMethodRunner:
         context: str,
         context_label: str = "Context",
         max_tokens: Optional[int] = None,
-    ) -> Tuple[str, str, str, int]:
+    ) -> Tuple[str, str, str, str, int]:
         task_type = TASK_TYPE[example["task"]]
         system_prompt = SYSTEM_PROMPTS[task_type]
         user_prompt = USER_PROMPT_TEMPLATES[task_type].format(
@@ -479,13 +479,21 @@ class OfficialMethodRunner:
             query=example["query"],
             context_label=context_label,
         )
+        generator_prompt = self._format_generator_prompt(system_prompt, user_prompt)
         answer = self.generator.generate(
             system_prompt,
             user_prompt,
             max_tokens=max_tokens,
         )
         input_tokens = self.generator.count_prompt_tokens(system_prompt, user_prompt)
-        return answer, system_prompt, user_prompt, input_tokens
+        return answer, system_prompt, user_prompt, generator_prompt, input_tokens
+
+    def _format_generator_prompt(self, system_prompt: str, user_prompt: str) -> str:
+        """Return the exact chat-formatted prompt passed to the reader model."""
+        formatter = getattr(self.generator, "format_prompt", None)
+        if callable(formatter):
+            return formatter(system_prompt, user_prompt)
+        return f"{system_prompt}\n\n{user_prompt}"
 
     @staticmethod
     def _neutral_system_prompt() -> str:
@@ -630,7 +638,7 @@ class OfficialMethodRunner:
             top_k=self.config.effective_top_k,
             max_tokens=self.config.context_budget,
         )
-        answer, system_prompt, user_prompt, input_tokens = self._answer_from_context(
+        answer, system_prompt, user_prompt, generator_prompt, input_tokens = self._answer_from_context(
             example,
             context,
         )
@@ -677,6 +685,7 @@ class OfficialMethodRunner:
             "num_context_chunks": len(prompt_indices),
             "document_truncated": False,
             "prompt_ordering": "document_order",
+            "context_text": context,
             "retrieved_chunks": retrieval_trace,
             "retrieval_scores": [row["score"] for row in retrieval_trace],
             "chunk_offsets": [
@@ -688,11 +697,14 @@ class OfficialMethodRunner:
                 }
                 for row in retrieval_trace
             ],
+            "selected_chunks": sorted(retrieval_trace, key=lambda row: row["index"]),
+            "selected_chunks_by_retrieval": list(retrieval_trace),
             "selected_chunk_indices": prompt_indices,
             "selected_chunk_indices_by_retrieval": retrieved_node_ids,
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "generator_prompt": generator_prompt,
             "prediction": answer,
             "official_implementation": "alex-laitenberger/dos-rag-eval",
             "provenance": self._result_provenance("dos_rag"),
@@ -782,7 +794,7 @@ class OfficialMethodRunner:
             collapse_tree=True,
             return_layer_information=True,
         )
-        answer, system_prompt, user_prompt, input_tokens = self._answer_from_context(
+        answer, system_prompt, user_prompt, generator_prompt, input_tokens = self._answer_from_context(
             example,
             context,
         )
@@ -818,9 +830,12 @@ class OfficialMethodRunner:
             "num_retrieved": len(retrieved_chunks),
             "num_context_chunks": len(retrieved_chunks),
             "document_truncated": False,
+            "context_text": context,
             "retrieved_chunks": retrieved_chunks,
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "selected_chunks": list(retrieved_chunks),
+            "selected_chunks_by_retrieval": list(retrieved_chunks),
             "selected_chunk_indices": [row["index"] for row in retrieved_chunks],
             "tree_num_layers": tree.num_layers,
             "tree_root_count": len(tree.root_nodes),
@@ -828,6 +843,7 @@ class OfficialMethodRunner:
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "generator_prompt": generator_prompt,
             "prediction": answer,
             "official_implementation": "parthsarthi03/raptor",
             "provenance": self._result_provenance("raptor"),
@@ -1093,7 +1109,7 @@ class OfficialMethodRunner:
             lookup_page_ids = self._parse_lookup_page_ids(response, max_page_id)[: prompts.max_lookup_pages]
 
         expanded_context = self._merge_pages_and_gists(pages, gists, lookup_page_ids)
-        answer, system_prompt, user_prompt, input_tokens = self._answer_from_context(
+        answer, system_prompt, user_prompt, generator_prompt, input_tokens = self._answer_from_context(
             example,
             expanded_context,
             context_label="Text",
@@ -1117,6 +1133,7 @@ class OfficialMethodRunner:
             "num_retrieved": len(lookup_page_ids),
             "num_context_chunks": len(pages),
             "document_truncated": False,
+            "context_text": expanded_context,
             "retrieved_chunks": [
                 {
                     "rank": rank,
@@ -1128,6 +1145,24 @@ class OfficialMethodRunner:
             ],
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "selected_chunks": [
+                {
+                    "rank": rank,
+                    "index": page_id,
+                    "chunk": "\n".join(pages[page_id]),
+                    "score": None,
+                }
+                for rank, page_id in enumerate(lookup_page_ids, start=1)
+            ],
+            "selected_chunks_by_retrieval": [
+                {
+                    "rank": rank,
+                    "index": page_id,
+                    "chunk": "\n".join(pages[page_id]),
+                    "score": None,
+                }
+                for rank, page_id in enumerate(lookup_page_ids, start=1)
+            ],
             "selected_chunk_indices": lookup_page_ids,
             "read_agent_variant": variant,
             "read_agent_page_count": len(pages),
@@ -1138,6 +1173,7 @@ class OfficialMethodRunner:
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
+            "generator_prompt": generator_prompt,
             "prediction": answer,
             "official_implementation": "read-agent/read-agent.github.io",
             "provenance": self._result_provenance(f"read_agent_{variant}"),

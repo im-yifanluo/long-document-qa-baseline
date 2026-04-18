@@ -238,6 +238,10 @@ class Generator:
             kwargs.pop("enable_thinking", None)
             return self.tokenizer.apply_chat_template(messages, **kwargs)
 
+    def format_prompt(self, system_prompt: str, user_prompt: str) -> str:
+        """Return the exact chat-formatted prompt sent to vLLM."""
+        return self._format_chat_prompt(system_prompt, user_prompt)
+
     def clean_output(self, text: str) -> str:
         """Strip leading thinking blocks if they still appear in output."""
         cleaned = re.sub(r"^\s*<think>.*?</think>\s*", "", text, flags=re.DOTALL)
@@ -249,7 +253,7 @@ class Generator:
 
     def count_prompt_tokens(self, system_prompt: str, user_prompt: str) -> int:
         """Count tokens after chat-template formatting, not before."""
-        prompt = self._format_chat_prompt(system_prompt, user_prompt)
+        prompt = self.format_prompt(system_prompt, user_prompt)
         return self.count_tokens(prompt)
 
     def truncate_text(self, text: str, max_tokens: int) -> Tuple[str, int, bool]:
@@ -276,7 +280,7 @@ class Generator:
         max_tokens: Optional[int] = None,
     ) -> str:
         """Generate one answer for a single prompt pair."""
-        prompt = self._format_chat_prompt(system_prompt, user_prompt)
+        prompt = self.format_prompt(system_prompt, user_prompt)
         sampling_params = (
             self.sampling_params
             if max_tokens is None
@@ -294,7 +298,7 @@ class Generator:
         if not prompts:
             return []
 
-        formatted = [self._format_chat_prompt(s, u) for s, u in prompts]
+        formatted = [self.format_prompt(s, u) for s, u in prompts]
         sampling_params = (
             self.sampling_params
             if max_tokens is None

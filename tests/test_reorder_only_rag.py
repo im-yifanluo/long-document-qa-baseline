@@ -37,6 +37,9 @@ class _StubEmbedder:
 class _StubGenerator:
     active_model = "stub-reader"
 
+    def format_prompt(self, system_prompt: str, user_prompt: str) -> str:
+        return f"<system>{system_prompt}</system><user>{user_prompt}</user>"
+
     def count_prompt_tokens(self, system_prompt: str, user_prompt: str) -> int:
         return len((system_prompt + " " + user_prompt).split())
 
@@ -78,6 +81,28 @@ class ReorderOnlyRagTests(unittest.TestCase):
         self.assertEqual(reorder["selected_chunk_indices"], [0, 1, 2])
         self.assertEqual(vanilla["context_tokens"], reorder["context_tokens"])
         self.assertEqual(reorder["prompt_ordering"], "document_order_from_vanilla_retrieval")
+        self.assertEqual(
+            [chunk["index"] for chunk in vanilla["selected_chunks"]],
+            [2, 0, 1],
+        )
+        self.assertEqual(
+            [chunk["index"] for chunk in reorder["selected_chunks"]],
+            [0, 1, 2],
+        )
+        self.assertEqual(
+            [chunk["index"] for chunk in vanilla["selected_chunks_by_retrieval"]],
+            [2, 0, 1],
+        )
+        self.assertEqual(
+            [chunk["index"] for chunk in reorder["selected_chunks_by_retrieval"]],
+            [2, 0, 1],
+        )
+        self.assertEqual(vanilla["context_text"], "chunk two\n\nchunk zero\n\nchunk one")
+        self.assertEqual(reorder["context_text"], "chunk zero\n\nchunk one\n\nchunk two")
+        self.assertIn("<system>", vanilla["generator_prompt"])
+        self.assertIn("<user>", vanilla["generator_prompt"])
+        self.assertIn("chunk two\n\nchunk zero", vanilla["generator_prompt"])
+        self.assertIn("chunk zero\n\nchunk one\n\nchunk two", reorder["generator_prompt"])
         self.assertIn("chunk two\n\nchunk zero", vanilla["user_prompt"])
         self.assertIn("chunk zero\n\nchunk one\n\nchunk two", reorder["user_prompt"])
 
