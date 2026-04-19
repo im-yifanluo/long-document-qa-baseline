@@ -22,6 +22,10 @@ The current comparison surface is:
 
 - `vanilla_rag`: repo-owned baseline
 - `reorder_only_rag`: repo-owned ablation that reuses vanilla retrieval and only restores selected chunks to document order
+- `reverse_order_rag`: repo-owned negative-control ablation that reverses the selected chunks into reverse document order
+- `random_order_rag`: repo-owned deterministic shuffle ablation over the same selected chunk set
+- `anchor1_doc_order_rag`: repo-owned hybrid that keeps the top-1 retrieved chunk first, then restores the tail to document order
+- `anchor2_doc_order_rag`: repo-owned hybrid that keeps the top-2 retrieved chunks first, then restores the tail to document order
 - `dos_rag`: SCROLLS adapter around the official DOS-RAG retrieval core
 - `raptor`: SCROLLS adapter around the official RAPTOR tree builder/retriever
 - `read_agent_parallel`: SCROLLS adapter around the official ReadAgent parallel prompt flow
@@ -73,6 +77,10 @@ official method implementations onto SCROLLS.
 |---|---|---|---|
 | `vanilla_rag` | none | none | repo-owned chunking, retrieval, prompting, shared reader |
 | `reorder_only_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to document order |
+| `reverse_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to reverse document order |
+| `random_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to a deterministic shuffle |
+| `anchor1_doc_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that anchors top-1 retrieval first, then restores the tail to document order |
+| `anchor2_doc_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that anchors top-2 retrieval first, then restores the tail to document order |
 | `dos_rag` | `alex-laitenberger/dos-rag-eval` | DOS chunking, dense retrieval, retrieve-then-restore-document-order behavior | SCROLLS loader, shared local reader, report schema |
 | `raptor` | `parthsarthi03/raptor` | RAPTOR tree construction and tree retrieval | SCROLLS loader, shared local reader, pinned summarizer/embedder for controlled comparison |
 | `read_agent_parallel` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, page look-up prompt flow | SCROLLS input adaptation, shared local reader |
@@ -143,7 +151,7 @@ cache audit above was only completed for the four tasks listed here.
 | Parameter | Value |
 |---|---|
 | Default methods | `vanilla_rag`, `dos_rag` |
-| Additional methods | `reorder_only_rag`, `raptor`, `read_agent_parallel`, `read_agent_sequential` |
+| Additional methods | `reorder_only_rag`, `reverse_order_rag`, `random_order_rag`, `anchor1_doc_order_rag`, `anchor2_doc_order_rag`, `raptor`, `read_agent_parallel`, `read_agent_sequential` |
 | Reader | `Qwen/Qwen2.5-7B-Instruct` |
 | Fallback reader | none by default |
 | Retriever embedding | `Snowflake/snowflake-arctic-embed-m-v1.5` |
@@ -254,6 +262,50 @@ Run the full QA subset at the default `10000`-token context budget:
 ```bash
 python run_benchmark.py --run-tier subset --overwrite-existing
 ```
+
+## Ordering-Only Ablation
+
+The ordering-family experiment is intentionally narrower than the full method
+benchmark. It asks:
+
+> Given the same selected chunk set, does changing only prompt chunk order
+> change QA accuracy?
+
+For this experiment, the following are held fixed across methods:
+
+- repo chunking
+- embedding model
+- per-document FAISS retrieval
+- greedy context-budget selection
+- final selected chunk set
+- reader prompt template and generation settings
+
+Only the final concatenation order of the selected chunks changes.
+
+The ordering-family methods are:
+
+- `vanilla_rag`
+- `reorder_only_rag`
+- `reverse_order_rag`
+- `random_order_rag`
+- `anchor1_doc_order_rag`
+- `anchor2_doc_order_rag`
+
+Important caveat:
+
+- Do **not** use `dos_rag` for causal conclusions in this ordering-only study.
+  The official DOS adapter uses a different chunking and retrieval core, so it
+  does not isolate prompt order alone.
+
+Each ordering-family result row now records:
+
+- retrieval-rank order and final prompt order
+- `selected_set_signature` so shared-set invariants can be checked later
+- `ordering_policy`
+- `ordering_random_seed` for `random_order_rag`
+- `anchor_chunk_indices` and `tail_chunk_indices` for anchor methods
+- `prompt_chunk_trace` with prompt position, retrieval rank, chunk score, and
+  estimated prompt-context token span
 
 ## Machine Commands
 
@@ -378,6 +430,41 @@ sweeps.
 The benchmark now standardizes on `Qwen/Qwen2.5-7B-Instruct` for these sweeps
 so results stay comparable across runs on shared A40 machines.
 
+### Ordering-only experiment commands
+
+Run the dedicated all-five-task smoke check for the ordering-family methods
+(`max_samples=2` per task, `context_budget=10000`):
+
+```bash
+bash scripts/run_ordering_ablation_smoke.sh \
+  outputs/experiments/ordering_ablation_smoke \
+  --overwrite-existing
+```
+
+Run the main 50-example subset ordering-only experiment at `10000` context
+tokens:
+
+```bash
+bash scripts/run_ordering_ablation_subset_10000.sh \
+  outputs/experiments/ordering_ablation_subset_10000 \
+  --overwrite-existing
+```
+
+Run the subset budget sweep for the same six ordering-family methods at
+`500`, `1500`, `5000`, and `10000` context tokens:
+
+```bash
+bash scripts/run_ordering_ablation_subset_budget_sweep.sh \
+  outputs/experiments/ordering_ablation_subset_budget_sweep \
+  --overwrite-existing
+```
+
+The ordering-only helper scripts are:
+
+- `scripts/run_ordering_ablation_smoke.sh`
+- `scripts/run_ordering_ablation_subset_10000.sh`
+- `scripts/run_ordering_ablation_subset_budget_sweep.sh`
+
 ## Analysis
 
 Generate post-hoc artifacts from saved outputs:
@@ -416,6 +503,35 @@ Analysis artifacts include:
 - agreement tables between methods
 - qualitative case exports
 - retrieval evidence-rank summaries
+
+Analyze the dedicated ordering-only smoke or subset runs:
+
+```bash
+python analyze_ordering_position_ablation.py \
+  --run-root outputs/experiments/ordering_ablation_smoke/subset
+```
+
+```bash
+python analyze_ordering_position_ablation.py \
+  --run-root outputs/experiments/ordering_ablation_subset_10000/subset
+```
+
+Analyze the ordering-only budget sweep:
+
+```bash
+for b in 500 1500 5000 10000; do
+  python analyze_ordering_position_ablation.py \
+    --run-root outputs/experiments/ordering_ablation_subset_budget_sweep/context_$b/subset
+done
+```
+
+The ordering-only analysis writes:
+
+- `task_level_scores.csv` and `.json`
+- `pairwise_example_outcomes.csv`
+- `bootstrap_deltas.json`
+- `ordering_diagnostics.csv`
+- `summary.md`
 
 ## Output Structure
 

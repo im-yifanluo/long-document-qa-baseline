@@ -17,6 +17,10 @@ documents on one shared SCROLLS surface:
 
 - `vanilla_rag`
 - `reorder_only_rag`
+- `reverse_order_rag`
+- `random_order_rag`
+- `anchor1_doc_order_rag`
+- `anchor2_doc_order_rag`
 - `dos_rag`
 - `raptor`
 - `read_agent_parallel`
@@ -77,7 +81,9 @@ Implemented in:
 This layer is responsible for:
 
 - the repo-owned `vanilla_rag` baseline
-- the repo-owned `reorder_only_rag` ordering ablation
+- the repo-owned ordering-only ablation family (`reorder_only_rag`,
+  `reverse_order_rag`, `random_order_rag`, `anchor1_doc_order_rag`,
+  `anchor2_doc_order_rag`)
 - the shared local reader model
 - report generation and downstream analysis
 

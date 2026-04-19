@@ -20,6 +20,7 @@ from benchmarking.config import (
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
     DEFAULT_METHODS,
+    DEFAULT_RANDOM_SEED,
     PAPER_LONG_QA_CONTEXT_BUDGETS,
     PAPER_SHORT_QA_CONTEXT_BUDGETS,
     SCROLLS_TASKS,
@@ -111,6 +112,7 @@ def parse_args():
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
 
     parser.add_argument("--analysis-sample-size", type=int, default=DEFAULT_ANALYSIS_SAMPLE_SIZE)
+    parser.add_argument("--random-seed", type=int, default=DEFAULT_RANDOM_SEED)
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument(
         "--dos-rag-repo-dir",
@@ -194,6 +196,7 @@ def main():
             methods=args.methods,
             run_tier=args.run_tier,
             analysis_sample_size=args.analysis_sample_size,
+            random_seed=args.random_seed,
             embedding_model=args.embedding_model,
             embedding_device=args.embedding_device,
             chunk_size=args.chunk_size,

@@ -10,6 +10,8 @@ Conceptually, the pipeline has three layers:
    - vanilla_rag: repo baseline retrieve-then-read
    - reorder_only_rag: repo ablation that reuses vanilla retrieval then restores
      the selected chunks to document order
+   - reverse_order_rag / random_order_rag / anchor{1,2}_doc_order_rag:
+     repo-owned ordering-only ablations over the exact same selected chunk set
    - dos_rag: official DOS-RAG adapter
    - raptor: official RAPTOR adapter
    - read_agent_parallel / read_agent_sequential: official ReadAgent-style
@@ -25,9 +27,11 @@ methods such as TreeRAG or GraphRAG can plug into ``_prepare_example`` without
 rewriting the rest of the runner.
 """
 
+import hashlib
 import json
 import logging
 import os
+import random
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
@@ -36,6 +40,7 @@ from benchmarking.chunker import TokenChunker
 from benchmarking.config import (
     BenchmarkConfig,
     DEFAULT_METHODS,
+    ORDERING_ABLATION_METHODS,
     RESULTS_FORMAT_VERSION,
     SYSTEM_PROMPTS,
     TASK_METRIC_TYPE,
@@ -50,6 +55,7 @@ from benchmarking.official_methods import OfficialMethodRunner
 from benchmarking.retriever import Retriever
 
 logger = logging.getLogger(__name__)
+ORDERING_ABLATION_METHOD_SET = set(ORDERING_ABLATION_METHODS)
 
 
 class BenchmarkPipeline:
@@ -129,6 +135,132 @@ class BenchmarkPipeline:
             return formatter(system_prompt, user_prompt)
         return f"{system_prompt}\n\n{user_prompt}"
 
+    def _separator_token_count(self) -> int:
+        if self.generator is None:
+            return 0
+        return self.generator.count_tokens("\n\n")
+
+    @staticmethod
+    def _selected_set_signature(indices: List[int]) -> str:
+        return ",".join(str(index) for index in indices)
+
+    def _random_order_seed(self, example: Dict[str, Any], method: str) -> int:
+        seed_text = (
+            f"{self.config.random_seed}:{example['task']}:{example['id']}:{method}"
+        )
+        return int(hashlib.sha256(seed_text.encode("utf-8")).hexdigest(), 16)
+
+    def _order_selected_chunks(
+        self,
+        selected: List[Dict[str, Any]],
+        method: str,
+        example: Dict[str, Any],
+    ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+        if method not in ORDERING_ABLATION_METHOD_SET:
+            raise ValueError(f"Unsupported ordering-ablation method: {method!r}")
+
+        selected_for_prompt = list(selected)
+        ordering_policy = "retrieval_rank"
+        prompt_ordering = "retrieval_rank"
+        ordering_random_seed: Optional[int] = None
+        anchor_chunk_indices: List[int] = []
+        tail_chunk_indices: List[int] = []
+
+        if method == "reorder_only_rag":
+            selected_for_prompt = sorted(selected, key=lambda chunk: chunk["index"])
+            ordering_policy = "document_order"
+            prompt_ordering = "document_order_from_vanilla_retrieval"
+        elif method == "reverse_order_rag":
+            selected_for_prompt = sorted(
+                selected,
+                key=lambda chunk: chunk["index"],
+                reverse=True,
+            )
+            ordering_policy = "reverse_document_order"
+            prompt_ordering = "reverse_document_order_from_vanilla_retrieval"
+        elif method == "random_order_rag":
+            ordering_random_seed = self._random_order_seed(example, method)
+            rng = random.Random(ordering_random_seed)
+            selected_for_prompt = list(selected)
+            rng.shuffle(selected_for_prompt)
+            ordering_policy = "deterministic_random_order"
+            prompt_ordering = "deterministic_random_order_from_vanilla_retrieval"
+        elif method in {"anchor1_doc_order_rag", "anchor2_doc_order_rag"}:
+            anchor_count = 1 if method == "anchor1_doc_order_rag" else 2
+            anchors = list(selected[:anchor_count])
+            anchor_chunk_indices = [chunk["index"] for chunk in anchors]
+            anchor_index_set = set(anchor_chunk_indices)
+            tail = [
+                chunk
+                for chunk in sorted(selected, key=lambda chunk: chunk["index"])
+                if chunk["index"] not in anchor_index_set
+            ]
+            tail_chunk_indices = [chunk["index"] for chunk in tail]
+            if len(selected) <= anchor_count:
+                selected_for_prompt = list(selected)
+            else:
+                selected_for_prompt = anchors + tail
+            if method == "anchor1_doc_order_rag":
+                ordering_policy = "top1_then_document_order_tail"
+                prompt_ordering = "top1_relevance_then_document_order_tail"
+            else:
+                ordering_policy = "top2_then_document_order_tail"
+                prompt_ordering = "top2_relevance_then_document_order_tail"
+
+        return selected_for_prompt, {
+            "ordering_policy": ordering_policy,
+            "prompt_ordering": prompt_ordering,
+            "ordering_random_seed": ordering_random_seed,
+            "anchor_chunk_indices": anchor_chunk_indices,
+            "tail_chunk_indices": tail_chunk_indices,
+        }
+
+    def _build_prompt_chunk_trace(
+        self,
+        selected_for_prompt: List[Dict[str, Any]],
+        selected_by_retrieval: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        retrieval_rank_by_index = {
+            chunk["index"]: chunk.get("rank")
+            for chunk in selected_by_retrieval
+            if chunk.get("index") is not None
+        }
+        separator_tokens = self._separator_token_count()
+        cursor = 0
+        trace: List[Dict[str, Any]] = []
+
+        for prompt_rank, chunk in enumerate(selected_for_prompt, start=1):
+            if prompt_rank > 1:
+                cursor += separator_tokens
+            token_count = chunk.get("token_count")
+            if token_count is None:
+                if self.chunker is not None:
+                    token_count = self.chunker.count_tokens(chunk.get("chunk", ""))
+                elif self.generator is not None:
+                    token_count = self.generator.count_tokens(chunk.get("chunk", ""))
+                else:
+                    token_count = 0
+            start_estimate = cursor
+            end_estimate = start_estimate + int(token_count)
+            trace.append(
+                {
+                    "prompt_rank": prompt_rank,
+                    "chunk_index": chunk.get("index"),
+                    "retrieval_rank": retrieval_rank_by_index.get(
+                        chunk.get("index"),
+                        chunk.get("rank"),
+                    ),
+                    "score": chunk.get("score"),
+                    "start_token": chunk.get("start_token"),
+                    "end_token": chunk.get("end_token"),
+                    "token_count": int(token_count),
+                    "prompt_context_start_token_estimate": start_estimate,
+                    "prompt_context_end_token_estimate": end_estimate,
+                }
+            )
+            cursor = end_estimate
+        return trace
+
     def _apply_prompt_trace_fields(self, row: Dict[str, Any]) -> bool:
         """Backfill prompt-trace fields for cached rows when possible."""
         changed = False
@@ -175,6 +307,90 @@ class BenchmarkPipeline:
                 user_prompt,
             )
             changed = True
+
+        method = row.get("method")
+        if method in ORDERING_ABLATION_METHOD_SET:
+            selected_by_retrieval = row.get("selected_chunks_by_retrieval") or []
+            if not selected_by_retrieval:
+                selected_by_retrieval = []
+                for index in row.get("selected_chunk_indices_by_retrieval", []):
+                    chunk = retrieved_by_index.get(index)
+                    if chunk is not None:
+                        selected_by_retrieval.append(chunk)
+
+            if any(
+                key not in row
+                for key in (
+                    "prompt_ordering",
+                    "ordering_policy",
+                    "ordering_random_seed",
+                    "anchor_chunk_indices",
+                    "tail_chunk_indices",
+                    "prompt_chunk_trace",
+                    "selected_set_signature",
+                )
+            ):
+                example_stub = {
+                    "id": row.get("id"),
+                    "task": row.get("task"),
+                }
+                ordered_chunks, ordering_meta = self._order_selected_chunks(
+                    selected_by_retrieval,
+                    method,
+                    example_stub,
+                )
+                row.setdefault(
+                    "selected_chunk_indices_by_retrieval",
+                    [chunk.get("index") for chunk in selected_by_retrieval],
+                )
+                row.setdefault(
+                    "selected_chunk_indices",
+                    [chunk.get("index") for chunk in ordered_chunks],
+                )
+                if "selected_chunks" not in row or row.get("selected_chunks") != ordered_chunks:
+                    row["selected_chunks"] = [dict(chunk) for chunk in ordered_chunks]
+                    changed = True
+                if "context_text" not in row:
+                    row["context_text"] = "\n\n".join(
+                        chunk.get("chunk", "") for chunk in ordered_chunks
+                    )
+                    changed = True
+                for key, value in ordering_meta.items():
+                    if row.get(key) != value:
+                        row[key] = value
+                        changed = True
+                prompt_chunk_trace = self._build_prompt_chunk_trace(
+                    ordered_chunks,
+                    selected_by_retrieval,
+                )
+                if row.get("prompt_chunk_trace") != prompt_chunk_trace:
+                    row["prompt_chunk_trace"] = prompt_chunk_trace
+                    changed = True
+                selected_set_signature = self._selected_set_signature(
+                    row.get("selected_chunk_indices_by_retrieval", [])
+                )
+                if row.get("selected_set_signature") != selected_set_signature:
+                    row["selected_set_signature"] = selected_set_signature
+                    changed = True
+            else:
+                row.setdefault("selected_set_signature", self._selected_set_signature(
+                    row.get("selected_chunk_indices_by_retrieval", [])
+                ))
+        else:
+            defaults = {
+                "ordering_policy": None,
+                "ordering_random_seed": None,
+                "anchor_chunk_indices": [],
+                "tail_chunk_indices": [],
+                "prompt_chunk_trace": [],
+                "selected_set_signature": self._selected_set_signature(
+                    row.get("selected_chunk_indices_by_retrieval", [])
+                ),
+            }
+            for key, value in defaults.items():
+                if key not in row:
+                    row[key] = value
+                    changed = True
 
         return changed
 
@@ -281,7 +497,7 @@ class BenchmarkPipeline:
         The returned dict is not just a prompt container. It also stores the
         retrieval trace needed for error analysis and qualitative inspection.
         """
-        if method not in {"vanilla_rag", "reorder_only_rag", "dos_rag"}:
+        if method not in ORDERING_ABLATION_METHOD_SET:
             raise ValueError(f"Unsupported retrieval method: {method!r}")
 
         task_type = TASK_TYPE[example["task"]]
@@ -313,15 +529,11 @@ class BenchmarkPipeline:
             selected.append(record)
             budget_used += tok_len
 
-        if method in {"reorder_only_rag", "dos_rag"}:
-            selected_for_prompt = sorted(selected, key=lambda x: x["index"])
-            if method == "reorder_only_rag":
-                prompt_ordering = "document_order_from_vanilla_retrieval"
-            else:
-                prompt_ordering = "document_order"
-        else:
-            selected_for_prompt = list(selected)
-            prompt_ordering = "retrieval_rank"
+        selected_for_prompt, ordering_meta = self._order_selected_chunks(
+            selected,
+            method,
+            example,
+        )
         context = "\n\n".join(r["chunk"] for r in selected_for_prompt)
 
         system_prompt = SYSTEM_PROMPTS[task_type]
@@ -334,7 +546,14 @@ class BenchmarkPipeline:
         )
 
         method_info = None
-        if method == "reorder_only_rag":
+        if method in ORDERING_ABLATION_METHOD_SET and method != "vanilla_rag":
+            ordering_notes = {
+                "reorder_only_rag": "Selected chunks are restored to ascending original document order before reading.",
+                "reverse_order_rag": "Selected chunks are restored to descending original document order before reading.",
+                "random_order_rag": "Selected chunks are shuffled with a deterministic hash-derived seed after budget selection.",
+                "anchor1_doc_order_rag": "The highest-ranked retrieved chunk stays first and the remaining selected chunks are restored to document order.",
+                "anchor2_doc_order_rag": "The top two retrieved chunks stay first and the remaining selected chunks are restored to document order.",
+            }
             method_info = {
                 "official_source_repo": None,
                 "official_artifact": None,
@@ -345,9 +564,15 @@ class BenchmarkPipeline:
                 ],
                 "adapter_notes": [
                     "This method reuses the exact retrieved chunk set from the repo's vanilla_rag baseline.",
-                    "Only the prompt ordering changes: selected chunks are restored to document order before reading.",
+                    "Only the prompt ordering changes after greedy budget selection has already finalized the selected chunk set.",
+                    ordering_notes[method],
                 ],
             }
+        prompt_chunk_trace = self._build_prompt_chunk_trace(
+            selected_for_prompt,
+            selected,
+        )
+        selected_chunk_indices_by_retrieval = [r["index"] for r in selected]
 
         return {
             "id": example["id"],
@@ -364,7 +589,11 @@ class BenchmarkPipeline:
             "document_truncated": False,
             "answer_position_ratio": ref_ratio,
             "answer_position_bucket": ref_bucket,
-            "prompt_ordering": prompt_ordering,
+            "prompt_ordering": ordering_meta["prompt_ordering"],
+            "ordering_policy": ordering_meta["ordering_policy"],
+            "ordering_random_seed": ordering_meta["ordering_random_seed"],
+            "anchor_chunk_indices": ordering_meta["anchor_chunk_indices"],
+            "tail_chunk_indices": ordering_meta["tail_chunk_indices"],
             "context_text": context,
             "retrieved_chunks": retrieved,
             "retrieval_scores": [r["score"] for r in retrieved],
@@ -377,10 +606,14 @@ class BenchmarkPipeline:
                 }
                 for r in retrieved
             ],
+            "prompt_chunk_trace": prompt_chunk_trace,
             "selected_chunks": [dict(r) for r in selected_for_prompt],
             "selected_chunks_by_retrieval": [dict(r) for r in selected],
             "selected_chunk_indices": [r["index"] for r in selected_for_prompt],
-            "selected_chunk_indices_by_retrieval": [r["index"] for r in selected],
+            "selected_chunk_indices_by_retrieval": selected_chunk_indices_by_retrieval,
+            "selected_set_signature": self._selected_set_signature(
+                selected_chunk_indices_by_retrieval
+            ),
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
@@ -443,13 +676,21 @@ class BenchmarkPipeline:
             "document_truncated": truncated,
             "answer_position_ratio": ref_ratio,
             "answer_position_bucket": ref_bucket,
+            "prompt_ordering": "long_context",
+            "ordering_policy": None,
+            "ordering_random_seed": None,
+            "anchor_chunk_indices": [],
+            "tail_chunk_indices": [],
             "context_text": context,
             "retrieved_chunks": [],
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "prompt_chunk_trace": [],
             "selected_chunks": [],
             "selected_chunks_by_retrieval": [],
             "selected_chunk_indices": [],
+            "selected_chunk_indices_by_retrieval": [],
+            "selected_set_signature": "",
             "model_name": self.generator.active_model,
             "system_prompt": system_prompt,
             "user_prompt": user_prompt,
@@ -471,7 +712,7 @@ class BenchmarkPipeline:
 
     def _prepare_example(self, example: Dict, method: str) -> Dict[str, Any]:
         """Dispatch one example to its method-specific prompt builder."""
-        if method in {"vanilla_rag", "reorder_only_rag"}:
+        if method in ORDERING_ABLATION_METHOD_SET:
             return self._prepare_retrieval_example(example, method)
         if method == "long_context":
             return self._prepare_long_context_example(example)
@@ -507,13 +748,21 @@ class BenchmarkPipeline:
             "num_retrieved": 0,
             "num_context_chunks": 0,
             "document_truncated": False,
+            "prompt_ordering": None,
+            "ordering_policy": None,
+            "ordering_random_seed": None,
+            "anchor_chunk_indices": [],
+            "tail_chunk_indices": [],
             "context_text": "",
             "retrieved_chunks": [],
             "retrieval_scores": [],
             "chunk_offsets": [],
+            "prompt_chunk_trace": [],
             "selected_chunks": [],
             "selected_chunks_by_retrieval": [],
             "selected_chunk_indices": [],
+            "selected_chunk_indices_by_retrieval": [],
+            "selected_set_signature": "",
             "model_name": self.generator.active_model,
             "system_prompt": "",
             "user_prompt": "",
