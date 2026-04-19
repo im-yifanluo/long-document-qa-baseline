@@ -1,0 +1,27 @@
+{
+  "task": "qasper",
+  "method": "anchor2_doc_order_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 29.7282,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 116.48,
+    "scrolls_score": 29.7282,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      29.7282
+    ]
+  },
+  "elapsed_seconds": 14.11,
+  "token_stats": {
+    "avg_input_tokens": 583.38,
+    "avg_context_tokens": 455.34,
+    "avg_generation_tokens": 25.94,
+    "total_input_tokens": 29169
+  },
+  "results_file": "outputs/experiments/ordering_ablation_subset_budget_sweep/context_500/subset/anchor2_doc_order_rag/qasper/results.jsonl"
+}

@@ -1,0 +1,27 @@
+{
+  "task": "narrative_qa",
+  "method": "anchor2_doc_order_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 15.0063,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 89.74,
+    "scrolls_score": 15.0063,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      15.0063
+    ]
+  },
+  "elapsed_seconds": 343.33,
+  "token_stats": {
+    "avg_input_tokens": 5086.64,
+    "avg_context_tokens": 4957.38,
+    "avg_generation_tokens": 20.76,
+    "total_input_tokens": 254332
+  },
+  "results_file": "outputs/experiments/ordering_ablation_subset_budget_sweep/context_5000/subset/anchor2_doc_order_rag/narrative_qa/results.jsonl"
+}

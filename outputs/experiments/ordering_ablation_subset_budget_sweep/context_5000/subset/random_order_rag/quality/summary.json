@@ -1,0 +1,27 @@
+{
+  "task": "quality",
+  "method": "random_order_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "exact_match",
+  "metrics": {
+    "exact_match": 56.0,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 61.6,
+    "scrolls_score": 56.0,
+    "display_keys": [
+      "exact_match"
+    ],
+    "display": [
+      56.0
+    ]
+  },
+  "elapsed_seconds": 49.95,
+  "token_stats": {
+    "avg_input_tokens": 5129.72,
+    "avg_context_tokens": 4956.66,
+    "avg_generation_tokens": 12.82,
+    "total_input_tokens": 256486
+  },
+  "results_file": "outputs/experiments/ordering_ablation_subset_budget_sweep/context_5000/subset/random_order_rag/quality/results.jsonl"
+}

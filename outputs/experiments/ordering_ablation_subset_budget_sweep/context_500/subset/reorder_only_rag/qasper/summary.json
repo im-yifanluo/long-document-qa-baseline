@@ -1,0 +1,27 @@
+{
+  "task": "qasper",
+  "method": "reorder_only_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "f1",
+  "metrics": {
+    "f1": 38.8096,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 85.52,
+    "scrolls_score": 38.8096,
+    "display_keys": [
+      "f1"
+    ],
+    "display": [
+      38.8096
+    ]
+  },
+  "elapsed_seconds": 14.55,
+  "token_stats": {
+    "avg_input_tokens": 583.38,
+    "avg_context_tokens": 455.34,
+    "avg_generation_tokens": 19.22,
+    "total_input_tokens": 29169
+  },
+  "results_file": "outputs/experiments/ordering_ablation_subset_budget_sweep/context_500/subset/reorder_only_rag/qasper/results.jsonl"
+}

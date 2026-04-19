@@ -1,0 +1,27 @@
+{
+  "task": "contract_nli",
+  "method": "anchor2_doc_order_rag",
+  "num_examples": 50,
+  "num_generated": 50,
+  "metric_type": "exact_match",
+  "metrics": {
+    "exact_match": 64.0,
+    "num_predicted": 50,
+    "mean_prediction_length_characters": 11.98,
+    "scrolls_score": 64.0,
+    "display_keys": [
+      "exact_match"
+    ],
+    "display": [
+      64.0
+    ]
+  },
+  "elapsed_seconds": 34.15,
+  "token_stats": {
+    "avg_input_tokens": 3600.82,
+    "avg_context_tokens": 3492.86,
+    "avg_generation_tokens": 2.44,
+    "total_input_tokens": 180041
+  },
+  "results_file": "outputs/experiments/ordering_ablation_subset_budget_sweep/context_5000/subset/anchor2_doc_order_rag/contract_nli/results.jsonl"
+}
