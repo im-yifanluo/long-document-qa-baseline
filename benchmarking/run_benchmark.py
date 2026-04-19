@@ -16,6 +16,7 @@ import sys
 from benchmarking.config import (
     BenchmarkConfig,
     DEFAULT_ANALYSIS_SAMPLE_SIZE,
+    DEFAULT_CONTEXT_BUDGET,
     DEFAULT_EMBEDDING_MODEL,
     DEFAULT_FALLBACK_LLM_MODEL,
     DEFAULT_LLM_MODEL,
@@ -84,7 +85,7 @@ def parse_args():
         default=None,
         help="Override the retrieval candidate cap. By default this is derived from the context budget using the paper-style heuristic.",
     )
-    parser.add_argument("--context-budget", type=int, default=10000)
+    parser.add_argument("--context-budget", type=int, default=DEFAULT_CONTEXT_BUDGET)
     parser.add_argument(
         "--context-budgets",
         nargs="+",

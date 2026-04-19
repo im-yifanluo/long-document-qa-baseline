@@ -178,7 +178,7 @@ DEFAULT_FALLBACK_LLM_MODEL = None
 
 # The DOS RAG paper uses Snowflake Arctic Embed m v1.5 for dense retrieval.
 DEFAULT_EMBEDDING_MODEL = "Snowflake/snowflake-arctic-embed-m-v1.5"
-DEFAULT_CONTEXT_BUDGET = 10_000
+DEFAULT_CONTEXT_BUDGET = 5_000
 
 # Long-context is intentionally not an active benchmark method right now, but
 # the config keeps a placeholder budget so the method can be reintroduced later
@@ -187,7 +187,7 @@ DEFAULT_LC_CONTEXT_BUDGET = 131_072
 
 # DOS/vanilla RAG select chunks until the token budget is hit, so top-k should
 # be comfortably larger than the final number of chunks that fit in context.
-DEFAULT_TOP_K = 200
+DEFAULT_TOP_K = 100
 PAPER_LONG_QA_CONTEXT_BUDGETS: List[int] = [1500, 5000, 10000, 20000, 30000, 40000]
 PAPER_SHORT_QA_CONTEXT_BUDGETS: List[int] = [500, 1000, 1500, 2000, 4000, 6000, 8000]
 DEFAULT_ANALYSIS_SAMPLE_SIZE = 30

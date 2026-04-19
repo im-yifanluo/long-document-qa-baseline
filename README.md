@@ -158,7 +158,7 @@ cache audit above was only completed for the four tasks listed here.
 | Chunking | sentence-aware |
 | Chunk size | `100` tokens |
 | Chunk overlap | `0` |
-| Retrieval context budget | `10000` tokens |
+| Retrieval context budget | `5000` tokens |
 | `top_k` default | derived as `ceil(context_budget / 50)` |
 | Thinking mode | off |
 
@@ -257,7 +257,7 @@ Run the official-benchmark smoke tier:
 python run_benchmark.py --run-tier smoke --overwrite-existing
 ```
 
-Run the full QA subset at the default `10000`-token context budget:
+Run the full QA subset at the default `5000`-token context budget:
 
 ```bash
 python run_benchmark.py --run-tier subset --overwrite-existing
@@ -318,47 +318,47 @@ source venv/bin/activate
 
 ### Single method on the SCROLLS QA subset
 
-Run `vanilla_rag` on the SCROLLS subset at `10000` context tokens:
+Run `vanilla_rag` on the SCROLLS subset at `5000` context tokens:
 
 ```bash
 python run_benchmark.py \
   --run-tier subset \
   --methods vanilla_rag \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_vanilla_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_vanilla_5k \
   --overwrite-existing
 ```
 
-Run `reorder_only_rag` on the SCROLLS subset at `10000` context tokens:
+Run `reorder_only_rag` on the SCROLLS subset at `5000` context tokens:
 
 ```bash
 python run_benchmark.py \
   --run-tier subset \
   --methods reorder_only_rag \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_reorder_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_reorder_5k \
   --overwrite-existing
 ```
 
-Run `dos_rag` on the SCROLLS subset at `10000` context tokens:
+Run `dos_rag` on the SCROLLS subset at `5000` context tokens:
 
 ```bash
 python run_benchmark.py \
   --run-tier subset \
   --methods dos_rag \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_dos_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_dos_5k \
   --overwrite-existing
 ```
 
-Run `raptor` on the SCROLLS subset at `10000` context tokens:
+Run `raptor` on the SCROLLS subset at `5000` context tokens:
 
 ```bash
 python run_benchmark.py \
   --run-tier subset \
   --methods raptor \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_raptor_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_raptor_5k \
   --overwrite-existing
 ```
 
@@ -369,8 +369,8 @@ python run_benchmark.py \
   --run-tier subset \
   --methods read_agent_parallel \
   --tasks qmsum narrative_qa quality \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_readagent_parallel_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_readagent_parallel_5k \
   --overwrite-existing
 ```
 
@@ -381,8 +381,8 @@ python run_benchmark.py \
   --run-tier subset \
   --methods read_agent_sequential \
   --tasks qmsum narrative_qa quality \
-  --context-budget 10000 \
-  --output-dir outputs/experiments/subset_readagent_sequential_10k \
+  --context-budget 5000 \
+  --output-dir outputs/experiments/subset_readagent_sequential_5k \
   --overwrite-existing
 ```
 
@@ -432,8 +432,13 @@ so results stay comparable across runs on shared A40 machines.
 
 ### Ordering-only experiment commands
 
+For the ordering-family study, the budget sweep is the primary benchmark.
+Use a single-budget run only as a quick check, and prefer `5000` over `10000`.
+At `10000`, several tasks often approach full-document coverage, which makes it
+less useful as the headline ordering benchmark.
+
 Run the dedicated all-five-task smoke check for the ordering-family methods
-(`max_samples=2` per task, `context_budget=10000`):
+(`max_samples=2` per task, default `context_budget=5000`):
 
 ```bash
 bash scripts/run_ordering_ablation_smoke.sh \
@@ -441,16 +446,16 @@ bash scripts/run_ordering_ablation_smoke.sh \
   --overwrite-existing
 ```
 
-Run the main 50-example subset ordering-only experiment at `10000` context
-tokens:
+Run the quick single-budget 50-example subset ordering-only experiment at
+`5000` context tokens:
 
 ```bash
-bash scripts/run_ordering_ablation_subset_10000.sh \
-  outputs/experiments/ordering_ablation_subset_10000 \
+bash scripts/run_ordering_ablation_subset_5000.sh \
+  outputs/experiments/ordering_ablation_subset_5000 \
   --overwrite-existing
 ```
 
-Run the subset budget sweep for the same six ordering-family methods at
+Run the main subset budget sweep for the same six ordering-family methods at
 `500`, `1500`, `5000`, and `10000` context tokens:
 
 ```bash
@@ -462,7 +467,7 @@ bash scripts/run_ordering_ablation_subset_budget_sweep.sh \
 The ordering-only helper scripts are:
 
 - `scripts/run_ordering_ablation_smoke.sh`
-- `scripts/run_ordering_ablation_subset_10000.sh`
+- `scripts/run_ordering_ablation_subset_5000.sh`
 - `scripts/run_ordering_ablation_subset_budget_sweep.sh`
 
 ## Analysis
@@ -513,7 +518,7 @@ python analyze_ordering_position_ablation.py \
 
 ```bash
 python analyze_ordering_position_ablation.py \
-  --run-root outputs/experiments/ordering_ablation_subset_10000/subset
+  --run-root outputs/experiments/ordering_ablation_subset_5000/subset
 ```
 
 Analyze the ordering-only budget sweep:
