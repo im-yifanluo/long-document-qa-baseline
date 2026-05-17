@@ -153,7 +153,7 @@ class ScrollsLoaderFidelityTests(unittest.TestCase):
         self.assertTrue(row["document"].startswith("OISAIR PROJECT"))
 
 
-class OfficialMethodAdapterSmokeTests(unittest.TestCase):
+class OfficialMethodAdapterQuickTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.config = BenchmarkConfig(
@@ -173,7 +173,7 @@ class OfficialMethodAdapterSmokeTests(unittest.TestCase):
         runner = OfficialMethodRunner(self.config, generator=_StubGenerator(), embedder=_StubEmbedder())
         self.assertIn("read-agent.github.io", runner._resolve_method_repo_root("read_agent_parallel"))
 
-    def test_readagent_page_and_gist_flow_can_be_smoke_stubbed(self):
+    def test_readagent_page_and_gist_flow_can_be_quick_stubbed(self):
         runner = OfficialMethodRunner(self.config, generator=_StubGenerator(), embedder=_StubEmbedder())
         state = runner._build_read_agent_state(
             {

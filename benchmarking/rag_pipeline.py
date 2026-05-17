@@ -1709,7 +1709,3 @@ class BenchmarkPipeline:
         print(f"  Comparison report saved to: {path}")
         print(f"  Example cases saved to: {artifact_paths['comparison_examples_jsonl']}")
         print(f"  Markdown report saved to: {artifact_paths['comparison_report_markdown']}")
-
-
-# Backwards-compatible alias.
-RAGPipeline = BenchmarkPipeline

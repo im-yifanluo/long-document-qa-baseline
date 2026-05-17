@@ -1,173 +1,59 @@
-# SCROLLS Retrieval Benchmark
+# SCROLLS Context Assembly Benchmark
 
-This repo benchmarks long-document QA and query-conditioned summarization methods on
-SCROLLS.
+This repository benchmarks long-document QA retrieval methods on SCROLLS with a
+specific focus on context assembly: after retrieval finds candidate chunks, how
+should a fixed-size reference be selected and ordered before a reader model
+answers?
 
-The code is now split by purpose:
+The code supports:
 
-- `benchmarking/`: benchmark execution, adapters, retrieval pipeline, and CLIs
-- `analysis/`: post-hoc result analysis and notebooks
-- `scripts/`: user-facing shell helpers for repeated sweeps and server runs
-- root-level `*.py` entrypoints: thin compatibility wrappers so existing server commands still work
+- official SCROLLS data loading from released task archives
+- official SCROLLS scoring through the released metric files
+- repo-owned flat RAG and ordering-only ablations
+- adapters around released DOS-RAG, RAPTOR, and ReadAgent artifacts
+- post-hoc analysis over saved benchmark outputs
 
-The benchmark is intentionally hybrid:
+The semester report is submitted separately. This README is only for running and
+maintaining the benchmark code.
 
-- SCROLLS data loading and evaluation follow the official benchmark assets.
-- DOS-RAG, RAPTOR, and ReadAgent are integrated from their official released
-  repos or prompts where available.
-- Any method-to-SCROLLS glue code in this repo is treated as adapter logic and
-  documented as such.
+## Repository Layout
 
-The current comparison surface is:
+```text
+benchmarking/   benchmark configuration, data loading, methods, generation, reports
+analysis/       post-hoc analysis scripts and notebooks
+tests/          unit and fidelity tests
+scripts/        repeatable experiment launchers
+docs/           architecture and output-format notes
+third_party/    external repos pinned as git submodules
+```
 
-- `vanilla_rag`: repo-owned baseline
-- `reorder_only_rag`: repo-owned ablation that reuses vanilla retrieval and only restores selected chunks to document order
-- `reverse_order_rag`: repo-owned negative-control ablation that reverses the selected chunks into reverse document order
-- `random_order_rag`: repo-owned deterministic shuffle ablation over the same selected chunk set
-- `anchor1_doc_order_rag`: repo-owned hybrid that keeps the top-1 retrieved chunk first, then restores the tail to document order
-- `anchor2_doc_order_rag`: repo-owned hybrid that keeps the top-2 retrieved chunks first, then restores the tail to document order
-- `dos_rag`: SCROLLS adapter around the official DOS-RAG retrieval core
-- `raptor`: SCROLLS adapter around the official RAPTOR tree builder/retriever
-- `read_agent_parallel`: SCROLLS adapter around the official ReadAgent parallel prompt flow
-- `read_agent_sequential`: SCROLLS adapter around the official ReadAgent sequential prompt flow
+Root-level compatibility wrappers were removed. Use module commands or the
+console scripts declared in `pyproject.toml`.
 
-`long_context` code still exists as an experimental scaffold, but it is not part
-of the active benchmark defaults.
+## Methods
 
-## Fidelity Contract
+Repo-owned methods:
 
-This repo makes three separate claims, and keeps them separate in both code and
-documentation.
+- `vanilla_rag`: dense retrieval, relevance-ranked context assembly
+- `reorder_only_rag`: same selected chunks as `vanilla_rag`, restored to document order
+- `reverse_order_rag`: same selected chunks, reverse document order
+- `random_order_rag`: same selected chunks, deterministic shuffled order
+- `anchor1_doc_order_rag`: top retrieved chunk first, remaining chunks in document order
+- `anchor2_doc_order_rag`: top two retrieved chunks first, remaining chunks in document order
 
-### 1. Official SCROLLS benchmark behavior
+External-method adapters:
 
-Official here means:
+- `dos_rag`: adapter around `alex-laitenberger/dos-rag-eval`
+- `raptor`: adapter around `parthsarthi03/raptor`
+- `read_agent_parallel`: adapter around the released ReadAgent notebook prompt flow
+- `read_agent_sequential`: sequential variant of the ReadAgent prompt flow
 
-- data comes from the released `tau/scrolls` task archives
-- validation duplicate ids are collapsed exactly into one prediction vs many
-  references, matching the official evaluator behavior
-- scoring calls the released `tau/scrolls/metrics/*.py` files directly
-- raw model predictions are scored without benchmark-side answer rewriting
+The external adapters reuse released method components where practical, but the
+SCROLLS input mapping, local reader, and report schema are repo-specific.
 
-### 2. Official method behavior
+## Tasks
 
-Official here means:
-
-- DOS-RAG uses the released `dos-rag-eval` chunking and retrieval core
-- RAPTOR uses the released `parthsarthi03/raptor` tree builder and retriever
-- ReadAgent uses the released prompt workflow from
-  `read-agent.github.io/assets/read_agent_demo.ipynb`
-
-### 3. Repo-specific adapter behavior
-
-Adapter logic here means:
-
-- splitting SCROLLS packed `input` into `document` and `query` for retrieval
-- handing method-produced context to one shared local reader model
-- converting method traces into a common report format
-- discovering cloned official repos on disk
-
-This repo does **not** claim that DOS-RAG, RAPTOR, or ReadAgent were released by
-their authors as native SCROLLS runners. They were not. This repo adapts those
-official method implementations onto SCROLLS.
-
-## Method Provenance
-
-| Method | Official source | Used unchanged | Adapter/shared parts in this repo |
-|---|---|---|---|
-| `vanilla_rag` | none | none | repo-owned chunking, retrieval, prompting, shared reader |
-| `reorder_only_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to document order |
-| `reverse_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to reverse document order |
-| `random_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that only changes prompt ordering to a deterministic shuffle |
-| `anchor1_doc_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that anchors top-1 retrieval first, then restores the tail to document order |
-| `anchor2_doc_order_rag` | none | same retrieved chunk set as `vanilla_rag` | repo-owned ablation that anchors top-2 retrieval first, then restores the tail to document order |
-| `dos_rag` | `alex-laitenberger/dos-rag-eval` | DOS chunking, dense retrieval, retrieve-then-restore-document-order behavior | SCROLLS loader, shared local reader, report schema |
-| `raptor` | `parthsarthi03/raptor` | RAPTOR tree construction and tree retrieval | SCROLLS loader, shared local reader, pinned summarizer/embedder for controlled comparison |
-| `read_agent_parallel` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, page look-up prompt flow | SCROLLS input adaptation, shared local reader |
-| `read_agent_sequential` | `read-agent/read-agent.github.io` notebook prompts | pagination, gisting, sequential page look-up prompt flow | SCROLLS input adaptation, shared local reader |
-
-## How SCROLLS Is Implemented Here
-
-### Official loading
-
-SCROLLS is loaded from the official Hugging Face dataset repository:
-
-- source repo: `tau/scrolls`
-- artifacts used here: the released task zip files such as `qmsum.zip` and
-  `qasper.zip`
-- loader reference: the released `scrolls.py` dataset script
-
-Why archives instead of `load_dataset("tau/scrolls")`?
-
-- modern `datasets` versions deprecated the old script-loader path used by
-  SCROLLS
-- this repo therefore reads the same released archive files directly
-- duplicate-id handling is preserved explicitly in `benchmarking/data_loader.py`
-
-### Official evaluation
-
-SCROLLS scoring is delegated to the released official metric files:
-
-- `metrics/scrolls.py`
-- `metrics/rouge.py`
-- `metrics/f1.py`
-- `metrics/exact_match.py`
-
-The only local wrapper logic is:
-
-- locating those files in the local Hugging Face cache or downloading them
-- loading them as an importable module
-- providing a tiny compatibility shim because newer `datasets` releases removed
-  the legacy `datasets.Metric` base class the official script subclasses
-
-The scoring math itself is the official SCROLLS implementation.
-
-### Adapter preprocessing: `input -> document/query`
-
-SCROLLS itself defines examples as packed `input` strings plus gold `output`
-strings. Retrieval methods need a structured `document` and `query`, so this
-repo derives them in `benchmarking/data_loader.py`.
-
-That split is **not** official SCROLLS behavior. It is explicit adapter logic
-for running retrieval methods on SCROLLS.
-
-## Parser Audit
-
-The following task-specific split rules were checked directly against locally
-cached official validation examples.
-
-| Task | Adapter rule | Verified against local official cache? |
-|---|---|---|
-| `qmsum` | first blank-line split: query first, transcript second | yes |
-| `qasper` | first blank-line split: question first, paper second | yes |
-| `quality` | question plus `(A)-(D)` options first, article second | yes |
-| `contract_nli` | hypothesis first, contract second | yes |
-
-Other tasks still use explicit parser rules in `benchmarking/data_loader.py`, but the local
-cache audit above was only completed for the four tasks listed here.
-
-## Current Defaults
-
-| Parameter | Value |
-|---|---|
-| Default methods | `vanilla_rag`, `dos_rag` |
-| Additional methods | `reorder_only_rag`, `reverse_order_rag`, `random_order_rag`, `anchor1_doc_order_rag`, `anchor2_doc_order_rag`, `raptor`, `read_agent_parallel`, `read_agent_sequential` |
-| Reader | `Qwen/Qwen2.5-7B-Instruct` |
-| Fallback reader | none by default |
-| Retriever embedding | `Snowflake/snowflake-arctic-embed-m-v1.5` |
-| Chunking | sentence-aware |
-| Chunk size | `100` tokens |
-| Chunk overlap | `0` |
-| Retrieval context budget | `5000` tokens |
-| `top_k` default | derived as `ceil(context_budget / 50)` |
-| Thinking mode | off |
-
-These defaults reflect the current benchmark focus: retrieval-based methods on a
-single local GPU system rather than 1M-token long-context inference.
-
-## Supported Tasks
-
-Official SCROLLS tasks:
+The full SCROLLS task list is:
 
 - `gov_report`
 - `summ_screen_fd`
@@ -177,8 +63,7 @@ Official SCROLLS tasks:
 - `quality`
 - `contract_nli`
 
-Default benchmark tiers currently focus on the QA-style and query-conditioned
-subset:
+Most ordering-ablation experiments use the QA and query-conditioned subset:
 
 - `qmsum`
 - `qasper`
@@ -186,432 +71,156 @@ subset:
 - `quality`
 - `contract_nli`
 
-ReadAgent support is narrower, because the released prompts in the official
-notebook target task families closest to:
+## Run Tiers
 
-- supported here: `quality`, `qmsum`, `narrative_qa`
-- not supported here: `gov_report`, `summ_screen_fd`, `qasper`, `contract_nli`
+The benchmark has four run tiers:
 
-Unsupported task/method combinations are reported explicitly rather than being
-silently scored as zero.
+| Tier | Default tasks | Samples per task | Purpose |
+|---|---:|---:|---|
+| `quick` | `qasper`, `quality` | 2 | fast end-to-end environment check |
+| `preflight` | all SCROLLS tasks | 1 | method/task compatibility check |
+| `subset` | QA subset | 50 | development-scale comparison |
+| `full` | QA subset | all validation rows | final benchmark run |
 
-## External Official Repos
-
-This repo expects the official method clones to exist locally.
-
-Current default layout:
+Generated outputs are written under:
 
 ```text
-long-document-qa-baseline/
-  third_party/
-    dos-rag-eval/
-    raptor/
-    read-agent.github.io/
+<output-dir>/<run-tier>/
 ```
 
-Repo discovery order for each official method is:
-
-1. CLI flag
-2. environment variable
-3. clone under `third_party/` inside this repo
-4. legacy clone at the repo root
-5. sibling `third_party/` directory next to this repo
-6. sibling directory next to this repo
-7. clone under `$HOME`
-
-Flags:
-
-- `--dos-rag-repo-dir`
-- `--raptor-repo-dir`
-- `--read-agent-repo-dir`
-
-Environment variables:
-
-- `DOS_RAG_REPO_DIR`
-- `RAPTOR_REPO_DIR`
-- `READ_AGENT_REPO_DIR`
+The default `output-dir` is `outputs`. The entire `outputs/` tree is ignored by
+git because raw benchmark results can become large. Keep final result bundles in
+an external artifact store such as the lab drive, Hugging Face Datasets, Zenodo,
+or a GitHub Release.
 
 ## Setup
+
+Clone with submodules:
+
+```bash
+git clone --recurse-submodules <repo-url>
+cd baseline_benchmark
+```
+
+If the repository was already cloned:
+
+```bash
+git submodule update --init --recursive
+```
+
+Create the environment:
 
 ```bash
 bash setup.sh
 source venv/bin/activate
 ```
 
-The benchmark requires the local `venv` because the reader, retrieval stack,
-and official method adapters have nontrivial dependencies.
+`setup.sh` requires Python 3.10, 3.11, or 3.12. The benchmark uses local model
+inference through vLLM, so a GPU environment is expected for real runs.
 
-## Quick Start
-
-Verify that the reader loads:
+For development checks, install:
 
 ```bash
-python test_generator.py \
+pip install -r requirements-dev.txt
+```
+
+## Common Commands
+
+Check that the reader model can load:
+
+```bash
+python -m benchmarking.check_generator \
   --llm-model Qwen/Qwen2.5-7B-Instruct \
-  --prompt "What is the capital of France?"
+  --prompt "Answer in one sentence: what is context assembly?"
 ```
 
-Run the official-benchmark smoke tier:
+Run a quick end-to-end check:
 
 ```bash
-python run_benchmark.py --run-tier smoke --overwrite-existing
+python -m benchmarking.quick_check --overwrite-existing
 ```
 
-Run the full QA subset at the default `5000`-token context budget:
+Run the default subset benchmark:
 
 ```bash
-python run_benchmark.py --run-tier subset --overwrite-existing
-```
-
-## Ordering-Only Ablation
-
-The ordering-family experiment is intentionally narrower than the full method
-benchmark. It asks:
-
-> Given the same selected chunk set, does changing only prompt chunk order
-> change QA accuracy?
-
-For this experiment, the following are held fixed across methods:
-
-- repo chunking
-- embedding model
-- per-document FAISS retrieval
-- greedy context-budget selection
-- final selected chunk set
-- reader prompt template and generation settings
-
-Only the final concatenation order of the selected chunks changes.
-
-The ordering-family methods are:
-
-- `vanilla_rag`
-- `reorder_only_rag`
-- `reverse_order_rag`
-- `random_order_rag`
-- `anchor1_doc_order_rag`
-- `anchor2_doc_order_rag`
-
-Important caveat:
-
-- Do **not** use `dos_rag` for causal conclusions in this ordering-only study.
-  The official DOS adapter uses a different chunking and retrieval core, so it
-  does not isolate prompt order alone.
-
-Each ordering-family result row now records:
-
-- retrieval-rank order and final prompt order
-- `selected_set_signature` so shared-set invariants can be checked later
-- `ordering_policy`
-- `ordering_random_seed` for `random_order_rag`
-- `anchor_chunk_indices` and `tail_chunk_indices` for anchor methods
-- `prompt_chunk_trace` with prompt position, retrieval rank, chunk score, and
-  estimated prompt-context token span
-
-## Machine Commands
-
-The following commands are intended to be copy-pasted on the target machine
-after setup:
-
-```bash
-source venv/bin/activate
-```
-
-### Single method on the SCROLLS QA subset
-
-Run `vanilla_rag` on the SCROLLS subset at `5000` context tokens:
-
-```bash
-python run_benchmark.py \
+python -m benchmarking.run_benchmark \
   --run-tier subset \
-  --methods vanilla_rag \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_vanilla_5k \
   --overwrite-existing
 ```
 
-Run `reorder_only_rag` on the SCROLLS subset at `5000` context tokens:
+Run the ordering ablation at a fixed 5000-token context budget:
 
 ```bash
-python run_benchmark.py \
-  --run-tier subset \
-  --methods reorder_only_rag \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_reorder_5k \
-  --overwrite-existing
+bash scripts/run_ordering_ablation_subset_5000.sh
 ```
 
-Run `dos_rag` on the SCROLLS subset at `5000` context tokens:
+Run the ordering budget sweep:
 
 ```bash
-python run_benchmark.py \
-  --run-tier subset \
-  --methods dos_rag \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_dos_5k \
-  --overwrite-existing
+bash scripts/run_ordering_ablation_subset_budget_sweep.sh
 ```
 
-Run `raptor` on the SCROLLS subset at `5000` context tokens:
+Analyze a saved subset run:
 
 ```bash
-python run_benchmark.py \
-  --run-tier subset \
-  --methods raptor \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_raptor_5k \
-  --overwrite-existing
+python -m analysis.analyze_outputs --run-tier subset
 ```
 
-Run `read_agent_parallel` on its supported subset tasks:
+Analyze an ordering-ablation run:
 
 ```bash
-python run_benchmark.py \
-  --run-tier subset \
-  --methods read_agent_parallel \
-  --tasks qmsum narrative_qa quality \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_readagent_parallel_5k \
-  --overwrite-existing
+python -m analysis.analyze_ordering_position_ablation \
+  --run-root outputs/experiments/ordering_ablation_subset_budget_sweep/context_5000/subset
 ```
 
-Run `read_agent_sequential` on its supported subset tasks:
+## Reproducibility Notes
+
+The defaults in `benchmarking/config.py` define the current comparison surface:
+
+- reader: `Qwen/Qwen2.5-7B-Instruct`
+- retriever embedding model: `Snowflake/snowflake-arctic-embed-m-v1.5`
+- chunk size: 100 tokens
+- chunk overlap: 0
+- default retrieval context budget: 5000 tokens
+- default random seed: 13
+
+Every saved result row records dataset, metric, method, model, and retrieval
+provenance. For controlled ordering ablations, the key invariant is that each
+method receives the same selected chunk set; only prompt order changes.
+
+## Tests
+
+Run the lightweight tests after installing development dependencies:
 
 ```bash
-python run_benchmark.py \
-  --run-tier subset \
-  --methods read_agent_sequential \
-  --tasks qmsum narrative_qa quality \
-  --context-budget 5000 \
-  --output-dir outputs/experiments/subset_readagent_sequential_5k \
-  --overwrite-existing
+python -m pytest
 ```
 
-### Budget sweeps
+The tests cover:
 
-Run `vanilla_rag` and `reorder_only_rag` on the full SCROLLS QA subset at
-`1500`, `5000`, and `10000` context tokens:
+- SCROLLS duplicate-id handling
+- official metric wrapper fidelity
+- ordering-ablation invariants
+- ReadAgent adapter prompt-flow stubs
 
-```bash
-bash scripts/run_vanilla_reorder_subset_budget_sweep.sh \
-  outputs/experiments/vanilla_reorder_subset_budget_sweep \
-  --overwrite-existing
-```
+## External Repos
 
-Run the same `vanilla_rag` / `reorder_only_rag` comparison on the full
-validation set for those five QA tasks:
+External repositories are pinned through `.gitmodules`:
 
-```bash
-bash scripts/run_vanilla_reorder_full_budget_sweep.sh \
-  outputs/experiments/vanilla_reorder_full_budget_sweep \
-  --overwrite-existing
-```
+- `third_party/dos-rag-eval`
+- `third_party/raptor`
+- `third_party/read-agent.github.io`
+- `third_party/scrolls`
 
-Run `vanilla_rag`, `reorder_only_rag`, and `dos_rag` on the focused
-`quality` / `contract_nli` subset at `1500`, `5000`, and `10000` context
-tokens:
+The benchmark can also use explicit paths through CLI flags:
 
-```bash
-bash scripts/run_ordering_budget_sweep.sh \
-  outputs/experiments/ordering_budget_sweep \
-  --overwrite-existing
-```
+- `--dos-rag-repo-dir`
+- `--raptor-repo-dir`
+- `--read-agent-repo-dir`
 
-The two sweep scripts are:
+## What This Repo Does Not Claim
 
-- `scripts/run_vanilla_reorder_subset_budget_sweep.sh`
-- `scripts/run_vanilla_reorder_full_budget_sweep.sh`
-- `scripts/run_ordering_budget_sweep.sh`
-
-Both scripts run each context budget in a separate Python process and
-automatically prepend `$CONDA_PREFIX/lib` to `LD_LIBRARY_PATH` when available.
-This avoids common shared-server vLLM reinitialization issues during multi-budget
-sweeps.
-
-The benchmark now standardizes on `Qwen/Qwen2.5-7B-Instruct` for these sweeps
-so results stay comparable across runs on shared A40 machines.
-
-### Ordering-only experiment commands
-
-For the ordering-family study, the budget sweep is the primary benchmark.
-Use a single-budget run only as a quick check, and prefer `5000` over `10000`.
-At `10000`, several tasks often approach full-document coverage, which makes it
-less useful as the headline ordering benchmark.
-
-Run the dedicated all-five-task smoke check for the ordering-family methods
-(`max_samples=2` per task, default `context_budget=5000`):
-
-```bash
-bash scripts/run_ordering_ablation_smoke.sh \
-  outputs/experiments/ordering_ablation_smoke \
-  --overwrite-existing
-```
-
-Run the quick single-budget 50-example subset ordering-only experiment at
-`5000` context tokens:
-
-```bash
-bash scripts/run_ordering_ablation_subset_5000.sh \
-  outputs/experiments/ordering_ablation_subset_5000 \
-  --overwrite-existing
-```
-
-Run the main subset budget sweep for the same six ordering-family methods at
-`500`, `1500`, `5000`, and `10000` context tokens:
-
-```bash
-bash scripts/run_ordering_ablation_subset_budget_sweep.sh \
-  outputs/experiments/ordering_ablation_subset_budget_sweep \
-  --overwrite-existing
-```
-
-The ordering-only helper scripts are:
-
-- `scripts/run_ordering_ablation_smoke.sh`
-- `scripts/run_ordering_ablation_subset_5000.sh`
-- `scripts/run_ordering_ablation_subset_budget_sweep.sh`
-
-## Analysis
-
-Generate post-hoc artifacts from saved outputs:
-
-```bash
-python analyze_outputs.py --run-tier subset
-```
-
-Analyze the three-budget `vanilla_rag` / `reorder_only_rag` subset sweep:
-
-```bash
-for b in 1500 5000 10000; do
-  python analyze_outputs.py \
-    --output-dir outputs/experiments/vanilla_reorder_subset_budget_sweep/context_$b \
-    --run-tier subset \
-    --methods vanilla_rag reorder_only_rag
-done
-```
-
-Analyze the focused `quality` / `contract_nli` ordering sweep:
-
-```bash
-for b in 1500 5000 10000; do
-  python analyze_outputs.py \
-    --output-dir outputs/experiments/ordering_budget_sweep/context_$b \
-    --run-tier subset \
-    --methods vanilla_rag reorder_only_rag dos_rag \
-    --tasks quality contract_nli
-done
-```
-
-Analysis artifacts include:
-
-- task score tables
-- score-vs-token-cost plots
-- agreement tables between methods
-- qualitative case exports
-- retrieval evidence-rank summaries
-
-Analyze the dedicated ordering-only smoke or subset runs:
-
-```bash
-python analyze_ordering_position_ablation.py \
-  --run-root outputs/experiments/ordering_ablation_smoke/subset
-```
-
-```bash
-python analyze_ordering_position_ablation.py \
-  --run-root outputs/experiments/ordering_ablation_subset_5000/subset
-```
-
-Analyze the ordering-only budget sweep:
-
-```bash
-for b in 500 1500 5000 10000; do
-  python analyze_ordering_position_ablation.py \
-    --run-root outputs/experiments/ordering_ablation_subset_budget_sweep/context_$b/subset
-done
-```
-
-The ordering-only analysis writes:
-
-- `task_level_scores.csv` and `.json`
-- `pairwise_example_outcomes.csv`
-- `bootstrap_deltas.json`
-- `ordering_diagnostics.csv`
-- `summary.md`
-
-## Output Structure
-
-Each result row and each report now records provenance so you can tell:
-
-- which official SCROLLS dataset artifacts were used
-- which official SCROLLS metric files were used
-- which method source repo or notebook the adapter came from
-- which shared benchmark components were held constant across methods
-
-Typical layout:
-
-```text
-outputs/
-  experiments/
-  smoke|preflight|subset|full/
-    comparison_report.json
-    comparison_report.md
-    comparison_examples.jsonl
-    benchmark.log
-    vanilla_rag/
-      qasper/
-        results.jsonl
-        summary.json
-      benchmark_report.json
-    dos_rag/
-      ...
-  tests/
-```
-
-Tiered historical runs now sit under their matching run folders, for example:
-
-- `outputs/subset/meeting_core/`
-- `outputs/subset/meeting_readagent_seq/`
-- `outputs/subset/meeting_raptor15/`
-- `outputs/preflight/preflight_all/`
-- `outputs/preflight/preflight_readagent/`
-- `outputs/smoke/official_smoke/`
-
-Ad-hoc sweeps stay under `outputs/experiments/`, for example:
-
-- `outputs/experiments/vanilla_reorder_subset_budget_sweep/`
-- `outputs/experiments/smoke_vanilla_reorder_budgets/`
-
-New analysis exports are written under the run root at:
-
-```text
-<output_dir>/<run_tier>/analysis/
-```
-
-## File Guide
-
-| Path | Role |
-|---|---|
-| `benchmarking/data_loader.py` | official SCROLLS archive loading plus explicit `input -> document/query` adapter logic |
-| `benchmarking/metrics.py` | thin wrapper around the official SCROLLS metric files |
-| `benchmarking/official_methods.py` | DOS-RAG, RAPTOR, and ReadAgent adapters plus provenance |
-| `benchmarking/rag_pipeline.py` | shared execution, official scoring calls, reporting |
-| `benchmarking/run_benchmark.py` | benchmark CLI implementation |
-| `analysis/analyze_outputs.py` | post-hoc analysis implementation |
-| `run_benchmark.py` | stable root wrapper for benchmark runs |
-| `analyze_outputs.py` | stable root wrapper for analysis |
-| `docs/ARCHITECTURE.md` | deeper execution walkthrough |
-| `docs/REPO_LAYOUT.md` | current directory structure and third-party repo layout |
-| `docs/RUN_OUTPUTS.md` | exact benchmark and analysis artifact layout on disk |
-| `docs/LAST_WEEK_RESULTS.md` | careful interpretation of the latest meeting-ready benchmark results |
-
-## References
-
-- SCROLLS website: https://www.scrolls-benchmark.com/
-- SCROLLS repo: https://github.com/tau-nlp/scrolls
-- SCROLLS dataset: https://huggingface.co/datasets/tau/scrolls
-- DOS-RAG repo: https://github.com/alex-laitenberger/dos-rag-eval
-- DOS-RAG paper: https://aclanthology.org/2025.emnlp-main.1656/
-- RAPTOR repo: https://github.com/parthsarthi03/raptor
-- RAPTOR paper: https://arxiv.org/abs/2401.18059
-- ReadAgent site/repo: https://github.com/read-agent/read-agent.github.io
-- ReadAgent paper: https://arxiv.org/abs/2402.09727
+This repo does not claim that DOS-RAG, RAPTOR, or ReadAgent shipped native
+SCROLLS runners. It adapts released method components onto one shared SCROLLS
+evaluation harness. The official benchmark behavior is limited to SCROLLS data
+loading and scoring; method-to-SCROLLS glue is adapter logic.

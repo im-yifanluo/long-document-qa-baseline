@@ -335,18 +335,13 @@ class OfficialMethodRunner:
 
     def _candidate_repo_paths(self, repo_name: str, config_value: Optional[str], env_var: str) -> List[str]:
         """Return plausible clone locations for an official method repository."""
-        package_dir = os.path.dirname(__file__)
-        repo_root = os.path.dirname(package_dir)
+        repo_root = os.path.dirname(os.path.dirname(__file__))
         home_dir = os.path.expanduser("~")
         candidates = [
             config_value,
             os.environ.get(env_var),
             os.path.join(repo_root, "third_party", repo_name),
-            os.path.join(repo_root, repo_name),
             os.path.join(os.path.dirname(repo_root), "third_party", repo_name),
-            os.path.join(os.path.dirname(repo_root), repo_name),
-            os.path.join(package_dir, "third_party", repo_name),
-            os.path.join(package_dir, repo_name),
             os.path.join(home_dir, repo_name),
         ]
         resolved = []

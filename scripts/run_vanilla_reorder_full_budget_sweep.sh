@@ -20,7 +20,7 @@ if [[ -n "${CONDA_PREFIX:-}" && -d "${CONDA_PREFIX}/lib" ]]; then
 fi
 
 for budget in 1500 5000 10000; do
-    python run_benchmark.py \
+    python -m benchmarking.run_benchmark \
       --run-tier full \
       --methods vanilla_rag reorder_only_rag \
       --llm-model "$LLM_MODEL" \

@@ -40,7 +40,7 @@ def parse_args():
     parser.add_argument(
         "--run-tier",
         default="full",
-        choices=["smoke", "preflight", "subset", "full"],
+        choices=["quick", "preflight", "subset", "full"],
     )
     parser.add_argument(
         "--methods",

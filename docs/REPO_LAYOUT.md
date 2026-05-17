@@ -1,128 +1,75 @@
 # Repo Layout
 
-This repo now keeps the root focused on stable entrypoints, docs, and run
-artifacts, while the implementation is split by responsibility.
-
-## Top-Level Structure
+The root now contains project metadata, documentation, setup files, and package
+directories only. Generated outputs are ignored by git.
 
 ```text
-long-document-qa-baseline/
-  benchmarking/         benchmark execution code, adapters, retrieval pipeline
+baseline_benchmark/
   analysis/             post-hoc analysis code and notebooks
-  docs/                 benchmark docs, architecture notes, and result notes
-  logs/                 large standalone benchmark logs
-  scripts/              user-facing shell helpers for repeated experiments
+  benchmarking/         benchmark execution code, adapters, retrieval pipeline
+  docs/                 architecture and output-format notes
+  scripts/              repeatable experiment launchers
   tests/                unit and fidelity tests
-  third_party/          cloned official method repos used by adapters
-  outputs/              all benchmark, experiment, and test artifacts
-  *.py                  thin compatibility wrappers for the main commands
+  third_party/          pinned external repos as git submodules
+  .gitmodules           external repo definitions
+  pyproject.toml        package metadata, CLI entrypoints, pytest config
+  requirements.txt      runtime dependencies
+  requirements-dev.txt  development/test dependencies
   setup.sh              environment setup
-  requirements.txt      Python dependencies
 ```
+
+## Primary Entry Points
+
+- `python -m benchmarking.run_benchmark`: main benchmark runner
+- `python -m benchmarking.quick_check`: fast end-to-end check
+- `python -m benchmarking.check_generator`: generator/runtime check
+- `python -m analysis.analyze_outputs`: general saved-output analysis
+- `python -m analysis.analyze_ordering_position_ablation`: ordering ablation analysis
+
+The old root-level wrapper scripts were removed to keep one import and execution
+surface.
 
 ## Benchmark Code
 
-- `benchmarking/run_benchmark.py`: main benchmark CLI implementation
+- `benchmarking/config.py`: tasks, methods, defaults, run tiers
+- `benchmarking/data_loader.py`: SCROLLS archive loading and adapter parsing
+- `benchmarking/metrics.py`: official SCROLLS metric loader
 - `benchmarking/rag_pipeline.py`: shared execution, scoring, and reporting
 - `benchmarking/official_methods.py`: DOS-RAG, RAPTOR, and ReadAgent adapters
-- `benchmarking/data_loader.py` / `benchmarking/metrics.py`: official SCROLLS loading and evaluation glue
-- `benchmarking/retriever.py`: dense retrieval baseline
+- `benchmarking/chunker.py`, `embedder.py`, `retriever.py`, `generator.py`: shared baseline components
 
-Stable root entrypoints remain:
+## Output Directories
 
-- `run_benchmark.py`
-- `smoke_test.py`
-- `test_generator.py`
+The code writes generated artifacts under:
 
-## Analysis Code
+```text
+<output-dir>/<run-tier>/
+```
 
-- `analysis/analyze_outputs.py`: post-hoc analysis over saved runs
-- `analysis/analysis_utils.py`: shared heuristics for evidence and agreement analysis
-Stable root analysis entrypoints remain:
+Supported run tiers are:
 
-- `analyze_outputs.py`
+- `quick`
+- `preflight`
+- `subset`
+- `full`
 
-## Tests
-
-- `tests/test_reorder_only_rag.py`: ordering-only ablation unit test
-- `tests/test_scrolls_fidelity.py`: SCROLLS loader / metric / adapter fidelity tests
-
-Stable root wrappers remain for backwards compatibility:
-
-- `test_reorder_only_rag.py`
-- `test_scrolls_fidelity.py`
-
-## Documentation
-
-- `docs/ARCHITECTURE.md`: deeper execution walkthrough
-- `docs/LAST_WEEK_RESULTS.md`: careful interpretation of the latest meeting-ready results
-- `docs/REPO_LAYOUT.md`: this directory map
-- `docs/RUN_OUTPUTS.md`: exact output artifact layout
+The default output directory is `outputs/`, which is ignored by git. Keep large
+raw result bundles outside the source repository.
 
 ## Third-Party Repos
 
-Bundled official repos now live under `third_party/`:
+Submodules live under `third_party/`:
 
 ```text
 third_party/
   dos-rag-eval/
   raptor/
   read-agent.github.io/
+  scrolls/
 ```
 
-The benchmark adapter search order is now:
+Initialize them with:
 
-1. CLI flag
-2. environment variable
-3. `third_party/<repo>`
-4. legacy root-level `<repo>`
-5. sibling `third_party/<repo>`
-6. sibling `<repo>`
-7. `$HOME/<repo>`
-
-This keeps the root cleaner without breaking older layouts.
-
-## Output Directories
-
-All generated artifacts now live under `outputs/`:
-
-```text
-outputs/
-  smoke/               default smoke runs
-  preflight/           default preflight runs
-  subset/              default subset runs
-  full/                default full runs
-  experiments/         ad-hoc sweeps and side experiments
-  tests/               test-only scratch outputs
-```
-
-Tiered named runs now live under the matching top-level run folder, for example:
-
-- `outputs/subset/meeting_core/`
-- `outputs/subset/meeting_readagent_seq/`
-- `outputs/subset/meeting_raptor15/`
-- `outputs/preflight/preflight_all/`
-- `outputs/preflight/preflight_readagent/`
-- `outputs/smoke/official_smoke/`
-
-`outputs/experiments/` is now reserved for ad-hoc sweeps such as:
-
-- `outputs/experiments/vanilla_reorder_subset_budget_sweep/`
-- `outputs/experiments/smoke_vanilla_reorder_budgets/`
-
-Within a run root, the code writes results to:
-
-```text
-<output_dir>/<run_tier>/
-  benchmark.log
-  comparison_report.json
-  comparison_report.md
-  comparison_examples.jsonl
-  <method>/
-    benchmark_report.json
-    <task>/
-      results.jsonl
-      summary.json
-  analysis/
-    ...
+```bash
+git submodule update --init --recursive
 ```

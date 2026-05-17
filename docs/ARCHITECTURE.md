@@ -308,7 +308,7 @@ The benchmark looks for official method clones in this order:
 
 1. explicit CLI flag
 2. explicit environment variable
-3. clone inside this repo
+3. pinned submodule under `third_party/`
 4. sibling directory next to this repo
 5. clone under `$HOME`
 
@@ -359,7 +359,7 @@ clear which parts are official source behavior and which parts are adapter glue.
 
 If you are orienting yourself in the codebase, read in this order:
 
-1. `config.py`
+1. `benchmarking/config.py`
 2. `benchmarking/data_loader.py`
 3. `benchmarking/metrics.py`
 4. `benchmarking/official_methods.py`

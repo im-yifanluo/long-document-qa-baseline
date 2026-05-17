@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-OUTPUT_DIR="${OUTPUT_DIR:-outputs/experiments/ordering_ablation_subset_5000}"
+OUTPUT_DIR="${OUTPUT_DIR:-outputs/experiments/ordering_ablation_quick}"
 LLM_MODEL="${LLM_MODEL:-Qwen/Qwen2.5-7B-Instruct}"
 FALLBACK_LLM_MODEL="${FALLBACK_LLM_MODEL:-Qwen/Qwen2.5-7B-Instruct}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.80}"
@@ -22,7 +22,9 @@ if [[ -n "${CONDA_PREFIX:-}" && -d "${CONDA_PREFIX}/lib" ]]; then
 fi
 
 python -m benchmarking.run_benchmark \
-  --run-tier subset \
+  --run-tier quick \
+  --tasks qmsum qasper narrative_qa quality contract_nli \
+  --max-samples 2 \
   --methods \
     vanilla_rag \
     reorder_only_rag \

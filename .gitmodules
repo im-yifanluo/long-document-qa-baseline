@@ -1,0 +1,15 @@
+[submodule "third_party/dos-rag-eval"]
+	path = third_party/dos-rag-eval
+	url = https://github.com/alex-laitenberger/dos-rag-eval.git
+
+[submodule "third_party/raptor"]
+	path = third_party/raptor
+	url = https://github.com/parthsarthi03/raptor.git
+
+[submodule "third_party/read-agent.github.io"]
+	path = third_party/read-agent.github.io
+	url = https://github.com/read-agent/read-agent.github.io.git
+
+[submodule "third_party/scrolls"]
+	path = third_party/scrolls
+	url = https://github.com/tau-nlp/scrolls.git

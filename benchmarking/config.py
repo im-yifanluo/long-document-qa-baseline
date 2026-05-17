@@ -8,7 +8,7 @@ This module is the single source of truth for:
   ablations, `dos_rag`, `raptor`, and ReadAgent variants)
 - prompt templates shared across methods
 - default model, retrieval, and context-budget settings
-- run-tier presets used by the main CLI (`smoke`, `preflight`, `subset`, `full`)
+- run-tier presets used by the main CLI (`quick`, `preflight`, `subset`, `full`)
 
 The goal is that a reader can inspect this file first and immediately answer:
 
@@ -90,7 +90,7 @@ DEFAULT_METHODS: List[str] = ["vanilla_rag", "dos_rag"]
 EXPERIMENTAL_METHODS: List[str] = ["long_context"]
 
 RUN_TIER_DEFAULTS: Dict[str, Dict[str, object]] = {
-    "smoke": {
+    "quick": {
         "tasks": ["qasper", "quality"],
         "max_samples": 2,
     },
@@ -326,7 +326,3 @@ class BenchmarkConfig:
     def run_output_dir(self) -> str:
         """Top-level directory for the selected run tier."""
         return f"{self.output_dir}/{self.run_tier}"
-
-
-# Backwards-compatible alias for older imports.
-RAGConfig = BenchmarkConfig

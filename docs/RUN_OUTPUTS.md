@@ -1,19 +1,27 @@
 # Run Outputs
 
-This repo now writes benchmark and analysis artifacts in one predictable place:
+Benchmark and analysis artifacts are generated under:
 
 ```text
-<output_dir>/<run_tier>/
+<output-dir>/<run-tier>/
 ```
 
-The path is defined in `benchmarking/config.py` by `BenchmarkConfig.run_output_dir`.
+`output-dir` defaults to `outputs`, and `run-tier` is one of:
 
-## Benchmark Outputs
+- `quick`
+- `preflight`
+- `subset`
+- `full`
 
-`benchmarking/rag_pipeline.py` writes the main run artifacts under the run root:
+`outputs/` is ignored by git. This keeps raw JSONL generations, logs, figures,
+and large experiment bundles out of the source repository.
+
+## Benchmark Output Layout
+
+`benchmarking/rag_pipeline.py` writes:
 
 ```text
-<output_dir>/<run_tier>/
+<output-dir>/<run-tier>/
   benchmark.log
   comparison_report.json
   comparison_report.md
@@ -27,35 +35,30 @@ The path is defined in `benchmarking/config.py` by `BenchmarkConfig.run_output_d
 
 Examples:
 
-- `outputs/subset/dos_rag/quality/results.jsonl`
-- `outputs/subset/meeting_core/subset/comparison_report.md`
-- `outputs/subset/meeting_core/subset/vanilla_rag/qasper/summary.json`
+- `outputs/quick/comparison_report.md`
+- `outputs/subset/vanilla_rag/qasper/summary.json`
+- `outputs/experiments/ordering_ablation_subset_budget_sweep/context_5000/subset/comparison_report.md`
 
-## Analysis Outputs
+## Analysis Output Layout
 
 `analysis/analyze_outputs.py` writes post-hoc artifacts under:
 
 ```text
-<output_dir>/<run_tier>/analysis/
+<output-dir>/<run-tier>/analysis/
 ```
 
 Common files include:
 
 - `comparison_table.csv`
 - `score_vs_token_cost.png`
-- `agreement.csv`
-- qualitative sample exports
-- retrieval evidence-rank summaries
+- `agreement_by_task.csv`
+- `qualitative_sample.csv`
+- `rag_rank_analysis.csv`
+- `analysis_manifest.json`
 
-## Historical Runs
+## Artifact Policy
 
-Named historical runs now sit under the matching run tier:
-
-- `outputs/smoke/official_smoke/`
-- `outputs/preflight/preflight_all/`
-- `outputs/preflight/preflight_readagent/`
-- `outputs/subset/meeting_core/`
-- `outputs/subset/meeting_raptor15/`
-- `outputs/subset/meeting_readagent_seq/`
-
-`outputs/experiments/` is reserved for ad-hoc sweeps and side experiments.
+Commit code, docs, test fixtures, and small hand-written summaries. Do not
+commit full benchmark output trees. For a handoff, upload full result bundles to
+an external artifact store and link them from the report or a small checked-in
+summary document.

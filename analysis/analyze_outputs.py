@@ -3,7 +3,7 @@
 Generate PI-facing analysis artifacts from saved benchmark outputs.
 
 This script is intentionally post-hoc: it does not rerun the benchmark. It
-reads the structured JSON/JSONL artifacts produced by ``run_benchmark.py`` and
+reads the structured JSON/JSONL artifacts produced by ``benchmarking.run_benchmark`` and
 materializes analysis-friendly tables and figures such as:
 
 - side-by-side task score tables
@@ -440,7 +440,7 @@ def main():
     parser.add_argument(
         "--run-tier",
         default="subset",
-        choices=["smoke", "preflight", "subset", "full"],
+        choices=["quick", "preflight", "subset", "full"],
     )
     parser.add_argument(
         "--methods",

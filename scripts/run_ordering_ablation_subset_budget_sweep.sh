@@ -21,7 +21,7 @@ if [[ -n "${CONDA_PREFIX:-}" && -d "${CONDA_PREFIX}/lib" ]]; then
 fi
 
 for budget in 500 1500 5000 10000; do
-    python run_benchmark.py \
+    python -m benchmarking.run_benchmark \
       --run-tier subset \
       --methods \
         vanilla_rag \
