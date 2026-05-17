@@ -225,9 +225,7 @@ scores = compute_metrics(
 
 ## Demo Video
 
-Demo video link: TODO add the shared Google Drive link before final submission.
-
-The README intentionally does not embed result figures or semester-report material. Full experiment artifacts should be stored outside git and linked from the final report or submission materials.
+[Google Drive Link](https://drive.google.com/drive/folders/1Ty-7_uF6VIguJL_L8Qjo9Hy28sjdwu1Z?usp=sharing)
 
 ## Algorithmic Design
 
@@ -338,6 +336,3 @@ Spring 2026 (Yifan Luo)
 * RAPTOR paper: https://arxiv.org/abs/2401.18059
 * ReadAgent repository/site: https://github.com/read-agent/read-agent.github.io
 * ReadAgent paper: https://arxiv.org/abs/2402.09727
-* Lost in the Middle: Liu et al. (2024), "Lost in the Middle: How Language Models Use Long Contexts."
-* Dense Passage Retrieval: Karpukhin et al. (2020), "Dense Passage Retrieval for Open-Domain Question Answering."
-* Retrieval-Augmented Generation: Lewis et al. (2020), "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks."
