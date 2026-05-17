@@ -19,6 +19,12 @@ outputs/
 runs/
 logs/
 
+# Local exploratory notebooks
+analysis/notebooks/*.ipynb
+
+# Local handoff notes
+docs/
+
 # OS
 .DS_Store
 Thumbs.db
